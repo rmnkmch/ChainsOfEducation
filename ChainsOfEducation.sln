@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ChainsOfEducation", "ChainsOfEducation\ChainsOfEducation.pyproj", "{55165C29-9070-4359-A93A-17D9B3FA0321}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55165C29-9070-4359-A93A-17D9B3FA0321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55165C29-9070-4359-A93A-17D9B3FA0321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E6AE75B-8927-424C-9140-4C45481F3BC6}
+	EndGlobalSection
+EndGlobal
