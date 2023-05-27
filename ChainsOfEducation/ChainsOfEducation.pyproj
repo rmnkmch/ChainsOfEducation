@@ -23,6 +23,9 @@
   <ItemGroup>
     <Compile Include="ChainsOfEducation.py" />
     <Compile Include="Droplet.py" />
+    <Compile Include="KnowledgeBlock.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MainCharacter.py">
       <SubType>Code</SubType>
     </Compile>

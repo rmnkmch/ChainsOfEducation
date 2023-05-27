@@ -1,10 +1,9 @@
 import manim
-import Droplet
-
+import KnowledgeBlock
 
 class ChainsOfEducation(manim.Scene):
     def construct(self):
-        self.add(Droplet.Droplet())
+        self.add(KnowledgeBlock.KnowledgeBlock())
         self.wait()
 
 #cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
