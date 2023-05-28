@@ -12,13 +12,13 @@ class Droplet(manim.Circle):
             fill_opacity=1.0,
             **kwargs)
 
-        tail = manim.Circle(
+        self.tail = manim.Circle(
             radius=0.5,
             color=color,
             fill_color=color,
             fill_opacity=1.0,
             ).move_to(3*manim.DOWN)
-        leftTriangle = manim.Polygon(
+        self.leftTriangle = manim.Polygon(
             [-1.0, 0.0, 0.0],
             [0.5, -3.0, 0.0],
             [-0.5, -3.0, 0.0],
@@ -26,7 +26,7 @@ class Droplet(manim.Circle):
             fill_color=color,
             fill_opacity=1.0,
             **kwargs)
-        rightTriangle = manim.Polygon(
+        self.rightTriangle = manim.Polygon(
             [-1.0, 0.0, 0.0],
             [1.0, 0.0, 0.0],
             [0.5, -3.0, 0.0],
@@ -34,4 +34,5 @@ class Droplet(manim.Circle):
             fill_color=color,
             fill_opacity=1.0,
             **kwargs)
-        self.add(tail, leftTriangle, rightTriangle)
+
+        self.add(self.tail, self.leftTriangle, self.rightTriangle)

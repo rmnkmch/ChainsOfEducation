@@ -13,42 +13,48 @@ class MainCharacter(manim.RoundedRectangle):
             fill_opacity=1.0,
             **kwargs)
 
-        leftEye = manim.RoundedRectangle(
+        self.leftEye = manim.RoundedRectangle(
             corner_radius=0.6,
             height=1.5,
             width=1.5,
             fill_color=manim.color.GRAY_A,
             fill_opacity=1.0,
             ).move_to(manim.UL)
-        rightEye = manim.RoundedRectangle(
+        self.rightEye = manim.RoundedRectangle(
             corner_radius=0.6,
             height=1.5,
             width=1.5,
             fill_color=manim.color.GRAY_A,
             fill_opacity=1.0,
             ).move_to(manim.UR)
-        mouth = manim.RoundedRectangle(
+        self.mouth = manim.RoundedRectangle(
             corner_radius=0.5,
             height=1.0,
             width=2.5,
             fill_color=manim.color.BLACK,
             fill_opacity=1.0,
             ).move_to(manim.DOWN)
-        leftPupil = manim.RoundedRectangle(
+        self.leftPupil = manim.RoundedRectangle(
             corner_radius=0.4,
             height=1.0,
             width=1.0,
             fill_color=manim.color.BLACK,
             fill_opacity=1.0,
             ).move_to(manim.UL)
-        rightPupil = manim.RoundedRectangle(
+        self.rightPupil = manim.RoundedRectangle(
             corner_radius=0.4,
             height=1.0,
             width=1.0,
             fill_color=manim.color.BLACK,
             fill_opacity=1.0,
             ).move_to(manim.UR)
-        self.add(leftEye, rightEye, mouth, leftPupil, rightPupil)
+
+        self.add(
+            self.leftEye,
+            self.rightEye,
+            self.mouth,
+            self.leftPupil,
+            self.rightPupil)
 
     def blink(self):
         pass
