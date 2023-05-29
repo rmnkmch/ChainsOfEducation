@@ -1,86 +1,91 @@
 ﻿import manim
 
 
-MIN_DESCRIPTION_FONT_SIZE: float = 10.0
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 30.0
-MIN_TITLE_FONT_SIZE: float = 16.0
-DEFAULT_TITLE_FONT_SIZE: float = 48.0
+MIN_DESCRIPTION_FONT_SIZE: float = 10.5
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 32.0
+MIN_TITLE_FONT_SIZE: float = 18.5
+DEFAULT_TITLE_FONT_SIZE: float = 56.0
+
+DEFAULT_PADDING: float = 0.25
 
 
 class KnowledgeBlock(manim.RoundedRectangle):
     """Base class for all blocks of knowledge"""
 
-    def __init__(self, **kwargs):
+    def __init__(
+        self,
+        title: str = "KnowledgeBlockTitle",
+        description: str = "KnowledgeBlockDescription",
+        **kwargs):
         super().__init__(
-            height=5.0,
-            width=10.0,
+            height=4.5,
+            width=8.0,
             **kwargs)
 
         self.title = manim.Text(
-            "KnowledgeBlockTitle",
+            title,
             font_size=DEFAULT_TITLE_FONT_SIZE,
             weight=manim.BOLD,
             )
         self.set_normal_title_size()
+        self.title_underline = manim.Underline(self.title)
+
         self.description = manim.Text(
-            '''Матема́тика (др.-греч. μᾰθημᾰτικά[1] < μάθημα «изучение; наука») —
-            точная формальная наука[2], первоначально исследовавшая
-            количественные отношения и пространственные
-            формы[3]. В более современном понимании, это наука об отношениях
-            между объектами, о которых ничего не известно,
-            кроме описывающих их некоторых свойств, — именно тех, которые
-            в качестве аксиом положены в основание той или иной
-            математической теории[4].
-            Математика исторически сложилась на основе операций подсчёта,
-            измерения и описания формы объектов[5]. Математические
-            объекты создаются путём идеализации свойств реальных или
-            других математических объектов и записи этих свойств на
-            формальном языке.
-            Математика не относится к естественным наукам, но широко
-            используется в них как для точной формулировки их содержания,
-            так и для получения новых результатов. Она является
-            фундаментальной наукой, предоставляющей (общие) языковые
-            средства другим наукам; тем самым она выявляет их
-            структурную взаимосвязь и способствует нахождению самых
-            общих законов природы[6].''',
+            description,
             font_size=DEFAULT_DESCRIPTION_FONT_SIZE,
             )
-        self.set_normal_description_size()
-        self.split_description_lines()
+        self.build_description()
 
-        self.add(self.title, self.description)
+        self.add(self.title, self.title_underline, self.description)
 
-    def is_unacceptable_width(self, text: manim.Text):
-        return self.width - 0.5 <= text.width
+    def is_acceptable_width(self, text: manim.Text):
+        return text.width < self.width - 2.0 * DEFAULT_PADDING
+
+    def is_acceptable_height(self, text: manim.Text):
+        return (text.height < self.height - self.title.height -
+                2.0 * DEFAULT_PADDING - 0.3)
 
     def set_normal_title_size(self):
-        while (self.is_unacceptable_width(self.title) and
+        while (not self.is_acceptable_width(self.title) and
                self.title.font_size > MIN_TITLE_FONT_SIZE):
-            self.title.font_size -= 1
-        self.title.next_to(self, manim.UP, -self.title.height - 0.25)
+            self.title.font_size -= 1.0
+        self.title.next_to(self, manim.UP, -self.title.height - DEFAULT_PADDING)
+
+    def build_description(self):
+        self.set_normal_description_size()
+        self.move_description_in_correct_position()
+
+    def move_description_in_correct_position(self):
+        self.description.next_to(self, manim.DOWN,
+                                 -0.5 * (self.height - self.title.height - 0.3)
+                                 -0.5 * self.description.height)
 
     def set_normal_description_size(self):
-        while (self.is_unacceptable_width(self.description) and
+        self.split_description_lines()
+        while (not self.is_acceptable_height(self.description) and
                self.description.font_size > MIN_DESCRIPTION_FONT_SIZE):
-            self.description.font_size -= 1
-        self.description.next_to(self, manim.DOWN, -self.description.height - 0.25)
+            self.description.font_size -= 1.0
+            self.split_description_lines()
+        while (not self.is_acceptable_width(self.description) and
+               self.description.font_size > MIN_DESCRIPTION_FONT_SIZE):
+            self.description.font_size -= 1.0
 
     def split_description_lines(self):
 
         def is_there_another_word():
             return current_word_index < len(all_text)
 
-        all_text = self.description.original_text.split()
-        splited_text = ""
-        current_word_index = 0
+        all_text: list[str] = self.description.original_text.split()
+        splited_text: str = ""
+        current_word_index: int = 0
         while is_there_another_word():
-            current_str = all_text[current_word_index]
+            current_str: str = all_text[current_word_index]
             current_word_index += 1
             while (is_there_another_word() and
-                   manim.Text(
-                       current_str + " " + all_text[current_word_index],
-                       font_size=self.description.font_size,
-                       ).width < self.width - 0.5):
+                   self.is_acceptable_width(
+                       manim.Text(
+                           current_str + " " + all_text[current_word_index],
+                           font_size=self.description.font_size))):
                 current_str += " " + all_text[current_word_index]
                 current_word_index += 1
             splited_text += current_str
@@ -90,4 +95,3 @@ class KnowledgeBlock(manim.RoundedRectangle):
         self.description = manim.Text(
             splited_text,
             font_size=self.description.font_size)
-        self.description.next_to(self, manim.DOWN, -self.description.height - 0.25)
