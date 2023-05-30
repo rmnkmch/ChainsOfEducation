@@ -6,7 +6,7 @@ DEFAULT_DESCRIPTION_FONT_SIZE: float = 32.0
 MIN_TITLE_FONT_SIZE: float = 18.5
 DEFAULT_TITLE_FONT_SIZE: float = 56.0
 
-DEFAULT_PADDING: float = 0.25
+DEFAULT_PADDING: float = 0.3
 
 
 class KnowledgeBlock(manim.RoundedRectangle):
@@ -38,12 +38,15 @@ class KnowledgeBlock(manim.RoundedRectangle):
 
         self.add(self.title, self.title_underline, self.description)
 
+    def scale(self, scale_factor: float, **kwargs):
+        super().scale(scale_factor, **kwargs)
+
     def is_acceptable_width(self, text: manim.Text):
         return text.width < self.width - 2.0 * DEFAULT_PADDING
 
     def is_acceptable_height(self, text: manim.Text):
-        return (text.height < self.height - self.title.height -
-                2.0 * DEFAULT_PADDING - 0.3)
+        return (text.height < self.height - self.title.height
+                - 2.0 * DEFAULT_PADDING - 0.3)
 
     def set_normal_title_size(self):
         while (not self.is_acceptable_width(self.title) and
@@ -57,8 +60,8 @@ class KnowledgeBlock(manim.RoundedRectangle):
 
     def move_description_in_correct_position(self):
         self.description.next_to(self, manim.DOWN,
-                                 -0.5 * (self.height - self.title.height - 0.3)
-                                 -0.5 * self.description.height)
+                                 - 0.5 * (self.height - self.title.height - 0.3)
+                                 - 0.5 * self.description.height)
 
     def set_normal_description_size(self):
         self.split_description_lines()
