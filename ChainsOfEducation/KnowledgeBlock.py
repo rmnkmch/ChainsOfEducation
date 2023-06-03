@@ -27,6 +27,10 @@ class KnowledgeBlock(manim.RoundedRectangle):
             width=DEFAULT_WIDTH,
             **kwargs)
 
+        self.kb_height: float = DEFAULT_HEIGHT
+        self.kb_width: float = DEFAULT_WIDTH
+        self.kb_center = super().get_center()
+
         self.title = manim.Text(
             title,
             font_size=DEFAULT_TITLE_FONT_SIZE,
@@ -45,10 +49,30 @@ class KnowledgeBlock(manim.RoundedRectangle):
 
     def scale(self, scale_factor: float, **kwargs):
         super().scale(scale_factor, **kwargs)
+        self.kb_height *= scale_factor
+        self.kb_width *= scale_factor
         return self
 
     def add(self, *mobjects):
         super().add(*mobjects)
+        return self
+
+    def remove(self, *mobjects):
+        super().remove(*mobjects)
+        return self
+
+    def get_center(self):
+        return self.kb_center
+
+    def move_to(self, point_or_mobject, aligned_edge=manim.ORIGIN, **kwargs):
+        super().move_to(point_or_mobject, aligned_edge, **kwargs)
+        if (isinstance(point_or_mobject, KnowledgeBlock) and
+            aligned_edge==manim.ORIGIN):
+            self.kb_center = point_or_mobject.get_center()
+        elif isinstance(point_or_mobject, manim.Mobject):
+            self.kb_center = point_or_mobject.get_critical_point(aligned_edge)
+        else:
+            self.kb_center = point_or_mobject
         return self
 
     def get_subkb_info_to_update(self):
@@ -57,32 +81,35 @@ class KnowledgeBlock(manim.RoundedRectangle):
         for kb in self.get_all_subkbs():
             scale = self.get_subkb_scale(current_kb_index)
             pos = self.get_subkb_pos(current_kb_index)
-            ret_info.append(tuple([kb, scale, pos]))
+            if ((abs(scale - 1.0) >= 0.001) or
+                (abs(pos[0] - kb.get_center()[0]) >= 0.001) or
+                (abs(pos[1] - kb.get_center()[1]) >= 0.001)):
+                ret_info.append(tuple([kb, scale, pos]))
             current_kb_index += 1
         return ret_info
 
     def get_subkb_scale(self, index: int):
-        return 1.0
         subkb_scale: float = 0.5
         subkbs = self.get_all_subkbs()
         if (index == 0) and (len(subkbs) == 1):
             subkb_scale = 1.0
-        return subkb_scale * 0.5 * self.width / subkbs[index].width
+        return subkb_scale * 0.5 * self.kb_width / subkbs[index].width
 
     def get_subkb_pos(self, index: int):
-        return self.get_center()
-        vertical_space = (self.height - self.title.height
+        vertical_space = (self.kb_height - self.title.height
                           - (DEFAULT_UNDERLINE_TITLE_OFFSET
                              + 2.0 * DEFAULT_PADDING)
                           * self.get_kb_proportion())
-        subkb_pos = (manim.RIGHT * 0.25 * self.width
-                     + manim.DOWN * (0.5 * self.height
+        subkb_pos = (manim.RIGHT * 0.25 * self.kb_width
+                     + manim.DOWN * (0.5 * self.kb_height
                                      - 0.5 * vertical_space
                                      - DEFAULT_PADDING * self.get_kb_proportion())
                      + self.get_center())
-        horizontal_dop_part = manim.LEFT * 0.125 * self.width
+        horizontal_dop_part = manim.LEFT * 0.125 * self.kb_width
         vertical_dop_part = 0.25 * manim.UP * vertical_space
-        if (index == 0) and not (len(self.get_all_subkbs()) == 1):
+        if (index == 0) and (len(self.get_all_subkbs()) == 1):
+            return subkb_pos
+        if index == 0:
             subkb_pos += horizontal_dop_part + vertical_dop_part
         elif index == 1:
             subkb_pos += - horizontal_dop_part + vertical_dop_part
@@ -96,18 +123,18 @@ class KnowledgeBlock(manim.RoundedRectangle):
         return [kb for kb in self.submobjects if isinstance(kb, KnowledgeBlock)]
 
     def get_kb_proportion(self):
-        return self.width / DEFAULT_WIDTH
+        return self.kb_width / DEFAULT_WIDTH
 
     def is_acceptable_title_width(self):
-        return self.title.width < self.width - 2.0 * DEFAULT_PADDING
+        return self.title.width < self.kb_width - 2.0 * DEFAULT_PADDING
 
     def is_acceptable_description_width(self, descr: manim.Text):
         if len(self.get_all_subkbs()) >= 1:
-            return descr.width < 0.5 * self.width - 2.0 * DEFAULT_PADDING
-        return descr.width < self.width - 2.0 * DEFAULT_PADDING
+            return descr.width < 0.5 * self.kb_width - 2.0 * DEFAULT_PADDING
+        return descr.width < self.kb_width - 2.0 * DEFAULT_PADDING
 
     def is_acceptable_description_height(self, text: manim.Text):
-        return (text.height < self.height - self.title.height
+        return (text.height < self.kb_height - self.title.height
                 - (2.0 * DEFAULT_PADDING + DEFAULT_UNDERLINE_TITLE_OFFSET)
                 * self.get_kb_proportion())
 
@@ -123,11 +150,11 @@ class KnowledgeBlock(manim.RoundedRectangle):
 
     def move_description_in_correct_position(self):
         self.description.next_to(self, manim.DOWN,
-                                 - 0.5 * (self.height - self.title.height
+                                 - 0.5 * (self.kb_height - self.title.height
                                           - DEFAULT_UNDERLINE_TITLE_OFFSET)
                                  - 0.5 * self.description.height)
         if len(self.get_all_subkbs()) >= 1:
-            self.description.shift(manim.LEFT * 0.5 * self.width)
+            self.description.shift(manim.LEFT * 0.5 * self.kb_width)
 
     def set_normal_description_size(self):
         self.split_description_lines()
