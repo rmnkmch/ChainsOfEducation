@@ -5,7 +5,7 @@ DEFAULT_HEIGHT: float = 4.5
 DEFAULT_WIDTH: float = 8.0
 
 MIN_DESCRIPTION_FONT_SIZE: float = 10.5
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 12.0#32.0
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 12.0
 MIN_TITLE_FONT_SIZE: float = 18.5
 DEFAULT_TITLE_FONT_SIZE: float = 56.0
 
@@ -23,25 +23,25 @@ class KnowledgeBlock(manim.RoundedRectangle):
         description: str = "KnowledgeBlockDescription",
         **kwargs):
         super().__init__(
-            height=DEFAULT_HEIGHT,
-            width=DEFAULT_WIDTH,
+            height = DEFAULT_HEIGHT,
+            width = DEFAULT_WIDTH,
             **kwargs)
 
         self.kb_height: float = DEFAULT_HEIGHT
         self.kb_width: float = DEFAULT_WIDTH
-        self.kb_center = super().get_center()
+        self.center = super().get_center()
 
         self.title = manim.Text(
             title,
-            font_size=DEFAULT_TITLE_FONT_SIZE,
-            weight=manim.BOLD,
+            font_size = DEFAULT_TITLE_FONT_SIZE,
+            weight = manim.BOLD,
             )
         self.set_normal_title_size()
         self.title_underline = manim.Underline(self.title)
 
         self.description = manim.Text(
             description,
-            font_size=DEFAULT_DESCRIPTION_FONT_SIZE,
+            font_size = DEFAULT_DESCRIPTION_FONT_SIZE,
             )
         self.build_description()
 
@@ -61,18 +61,21 @@ class KnowledgeBlock(manim.RoundedRectangle):
         super().remove(*mobjects)
         return self
 
+    def set_center(self, new_center):
+        self.center = new_center
+
     def get_center(self):
-        return self.kb_center
+        return self.center
 
     def move_to(self, point_or_mobject, aligned_edge=manim.ORIGIN, **kwargs):
         super().move_to(point_or_mobject, aligned_edge, **kwargs)
         if (isinstance(point_or_mobject, KnowledgeBlock) and
-            aligned_edge==manim.ORIGIN):
-            self.kb_center = point_or_mobject.get_center()
+            aligned_edge == manim.ORIGIN):
+            self.set_center(point_or_mobject.get_center())
         elif isinstance(point_or_mobject, manim.Mobject):
-            self.kb_center = point_or_mobject.get_critical_point(aligned_edge)
+            self.set_center(point_or_mobject.get_critical_point(aligned_edge))
         else:
-            self.kb_center = point_or_mobject
+            self.set_center(point_or_mobject)
         return self
 
     def get_subkb_info_to_update(self):
@@ -126,12 +129,16 @@ class KnowledgeBlock(manim.RoundedRectangle):
         return self.kb_width / DEFAULT_WIDTH
 
     def is_acceptable_title_width(self):
-        return self.title.width < self.kb_width - 2.0 * DEFAULT_PADDING
+        return (self.title.width <
+                self.kb_width - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
 
     def is_acceptable_description_width(self, descr: manim.Text):
         if len(self.get_all_subkbs()) >= 1:
-            return descr.width < 0.5 * self.kb_width - 2.0 * DEFAULT_PADDING
-        return descr.width < self.kb_width - 2.0 * DEFAULT_PADDING
+            return (descr.width <
+                    0.5 * self.kb_width
+                    - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
+        return (descr.width <
+                self.kb_width - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
 
     def is_acceptable_description_height(self, text: manim.Text):
         return (text.height < self.kb_height - self.title.height
@@ -144,19 +151,35 @@ class KnowledgeBlock(manim.RoundedRectangle):
             self.title.font_size -= 1.0
         self.title.next_to(self, manim.UP, - self.title.height - DEFAULT_PADDING)
 
-    def build_description(self):
-        self.set_normal_description_size()
-        self.move_description_in_correct_position()
+    def get_description_info_to_update(self):
+        ret_info = []
+        scale = 1.0#TODO
+        pos = self.get_description_correct_position()
+        if ((abs(scale - 1.0) >= 0.001) or
+            (abs(pos[0] - self.description.get_center()[0]) >= 0.001) or
+            (abs(pos[1] - self.description.get_center()[1]) >= 0.001)):
+            ret_info.append(tuple([self.description, scale, pos]))
+        return ret_info
 
-    def move_description_in_correct_position(self):
-        self.description.next_to(self, manim.DOWN,
-                                 - 0.5 * (self.kb_height - self.title.height
-                                          - DEFAULT_UNDERLINE_TITLE_OFFSET)
-                                 - 0.5 * self.description.height)
+    def get_description_correct_position(self):
+        vertical_space = (self.kb_height - self.title.height
+                          - (DEFAULT_UNDERLINE_TITLE_OFFSET
+                             + 2.0 * DEFAULT_PADDING)
+                          * self.get_kb_proportion())
+        description_pos = (manim.DOWN * (0.5 * self.kb_height
+                                         - 0.5 * vertical_space
+                                         - DEFAULT_PADDING
+                                         * self.get_kb_proportion())
+                           + self.get_center())
         if len(self.get_all_subkbs()) >= 1:
-            self.description.shift(manim.LEFT * 0.5 * self.kb_width)
+            description_pos += manim.LEFT * 0.25 * self.kb_width
+        return description_pos
 
-    def set_normal_description_size(self):
+    def build_description(self):
+        self.set_description_normal_size()
+        self.description.move_to(self.get_description_correct_position())
+
+    def set_description_normal_size(self):#TODO -> get_
         self.split_description_lines()
         while (not self.is_acceptable_description_height(self.description) and
                self.description.font_size > MIN_DESCRIPTION_FONT_SIZE):
@@ -166,7 +189,7 @@ class KnowledgeBlock(manim.RoundedRectangle):
                self.description.font_size > MIN_DESCRIPTION_FONT_SIZE):
             self.description.font_size -= 1.0
 
-    def split_description_lines(self):
+    def split_description_lines(self):#TODO remove while while
 
         def is_there_another_word():
             return current_word_index < len(all_text)
