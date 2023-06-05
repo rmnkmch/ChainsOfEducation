@@ -4,9 +4,7 @@
 DEFAULT_HEIGHT: float = 4.5
 DEFAULT_WIDTH: float = 8.0
 
-MIN_DESCRIPTION_FONT_SIZE: float = 10.5
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 12.0
-MIN_TITLE_FONT_SIZE: float = 18.5
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 19.0#32.0
 DEFAULT_TITLE_FONT_SIZE: float = 56.0
 
 DEFAULT_PADDING: float = 0.3
@@ -36,7 +34,7 @@ class KnowledgeBlock(manim.RoundedRectangle):
             font_size = DEFAULT_TITLE_FONT_SIZE,
             weight = manim.BOLD,
             )
-        self.set_normal_title_size()
+        self.set_normal_title()
         self.title_underline = manim.Underline(self.title)
 
         self.description = manim.Text(
@@ -140,26 +138,75 @@ class KnowledgeBlock(manim.RoundedRectangle):
         return (descr.width <
                 self.kb_width - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
 
-    def is_acceptable_description_height(self, text: manim.Text):
-        return (text.height < self.kb_height - self.title.height
+    def is_acceptable_description_height(self, descr: manim.Text):
+        return (descr.height < self.kb_height - self.title.height
                 - (2.0 * DEFAULT_PADDING + DEFAULT_UNDERLINE_TITLE_OFFSET)
                 * self.get_kb_proportion())
 
-    def set_normal_title_size(self):
-        while (not self.is_acceptable_title_width() and
-               self.title.font_size > MIN_TITLE_FONT_SIZE):
+    def set_normal_title(self):
+        while not self.is_acceptable_title_width():
             self.title.font_size -= 1.0
         self.title.next_to(self, manim.UP, - self.title.height - DEFAULT_PADDING)
 
+    def build_description(self):
+        size_and_text = self.get_correct_description_size_and_text()
+        self.description = manim.Text(
+            size_and_text[1], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
+        self.description.scale(size_and_text[0])
+        self.description.move_to(self.get_description_correct_position())
+
     def get_description_info_to_update(self):
         ret_info = []
-        scale = 1.0#TODO
+        size_and_text = self.get_correct_description_size_and_text()
         pos = self.get_description_correct_position()
-        if ((abs(scale - 1.0) >= 0.001) or
+        if ((abs(size_and_text[0] - 1.0) >= 0.001) or
             (abs(pos[0] - self.description.get_center()[0]) >= 0.001) or
             (abs(pos[1] - self.description.get_center()[1]) >= 0.001)):
-            ret_info.append(tuple([self.description, scale, pos]))
+            ret_info.append(tuple([self.description, size_and_text[1],
+                                   size_and_text[0], pos]))
         return ret_info
+
+    def get_correct_description_size_and_text(self):
+        correct_text = self.get_splited_description_text()
+        new_description = manim.Text(
+            correct_text, font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
+        scale_factor: float = (DEFAULT_DESCRIPTION_FONT_SIZE
+                               / self.description.font_size)
+        while not self.is_acceptable_description_height(new_description):
+            new_description.scale(0.9)
+            scale_factor *= 0.9
+            correct_text = self.get_splited_description_text(
+                new_description.font_size)
+            new_description = manim.Text(
+                correct_text, font_size = new_description.font_size)#???
+        while not self.is_acceptable_description_width(new_description):
+            new_description.scale(0.9)
+            scale_factor *= 0.9
+        return (scale_factor, correct_text)
+
+    def get_splited_description_text(
+        self, new_font_size: float = DEFAULT_DESCRIPTION_FONT_SIZE):
+        def is_there_another_word():
+            return current_word_index < len(all_text)
+
+        all_text: list[str] = self.description.original_text.split()
+        splited_text: str = ""
+        current_word_index: int = 0
+        while is_there_another_word():
+            current_str: str = all_text[current_word_index]
+            current_word_index += 1
+            while (is_there_another_word() and
+                   self.is_acceptable_description_width(
+                       manim.Text(
+                           current_str + " " + all_text[current_word_index],
+                           font_size = new_font_size))):
+                current_str += " " + all_text[current_word_index]
+                current_word_index += 1
+            splited_text += current_str
+            if is_there_another_word():
+                splited_text += "\n"
+
+        return splited_text
 
     def get_description_correct_position(self):
         vertical_space = (self.kb_height - self.title.height
@@ -174,43 +221,3 @@ class KnowledgeBlock(manim.RoundedRectangle):
         if len(self.get_all_subkbs()) >= 1:
             description_pos += manim.LEFT * 0.25 * self.kb_width
         return description_pos
-
-    def build_description(self):
-        self.set_description_normal_size()
-        self.description.move_to(self.get_description_correct_position())
-
-    def set_description_normal_size(self):#TODO -> get_
-        self.split_description_lines()
-        while (not self.is_acceptable_description_height(self.description) and
-               self.description.font_size > MIN_DESCRIPTION_FONT_SIZE):
-            self.description.font_size -= 1.0
-            self.split_description_lines()
-        while (not self.is_acceptable_description_width(self.description) and
-               self.description.font_size > MIN_DESCRIPTION_FONT_SIZE):
-            self.description.font_size -= 1.0
-
-    def split_description_lines(self):#TODO remove while while
-
-        def is_there_another_word():
-            return current_word_index < len(all_text)
-
-        all_text: list[str] = self.description.original_text.split()
-        splited_text: str = ""
-        current_word_index: int = 0
-        while is_there_another_word():
-            current_str: str = all_text[current_word_index]
-            current_word_index += 1
-            while (is_there_another_word() and
-                   self.is_acceptable_description_width(
-                       manim.Text(
-                           current_str + " " + all_text[current_word_index],
-                           font_size=self.description.font_size))):
-                current_str += " " + all_text[current_word_index]
-                current_word_index += 1
-            splited_text += current_str
-            if is_there_another_word():
-                splited_text += "\n"
-
-        self.description = manim.Text(
-            splited_text,
-            font_size=self.description.font_size)

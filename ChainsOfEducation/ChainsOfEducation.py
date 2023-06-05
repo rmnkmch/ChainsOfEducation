@@ -24,7 +24,8 @@ class ChainsOfEducation(manim.Scene):
             self.add_one_kb_into_other(kbi, kb)
             self.wait()
         self.play(self.get_move_kb_with_scale_to_animation(
-            kb, 2.0).set_run_time(2.0))
+            kb, 2.0, manim.ORIGIN).set_run_time(2.0))
+        self.wait()
 
     def add_one_kb_into_other(self, one: KnowledgeBlock, other: KnowledgeBlock):
         other.add(one)
@@ -59,15 +60,21 @@ class ChainsOfEducation(manim.Scene):
         all_animations = manim.AnimationGroup()
         for description_info in all_info:
             description_info[0].generate_target()
-            description_info[0].target.scale(description_info[1]).move_to(
-                description_info[2])
+            description_info[0].target = manim.Text(
+                description_info[1],
+                font_size = KnowledgeBlock.DEFAULT_DESCRIPTION_FONT_SIZE)
+            description_info[0].target.scale(
+                description_info[2] * description_info[0].width
+                / description_info[0].target.width).move_to(
+                    description_info[3])
             all_animations = manim.AnimationGroup(
                 all_animations, manim.MoveToTarget(description_info[0]))
         return all_animations
 
     def update_kb(self, kb: KnowledgeBlock):
+        kb.generate_target()#TODO remove MoveToTarget
         self.play(manim.AnimationGroup(
-            self.get_move_kb_with_scale_to_animation(kb),#BUG!!!
+            manim.MoveToTarget(kb),
             self.get_update_description_animation(kb),
             self.get_update_subkbs_animations(kb),
             lag_ratio=0.3))
