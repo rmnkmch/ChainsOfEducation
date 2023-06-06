@@ -4,7 +4,7 @@
 DEFAULT_HEIGHT: float = 4.5
 DEFAULT_WIDTH: float = 8.0
 
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 19.0#32.0
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 12.0#32.0
 DEFAULT_TITLE_FONT_SIZE: float = 56.0
 
 DEFAULT_PADDING: float = 0.3
@@ -12,17 +12,18 @@ DEFAULT_UNDERLINE_TITLE_OFFSET: float = 0.3
 
 
 class KnowledgeBlock(manim.RoundedRectangle):
-    """Base class for all blocks of knowledge
-    kb - KnowledgeBlock"""
+    """Base class for all blocks of knowledge"""
 
     def __init__(
         self,
         title: str = "KnowledgeBlockTitle",
         description: str = "KnowledgeBlockDescription",
+        height: float = DEFAULT_HEIGHT,
+        width: float = DEFAULT_WIDTH,
         **kwargs):
         super().__init__(
-            height = DEFAULT_HEIGHT,
-            width = DEFAULT_WIDTH,
+            height = height,
+            width = width,
             **kwargs)
 
         self.kb_height: float = DEFAULT_HEIGHT
@@ -32,24 +33,16 @@ class KnowledgeBlock(manim.RoundedRectangle):
         self.title = manim.Text(
             title,
             font_size = DEFAULT_TITLE_FONT_SIZE,
-            weight = manim.BOLD,
-            )
+            weight = manim.BOLD)
         self.set_normal_title()
         self.title_underline = manim.Underline(self.title)
 
         self.description = manim.Text(
             description,
-            font_size = DEFAULT_DESCRIPTION_FONT_SIZE,
-            )
+            font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.build_description()
 
         self.add(self.title, self.title_underline, self.description)
-
-    def scale(self, scale_factor: float, **kwargs):
-        super().scale(scale_factor, **kwargs)
-        self.kb_height *= scale_factor
-        self.kb_width *= scale_factor
-        return self
 
     def add(self, *mobjects):
         super().add(*mobjects)
@@ -59,13 +52,28 @@ class KnowledgeBlock(manim.RoundedRectangle):
         super().remove(*mobjects)
         return self
 
+    def scale(self, scale_factor: float, **kwargs):
+        super().scale(scale_factor, **kwargs)
+        self.update_size(scale_factor)
+        return self
+
+    def update_size(self, scale_factor: float):
+        self.kb_height *= scale_factor
+        self.kb_width *= scale_factor
+        for subkb in self.get_all_subkbs():
+            subkb.update_size(scale_factor)
+
     def set_center(self, new_center):
         self.center = new_center
+        current_kb_index = 0
+        for subkb in self.get_all_subkbs():
+            subkb.set_center(subkb.get_subkb_pos(current_kb_index))
+            current_kb_index += 1
 
     def get_center(self):
         return self.center
 
-    def move_to(self, point_or_mobject, aligned_edge=manim.ORIGIN, **kwargs):
+    def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
         super().move_to(point_or_mobject, aligned_edge, **kwargs)
         if (isinstance(point_or_mobject, KnowledgeBlock) and
             aligned_edge == manim.ORIGIN):
@@ -78,15 +86,15 @@ class KnowledgeBlock(manim.RoundedRectangle):
 
     def get_subkb_info_to_update(self):
         ret_info = []
-        current_kb_index = 0
-        for kb in self.get_all_subkbs():
-            scale = self.get_subkb_scale(current_kb_index)
-            pos = self.get_subkb_pos(current_kb_index)
+        current_subkb_index = 0
+        for subkb in self.get_all_subkbs():
+            scale = self.get_subkb_scale(current_subkb_index)
+            pos = self.get_subkb_pos(current_subkb_index)
             if ((abs(scale - 1.0) >= 0.001) or
-                (abs(pos[0] - kb.get_center()[0]) >= 0.001) or
-                (abs(pos[1] - kb.get_center()[1]) >= 0.001)):
-                ret_info.append(tuple([kb, scale, pos]))
-            current_kb_index += 1
+                (abs(pos[0] - subkb.get_center()[0]) >= 0.001) or
+                (abs(pos[1] - subkb.get_center()[1]) >= 0.001)):
+                ret_info.append(tuple([subkb, scale, pos]))
+            current_subkb_index += 1
         return ret_info
 
     def get_subkb_scale(self, index: int):
@@ -94,7 +102,7 @@ class KnowledgeBlock(manim.RoundedRectangle):
         subkbs = self.get_all_subkbs()
         if (index == 0) and (len(subkbs) == 1):
             subkb_scale = 1.0
-        return subkb_scale * 0.5 * self.kb_width / subkbs[index].width
+        return subkb_scale * 0.5 * self.kb_width / subkbs[index].kb_width
 
     def get_subkb_pos(self, index: int):
         vertical_space = (self.kb_height - self.title.height
@@ -149,21 +157,21 @@ class KnowledgeBlock(manim.RoundedRectangle):
         self.title.next_to(self, manim.UP, - self.title.height - DEFAULT_PADDING)
 
     def build_description(self):
-        size_and_text = self.get_correct_description_size_and_text()
+        text_and_size = self.get_correct_description_size_and_text()
         self.description = manim.Text(
-            size_and_text[1], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
-        self.description.scale(size_and_text[0])
+            text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
+        self.description.scale(text_and_size[1])
         self.description.move_to(self.get_description_correct_position())
 
     def get_description_info_to_update(self):
         ret_info = []
-        size_and_text = self.get_correct_description_size_and_text()
+        text_and_size = self.get_correct_description_size_and_text()
         pos = self.get_description_correct_position()
-        if ((abs(size_and_text[0] - 1.0) >= 0.001) or
+        if ((abs(text_and_size[1] - 1.0) >= 0.001) or
             (abs(pos[0] - self.description.get_center()[0]) >= 0.001) or
             (abs(pos[1] - self.description.get_center()[1]) >= 0.001)):
-            ret_info.append(tuple([self.description, size_and_text[1],
-                                   size_and_text[0], pos]))
+            ret_info.append(tuple([self.description, text_and_size[0],
+                                   text_and_size[1], pos]))
         return ret_info
 
     def get_correct_description_size_and_text(self):
@@ -178,11 +186,11 @@ class KnowledgeBlock(manim.RoundedRectangle):
             correct_text = self.get_splited_description_text(
                 new_description.font_size)
             new_description = manim.Text(
-                correct_text, font_size = new_description.font_size)#???
+                correct_text, font_size = new_description.font_size)
         while not self.is_acceptable_description_width(new_description):
             new_description.scale(0.9)
             scale_factor *= 0.9
-        return (scale_factor, correct_text)
+        return (correct_text, scale_factor)
 
     def get_splited_description_text(
         self, new_font_size: float = DEFAULT_DESCRIPTION_FONT_SIZE):
@@ -221,3 +229,10 @@ class KnowledgeBlock(manim.RoundedRectangle):
         if len(self.get_all_subkbs()) >= 1:
             description_pos += manim.LEFT * 0.25 * self.kb_width
         return description_pos
+
+
+class ContainingBlock(KnowledgeBlock):
+    """Class for fourth and next subblocks of KnowledgeBlock"""
+
+    def __init__(self, title: str = "0", **kwargs):
+        super().__init__(title = title, **kwargs)
