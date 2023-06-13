@@ -1,11 +1,11 @@
 ﻿import manim
+import Block
 import KnowledgeBlock as KB
 
 
 class ChainsOfEducation(manim.Scene):
     def construct(self):
         grid = manim.NumberPlane()
-        grid.stroke_opacity = 0.01
         kb = KB.KnowledgeBlock("Хи́мия!", '''
         Хи́мия - одна из 
         важнейших и обширных областей естествознания,
@@ -21,49 +21,53 @@ class ChainsOfEducation(manim.Scene):
         средой обитания. Изучает все аспекты жизни,
         в частности''').move_to(3.0 * manim.RIGHT)
         self.add(kb, kb2, grid)
-        self.wait()
-        self.add_one_kb_into_other(kb2, kb)
-        self.wait()
-        for i in range(0):
-            self.play(self.get_move_kb_with_scale_to_animation(kb))
-            self.wait()
-        self.play(self.get_move_kb_with_scale_to_animation(
+        self.add_one_into_other(kb2, kb)
+        for i in range(5):
+            kbi = KB.KnowledgeBlock(str(i) * 10, '''
+            Биаивсе аспекты жизнив частности''').move_to(1.0 * manim.RIGHT)
+            self.add_one_into_other(kbi, kb)
+        self.play(self.get_move_with_scale_animation(
             kb, 1.5, manim.ORIGIN))
         self.wait()
-        manim.FadeOut
+        kb.make_target_be_hidden()
+        self.play(manim.MoveToTarget(kb))
+        self.wait()
+        kb.make_target_be_displayed()
+        self.play(manim.MoveToTarget(kb))
+        self.wait()
 
-    def add_one_kb_into_other(self,
-                              one: KB.KnowledgeBlock,
-                              other: KB.KnowledgeBlock):
+    def add_one_into_other(self,
+                           one: Block.Block,
+                           other: Block.Block):
         other.add(one)
-        self.update_kb(other)
+        self.update_b(other)
 
-    def remove_one_kb_outof_other(self,
-                                  one: KB.KnowledgeBlock,
-                                  other: KB.KnowledgeBlock):
+    def remove_one_outof_other(self,
+                               one: Block.Block,
+                               other: Block.Block):
         other.remove(one)
         self.remove(one)
-        self.update_kb(other)
+        self.update_b(other)
 
-    def get_move_kb_with_scale_to_animation(self,
-                                            kb: KB.KnowledgeBlock,
-                                            scale_factor: float = 1.0,
-                                            position = None):
+    def get_move_with_scale_animation(self,
+                                      b: Block.Block,
+                                      scale_factor: float = 1.0,
+                                      position = None):
         if position is None:
-            position = kb.get_center()
-        kb.update_size(scale_factor)
-        kb.set_center(position)
-        kb.generate_target()
-        kb.target.scale(scale_factor).move_to(position)
-        return manim.MoveToTarget(kb)
+            position = b.get_center()
+        b.update_size(scale_factor)
+        b.set_center(position)
+        b.generate_target()
+        b.target.scale(scale_factor).move_to(position)
+        return manim.MoveToTarget(b)
 
-    def get_update_subkbs_animations(self, kb: KB.KnowledgeBlock):
-        all_info = kb.get_subkb_info_to_update()
+    def get_update_subbs_animations(self, b: Block.Block):
+        all_info = b.get_subb_info_to_update()
         all_animations = manim.AnimationGroup()
-        for subkb_info in all_info:
+        for subb_info in all_info:
             all_animations = manim.AnimationGroup(
-                all_animations, self.get_move_kb_with_scale_to_animation(
-                    subkb_info[0], subkb_info[1], subkb_info[2]))
+                all_animations, self.get_move_with_scale_animation(
+                    subb_info[0], subb_info[1], subb_info[2]))
         return all_animations
 
     def get_update_description_animation(self, kb: KB.KnowledgeBlock):
@@ -82,29 +86,14 @@ class ChainsOfEducation(manim.Scene):
                 all_animations, manim.MoveToTarget(description_info[0]))
         return all_animations
 
-    def update_kb(self, kb: KB.KnowledgeBlock):
-        kb.generate_target()#TODO remove MoveToTarget
-        self.play(manim.AnimationGroup(
-            manim.MoveToTarget(kb),
-            self.get_update_description_animation(kb),
-            self.get_update_subkbs_animations(kb),
-            lag_ratio = 0.3))
+    def update_b(self, b):
+        b.generate_target()#TODO remove MoveToTarget
+        all_animations = manim.AnimationGroup(
+            manim.MoveToTarget(b),
+            self.get_update_description_animation(b),
+            self.get_update_subbs_animations(b), lag_ratio = 0.25)
+        self.play(all_animations)
 
 #cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 #manim  -pql ChainsOfEducation.py ChainsOfEducation
 #--disable_caching
-"""
-for i in range(2):
-            kbi = KB.KnowledgeBlock(str(i), str(i) * 20).move_to(
-                i * manim.LEFT + 3.0 * manim.RIGHT).scale(0.6 + i * 0.1)
-            self.add(kbi)
-            self.wait()
-            self.add_one_kb_into_other(kbi, kb2)
-            self.wait()
-            self.play(self.get_move_kb_with_scale_to_animation(
-                kb, 0.9))
-            self.wait()
-        self.play(self.get_move_kb_with_scale_to_animation(
-            kb, 2.0, manim.ORIGIN))
-        self.wait()
-        """

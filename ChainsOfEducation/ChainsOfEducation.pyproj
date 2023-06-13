@@ -21,7 +21,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Block.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ChainsOfEducation.py" />
+    <Compile Include="ContainingBlock.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Droplet.py" />
     <Compile Include="KnowledgeBlock.py">
       <SubType>Code</SubType>

@@ -1,18 +1,19 @@
 ﻿import manim
+import Block
 
 
-DEFAULT_HEIGHT: float = 4.5
-DEFAULT_WIDTH: float = 8.0
+DEFAULT_HEIGHT: float = Block.DEFAULT_HEIGHT
+DEFAULT_WIDTH: float = Block.DEFAULT_WIDTH
 
 DEFAULT_DESCRIPTION_FONT_SIZE: float = 12.0#32.0
-DEFAULT_TITLE_FONT_SIZE: float = 56.0
+DEFAULT_TITLE_FONT_SIZE: float = Block.DEFAULT_TITLE_FONT_SIZE
 
-DEFAULT_PADDING: float = 0.3
-DEFAULT_UNDERLINE_TITLE_OFFSET: float = 0.3
+DEFAULT_PADDING: float = Block.DEFAULT_PADDING
+DEFAULT_UNDERLINE_TITLE_OFFSET: float = Block.DEFAULT_UNDERLINE_TITLE_OFFSET
 
 
-class KnowledgeBlock(manim.RoundedRectangle):
-    """Base class for all blocks of knowledge"""
+class KnowledgeBlock(Block.Block):
+    """Class for all blocks of knowledge"""
 
     def __init__(
         self,
@@ -22,139 +23,30 @@ class KnowledgeBlock(manim.RoundedRectangle):
         width: float = DEFAULT_WIDTH,
         **kwargs):
         super().__init__(
+            title = title,
             height = height,
             width = width,
             **kwargs)
-
-        self.kb_height: float = DEFAULT_HEIGHT
-        self.kb_width: float = DEFAULT_WIDTH
-        self.center = super().get_center()
-
-        self.title = manim.Text(
-            title,
-            font_size = DEFAULT_TITLE_FONT_SIZE,
-            weight = manim.BOLD)
-        self.set_normal_title()
-        self.title_underline = manim.Underline(self.title)
 
         self.description = manim.Text(
             description,
             font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.build_description()
 
-        self.add(self.title, self.title_underline, self.description)
-
-    def add(self, *mobjects):
-        super().add(*mobjects)
-        return self
-
-    def remove(self, *mobjects):
-        super().remove(*mobjects)
-        return self
-
-    def scale(self, scale_factor: float, **kwargs):
-        super().scale(scale_factor, **kwargs)
-        self.update_size(scale_factor)
-        return self
-
-    def update_size(self, scale_factor: float):
-        self.kb_height *= scale_factor
-        self.kb_width *= scale_factor
-        for subkb in self.get_all_subkbs():
-            subkb.update_size(scale_factor)
-
-    def set_center(self, new_center):
-        self.center = new_center
-        current_kb_index = 0
-        for subkb in self.get_all_subkbs():
-            subkb.set_center(subkb.get_subkb_pos(current_kb_index))
-            current_kb_index += 1
-
-    def get_center(self):
-        return self.center
-
-    def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
-        super().move_to(point_or_mobject, aligned_edge, **kwargs)
-        if (isinstance(point_or_mobject, KnowledgeBlock) and
-            aligned_edge == manim.ORIGIN):
-            self.set_center(point_or_mobject.get_center())
-        elif isinstance(point_or_mobject, manim.Mobject):
-            self.set_center(point_or_mobject.get_critical_point(aligned_edge))
-        else:
-            self.set_center(point_or_mobject)
-        return self
-
-    def get_subkb_info_to_update(self):
-        ret_info = []
-        current_subkb_index = 0
-        for subkb in self.get_all_subkbs():
-            scale = self.get_subkb_scale(current_subkb_index)
-            pos = self.get_subkb_pos(current_subkb_index)
-            if ((abs(scale - 1.0) >= 0.001) or
-                (abs(pos[0] - subkb.get_center()[0]) >= 0.001) or
-                (abs(pos[1] - subkb.get_center()[1]) >= 0.001)):
-                ret_info.append(tuple([subkb, scale, pos]))
-            current_subkb_index += 1
-        return ret_info
-
-    def get_subkb_scale(self, index: int):
-        subkb_scale: float = 0.5
-        subkbs = self.get_all_subkbs()
-        if (index == 0) and (len(subkbs) == 1):
-            subkb_scale = 1.0
-        return subkb_scale * 0.5 * self.kb_width / subkbs[index].kb_width
-
-    def get_subkb_pos(self, index: int):
-        vertical_space = (self.kb_height - self.title.height
-                          - (DEFAULT_UNDERLINE_TITLE_OFFSET
-                             + 2.0 * DEFAULT_PADDING)
-                          * self.get_kb_proportion())
-        subkb_pos = (manim.RIGHT * 0.25 * self.kb_width
-                     + manim.DOWN * (0.5 * self.kb_height
-                                     - 0.5 * vertical_space
-                                     - DEFAULT_PADDING * self.get_kb_proportion())
-                     + self.get_center())
-        horizontal_dop_part = manim.LEFT * 0.125 * self.kb_width
-        vertical_dop_part = 0.25 * manim.UP * vertical_space
-        if (index == 0) and (len(self.get_all_subkbs()) == 1):
-            return subkb_pos
-        if index == 0:
-            subkb_pos += horizontal_dop_part + vertical_dop_part
-        elif index == 1:
-            subkb_pos += - horizontal_dop_part + vertical_dop_part
-        elif index == 2:
-            subkb_pos += horizontal_dop_part - vertical_dop_part
-        else:
-            subkb_pos += - horizontal_dop_part - vertical_dop_part
-        return subkb_pos
-
-    def get_all_subkbs(self):
-        return [kb for kb in self.submobjects if isinstance(kb, KnowledgeBlock)]
-
-    def get_kb_proportion(self):
-        return self.kb_width / DEFAULT_WIDTH
-
-    def is_acceptable_title_width(self):
-        return (self.title.width <
-                self.kb_width - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
+        self.add(self.description)
 
     def is_acceptable_description_width(self, descr: manim.Text):
-        if len(self.get_all_subkbs()) >= 1:
+        if len(self.get_all_subbs()) >= 1:
             return (descr.width <
-                    0.5 * self.kb_width
-                    - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
+                    0.5 * self.b_width
+                    - 2.0 * DEFAULT_PADDING * self.get_proportion())
         return (descr.width <
-                self.kb_width - 2.0 * DEFAULT_PADDING * self.get_kb_proportion())
+                self.b_width - 2.0 * DEFAULT_PADDING * self.get_proportion())
 
     def is_acceptable_description_height(self, descr: manim.Text):
-        return (descr.height < self.kb_height - self.title.height
+        return (descr.height < self.b_height - self.title.height
                 - (2.0 * DEFAULT_PADDING + DEFAULT_UNDERLINE_TITLE_OFFSET)
-                * self.get_kb_proportion())
-
-    def set_normal_title(self):
-        while not self.is_acceptable_title_width():
-            self.title.font_size -= 1.0
-        self.title.next_to(self, manim.UP, - self.title.height - DEFAULT_PADDING)
+                * self.get_proportion())
 
     def build_description(self):
         text_and_size = self.get_correct_description_size_and_text()
@@ -217,22 +109,30 @@ class KnowledgeBlock(manim.RoundedRectangle):
         return splited_text
 
     def get_description_correct_position(self):
-        vertical_space = (self.kb_height - self.title.height
+        vertical_space = (self.b_height - self.title.height
                           - (DEFAULT_UNDERLINE_TITLE_OFFSET
                              + 2.0 * DEFAULT_PADDING)
-                          * self.get_kb_proportion())
-        description_pos = (manim.DOWN * (0.5 * self.kb_height
+                          * self.get_proportion())
+        description_pos = (manim.DOWN * (0.5 * self.b_height
                                          - 0.5 * vertical_space
                                          - DEFAULT_PADDING
-                                         * self.get_kb_proportion())
+                                         * self.get_proportion())
                            + self.get_center())
-        if len(self.get_all_subkbs()) >= 1:
-            description_pos += manim.LEFT * 0.25 * self.kb_width
+        if len(self.get_all_subbs()) >= 1:
+            description_pos += manim.LEFT * 0.25 * self.b_width
         return description_pos
 
+    def save_all_opacity(self):
+        super().save_all_opacity()
+        self.all_old_opacity.append(self.description.get_fill_opacity())
+        self.all_old_opacity.append(self.description.get_stroke_opacity())
 
-class ContainingBlock(KnowledgeBlock):
-    """Class for fourth and next subblocks of KnowledgeBlock"""
+    def hide(self):
+        super().hide()
+        self.description.set_fill(opacity = 0.0)
+        self.description.set_stroke(opacity = 0.0)
 
-    def __init__(self, title: str = "0", **kwargs):
-        super().__init__(title = title, **kwargs)
+    def display(self):
+        super().display()
+        self.description.set_fill(opacity = self.all_old_opacity[6])
+        self.description.set_stroke(opacity = self.all_old_opacity[7])
