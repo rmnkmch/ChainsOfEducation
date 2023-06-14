@@ -46,6 +46,7 @@ class Block(manim.RoundedRectangle):
     def scale(self, scale_factor: float, **kwargs):
         super().scale(scale_factor, **kwargs)
         self.update_size(scale_factor)
+        print(self.b_width)
         return self
 
     def update_size(self, scale_factor: float):
@@ -74,7 +75,21 @@ class Block(manim.RoundedRectangle):
             self.set_center(point_or_mobject)
         return self
 
-    def get_subb_info_to_update(self):
+    def prepare_target(self):
+        self.make_target_with_correct_subblocks()
+
+    def make_finish_target(self):
+        self.make_target_with_correct_subblocks()
+
+    def make_target_with_correct_subblocks(self):
+        current_subb_index: int = 0
+        for subb in self.get_all_subbs():
+            new_scale = self.get_subb_scale(current_subb_index)
+            pos = self.get_subb_pos(current_subb_index)
+            subb.scale(new_scale).move_to(pos)
+            current_subb_index += 1
+
+    """def get_subb_info_to_update(self):
         ret_info = []
         current_subb_index: int = 0
         for subb in self.get_all_subbs():
@@ -85,7 +100,7 @@ class Block(manim.RoundedRectangle):
                 (abs(pos[1] - subb.get_center()[1]) >= 0.001)):
                 ret_info.append(tuple([subb, scale, pos]))
             current_subb_index += 1
-        return ret_info
+        return ret_info"""
 
     def get_subb_scale(self, index: int):
         subb_scale: float = 0.5
@@ -119,7 +134,11 @@ class Block(manim.RoundedRectangle):
         return subb_pos
 
     def get_all_subbs(self):
-        return [b for b in self.submobjects if isinstance(b, Block)]
+        ret_list = []
+        for b in self.submobjects:
+            if isinstance(b, Block):
+                ret_list.append(b)
+        return ret_list
 
     def get_proportion(self):
         return self.b_width / DEFAULT_WIDTH

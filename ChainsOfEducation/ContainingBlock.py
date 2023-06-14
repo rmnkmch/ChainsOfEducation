@@ -5,8 +5,8 @@ import Block
 class ContainingBlock(Block.Block):
     """Class for fourth and next subblocks of KnowledgeBlock"""
 
-    def __init__(self, **kwargs):
-        super().__init__("0", **kwargs)
+    def __init__(self, title: str = "0", **kwargs):
+        super().__init__(title, **kwargs)
 
         self.set_normal_title()
         self.title_underline = manim.Underline(self.title)

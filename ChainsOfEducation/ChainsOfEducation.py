@@ -21,11 +21,20 @@ class ChainsOfEducation(manim.Scene):
         средой обитания. Изучает все аспекты жизни,
         в частности''').move_to(3.0 * manim.RIGHT)
         self.add(kb, kb2, grid)
-        self.add_one_into_other(kb2, kb)
-        for i in range(5):
+        kb.add(kb2)
+        kb.generate_target()
+        kb.target.scale(0.5)
+        self.play(manim.MoveToTarget(kb))
+        #self.add_one_into_other(kb2, kb)
+
+        """for i in range(2):
             kbi = KB.KnowledgeBlock(str(i) * 10, '''
             Биаивсе аспекты жизнив частности''').move_to(1.0 * manim.RIGHT)
             self.add_one_into_other(kbi, kb)
+        for i in range(2):
+            kbi = KB.KnowledgeBlock(str(i) * 20, '''
+            Биаиности''').move_to(1.0 * manim.LEFT)
+            self.add_one_into_other(kbi, kb2)
         self.play(self.get_move_with_scale_animation(
             kb, 1.5, manim.ORIGIN))
         self.wait()
@@ -34,7 +43,7 @@ class ChainsOfEducation(manim.Scene):
         self.wait()
         kb.make_target_be_displayed()
         self.play(manim.MoveToTarget(kb))
-        self.wait()
+        self.wait()"""
 
     def add_one_into_other(self,
                            one: Block.Block,
@@ -88,10 +97,11 @@ class ChainsOfEducation(manim.Scene):
 
     def update_b(self, b):
         b.generate_target()#TODO remove MoveToTarget
+        b.target.make_finish_target()
         all_animations = manim.AnimationGroup(
-            manim.MoveToTarget(b),
-            self.get_update_description_animation(b),
-            self.get_update_subbs_animations(b), lag_ratio = 0.25)
+            manim.MoveToTarget(b))
+            #self.get_update_description_animation(b),
+            #self.get_update_subbs_animations(b), lag_ratio = 0.25)
         self.play(all_animations)
 
 #cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation

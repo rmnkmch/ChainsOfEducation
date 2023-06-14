@@ -1,5 +1,6 @@
 ﻿import manim
 import Block
+import ContainingBlock
 
 
 DEFAULT_HEIGHT: float = Block.DEFAULT_HEIGHT
@@ -33,7 +34,9 @@ class KnowledgeBlock(Block.Block):
             font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.build_description()
 
-        self.add(self.description)
+        #self.containing_b = ContainingBlock.ContainingBlock("0")
+
+        self.add(self.description)#, self.containing_b)
 
     def is_acceptable_description_width(self, descr: manim.Text):
         if len(self.get_all_subbs()) >= 1:
