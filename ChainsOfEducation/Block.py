@@ -46,7 +46,6 @@ class Block(manim.RoundedRectangle):
     def scale(self, scale_factor: float, **kwargs):
         super().scale(scale_factor, **kwargs)
         self.update_size(scale_factor)
-        print(self.b_width)
         return self
 
     def update_size(self, scale_factor: float):
@@ -59,7 +58,7 @@ class Block(manim.RoundedRectangle):
         self.b_center = new_center
         current_subb_index: int = 0
         for subb in self.get_all_subbs():
-            subb.set_center(subb.get_subb_pos(current_subb_index))
+            subb.set_center(self.get_subb_pos(current_subb_index))
             current_subb_index += 1
 
     def get_center(self):
@@ -76,31 +75,25 @@ class Block(manim.RoundedRectangle):
         return self
 
     def prepare_target(self):
-        self.make_target_with_correct_subblocks()
+        current_subb_index: int = 0
+        for subb in self.get_all_subbs():
+            new_scale = self.get_subb_scale(current_subb_index)
+            pos = self.get_subb_pos(current_subb_index)
+            subb.update_size(new_scale)
+            subb.set_center(pos)
+            current_subb_index += 1
 
     def make_finish_target(self):
-        self.make_target_with_correct_subblocks()
+        self.generate_target()
+        self.target.correct_subblocks()
 
-    def make_target_with_correct_subblocks(self):
+    def correct_subblocks(self):
         current_subb_index: int = 0
         for subb in self.get_all_subbs():
             new_scale = self.get_subb_scale(current_subb_index)
             pos = self.get_subb_pos(current_subb_index)
             subb.scale(new_scale).move_to(pos)
             current_subb_index += 1
-
-    """def get_subb_info_to_update(self):
-        ret_info = []
-        current_subb_index: int = 0
-        for subb in self.get_all_subbs():
-            scale = self.get_subb_scale(current_subb_index)
-            pos = self.get_subb_pos(current_subb_index)
-            if ((abs(scale - 1.0) >= 0.001) or
-                (abs(pos[0] - subb.get_center()[0]) >= 0.001) or
-                (abs(pos[1] - subb.get_center()[1]) >= 0.001)):
-                ret_info.append(tuple([subb, scale, pos]))
-            current_subb_index += 1
-        return ret_info"""
 
     def get_subb_scale(self, index: int):
         subb_scale: float = 0.5

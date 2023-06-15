@@ -21,29 +21,20 @@ class ChainsOfEducation(manim.Scene):
         средой обитания. Изучает все аспекты жизни,
         в частности''').move_to(3.0 * manim.RIGHT)
         self.add(kb, kb2, grid)
-        kb.add(kb2)
-        kb.generate_target()
-        kb.target.scale(0.5)
-        self.play(manim.MoveToTarget(kb))
-        #self.add_one_into_other(kb2, kb)
-
-        """for i in range(2):
+        self.add_one_into_other(kb2, kb)
+        for i in range(3):
             kbi = KB.KnowledgeBlock(str(i) * 10, '''
             Биаивсе аспекты жизнив частности''').move_to(1.0 * manim.RIGHT)
             self.add_one_into_other(kbi, kb)
-        for i in range(2):
+        for i in range(3):
             kbi = KB.KnowledgeBlock(str(i) * 20, '''
             Биаиности''').move_to(1.0 * manim.LEFT)
             self.add_one_into_other(kbi, kb2)
-        self.play(self.get_move_with_scale_animation(
-            kb, 1.5, manim.ORIGIN))
-        self.wait()
         kb.make_target_be_hidden()
         self.play(manim.MoveToTarget(kb))
-        self.wait()
         kb.make_target_be_displayed()
         self.play(manim.MoveToTarget(kb))
-        self.wait()"""
+        self.wait()
 
     def add_one_into_other(self,
                            one: Block.Block,
@@ -57,27 +48,6 @@ class ChainsOfEducation(manim.Scene):
         other.remove(one)
         self.remove(one)
         self.update_b(other)
-
-    def get_move_with_scale_animation(self,
-                                      b: Block.Block,
-                                      scale_factor: float = 1.0,
-                                      position = None):
-        if position is None:
-            position = b.get_center()
-        b.update_size(scale_factor)
-        b.set_center(position)
-        b.generate_target()
-        b.target.scale(scale_factor).move_to(position)
-        return manim.MoveToTarget(b)
-
-    def get_update_subbs_animations(self, b: Block.Block):
-        all_info = b.get_subb_info_to_update()
-        all_animations = manim.AnimationGroup()
-        for subb_info in all_info:
-            all_animations = manim.AnimationGroup(
-                all_animations, self.get_move_with_scale_animation(
-                    subb_info[0], subb_info[1], subb_info[2]))
-        return all_animations
 
     def get_update_description_animation(self, kb: KB.KnowledgeBlock):
         all_info = kb.get_description_info_to_update()
@@ -96,13 +66,10 @@ class ChainsOfEducation(manim.Scene):
         return all_animations
 
     def update_b(self, b):
-        b.generate_target()#TODO remove MoveToTarget
-        b.target.make_finish_target()
-        all_animations = manim.AnimationGroup(
-            manim.MoveToTarget(b))
-            #self.get_update_description_animation(b),
-            #self.get_update_subbs_animations(b), lag_ratio = 0.25)
-        self.play(all_animations)
+        b.prepare_target()
+        b.make_finish_target()
+        self.play(manim.MoveToTarget(b))
+        self.wait()
 
 #cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 #manim  -pql ChainsOfEducation.py ChainsOfEducation
