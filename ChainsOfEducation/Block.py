@@ -74,7 +74,10 @@ class Block(manim.RoundedRectangle):
             self.set_center(point_or_mobject)
         return self
 
-    def prepare_target(self):
+    def get_animations_to_play(self):
+        return manim.AnimationGroup(manim.MoveToTarget(self))
+
+    def correct_subblocks_info(self):
         current_subb_index: int = 0
         for subb in self.get_all_subbs():
             new_scale = self.get_subb_scale(current_subb_index)
@@ -85,6 +88,7 @@ class Block(manim.RoundedRectangle):
 
     def make_finish_target(self):
         self.generate_target()
+        self.correct_subblocks_info()
         self.target.correct_subblocks()
 
     def correct_subblocks(self):
@@ -143,7 +147,8 @@ class Block(manim.RoundedRectangle):
     def set_normal_title(self):
         while not self.is_acceptable_title_width():
             self.title.font_size -= 2.0
-        self.title.next_to(self, manim.UP, - self.title.height - DEFAULT_PADDING)
+        self.title.next_to(self, manim.UP, - self.title.height
+                           - DEFAULT_PADDING * self.get_proportion())
 
     def set_fill(self, color: str | None = None,
                  opacity: float | None = None, family: bool = False):
@@ -184,12 +189,3 @@ class Block(manim.RoundedRectangle):
         #self.set_stroke(opacity=opacity, background=True)???
         for subb in self.get_all_subbs():
             subb.display()
-
-    def make_target_be_hidden(self):
-        self.generate_target()
-        self.save_all_opacity()
-        self.target.hide()
-
-    def make_target_be_displayed(self):
-        self.generate_target()
-        self.target.display()

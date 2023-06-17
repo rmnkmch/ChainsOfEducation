@@ -38,6 +38,20 @@ class KnowledgeBlock(Block.Block):
 
         self.add(self.description)#, self.containing_b)
 
+    def get_animations_to_play(self):
+        return manim.AnimationGroup(super().get_animations_to_play(),
+                                    manim.MoveToTarget(self.description))
+
+    def make_finish_target(self):
+        super().make_finish_target()
+        self.description.generate_target()
+        self.build_description()
+        text_and_size = self.get_correct_description_size_and_text()
+        self.description.target = manim.Text(
+            text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
+        self.description.target.scale(text_and_size[1])
+        self.description.target.move_to(self.get_description_correct_position())
+
     def is_acceptable_description_width(self, descr: manim.Text):
         if len(self.get_all_subbs()) >= 1:
             return (descr.width <
@@ -57,17 +71,6 @@ class KnowledgeBlock(Block.Block):
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(text_and_size[1])
         self.description.move_to(self.get_description_correct_position())
-
-    def get_description_info_to_update(self):
-        ret_info = []
-        text_and_size = self.get_correct_description_size_and_text()
-        pos = self.get_description_correct_position()
-        if ((abs(text_and_size[1] - 1.0) >= 0.001) or
-            (abs(pos[0] - self.description.get_center()[0]) >= 0.001) or
-            (abs(pos[1] - self.description.get_center()[1]) >= 0.001)):
-            ret_info.append(tuple([self.description, text_and_size[0],
-                                   text_and_size[1], pos]))
-        return ret_info
 
     def get_correct_description_size_and_text(self):
         correct_text = self.get_splited_description_text()
