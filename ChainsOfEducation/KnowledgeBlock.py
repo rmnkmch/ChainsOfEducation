@@ -45,11 +45,10 @@ class KnowledgeBlock(Block.Block):
     def make_finish_target(self):
         super().make_finish_target()
         self.description.generate_target()
-        self.build_description()
-        text_and_size = self.get_correct_description_size_and_text()
+        """text_and_size = self.get_correct_description_size_and_text()
         self.description.target = manim.Text(
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
-        self.description.target.scale(text_and_size[1])
+        self.description.target.scale(text_and_size[1])"""
         self.description.target.move_to(self.get_description_correct_position())
 
     def is_acceptable_description_width(self, descr: manim.Text):

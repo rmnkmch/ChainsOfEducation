@@ -64,6 +64,9 @@ class Block(manim.RoundedRectangle):
     def get_center(self):
         return self.b_center
 
+    def get_not_my_center(self):
+        return super().get_center()
+
     def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
         super().move_to(point_or_mobject, aligned_edge, **kwargs)
         if (isinstance(point_or_mobject, Block) and aligned_edge == manim.ORIGIN):
