@@ -28,6 +28,8 @@ class Block(manim.RoundedRectangle):
         self.b_width: float = width
         self.b_center = super().get_center()
 
+        self.hidden = False
+
         self.title = manim.Text(
             title,
             font_size = DEFAULT_TITLE_FONT_SIZE,
@@ -80,26 +82,39 @@ class Block(manim.RoundedRectangle):
     def get_animations_to_play(self):
         return manim.AnimationGroup(manim.MoveToTarget(self))
 
-    def correct_subblocks_info(self):
-        current_subb_index: int = 0
-        for subb in self.get_all_subbs():
-            new_scale = self.get_subb_scale(current_subb_index)
-            pos = self.get_subb_pos(current_subb_index)
-            subb.update_size(new_scale)
-            subb.set_center(pos)
-            current_subb_index += 1
-
     def make_finish_target(self):
         self.generate_target()
         self.correct_subblocks_info()
         self.target.correct_subblocks()
 
+    def correct_subblocks_info(self):
+        current_subb_index: int = 0
+        subbs = self.get_all_subbs()
+        for subb in subbs:
+            new_scale = self.get_subb_scale(current_subb_index)
+            pos = self.get_subb_pos(current_subb_index)
+            subb.update_size(new_scale)
+            subb.set_center(pos)
+            if ((current_subb_index >= 4) or
+                ((current_subb_index >= 3) and len(subbs) >= 5)):
+                subb.save_all_opacity()
+                subb.hidden = True
+            else:
+                subb.hidden = False
+            current_subb_index += 1
+
     def correct_subblocks(self):
         current_subb_index: int = 0
-        for subb in self.get_all_subbs():
+        subbs = self.get_all_subbs()
+        for subb in subbs:
             new_scale = self.get_subb_scale(current_subb_index)
             pos = self.get_subb_pos(current_subb_index)
             subb.scale(new_scale).move_to(pos)
+            if ((current_subb_index >= 4) or
+                ((current_subb_index >= 3) and len(subbs) >= 5)):
+                subb.hide()
+            else:
+                subb.display()
             current_subb_index += 1
 
     def get_subb_scale(self, index: int):
@@ -161,7 +176,12 @@ class Block(manim.RoundedRectangle):
                    opacity = None, background = False, family = False):
         return super().set_stroke(color, width, opacity, background, family)
 
+    def is_hidden(self):
+        return self.hidden
+
     def save_all_opacity(self):
+        if self.is_hidden():
+            return False
         self.all_old_opacity = [
             self.get_fill_opacity(),
             self.get_stroke_opacity(),
@@ -171,8 +191,12 @@ class Block(manim.RoundedRectangle):
             self.title_underline.get_stroke_opacity()]
         for subb in self.get_all_subbs():
             subb.save_all_opacity()
+        return True
 
     def hide(self):
+        if self.is_hidden():
+            return False
+        self.hidden = True
         self.set_fill(opacity = 0.0)
         self.set_stroke(opacity = 0.0)
         self.title.set_fill(opacity = 0.0)
@@ -181,8 +205,12 @@ class Block(manim.RoundedRectangle):
         self.title_underline.set_stroke(opacity = 0.0)
         for subb in self.get_all_subbs():
             subb.hide()
+        return True
 
     def display(self):
+        if not self.is_hidden():
+            return False
+        self.hidden = False
         self.set_fill(opacity = self.all_old_opacity[0])
         self.set_stroke(opacity = self.all_old_opacity[1])
         self.title.set_fill(opacity = self.all_old_opacity[2])
@@ -192,3 +220,4 @@ class Block(manim.RoundedRectangle):
         #self.set_stroke(opacity=opacity, background=True)???
         for subb in self.get_all_subbs():
             subb.display()
+        return True
