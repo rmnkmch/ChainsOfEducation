@@ -7,17 +7,16 @@ class ContainingBlock(Block.Block):
 
     def __init__(self, title: str = "0", **kwargs):
         super().__init__(title, **kwargs)
+        self.save_all_opacity()
+        self.hide()
 
-        self.set_normal_title()
-        self.title_underline = manim.Underline(self.title)
-
-    def add(self, *mobjects):
+    def make_finish_target(self):
         return
 
-    def remove(self, *mobjects):
+    def correct_subblocks_info(self):
         return
 
-    def get_subb_info_to_update(self):
+    def correct_subblocks(self):
         return
 
     def get_subb_scale(self, index: int):
@@ -27,8 +26,8 @@ class ContainingBlock(Block.Block):
         return
 
     def get_all_subbs(self):
-        return
+        return []
 
     def set_normal_title(self):
         super().set_normal_title()
-        self.title.move_to(self)
+        self.title.scale(5.0).move_to(self)

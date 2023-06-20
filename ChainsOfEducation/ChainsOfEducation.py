@@ -7,34 +7,49 @@ import random
 class ChainsOfEducation(manim.Scene):
     def construct(self):
         grid = manim.NumberPlane()
-        kb = KB.KnowledgeBlock("Хи́мия!", '''
+        self.kb = KB.KnowledgeBlock("Хи́мия!", '''
         Хи́мия - одна из 
         важнейших и обширных областей естествознания,
         наука, изучающая вещества, также их состав и
         строение, их свойства, зависящие от состава и
         строения, их превращения, ведущие к изменению
         состава.'''
-        ).move_to(4.0 * manim.LEFT).scale(0.5)
+        ).move_to(3.0 * manim.LEFT).scale(0.8)
         kb2 = KB.KnowledgeBlock("Биоло́гия!", '''
         Биоло́гия (греч. βιολογία; от др.-греч.
         βίος «жизнь» + λόγος «учение, наука»[1]) —
         наука о живых существах и их взаимодействии со
         средой обитания. Изучает все аспекты жизни,
         в частности''').move_to(3.0 * manim.RIGHT)
+        self.ccountt = 0
+        self.debug_group = manim.Group()
 
-        self.add(kb, kb2, grid)
+        self.add(self.kb, kb2, grid, self.debug_group)
 
-        self.add_one_into_other(kb2, kb)
-        self.random_scale_move(kb, 1)
-        self.remove_one_outof_other(kb2, kb)
-        """self.random_scale_move(kb, 1, False)
-        self.add_blocks(kb)
-        self.random_scale_move(kb, 1, False)
-        self.random_scale_move(kb, 1)
-        self.add_blocks(kb, 5)
-        self.random_scale_move(kb, 1, False)
-        self.random_scale_move(kb, 1)
-        self.remove_blocks(kb)"""
+        self.show_debug()
+        self.add_one_into_other(kb2, self.kb)
+        self.show_debug()
+        self.random_scale_move(self.kb)
+        self.add_blocks(self.kb, 5)
+        self.random_scale_move(self.kb)
+        self.remove_blocks(self.kb, 3)
+        self.add_blocks(self.kb, 3)
+        self.remove_blocks(self.kb, 3)
+        self.wait(1.0)
+
+    def show_debug(self):
+        self.remove(self.debug_group)
+        self.debug_group = manim.Group(
+            manim.Text(str(self.kb.containing_b.title.get_fill_opacity())),
+            manim.Text(str(self.kb.containing_b.title.get_stroke_opacity())),
+            manim.Text(str(
+                self.kb.containing_b.title_underline.get_fill_opacity())),
+            manim.Text(str(
+                self.kb.containing_b.title_underline.get_stroke_opacity())),
+            manim.Text(str(self.ccountt)))
+        self.add(self.debug_group.arrange(
+            manim.DOWN).scale(0.3).move_to(3.0 * manim.UR))
+        self.ccountt += 1
 
     def random_scale_move(self, b: Block.Block, num = 1, anim = True):
         if anim:
@@ -47,10 +62,8 @@ class ChainsOfEducation(manim.Scene):
                 self.play(manim.MoveToTarget(b))
                 self.wait()
         else:
-            for _ in range(num):
-                self.scale_random(b)
-                self.move_random(b)
-                self.wait()
+            self.scale_random(b)
+            self.move_random(b)
 
     def add_blocks(self, b: Block.Block, num: int = 1):
         for i in range(num):
@@ -58,10 +71,12 @@ class ChainsOfEducation(manim.Scene):
                 str(i), str(i) * 10 + " th KnowledgeBlock")
             self.random_scale_move(kbi, anim = False)
             self.add_one_into_other(kbi, b)
+            self.show_debug()
 
     def remove_blocks(self, b: Block.Block, num: int = 10):
         for kbi in b.get_all_subbs():
             self.remove_one_outof_other(kbi, b)
+            self.show_debug()
             num -= 1
             if num <= 0: break
 
@@ -92,5 +107,9 @@ class ChainsOfEducation(manim.Scene):
         self.my_scl = 1.0 + (random.random() - 0.5) * 0.6
         b.scale(self.my_scl)
 
+    def wait(self, duration: float = 0.25, **kwargs):
+        super().wait(duration, **kwargs)
+
 #cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
-#manim  -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+#manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+#manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation

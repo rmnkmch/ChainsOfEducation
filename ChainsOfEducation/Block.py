@@ -91,12 +91,13 @@ class Block(manim.RoundedRectangle):
         current_subb_index: int = 0
         subbs = self.get_all_subbs()
         for subb in subbs:
-            new_scale = self.get_subb_scale(current_subb_index)
+            new_scale = self.get_subb_scale(current_subb_index) / subb.b_width
             pos = self.get_subb_pos(current_subb_index)
             subb.update_size(new_scale)
             subb.set_center(pos)
             if ((current_subb_index >= 4) or
-                ((current_subb_index >= 3) and len(subbs) >= 5)):
+                ((current_subb_index >= 3) and len(subbs) >= 5) or
+                not subb.is_clear()):
                 subb.save_all_opacity()
                 subb.hidden = True
             else:
@@ -107,24 +108,24 @@ class Block(manim.RoundedRectangle):
         current_subb_index: int = 0
         subbs = self.get_all_subbs()
         for subb in subbs:
-            new_scale = self.get_subb_scale(current_subb_index)
+            new_scale = self.get_subb_scale(current_subb_index) / subb.b_width
             pos = self.get_subb_pos(current_subb_index)
             subb.scale(new_scale).move_to(pos)
             if ((current_subb_index >= 4) or
-                ((current_subb_index >= 3) and len(subbs) >= 5)):
+                ((current_subb_index >= 3) and len(subbs) >= 5) or
+                not subb.is_clear()):
                 subb.hide()
             else:
                 subb.display()
             current_subb_index += 1
 
-    def get_subb_scale(self, index: int):
+    def get_subb_scale(self, index: int, containing = False):
         subb_scale: float = 0.5
-        subbs = self.get_all_subbs()
-        if (index == 0) and (len(subbs) == 1):
+        if ((index == 0) and (len(self.get_all_subbs()) <= 1)) or containing:
             subb_scale = 1.0
-        return subb_scale * 0.5 * self.b_width / subbs[index].b_width
+        return subb_scale * 0.5 * self.b_width
 
-    def get_subb_pos(self, index: int):
+    def get_subb_pos(self, index: int, containing = False):
         vertical_space = (self.b_height - self.title.height
                           - (DEFAULT_UNDERLINE_TITLE_OFFSET
                              + 2.0 * DEFAULT_PADDING)
@@ -136,7 +137,7 @@ class Block(manim.RoundedRectangle):
                     + self.get_center())
         horizontal_dop_part = manim.LEFT * 0.125 * self.b_width
         vertical_dop_part = 0.25 * manim.UP * vertical_space
-        if (index == 0) and (len(self.get_all_subbs()) == 1):
+        if ((index == 0) and (len(self.get_all_subbs()) <= 1)) or containing:
             return subb_pos
         if index == 0:
             subb_pos += horizontal_dop_part + vertical_dop_part
@@ -157,6 +158,9 @@ class Block(manim.RoundedRectangle):
 
     def get_proportion(self):
         return self.b_width / DEFAULT_WIDTH
+
+    def is_clear(self):
+        return self.b_width > 0.5
 
     def is_acceptable_title_width(self):
         return (self.title.width <

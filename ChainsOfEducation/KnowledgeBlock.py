@@ -1,4 +1,5 @@
-﻿import manim
+﻿from turtle import title
+import manim
 import Block
 import ContainingBlock
 
@@ -31,22 +32,78 @@ class KnowledgeBlock(Block.Block):
             font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.build_description()
 
-        #self.containing_b = ContainingBlock.ContainingBlock("0")
+        self.containing_b = ContainingBlock.ContainingBlock()
 
-        self.add(self.description)#, self.containing_b)
+        self.add(self.description, self.containing_b)
+
+    def update_size(self, scale_factor: float):
+        super().update_size(scale_factor)
+        self.containing_b.update_size(scale_factor)
+
+    def set_center(self, new_center):
+        super().set_center(new_center)
+        self.containing_b.set_center(new_center)
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
-                                    manim.MoveToTarget(self.description))
+                                    manim.MoveToTarget(self.description),
+                                    manim.MoveToTarget(self.containing_b.title))
 
     def make_finish_target(self):
         super().make_finish_target()
         self.description.generate_target()
-        text_and_size = self.get_correct_description_text_and_size()
-        self.description.target = manim.Text(
-            text_and_size[0], font_size = self.description.font_size)
-        self.description.target.scale(text_and_size[1])
-        self.description.target.move_to(self.get_description_correct_position())
+        #text_and_size = self.get_correct_description_text_and_size()
+        #self.description.target = manim.Text(
+            #text_and_size[0], font_size = self.description.font_size)
+        #self.description.target.scale(text_and_size[1])
+        #self.description.target.move_to(self.get_description_correct_position())
+        self.containing_b.title.generate_target()
+        self.containing_b.title.target = manim.Text(
+            str(len(self.get_all_subbs())),
+            font_size = self.containing_b.title.font_size,
+            weight = manim.BOLD).scale(
+                self.containing_b.title.height / self.containing_b.title.target.height)
+        self.containing_b.title.target.move_to(self.containing_b)
+
+    def correct_subblocks_info(self):
+        super().correct_subblocks_info()
+        self.containing_b.update_size(
+            self.get_subb_scale(3) / self.containing_b.b_width)
+        self.containing_b.set_center(self.get_subb_pos(0, True))
+        if not self.containing_b.is_clear():
+            self.containing_b.update_size(
+                self.get_subb_scale(0, True) / self.containing_b.b_width)
+            self.containing_b.hidden = False
+        else:
+            if len(self.get_all_subbs()) >= 5:
+                self.containing_b.set_center(self.get_subb_pos(3))
+                self.containing_b.hidden = False
+            else:
+                #self.containing_b.save_all_opacity()???
+                self.containing_b.hidden = True
+
+    def correct_subblocks(self):
+        super().correct_subblocks()
+        self.containing_b.scale(
+            self.get_subb_scale(3) / self.containing_b.b_width
+            ).move_to(self.get_subb_pos(0, True))
+        if not self.containing_b.is_clear():
+            self.containing_b.scale(
+                self.get_subb_scale(0, True) / self.containing_b.b_width)
+            self.containing_b.display()
+        else:
+            if len(self.get_all_subbs()) >= 5:
+                self.containing_b.move_to(self.get_subb_pos(3))
+                self.containing_b.display()
+            else:
+                self.containing_b.hide()
+
+    def get_all_subbs(self):
+        ret_list = []
+        for b in super().get_all_subbs():
+            if not isinstance(b, ContainingBlock.ContainingBlock):
+                ret_list.append(b)
+        return ret_list
 
     def is_description_clear(self, descr: manim.Text):
         return descr.font_size > MIN_DESCRIPTION_FONT_SIZE
