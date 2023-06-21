@@ -26,26 +26,28 @@ class ChainsOfEducation(manim.Scene):
 
         self.add(self.kb, kb2, grid, self.debug_group)
 
-        self.show_debug()
         self.add_one_into_other(kb2, self.kb)
-        self.show_debug()
-        self.random_scale_move(self.kb)
-        self.add_blocks(self.kb, 5)
-        self.random_scale_move(self.kb)
-        self.remove_blocks(self.kb, 3)
-        self.add_blocks(self.kb, 3)
-        self.remove_blocks(self.kb, 3)
+        for _ in range(1):
+            self.kb.generate_target()
+            kb2.title = manim.Text("tetx")
+            self.kb.target = kb2
+            self.play(manim.MoveToTarget(self.kb))
         self.wait(1.0)
+
+    def debug_def(self):
+        self.kb.title.generate_target()
+        self.kb.title.target = manim.Text(
+            str(self.ccountt),
+            font_size = self.kb.title.font_size,
+            weight = manim.BOLD)
+        self.kb.title.target.move_to(self.kb)
+        self.play(manim.MoveToTarget(self.kb.title))
+        self.show_debug()
 
     def show_debug(self):
         self.remove(self.debug_group)
         self.debug_group = manim.Group(
-            manim.Text(str(self.kb.containing_b.title.get_fill_opacity())),
-            manim.Text(str(self.kb.containing_b.title.get_stroke_opacity())),
-            manim.Text(str(
-                self.kb.containing_b.title_underline.get_fill_opacity())),
-            manim.Text(str(
-                self.kb.containing_b.title_underline.get_stroke_opacity())),
+            manim.Text(str(self.kb.title.font_size)),
             manim.Text(str(self.ccountt)))
         self.add(self.debug_group.arrange(
             manim.DOWN).scale(0.3).move_to(3.0 * manim.UR))
@@ -71,12 +73,10 @@ class ChainsOfEducation(manim.Scene):
                 str(i), str(i) * 10 + " th KnowledgeBlock")
             self.random_scale_move(kbi, anim = False)
             self.add_one_into_other(kbi, b)
-            self.show_debug()
 
     def remove_blocks(self, b: Block.Block, num: int = 10):
         for kbi in b.get_all_subbs():
             self.remove_one_outof_other(kbi, b)
-            self.show_debug()
             num -= 1
             if num <= 0: break
 

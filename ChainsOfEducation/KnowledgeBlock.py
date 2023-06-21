@@ -1,5 +1,4 @@
-﻿from turtle import title
-import manim
+﻿import manim
 import Block
 import ContainingBlock
 
@@ -46,12 +45,12 @@ class KnowledgeBlock(Block.Block):
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
-                                    manim.MoveToTarget(self.description),
+                                    #manim.MoveToTarget(self.description),
                                     manim.MoveToTarget(self.containing_b.title))
 
     def make_finish_target(self):
         super().make_finish_target()
-        self.description.generate_target()
+        #self.description.generate_target()
         #text_and_size = self.get_correct_description_text_and_size()
         #self.description.target = manim.Text(
             #text_and_size[0], font_size = self.description.font_size)
@@ -61,9 +60,8 @@ class KnowledgeBlock(Block.Block):
         self.containing_b.title.target = manim.Text(
             str(len(self.get_all_subbs())),
             font_size = self.containing_b.title.font_size,
-            weight = manim.BOLD).scale(
-                self.containing_b.title.height / self.containing_b.title.target.height)
-        self.containing_b.title.target.move_to(self.containing_b)
+            weight = manim.BOLD)
+        self.containing_b.title.target.scale(1.0).move_to(self.containing_b)
 
     def correct_subblocks_info(self):
         super().correct_subblocks_info()
