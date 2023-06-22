@@ -45,56 +45,67 @@ class KnowledgeBlock(Block.Block):
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
-                                    #manim.MoveToTarget(self.description),
-                                    manim.MoveToTarget(self.containing_b.title))
+                                    manim.MoveToTarget(self.description),
+                                    manim.MoveToTarget(self.containing_b))
 
     def make_finish_target(self):
         super().make_finish_target()
-        #self.description.generate_target()
-        #text_and_size = self.get_correct_description_text_and_size()
-        #self.description.target = manim.Text(
-            #text_and_size[0], font_size = self.description.font_size)
-        #self.description.target.scale(text_and_size[1])
-        #self.description.target.move_to(self.get_description_correct_position())
-        self.containing_b.title.generate_target()
-        self.containing_b.title.target = manim.Text(
-            str(len(self.get_all_subbs())),
-            font_size = self.containing_b.title.font_size,
-            weight = manim.BOLD)
-        self.containing_b.title.target.scale(1.0).move_to(self.containing_b)
+        self.make_description()
+        self.make_containing_b()
 
-    def correct_subblocks_info(self):
-        super().correct_subblocks_info()
-        self.containing_b.update_size(
-            self.get_subb_scale(3) / self.containing_b.b_width)
-        self.containing_b.set_center(self.get_subb_pos(0, True))
+    def make_description(self):
+        text_and_size = self.get_correct_description_text_and_size()
+        self.description.generate_target()
+        self.description.target = manim.Text(
+            text_and_size[0], font_size = self.description.font_size)
+        self.description.target.scale(text_and_size[1]).move_to(
+            self.get_description_correct_position())
+
+    def make_containing_b(self):
+
+        def hide_containing_b():
+            nonlocal scale_center, pos_center
+            #self.containing_b.save_all_opacity()???
+            self.containing_b.hidden = True
+            self.containing_b.target = ContainingBlock.ContainingBlock("0")
+            self.containing_b.target.scale(
+                scale_center / self.containing_b.target.b_width
+                ).move_to(pos_center)
+            self.containing_b.target.hide()
+
+        scale_center = self.get_subb_scale(0, True)
+        scale_DR = self.get_subb_scale(3)
+        pos_center = self.get_subb_pos(0, True)
+        pos_DR = self.get_subb_pos(3)
+        len_all_subbs = len(self.get_all_subbs())
+        self.containing_b.generate_target()
+        self.containing_b.update_size(scale_DR / self.containing_b.b_width)
         if not self.containing_b.is_clear():
-            self.containing_b.update_size(
-                self.get_subb_scale(0, True) / self.containing_b.b_width)
-            self.containing_b.hidden = False
-        else:
-            if len(self.get_all_subbs()) >= 5:
-                self.containing_b.set_center(self.get_subb_pos(3))
+            if len_all_subbs >= 2:
+                self.containing_b.update_size(
+                    scale_center / self.containing_b.b_width)
+                self.containing_b.set_center(pos_center)
                 self.containing_b.hidden = False
+                self.containing_b.target = ContainingBlock.ContainingBlock(
+                    str(len_all_subbs))
+                self.containing_b.target.scale(
+                    scale_center / self.containing_b.target.b_width
+                    ).move_to(pos_center)
+                self.containing_b.target.display()
             else:
-                #self.containing_b.save_all_opacity()???
-                self.containing_b.hidden = True
-
-    def correct_subblocks(self):
-        super().correct_subblocks()
-        self.containing_b.scale(
-            self.get_subb_scale(3) / self.containing_b.b_width
-            ).move_to(self.get_subb_pos(0, True))
-        if not self.containing_b.is_clear():
-            self.containing_b.scale(
-                self.get_subb_scale(0, True) / self.containing_b.b_width)
-            self.containing_b.display()
+                hide_containing_b()
         else:
-            if len(self.get_all_subbs()) >= 5:
-                self.containing_b.move_to(self.get_subb_pos(3))
-                self.containing_b.display()
+            if len_all_subbs >= 5:
+                self.containing_b.set_center(pos_DR)
+                self.containing_b.hidden = False
+                self.containing_b.target = ContainingBlock.ContainingBlock(
+                    str(len_all_subbs - 3))
+                self.containing_b.target.scale(
+                    scale_DR / self.containing_b.target.b_width
+                    ).move_to(pos_DR)
+                self.containing_b.target.display()
             else:
-                self.containing_b.hide()
+                hide_containing_b()
 
     def get_all_subbs(self):
         ret_list = []
@@ -144,16 +155,35 @@ class KnowledgeBlock(Block.Block):
 
     def get_splited_description_text(
         self, new_font_size: float = DEFAULT_DESCRIPTION_FONT_SIZE):
+
         def is_there_another_word():
+            nonlocal current_word_index, len_all_text
             return current_word_index < len_all_text
 
+        def is_word_insertable(word: str):
+            nonlocal current_str, max_line_len
+            return len(current_str + " " + word) <= max_line_len
+
+        def update_max_line_len(new_line_len: int):
+            nonlocal max_line_len
+            if new_line_len > max_line_len:
+                max_line_len = new_line_len
+
+        #max_line_len_of_font_size = {[10.0]:  10}
         all_text: list[str] = self.description.original_text.split()
         len_all_text = len(all_text)
         splited_text: str = ""
         current_word_index: int = 0
+        current_str: str = ""
+        max_line_len: int = 5
+
         while is_there_another_word():
-            current_str: str = all_text[current_word_index]
+            current_str = all_text[current_word_index]
             current_word_index += 1
+            while (is_there_another_word() and
+                   is_word_insertable(all_text[current_word_index])):
+                current_str += " " + all_text[current_word_index]
+                current_word_index += 1
             while (is_there_another_word() and
                    self.is_acceptable_description_width(
                        manim.Text(
@@ -161,6 +191,7 @@ class KnowledgeBlock(Block.Block):
                            font_size = new_font_size))):
                 current_str += " " + all_text[current_word_index]
                 current_word_index += 1
+                update_max_line_len(len(current_str))
             splited_text += current_str
             if is_there_another_word():
                 splited_text += "\n"

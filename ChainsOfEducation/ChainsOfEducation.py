@@ -14,7 +14,7 @@ class ChainsOfEducation(manim.Scene):
         строение, их свойства, зависящие от состава и
         строения, их превращения, ведущие к изменению
         состава.'''
-        ).move_to(3.0 * manim.LEFT).scale(0.8)
+        ).move_to(3.0 * manim.LEFT).scale(0.7)
         kb2 = KB.KnowledgeBlock("Биоло́гия!", '''
         Биоло́гия (греч. βιολογία; от др.-греч.
         βίος «жизнь» + λόγος «учение, наука»[1]) —
@@ -28,10 +28,10 @@ class ChainsOfEducation(manim.Scene):
 
         self.add_one_into_other(kb2, self.kb)
         for _ in range(1):
-            self.kb.generate_target()
-            kb2.title = manim.Text("tetx")
-            self.kb.target = kb2
-            self.play(manim.MoveToTarget(self.kb))
+            self.add_blocks(self.kb, 5)
+            self.add_blocks(kb2, 5)
+            self.remove_blocks(kb2, 4)
+            self.remove_blocks(self.kb)
         self.wait(1.0)
 
     def debug_def(self):
@@ -110,6 +110,8 @@ class ChainsOfEducation(manim.Scene):
     def wait(self, duration: float = 0.25, **kwargs):
         super().wait(duration, **kwargs)
 
-#cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
-#manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
-#manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
+"""
+cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
+manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
+"""

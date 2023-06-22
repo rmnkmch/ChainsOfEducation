@@ -160,7 +160,7 @@ class Block(manim.RoundedRectangle):
         return self.b_width / DEFAULT_WIDTH
 
     def is_clear(self):
-        return self.b_width > 0.5
+        return self.b_width > 1.0
 
     def is_acceptable_title_width(self):
         return (self.title.width <
