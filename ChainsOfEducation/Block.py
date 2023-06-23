@@ -24,11 +24,10 @@ class Block(manim.RoundedRectangle):
             width = width,
             **kwargs)
 
+        self.subbs = []
         self.b_height: float = height
         self.b_width: float = width
         self.b_center = super().get_center()
-
-        self.hidden = False
 
         self.title = manim.Text(
             title,
@@ -37,13 +36,17 @@ class Block(manim.RoundedRectangle):
         self.set_normal_title()
         self.title_underline = manim.Underline(self.title)
 
+        self.hidden = False
+
         self.add(self.title, self.title_underline)
 
-    def add(self, *mobjects):
-        return super().add(*mobjects)
+    def add_subb(self, subb):
+        if subb not in self.get_all_subbs():
+            self.subbs.append(subb)
 
-    def remove(self, *mobjects):
-        return super().remove(*mobjects)
+    def remove_subb(self, subb):
+        if subb in self.get_all_subbs():
+            self.subbs.remove(subb)
 
     def scale(self, scale_factor: float, **kwargs):
         super().scale(scale_factor, **kwargs)
@@ -66,9 +69,6 @@ class Block(manim.RoundedRectangle):
     def get_center(self):
         return self.b_center
 
-    def get_not_my_center(self):
-        return super().get_center()
-
     def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
         super().move_to(point_or_mobject, aligned_edge, **kwargs)
         if (isinstance(point_or_mobject, Block) and aligned_edge == manim.ORIGIN):
@@ -80,43 +80,43 @@ class Block(manim.RoundedRectangle):
         return self
 
     def get_animations_to_play(self):
-        return manim.AnimationGroup(manim.MoveToTarget(self))
+        animations_to_play = manim.AnimationGroup(manim.MoveToTarget(self))
+        for subb in self.get_all_subbs():
+            animations_to_play = manim.AnimationGroup(
+                animations_to_play, subb.get_animations_to_play())
+        return animations_to_play
 
-    def make_finish_target(self):
+    def make_finish_target(self, parent = True):
+        if parent:
+            self.generate_targets()
+        self.make_subblocks()
+        for subb in self.get_all_subbs():
+            subb.make_finish_target(False)
+
+    def generate_targets(self):
         self.generate_target()
-        self.correct_subblocks_info()
-        self.target.correct_subblocks()
+        for subb in self.get_all_subbs():
+            subb.generate_targets()
 
-    def correct_subblocks_info(self):
+    def make_subblocks(self):
         current_subb_index: int = 0
-        subbs = self.get_all_subbs()
-        for subb in subbs:
-            new_scale = self.get_subb_scale(current_subb_index) / subb.b_width
-            pos = self.get_subb_pos(current_subb_index)
-            subb.update_size(new_scale)
-            subb.set_center(pos)
+        loc_subbs = self.get_all_subbs()
+        len_subbs = len(loc_subbs)
+        for subb in loc_subbs:
+            sub_scale = self.get_subb_scale(current_subb_index) / subb.b_width
+            sub_pos = self.get_subb_pos(current_subb_index)
+            subb.update_size(sub_scale)
+            subb.set_center(sub_pos)
+            subb.target.scale(sub_scale).move_to(sub_pos)
             if ((current_subb_index >= 4) or
-                ((current_subb_index >= 3) and len(subbs) >= 5) or
-                not subb.is_clear()):
+                ((current_subb_index >= 3) and len_subbs >= 5) or
+                (not subb.is_clear() and len_subbs >= 2)):
                 subb.save_all_opacity()
                 subb.hidden = True
+                subb.target.hide()
             else:
                 subb.hidden = False
-            current_subb_index += 1
-
-    def correct_subblocks(self):
-        current_subb_index: int = 0
-        subbs = self.get_all_subbs()
-        for subb in subbs:
-            new_scale = self.get_subb_scale(current_subb_index) / subb.b_width
-            pos = self.get_subb_pos(current_subb_index)
-            subb.scale(new_scale).move_to(pos)
-            if ((current_subb_index >= 4) or
-                ((current_subb_index >= 3) and len(subbs) >= 5) or
-                not subb.is_clear()):
-                subb.hide()
-            else:
-                subb.display()
+                subb.target.display()
             current_subb_index += 1
 
     def get_subb_scale(self, index: int, containing = False):
@@ -150,11 +150,7 @@ class Block(manim.RoundedRectangle):
         return subb_pos
 
     def get_all_subbs(self):
-        ret_list = []
-        for b in self.submobjects:
-            if isinstance(b, Block):
-                ret_list.append(b)
-        return ret_list
+        return self.subbs
 
     def get_proportion(self):
         return self.b_width / DEFAULT_WIDTH

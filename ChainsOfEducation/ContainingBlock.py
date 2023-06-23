@@ -10,24 +10,6 @@ class ContainingBlock(Block.Block):
         self.save_all_opacity()
         self.hide()
 
-    def make_finish_target(self):
-        return
-
-    def correct_subblocks_info(self):
-        return
-
-    def correct_subblocks(self):
-        return
-
-    def get_subb_scale(self, index: int):
-        return
-
-    def get_subb_pos(self, index: int):
-        return
-
-    def get_all_subbs(self):
-        return []
-
     def set_normal_title(self):
         super().set_normal_title()
         self.title.scale(5.0).move_to(self)

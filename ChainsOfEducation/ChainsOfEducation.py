@@ -83,14 +83,16 @@ class ChainsOfEducation(manim.Scene):
     def add_one_into_other(self,
                            one: Block.Block,
                            other: Block.Block):
-        other.add(one)
+        other.add_subb(one)
         self.update_b(other)
 
     def remove_one_outof_other(self,
                                one: Block.Block,
                                other: Block.Block):
-        other.remove(one)
+        other.remove_subb(one)
         self.remove(one)
+        for subb in one.get_all_subbs():
+            self.remove(subb)
         self.update_b(other)
 
     def update_b(self, b: Block.Block):
