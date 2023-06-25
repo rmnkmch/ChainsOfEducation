@@ -21,50 +21,27 @@ class ChainsOfEducation(manim.Scene):
         наука о живых существах и их взаимодействии со
         средой обитания. Изучает все аспекты жизни,
         в частности''').move_to(3.0 * manim.RIGHT)
-        self.ccountt = 0
-        self.debug_group = manim.Group()
 
-        self.add(self.kb, kb2, grid, self.debug_group)
+        self.add(self.kb, grid)
+        self.wait()
+        self.add(kb2)
+        self.wait()
 
         self.add_one_into_other(kb2, self.kb)
-        for _ in range(1):
+        for _ in range(3):
             self.add_blocks(self.kb, 5)
-            self.add_blocks(kb2, 5)
-            self.remove_blocks(kb2, 4)
-            self.remove_blocks(self.kb)
         self.wait(1.0)
-
-    def debug_def(self):
-        self.kb.title.generate_target()
-        self.kb.title.target = manim.Text(
-            str(self.ccountt),
-            font_size = self.kb.title.font_size,
-            weight = manim.BOLD)
-        self.kb.title.target.move_to(self.kb)
-        self.play(manim.MoveToTarget(self.kb.title))
-        self.show_debug()
-
-    def show_debug(self):
-        self.remove(self.debug_group)
-        self.debug_group = manim.Group(
-            manim.Text(str(self.kb.title.font_size)),
-            manim.Text(str(self.ccountt)))
-        self.add(self.debug_group.arrange(
-            manim.DOWN).scale(0.3).move_to(3.0 * manim.UR))
-        self.ccountt += 1
 
     def random_scale_move(self, b: Block.Block, num = 1, anim = True):
         if anim:
             for _ in range(num):
                 b.generate_target()
-                self.scale_random(b.target)
+                #self.scale_random(b.target)
                 self.move_random(b.target)
-                b.update_size(self.my_scl)
-                b.set_center(self.my_pos_x * manim.RIGHT + self.my_pos_y * manim.UP)
                 self.play(manim.MoveToTarget(b))
                 self.wait()
         else:
-            self.scale_random(b)
+            #self.scale_random(b)
             self.move_random(b)
 
     def add_blocks(self, b: Block.Block, num: int = 1):
@@ -96,6 +73,7 @@ class ChainsOfEducation(manim.Scene):
         self.update_b(other)
 
     def update_b(self, b: Block.Block):
+        b.generate_target()
         b.make_finish_target()
         self.play(b.get_animations_to_play())
         self.wait()
@@ -111,6 +89,18 @@ class ChainsOfEducation(manim.Scene):
 
     def wait(self, duration: float = 0.25, **kwargs):
         super().wait(duration, **kwargs)
+
+    def add(self, *mobjects: manim.Mobject):
+        super().add(*mobjects)
+        for b in mobjects:
+            if isinstance(b, KB.KnowledgeBlock):
+                self.add(b.containing_b, b.description)
+
+    def remove(self, *mobjects: manim.Mobject):
+        super().remove(*mobjects)
+        for b in mobjects:
+            if isinstance(b, KB.KnowledgeBlock):
+                self.remove(b.containing_b, b.description)
 
 """
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation

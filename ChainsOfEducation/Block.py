@@ -25,9 +25,6 @@ class Block(manim.RoundedRectangle):
             **kwargs)
 
         self.subbs = []
-        self.b_height: float = height
-        self.b_width: float = width
-        self.b_center = super().get_center()
 
         self.title = manim.Text(
             title,
@@ -37,6 +34,7 @@ class Block(manim.RoundedRectangle):
         self.title_underline = manim.Underline(self.title)
 
         self.hidden = False
+        self.all_old_opacity = []
 
         self.add(self.title, self.title_underline)
 
@@ -50,33 +48,17 @@ class Block(manim.RoundedRectangle):
 
     def scale(self, scale_factor: float, **kwargs):
         super().scale(scale_factor, **kwargs)
-        self.update_size(scale_factor)
+        subbs = self.get_all_subbs()
+        for subb in subbs:
+            subb.scale(scale_factor, **kwargs)
+            subb.move_to(self.get_subb_pos(subbs.index(subb)))
         return self
-
-    def update_size(self, scale_factor: float):
-        self.b_height *= scale_factor
-        self.b_width *= scale_factor
-        for subb in self.get_all_subbs():
-            subb.update_size(scale_factor)
-
-    def set_center(self, new_center):
-        self.b_center = new_center
-        current_subb_index: int = 0
-        for subb in self.get_all_subbs():
-            subb.set_center(self.get_subb_pos(current_subb_index))
-            current_subb_index += 1
-
-    def get_center(self):
-        return self.b_center
 
     def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
         super().move_to(point_or_mobject, aligned_edge, **kwargs)
-        if (isinstance(point_or_mobject, Block) and aligned_edge == manim.ORIGIN):
-            self.set_center(point_or_mobject.get_center())
-        elif isinstance(point_or_mobject, manim.Mobject):
-            self.set_center(point_or_mobject.get_critical_point(aligned_edge))
-        else:
-            self.set_center(point_or_mobject)
+        subbs = self.get_all_subbs()
+        for subb in subbs:
+            subb.move_to(self.get_subb_pos(subbs.index(subb)))
         return self
 
     def get_animations_to_play(self):
@@ -86,31 +68,28 @@ class Block(manim.RoundedRectangle):
                 animations_to_play, subb.get_animations_to_play())
         return animations_to_play
 
-    def make_finish_target(self, parent = True):
-        if parent:
-            self.generate_targets()
+    def make_finish_target(self):
         self.make_subblocks()
         for subb in self.get_all_subbs():
-            subb.make_finish_target(False)
+            subb.make_finish_target()
 
-    def generate_targets(self):
-        self.generate_target()
+    def generate_target(self):
+        super().generate_target()
         for subb in self.get_all_subbs():
-            subb.generate_targets()
+            subb.generate_target()
 
     def make_subblocks(self):
         current_subb_index: int = 0
         loc_subbs = self.get_all_subbs()
         len_subbs = len(loc_subbs)
         for subb in loc_subbs:
-            sub_scale = self.get_subb_scale(current_subb_index) / subb.b_width
-            sub_pos = self.get_subb_pos(current_subb_index)
-            subb.update_size(sub_scale)
-            subb.set_center(sub_pos)
+            sub_scale = self.get_subb_scale(
+                current_subb_index, from_target = True) / subb.width
+            sub_pos = self.get_subb_pos(current_subb_index, from_target = True)
             subb.target.scale(sub_scale).move_to(sub_pos)
             if ((current_subb_index >= 4) or
                 ((current_subb_index >= 3) and len_subbs >= 5) or
-                (not subb.is_clear() and len_subbs >= 2)):
+                (not subb.target.is_clear() and len_subbs >= 2)):
                 subb.save_all_opacity()
                 subb.hidden = True
                 subb.target.hide()
@@ -119,23 +98,28 @@ class Block(manim.RoundedRectangle):
                 subb.target.display()
             current_subb_index += 1
 
-    def get_subb_scale(self, index: int, containing = False):
+    def get_subb_scale(self, index: int, containing = False, from_target = False):
+        used_b = self
+        if from_target:
+            used_b = self.target
         subb_scale: float = 0.5
         if ((index == 0) and (len(self.get_all_subbs()) <= 1)) or containing:
             subb_scale = 1.0
-        return subb_scale * 0.5 * self.b_width
+        return subb_scale * 0.5 * used_b.width
 
-    def get_subb_pos(self, index: int, containing = False):
-        vertical_space = (self.b_height - self.title.height
+    def get_subb_pos(self, index: int, containing = False, from_target = False):
+        used_b = self
+        if from_target:
+            used_b = self.target
+        vertical_space = (used_b.height - used_b.title.height
                           - (DEFAULT_UNDERLINE_TITLE_OFFSET
                              + 2.0 * DEFAULT_PADDING)
-                          * self.get_proportion())
-        subb_pos = (manim.RIGHT * 0.25 * self.b_width
-                    + manim.DOWN * (0.5 * self.b_height
-                                    - 0.5 * vertical_space
-                                    - DEFAULT_PADDING * self.get_proportion())
-                    + self.get_center())
-        horizontal_dop_part = manim.LEFT * 0.125 * self.b_width
+                          * used_b.get_proportion())
+        subb_pos = (manim.RIGHT * 0.25 * used_b.width + manim.DOWN
+                    * (0.5 * used_b.height - 0.5 * vertical_space
+                       - DEFAULT_PADDING * used_b.get_proportion())
+                    + used_b.get_center())
+        horizontal_dop_part = manim.LEFT * 0.125 * used_b.width
         vertical_dop_part = 0.25 * manim.UP * vertical_space
         if ((index == 0) and (len(self.get_all_subbs()) <= 1)) or containing:
             return subb_pos
@@ -153,14 +137,14 @@ class Block(manim.RoundedRectangle):
         return self.subbs
 
     def get_proportion(self):
-        return self.b_width / DEFAULT_WIDTH
+        return self.width / DEFAULT_WIDTH
 
     def is_clear(self):
-        return self.b_width > 1.0
+        return self.width > 1.0
 
     def is_acceptable_title_width(self):
         return (self.title.width <
-                self.b_width - 2.0 * DEFAULT_PADDING * self.get_proportion())
+                self.width - 2.0 * DEFAULT_PADDING * self.get_proportion())
 
     def set_normal_title(self):
         while not self.is_acceptable_title_width():
