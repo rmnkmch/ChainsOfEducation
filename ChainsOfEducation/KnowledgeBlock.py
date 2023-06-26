@@ -3,7 +3,7 @@ import Block
 import ContainingBlock
 
 
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 9.9
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 30.0
 MIN_DESCRIPTION_FONT_SIZE: float = 10.0
 
 DEFAULT_PADDING: float = Block.DEFAULT_PADDING
@@ -33,22 +33,22 @@ class KnowledgeBlock(Block.Block):
             font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.build_description()
         self.description_hidden = False
+        self.save_description_opacity()
+        self.description_should_be_hidden = False
 
-    def scale(self, scale_factor: float, **kwargs):
-        super().scale(scale_factor, **kwargs)
-        self.containing_b.scale(scale_factor, **kwargs)
+    def scale_outside(self, scale_factor: float, **kwargs):
+        super().scale_outside(scale_factor, **kwargs)
+        self.containing_b.scale_outside(scale_factor, **kwargs)
         text_and_size = self.get_correct_description_text_and_size()
         self.description = manim.Text(
             text_and_size[0], font_size = self.description.font_size)
         self.description.scale(
             text_and_size[1]).move_to(self.get_description_correct_position())
-        return self
 
-    def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
-        super().move_to(point_or_mobject, aligned_edge, **kwargs)
-        self.containing_b.move_to(self.get_subb_pos(0))
+    def move_to_outside(self, point_or_mobject, **kwargs):
+        super().move_to_outside(point_or_mobject, **kwargs)
+        self.containing_b.move_to_outside(self.get_subb_pos(0))
         self.description.move_to(self.get_description_correct_position())
-        return self
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
@@ -57,25 +57,13 @@ class KnowledgeBlock(Block.Block):
 
     def make_finish_target(self):
         super().make_finish_target()
-        self.make_description()
         self.make_containing_b()
+        self.make_description()
 
-    def make_description(self):
-        text_and_size = self.get_correct_description_text_and_size()
+    def generate_target(self):
+        super().generate_target()
+        self.containing_b.generate_target()
         self.description.generate_target()
-        self.description.target = manim.Text(
-            text_and_size[0], font_size = self.description.font_size)
-        self.description.target.scale(text_and_size[1]).move_to(
-            self.get_description_correct_position())
-        if (not self.is_font_size_clear(self.description.target.font_size - 1.0) or
-            self.target.hidden):
-            self.description_hidden = True
-            self.save_description_opacity()
-            self.target.hide_description()
-        else:
-            self.description_hidden = False
-            if len(self.all_old_opacity) >= 8:
-                self.target.display_description()
 
     def make_containing_b(self):
 
@@ -94,7 +82,6 @@ class KnowledgeBlock(Block.Block):
         pos_center = self.get_subb_pos(0, True, True)
         pos_DR = self.get_subb_pos(3, from_target = True)
         len_all_subbs = len(self.get_all_subbs())
-        self.containing_b.generate_target()
         self.containing_b.target.scale(scale_DR / self.containing_b.target.width)
         if not self.containing_b.target.is_clear():
             if len_all_subbs >= 2:
@@ -119,23 +106,30 @@ class KnowledgeBlock(Block.Block):
             else:
                 hide_containing_b()
 
+    def make_description(self):
+        text_and_size = self.get_correct_description_text_and_size(True)
+        self.description.target = manim.Text(
+            text_and_size[0], font_size = self.description.font_size)
+        self.description.target.scale(text_and_size[1]).move_to(
+            self.get_description_correct_position(True))
+        if self.description_should_be_hidden or self.target.hidden:
+            self.description_should_be_hidden = False
+            self.save_description_opacity()
+            self.hide_description()
+        else:
+            self.display_description()
+
     def is_font_size_clear(self, font_size: float):
         return font_size > MIN_DESCRIPTION_FONT_SIZE
 
-    def is_acceptable_description_width(
-        self, descr: manim.Text, check_font = False):
-        if (check_font and not self.is_font_size_clear(descr.font_size)):
-            return True
+    def is_acceptable_description_width(self, descr: manim.Text):
         if len(self.get_all_subbs()) >= 1:
-            return (descr.width <
-                    0.5 * self.width
+            return (descr.width < 0.5 * self.width
                     - 2.0 * DEFAULT_PADDING * self.get_proportion())
         return (descr.width <
                 self.width - 2.0 * DEFAULT_PADDING * self.get_proportion())
 
     def is_acceptable_description_height(self, descr: manim.Text):
-        if not self.is_font_size_clear(descr.font_size):
-            return True
         return (descr.height < self.height - self.title.height
                 - (2.0 * DEFAULT_PADDING + DEFAULT_UNDERLINE_TITLE_OFFSET)
                 * self.get_proportion())
@@ -156,14 +150,22 @@ class KnowledgeBlock(Block.Block):
             correct_text, font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         scale_factor: float = (DEFAULT_DESCRIPTION_FONT_SIZE
                                / used_b.description.font_size)
-        while not self.is_acceptable_description_height(new_description):
+        while not used_b.is_acceptable_description_height(new_description):
             new_description.scale(0.9)
             scale_factor *= 0.9
+            if not used_b.is_font_size_clear(new_description.font_size):
+                self.description_should_be_hidden = True
+                return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
+                                       / used_b.description.font_size))
             correct_text = used_b.get_splited_description_text(
                 new_description.font_size)
-        while not self.is_acceptable_description_width(new_description, True):
+        while not used_b.is_acceptable_description_width(new_description):
             new_description.scale(0.9)
             scale_factor *= 0.9
+            if not used_b.is_font_size_clear(new_description.font_size):
+                self.description_should_be_hidden = True
+                return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
+                                       / used_b.description.font_size))
         return (correct_text, scale_factor)
 
     def get_splited_description_text(
@@ -182,7 +184,6 @@ class KnowledgeBlock(Block.Block):
             if new_line_len > max_line_len:
                 max_line_len = new_line_len
 
-        #max_line_len_of_font_size = {[10.0]:  10}
         all_text: list[str] = self.description.original_text.split()
         len_all_text = len(all_text)
         splited_text: str = ""
@@ -231,12 +232,6 @@ class KnowledgeBlock(Block.Block):
     def is_description_hidden(self):
         return self.description_hidden
 
-    def save_all_opacity(self):
-        if super().save_all_opacity():
-            self.save_description_opacity()
-            return True
-        return False
-
     def save_description_opacity(self):
         if self.is_description_hidden():
             return False
@@ -244,29 +239,18 @@ class KnowledgeBlock(Block.Block):
         self.all_old_opacity.append(self.description.get_stroke_opacity())
         return True
 
-    def hide(self):
-        if super().hide():
-            self.hide_description()
-            return True
-        return False
-
     def hide_description(self):
         if self.is_description_hidden():
             return False
-        self.description.set_fill(opacity = 0.0)
-        self.description.set_stroke(opacity = 0.0)
+        self.description_hidden = True
+        self.description.target.set_fill(opacity = 0.0)
+        self.description.target.set_stroke(opacity = 0.0)
         return True
-
-    def display(self):
-        if super().display():
-            if len(self.all_old_opacity) >= 8:
-                self.display_description()
-            return True
-        return False
 
     def display_description(self):
         if not self.is_description_hidden():
             return False
-        self.description.set_fill(opacity = self.all_old_opacity[6])
-        self.description.set_stroke(opacity = self.all_old_opacity[7])
+        self.description_hidden = False
+        self.description.target.set_fill(opacity = self.all_old_opacity[6])
+        self.description.target.set_stroke(opacity = self.all_old_opacity[7])
         return True

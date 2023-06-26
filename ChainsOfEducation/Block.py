@@ -35,6 +35,7 @@ class Block(manim.RoundedRectangle):
 
         self.hidden = False
         self.all_old_opacity = []
+        self.save_all_opacity()
 
         self.add(self.title, self.title_underline)
 
@@ -46,20 +47,18 @@ class Block(manim.RoundedRectangle):
         if subb in self.get_all_subbs():
             self.subbs.remove(subb)
 
-    def scale(self, scale_factor: float, **kwargs):
-        super().scale(scale_factor, **kwargs)
+    def scale_outside(self, scale_factor: float, **kwargs):
+        self.scale(scale_factor, **kwargs)
         subbs = self.get_all_subbs()
         for subb in subbs:
             subb.scale(scale_factor, **kwargs)
             subb.move_to(self.get_subb_pos(subbs.index(subb)))
-        return self
 
-    def move_to(self, point_or_mobject, aligned_edge = manim.ORIGIN, **kwargs):
-        super().move_to(point_or_mobject, aligned_edge, **kwargs)
+    def move_to_outside(self, point_or_mobject, **kwargs):
+        self.move_to(point_or_mobject, **kwargs)
         subbs = self.get_all_subbs()
         for subb in subbs:
-            subb.move_to(self.get_subb_pos(subbs.index(subb)))
-        return self
+            subb.move_to_outside(self.get_subb_pos(subbs.index(subb)))
 
     def get_animations_to_play(self):
         animations_to_play = manim.AnimationGroup(manim.MoveToTarget(self))
@@ -84,7 +83,7 @@ class Block(manim.RoundedRectangle):
         len_subbs = len(loc_subbs)
         for subb in loc_subbs:
             sub_scale = self.get_subb_scale(
-                current_subb_index, from_target = True) / subb.width
+                current_subb_index, from_target = True) / subb.target.width
             sub_pos = self.get_subb_pos(current_subb_index, from_target = True)
             subb.target.scale(sub_scale).move_to(sub_pos)
             if ((current_subb_index >= 4) or
@@ -166,6 +165,7 @@ class Block(manim.RoundedRectangle):
     def save_all_opacity(self):
         if self.is_hidden():
             return False
+        already_saved = self.all_old_opacity.copy()
         self.all_old_opacity = [
             self.get_fill_opacity(),
             self.get_stroke_opacity(),
@@ -173,6 +173,8 @@ class Block(manim.RoundedRectangle):
             self.title.get_stroke_opacity(),
             self.title_underline.get_fill_opacity(),
             self.title_underline.get_stroke_opacity()]
+        for op in range(6, len(already_saved)):
+            self.all_old_opacity.append(already_saved[op])
         for subb in self.get_all_subbs():
             subb.save_all_opacity()
         return True

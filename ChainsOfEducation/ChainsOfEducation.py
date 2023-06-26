@@ -14,13 +14,16 @@ class ChainsOfEducation(manim.Scene):
         строение, их свойства, зависящие от состава и
         строения, их превращения, ведущие к изменению
         состава.'''
-        ).move_to(3.0 * manim.LEFT).scale(0.7)
+        )
+        self.kb.move_to_outside(3.0 * manim.LEFT)
+        self.kb.scale_outside(0.7)
         kb2 = KB.KnowledgeBlock("Биоло́гия!", '''
         Биоло́гия (греч. βιολογία; от др.-греч.
         βίος «жизнь» + λόγος «учение, наука»[1]) —
         наука о живых существах и их взаимодействии со
         средой обитания. Изучает все аспекты жизни,
-        в частности''').move_to(3.0 * manim.RIGHT)
+        в частности''')
+        kb2.move_to_outside(3.0 * manim.RIGHT)
 
         self.add(self.kb, grid)
         self.wait()
@@ -28,8 +31,9 @@ class ChainsOfEducation(manim.Scene):
         self.wait()
 
         self.add_one_into_other(kb2, self.kb)
-        for _ in range(3):
-            self.add_blocks(self.kb, 5)
+        for _ in range(5):
+            self.add_blocks(self.kb, 1)
+            self.random_scale_move(self.kb)
         self.wait(1.0)
 
     def random_scale_move(self, b: Block.Block, num = 1, anim = True):
@@ -38,6 +42,7 @@ class ChainsOfEducation(manim.Scene):
                 b.generate_target()
                 #self.scale_random(b.target)
                 self.move_random(b.target)
+                b.make_finish_target()
                 self.play(manim.MoveToTarget(b))
                 self.wait()
         else:
@@ -67,9 +72,9 @@ class ChainsOfEducation(manim.Scene):
                                one: Block.Block,
                                other: Block.Block):
         other.remove_subb(one)
-        self.remove(one)
         for subb in one.get_all_subbs():
             self.remove(subb)
+        self.remove(one)
         self.update_b(other)
 
     def update_b(self, b: Block.Block):
@@ -105,5 +110,7 @@ class ChainsOfEducation(manim.Scene):
 """
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pqh ChainsOfEducation.py ChainsOfEducation
 """
