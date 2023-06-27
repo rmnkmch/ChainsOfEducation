@@ -25,29 +25,25 @@ class ChainsOfEducation(manim.Scene):
         в частности''')
         kb2.move_to_outside(3.0 * manim.RIGHT)
 
-        self.add(self.kb, grid)
-        self.wait()
-        self.add(kb2)
+        self.add(self.kb, kb2, grid)
         self.wait()
 
         self.add_one_into_other(kb2, self.kb)
-        for _ in range(5):
-            self.add_blocks(self.kb, 1)
-            self.random_scale_move(self.kb)
+        for _ in range(1):
+            self.add_blocks(self.kb, 2)
+            #self.random_scale_move(self.kb)
         self.wait(1.0)
 
     def random_scale_move(self, b: Block.Block, num = 1, anim = True):
         if anim:
             for _ in range(num):
                 b.generate_target()
-                #self.scale_random(b.target)
-                self.move_random(b.target)
-                b.make_finish_target()
-                self.play(manim.MoveToTarget(b))
-                self.wait()
+                self.scale_random(b, anim)
+                self.move_random(b, anim)
+                self.update_b(b)
         else:
-            #self.scale_random(b)
-            self.move_random(b)
+            self.scale_random(b, anim)
+            self.move_random(b, anim)
 
     def add_blocks(self, b: Block.Block, num: int = 1):
         for i in range(num):
@@ -66,6 +62,7 @@ class ChainsOfEducation(manim.Scene):
                            one: Block.Block,
                            other: Block.Block):
         other.add_subb(one)
+        other.generate_target()
         self.update_b(other)
 
     def remove_one_outof_other(self,
@@ -75,22 +72,28 @@ class ChainsOfEducation(manim.Scene):
         for subb in one.get_all_subbs():
             self.remove(subb)
         self.remove(one)
+        other.generate_target()
         self.update_b(other)
 
     def update_b(self, b: Block.Block):
-        b.generate_target()
         b.make_finish_target()
         self.play(b.get_animations_to_play())
         self.wait()
 
-    def move_random(self, b: Block.Block):
-        self.my_pos_x = (random.random() - 0.5) * 6.0
-        self.my_pos_y = (random.random() - 0.5) * 3.0
-        b.move_to(self.my_pos_x * manim.RIGHT + self.my_pos_y * manim.UP)
+    def move_random(self, b: Block.Block, anim = True):
+        my_pos_x = (random.random() - 0.5) * 6.0
+        my_pos_y = (random.random() - 0.5) * 3.0
+        if anim:
+            b.target.move_to(my_pos_x * manim.RIGHT + my_pos_y * manim.UP)
+        else:
+            b.move_to_outside(my_pos_x * manim.RIGHT + my_pos_y * manim.UP)
 
-    def scale_random(self, b: Block.Block):
-        self.my_scl = 1.0 + (random.random() - 0.5) * 0.6
-        b.scale(self.my_scl)
+    def scale_random(self, b: Block.Block, anim = True):
+        my_scl = 1.0 + (random.random() - 0.5) * 0.6
+        if anim:
+            b.target.scale(my_scl)
+        else:
+            b.scale_outside(my_scl)
 
     def wait(self, duration: float = 0.25, **kwargs):
         super().wait(duration, **kwargs)

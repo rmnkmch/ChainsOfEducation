@@ -3,7 +3,7 @@ import Block
 import ContainingBlock
 
 
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 30.0
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 20.0
 MIN_DESCRIPTION_FONT_SIZE: float = 10.0
 
 DEFAULT_PADDING: float = Block.DEFAULT_PADDING
@@ -41,7 +41,7 @@ class KnowledgeBlock(Block.Block):
         self.containing_b.scale_outside(scale_factor, **kwargs)
         text_and_size = self.get_correct_description_text_and_size()
         self.description = manim.Text(
-            text_and_size[0], font_size = self.description.font_size)
+            text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(
             text_and_size[1]).move_to(self.get_description_correct_position())
 
@@ -109,15 +109,14 @@ class KnowledgeBlock(Block.Block):
     def make_description(self):
         text_and_size = self.get_correct_description_text_and_size(True)
         self.description.target = manim.Text(
-            text_and_size[0], font_size = self.description.font_size)
+            text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.target.scale(text_and_size[1]).move_to(
             self.get_description_correct_position(True))
-        if self.description_should_be_hidden or self.target.hidden:
+        self.display_description()
+        if self.description_should_be_hidden or self.target.is_hidden():
             self.description_should_be_hidden = False
             self.save_description_opacity()
             self.hide_description()
-        else:
-            self.display_description()
 
     def is_font_size_clear(self, font_size: float):
         return font_size > MIN_DESCRIPTION_FONT_SIZE
@@ -137,7 +136,7 @@ class KnowledgeBlock(Block.Block):
     def build_description(self):
         text_and_size = self.get_correct_description_text_and_size()
         self.description = manim.Text(
-            text_and_size[0], font_size = self.description.font_size)
+            text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(text_and_size[1])
         self.description.move_to(self.get_description_correct_position())
 
@@ -148,28 +147,28 @@ class KnowledgeBlock(Block.Block):
         correct_text = used_b.get_splited_description_text()
         new_description = manim.Text(
             correct_text, font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
-        scale_factor: float = (DEFAULT_DESCRIPTION_FONT_SIZE
-                               / used_b.description.font_size)
+        scale_factor: float = 1.0
         while not used_b.is_acceptable_description_height(new_description):
-            new_description.scale(0.9)
-            scale_factor *= 0.9
             if not used_b.is_font_size_clear(new_description.font_size):
                 self.description_should_be_hidden = True
+                correct_text = used_b.get_splited_description_text(
+                    MIN_DESCRIPTION_FONT_SIZE / DEFAULT_DESCRIPTION_FONT_SIZE)
                 return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
-                                       / used_b.description.font_size))
-            correct_text = used_b.get_splited_description_text(
-                new_description.font_size)
+                                       / DEFAULT_DESCRIPTION_FONT_SIZE))
+            new_description.scale(0.9)
+            scale_factor *= 0.9
+            correct_text = used_b.get_splited_description_text(scale_factor)
         while not used_b.is_acceptable_description_width(new_description):
-            new_description.scale(0.9)
-            scale_factor *= 0.9
             if not used_b.is_font_size_clear(new_description.font_size):
                 self.description_should_be_hidden = True
                 return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
-                                       / used_b.description.font_size))
+                                       / DEFAULT_DESCRIPTION_FONT_SIZE))
+            new_description.scale(0.9)
+            scale_factor *= 0.9
+
         return (correct_text, scale_factor)
 
-    def get_splited_description_text(
-        self, new_font_size: float = DEFAULT_DESCRIPTION_FONT_SIZE):
+    def get_splited_description_text(self, scale_ratio: float = 1.0):
 
         def is_there_another_word():
             nonlocal current_word_index, len_all_text
@@ -202,7 +201,8 @@ class KnowledgeBlock(Block.Block):
                    self.is_acceptable_description_width(
                        manim.Text(
                            current_str + " " + all_text[current_word_index],
-                           font_size = new_font_size))):
+                           font_size = DEFAULT_DESCRIPTION_FONT_SIZE
+                           ).scale(scale_ratio))):
                 current_str += " " + all_text[current_word_index]
                 current_word_index += 1
                 update_max_line_len(len(current_str))

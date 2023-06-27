@@ -51,8 +51,8 @@ class Block(manim.RoundedRectangle):
         self.scale(scale_factor, **kwargs)
         subbs = self.get_all_subbs()
         for subb in subbs:
-            subb.scale(scale_factor, **kwargs)
-            subb.move_to(self.get_subb_pos(subbs.index(subb)))
+            subb.scale_outside(scale_factor, **kwargs)
+            subb.move_to_outside(self.get_subb_pos(subbs.index(subb)))
 
     def move_to_outside(self, point_or_mobject, **kwargs):
         self.move_to(point_or_mobject, **kwargs)
