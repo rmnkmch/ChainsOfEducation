@@ -3,7 +3,7 @@ import Block
 import ContainingBlock
 
 
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 20.0
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 20.0#30.0
 MIN_DESCRIPTION_FONT_SIZE: float = 10.0
 
 DEFAULT_PADDING: float = Block.DEFAULT_PADDING
@@ -47,7 +47,7 @@ class KnowledgeBlock(Block.Block):
 
     def move_to_outside(self, point_or_mobject, **kwargs):
         super().move_to_outside(point_or_mobject, **kwargs)
-        self.containing_b.move_to_outside(self.get_subb_pos(0))
+        self.containing_b.move_to_outside(self.get_containing_b_positions()[0])
         self.description.move_to(self.get_description_correct_position())
 
     def get_animations_to_play(self):
@@ -68,19 +68,18 @@ class KnowledgeBlock(Block.Block):
     def make_containing_b(self):
 
         def hide_containing_b():
-            nonlocal scale_center, pos_center
+            nonlocal scale_center, pos_cont_b
             self.containing_b.save_all_opacity()
             self.containing_b.hidden = True
             self.containing_b.target = ContainingBlock.ContainingBlock("0")
             self.containing_b.target.scale(
                 scale_center / self.containing_b.target.width
-                ).move_to(pos_center)
+                ).move_to(pos_cont_b[0])
             self.containing_b.target.hide()
 
         scale_center = self.get_subb_scale(0, True, True)
         scale_DR = self.get_subb_scale(3, from_target = True)
-        pos_center = self.get_subb_pos(0, True, True)
-        pos_DR = self.get_subb_pos(3, from_target = True)
+        pos_cont_b = self.get_containing_b_positions(True)
         len_all_subbs = len(self.get_all_subbs())
         self.containing_b.target.scale(scale_DR / self.containing_b.target.width)
         if not self.containing_b.target.is_clear():
@@ -90,7 +89,7 @@ class KnowledgeBlock(Block.Block):
                     str(len_all_subbs))
                 self.containing_b.target.scale(
                     scale_center / self.containing_b.target.width
-                    ).move_to(pos_center)
+                    ).move_to(pos_cont_b[0])
                 self.containing_b.target.display()
             else:
                 hide_containing_b()
@@ -101,7 +100,7 @@ class KnowledgeBlock(Block.Block):
                     str(len_all_subbs - 3))
                 self.containing_b.target.scale(
                     scale_DR / self.containing_b.target.width
-                    ).move_to(pos_DR)
+                    ).move_to(pos_cont_b[1])
                 self.containing_b.target.display()
             else:
                 hide_containing_b()
@@ -117,6 +116,19 @@ class KnowledgeBlock(Block.Block):
             self.description_should_be_hidden = False
             self.save_description_opacity()
             self.hide_description()
+
+    def get_containing_b_positions(self, from_target = False):
+        used_b = self
+        if from_target:
+            used_b = self.target
+        vertical_space = used_b.get_vertical_space()
+        containing_pos = (manim.RIGHT * 0.25 * used_b.width + manim.DOWN
+                          * (0.5 * used_b.height - 0.5 * vertical_space
+                             - DEFAULT_PADDING * used_b.get_proportion())
+                          + used_b.get_center())
+        containing_pos2 = (containing_pos - used_b.get_horizontal_sub_part()
+                           - used_b.get_vertical_sub_part() * vertical_space)
+        return [containing_pos, containing_pos2]
 
     def is_font_size_clear(self, font_size: float):
         return font_size > MIN_DESCRIPTION_FONT_SIZE
@@ -144,6 +156,7 @@ class KnowledgeBlock(Block.Block):
         used_b = self
         if from_target:
             used_b = self.target
+        scale_const = 0.8
         correct_text = used_b.get_splited_description_text()
         new_description = manim.Text(
             correct_text, font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
@@ -155,16 +168,16 @@ class KnowledgeBlock(Block.Block):
                     MIN_DESCRIPTION_FONT_SIZE / DEFAULT_DESCRIPTION_FONT_SIZE)
                 return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
                                        / DEFAULT_DESCRIPTION_FONT_SIZE))
-            new_description.scale(0.9)
-            scale_factor *= 0.9
+            new_description.scale(scale_const)
+            scale_factor *= scale_const
             correct_text = used_b.get_splited_description_text(scale_factor)
         while not used_b.is_acceptable_description_width(new_description):
             if not used_b.is_font_size_clear(new_description.font_size):
                 self.description_should_be_hidden = True
                 return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
                                        / DEFAULT_DESCRIPTION_FONT_SIZE))
-            new_description.scale(0.9)
-            scale_factor *= 0.9
+            new_description.scale(scale_const)
+            scale_factor *= scale_const
 
         return (correct_text, scale_factor)
 

@@ -29,9 +29,22 @@ class ChainsOfEducation(manim.Scene):
         self.wait()
 
         self.add_one_into_other(kb2, self.kb)
-        for _ in range(1):
-            self.add_blocks(self.kb, 2)
-            #self.random_scale_move(self.kb)
+        for _ in range(4):
+            self.add_blocks(self.kb, 1)
+            self.random_scale_move(self.kb)
+        self.kb.move_to_outside(manim.ORIGIN)
+        self.wait()
+        for _ in range(5):
+            self.kb.generate_target()
+            self.kb.target.scale(1.2)
+            self.update_b(self.kb)
+        for _ in range(2):
+            self.add_blocks(kb2, 2)
+            self.random_scale_move(self.kb)
+        for _ in range(5):
+            self.kb.generate_target()
+            self.kb.target.scale(0.7)
+            self.update_b(self.kb)
         self.wait(1.0)
 
     def random_scale_move(self, b: Block.Block, num = 1, anim = True):

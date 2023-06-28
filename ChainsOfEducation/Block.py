@@ -52,13 +52,13 @@ class Block(manim.RoundedRectangle):
         subbs = self.get_all_subbs()
         for subb in subbs:
             subb.scale_outside(scale_factor, **kwargs)
-            subb.move_to_outside(self.get_subb_pos(subbs.index(subb)))
+            subb.move_to_outside(self.get_subb_positions()[subbs.index(subb)])
 
     def move_to_outside(self, point_or_mobject, **kwargs):
         self.move_to(point_or_mobject, **kwargs)
         subbs = self.get_all_subbs()
         for subb in subbs:
-            subb.move_to_outside(self.get_subb_pos(subbs.index(subb)))
+            subb.move_to_outside(self.get_subb_positions()[subbs.index(subb)])
 
     def get_animations_to_play(self):
         animations_to_play = manim.AnimationGroup(manim.MoveToTarget(self))
@@ -81,11 +81,11 @@ class Block(manim.RoundedRectangle):
         current_subb_index: int = 0
         loc_subbs = self.get_all_subbs()
         len_subbs = len(loc_subbs)
+        loc_positions = self.get_subb_positions(True)
         for subb in loc_subbs:
             sub_scale = self.get_subb_scale(
                 current_subb_index, from_target = True) / subb.target.width
-            sub_pos = self.get_subb_pos(current_subb_index, from_target = True)
-            subb.target.scale(sub_scale).move_to(sub_pos)
+            subb.target.scale(sub_scale).move_to(loc_positions[current_subb_index])
             if ((current_subb_index >= 4) or
                 ((current_subb_index >= 3) and len_subbs >= 5) or
                 (not subb.target.is_clear() and len_subbs >= 2)):
@@ -106,31 +106,40 @@ class Block(manim.RoundedRectangle):
             subb_scale = 1.0
         return subb_scale * 0.5 * used_b.width
 
-    def get_subb_pos(self, index: int, containing = False, from_target = False):
+    def get_subb_positions(self, from_target = False):
         used_b = self
         if from_target:
             used_b = self.target
-        vertical_space = (used_b.height - used_b.title.height
-                          - (DEFAULT_UNDERLINE_TITLE_OFFSET
-                             + 2.0 * DEFAULT_PADDING)
-                          * used_b.get_proportion())
+        vertical_space = used_b.get_vertical_space()
         subb_pos = (manim.RIGHT * 0.25 * used_b.width + manim.DOWN
                     * (0.5 * used_b.height - 0.5 * vertical_space
                        - DEFAULT_PADDING * used_b.get_proportion())
                     + used_b.get_center())
-        horizontal_dop_part = manim.LEFT * 0.125 * used_b.width
-        vertical_dop_part = 0.25 * manim.UP * vertical_space
-        if ((index == 0) and (len(self.get_all_subbs()) <= 1)) or containing:
-            return subb_pos
-        if index == 0:
-            subb_pos += horizontal_dop_part + vertical_dop_part
-        elif index == 1:
-            subb_pos += - horizontal_dop_part + vertical_dop_part
-        elif index == 2:
-            subb_pos += horizontal_dop_part - vertical_dop_part
-        else:
-            subb_pos += - horizontal_dop_part - vertical_dop_part
-        return subb_pos
+        hor_dop_part = used_b.get_horizontal_sub_part()
+        vert_dop_part = used_b.get_vertical_sub_part() * vertical_space
+        all_positions = []
+        for _ in self.get_all_subbs():
+            if len(all_positions) == 0:
+                all_positions = [subb_pos]
+            elif len(all_positions) == 1:
+                all_positions = [subb_pos + hor_dop_part + vert_dop_part,
+                                 subb_pos - hor_dop_part + vert_dop_part]
+            elif len(all_positions) == 2:
+                all_positions.append(subb_pos + hor_dop_part - vert_dop_part)
+            else:
+                all_positions.append(subb_pos - hor_dop_part - vert_dop_part)
+
+        return all_positions
+
+    def get_vertical_space(self):
+        return (self.height - self.title.height - self.get_proportion()
+                * (DEFAULT_UNDERLINE_TITLE_OFFSET + 2.0 * DEFAULT_PADDING))
+
+    def get_vertical_sub_part(self):
+        return manim.UP * 0.25
+
+    def get_horizontal_sub_part(self):
+        return manim.LEFT * 0.125 * self.width
 
     def get_all_subbs(self):
         return self.subbs
