@@ -16,7 +16,7 @@ class ChainsOfEducation(manim.Scene):
         состава.'''
         )
         self.kb.move_to_outside(3.0 * manim.LEFT)
-        self.kb.scale_outside(0.7)
+        self.kb.scale_outside(0.6)
         kb2 = KB.KnowledgeBlock("Биоло́гия!", '''
         Биоло́гия (греч. βιολογία; от др.-греч.
         βίος «жизнь» + λόγος «учение, наука»[1]) —
@@ -28,20 +28,19 @@ class ChainsOfEducation(manim.Scene):
         self.add(self.kb, kb2, grid)
         self.wait()
 
-        self.add_one_into_other(kb2, self.kb)
-        for _ in range(4):
-            self.add_blocks(self.kb, 1)
+        for _ in range(2):
+            self.add_blocks(self.kb, 3)
             self.random_scale_move(self.kb)
-        self.kb.move_to_outside(manim.ORIGIN)
-        self.wait()
-        for _ in range(5):
-            self.kb.generate_target()
-            self.kb.target.scale(1.2)
-            self.update_b(self.kb)
+        for _ in range(2):
+            self.random_scale_move(self.kb)
+            #self.kb.generate_target()
+            #self.kb.target.scale(1.1)
+            #self.update_b(self.kb)
         for _ in range(2):
             self.add_blocks(kb2, 2)
-            self.random_scale_move(self.kb)
-        for _ in range(5):
+            self.random_scale_move(kb2)
+        self.add_one_into_other(kb2, self.kb)
+        for _ in range(0):
             self.kb.generate_target()
             self.kb.target.scale(0.7)
             self.update_b(self.kb)

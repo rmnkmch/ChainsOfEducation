@@ -3,7 +3,7 @@ import Block
 import ContainingBlock
 
 
-DEFAULT_DESCRIPTION_FONT_SIZE: float = 20.0#30.0
+DEFAULT_DESCRIPTION_FONT_SIZE: float = 11.0#30.0
 MIN_DESCRIPTION_FONT_SIZE: float = 10.0
 
 DEFAULT_PADDING: float = Block.DEFAULT_PADDING
@@ -82,6 +82,9 @@ class KnowledgeBlock(Block.Block):
         pos_cont_b = self.get_containing_b_positions(True)
         len_all_subbs = len(self.get_all_subbs())
         self.containing_b.target.scale(scale_DR / self.containing_b.target.width)
+        if self.target.is_hidden():
+            hide_containing_b()
+            return
         if not self.containing_b.target.is_clear():
             if len_all_subbs >= 2:
                 self.containing_b.hidden = False
