@@ -1,11 +1,8 @@
 import manim
 
 
-DEFAULT_HEIGHT: float = 4.5
 DEFAULT_WIDTH: float = 8.0
-
-DEFAULT_TITLE_FONT_SIZE: float = 56.0
-
+DEFAULT_SUBB_PROPORTION: float = 0.45
 DEFAULT_PADDING: float = 0.3
 DEFAULT_UNDERLINE_TITLE_OFFSET: float = 0.3
 
@@ -16,19 +13,35 @@ class Block(manim.RoundedRectangle):
     def __init__(
         self,
         title: str = "Block",
-        height: float = DEFAULT_HEIGHT,
+        height: float = 4.5,
         width: float = DEFAULT_WIDTH,
+        fill_color = "#777777",
+        fill_opacity = 0.1,
+        stroke_color = "#FFFFFF",
+        stroke_opacity = 1.0,
+        stroke_width = 4,
+        background_stroke_color = "#000000",
+        background_stroke_opacity = 1.0,
+        background_stroke_width = 0,
         **kwargs):
         super().__init__(
             height = height,
             width = width,
+            fill_color = fill_color,
+            fill_opacity = fill_opacity,
+            stroke_color = stroke_color,
+            stroke_opacity = stroke_opacity,
+            stroke_width = stroke_width,
+            background_stroke_color = background_stroke_color,
+            background_stroke_opacity = background_stroke_opacity,
+            background_stroke_width = background_stroke_width,
             **kwargs)
 
         self.subbs = []
 
         self.title = manim.Text(
             title,
-            font_size = DEFAULT_TITLE_FONT_SIZE,
+            font_size = 56.0,
             weight = manim.BOLD)
         self.set_normal_title()
         self.title_underline = manim.Underline(self.title)
@@ -67,53 +80,58 @@ class Block(manim.RoundedRectangle):
                 animations_to_play, subb.get_animations_to_play())
         return animations_to_play
 
-    def make_finish_target(self):
-        self.make_subblocks()
-        for subb in self.get_all_subbs():
-            subb.make_finish_target()
-
     def generate_target(self):
         super().generate_target()
         for subb in self.get_all_subbs():
             subb.generate_target()
 
+    def make_finish_target(self):
+        self.make_subblocks()
+        for subb in self.get_all_subbs():
+            subb.make_finish_target()
+
     def make_subblocks(self):
-        current_subb_index: int = 0
-        loc_subbs = self.get_all_subbs()
-        len_subbs = len(loc_subbs)
-        loc_positions = self.get_subb_positions(True)
-        for subb in loc_subbs:
-            sub_scale = self.get_subb_scale(
-                current_subb_index, from_target = True) / subb.target.width
-            subb.target.scale(sub_scale).move_to(loc_positions[current_subb_index])
+        subbs = self.get_all_subbs()
+        len_subbs = len(subbs)
+        scales = self.get_subb_scales(True)
+        positions = self.get_subb_positions(True)
+        for subb in subbs:
+            current_subb_index = subbs.index(subb)
+            subb.target.scale(scales[current_subb_index] / subb.target.width
+                              ).move_to(positions[current_subb_index])
             if ((current_subb_index >= 4) or
                 ((current_subb_index >= 3) and len_subbs >= 5) or
-                (not subb.target.is_clear() and len_subbs >= 2)):
+                (not subb.target.is_clear() and len_subbs >= 2) or
+                self.target.is_hidden()):
                 subb.save_all_opacity()
                 subb.hidden = True
                 subb.target.hide()
             else:
                 subb.hidden = False
                 subb.target.display()
-            current_subb_index += 1
 
-    def get_subb_scale(self, index: int, containing = False, from_target = False):
+    def get_subb_scales(self, from_target = False):
         used_b = self
         if from_target:
             used_b = self.target
-        subb_scale: float = 0.5
-        if ((index == 0) and (len(self.get_all_subbs()) <= 1)) or containing:
-            subb_scale = 1.0
-        return subb_scale * 0.5 * used_b.width
+        subb_scale = DEFAULT_SUBB_PROPORTION * used_b.width
+        all_scales = []
+        for _ in self.get_all_subbs():
+            if len(all_scales) == 0:
+                all_scales = [subb_scale]
+            elif len(all_scales) == 1:
+                all_scales = [0.5 * subb_scale, 0.5 * subb_scale]
+            else:
+                all_scales.append(0.5 * subb_scale)
+        return all_scales
 
     def get_subb_positions(self, from_target = False):
         used_b = self
         if from_target:
             used_b = self.target
         vertical_space = used_b.get_vertical_space()
-        subb_pos = (manim.RIGHT * 0.25 * used_b.width + manim.DOWN
-                    * (0.5 * used_b.height - 0.5 * vertical_space
-                       - DEFAULT_PADDING * used_b.get_proportion())
+        subb_pos = (manim.RIGHT * 0.25 * used_b.width
+                    + used_b.get_middle_space(vertical_space)
                     + used_b.get_center())
         hor_dop_part = used_b.get_horizontal_sub_part()
         vert_dop_part = used_b.get_vertical_sub_part() * vertical_space
@@ -128,8 +146,13 @@ class Block(manim.RoundedRectangle):
                 all_positions.append(subb_pos + hor_dop_part - vert_dop_part)
             else:
                 all_positions.append(subb_pos - hor_dop_part - vert_dop_part)
-
         return all_positions
+
+    def get_middle_space(self, vertical_space: float | None = None):
+        if vertical_space is None:
+            vertical_space = self.get_vertical_space()
+        return (manim.DOWN * (0.5 * self.height - 0.5 * vertical_space
+                              - DEFAULT_PADDING * self.get_proportion()))
 
     def get_vertical_space(self):
         return (self.height - self.title.height - self.get_proportion()
@@ -178,11 +201,12 @@ class Block(manim.RoundedRectangle):
         self.all_old_opacity = [
             self.get_fill_opacity(),
             self.get_stroke_opacity(),
+            self.get_stroke_opacity(True),
             self.title.get_fill_opacity(),
             self.title.get_stroke_opacity(),
             self.title_underline.get_fill_opacity(),
             self.title_underline.get_stroke_opacity()]
-        for op in range(6, len(already_saved)):
+        for op in range(len(self.all_old_opacity), len(already_saved)):
             self.all_old_opacity.append(already_saved[op])
         for subb in self.get_all_subbs():
             subb.save_all_opacity()
@@ -194,6 +218,7 @@ class Block(manim.RoundedRectangle):
         self.hidden = True
         self.set_fill(opacity = 0.0)
         self.set_stroke(opacity = 0.0)
+        self.set_stroke(opacity = 0.0, background = True)
         self.title.set_fill(opacity = 0.0)
         self.title.set_stroke(opacity = 0.0)
         self.title_underline.set_fill(opacity = 0.0)
@@ -208,11 +233,11 @@ class Block(manim.RoundedRectangle):
         self.hidden = False
         self.set_fill(opacity = self.all_old_opacity[0])
         self.set_stroke(opacity = self.all_old_opacity[1])
-        self.title.set_fill(opacity = self.all_old_opacity[2])
-        self.title.set_stroke(opacity = self.all_old_opacity[3])
-        self.title_underline.set_fill(opacity = self.all_old_opacity[4])
-        self.title_underline.set_stroke(opacity = self.all_old_opacity[5])
-        #self.set_stroke(opacity=opacity, background=True)???
+        self.set_stroke(opacity = self.all_old_opacity[2], background = True)
+        self.title.set_fill(opacity = self.all_old_opacity[3])
+        self.title.set_stroke(opacity = self.all_old_opacity[4])
+        self.title_underline.set_fill(opacity = self.all_old_opacity[5])
+        self.title_underline.set_stroke(opacity = self.all_old_opacity[6])
         for subb in self.get_all_subbs():
             subb.display()
         return True

@@ -28,40 +28,34 @@ class ChainsOfEducation(manim.Scene):
         self.add(self.kb, kb2, grid)
         self.wait()
 
-        for _ in range(2):
-            self.add_blocks(self.kb, 3)
-            self.random_scale_move(self.kb)
-        for _ in range(2):
-            self.random_scale_move(self.kb)
-            #self.kb.generate_target()
-            #self.kb.target.scale(1.1)
-            #self.update_b(self.kb)
-        for _ in range(2):
-            self.add_blocks(kb2, 2)
-            self.random_scale_move(kb2)
+        for _ in range(4):
+            self.add_blocks(self.kb, 1)
+        for _ in range(1):
+            self.add_blocks(kb2, 1)
         self.add_one_into_other(kb2, self.kb)
         for _ in range(0):
-            self.kb.generate_target()
-            self.kb.target.scale(0.7)
-            self.update_b(self.kb)
+            self.random_scale_move_fill(self.kb)
         self.wait(1.0)
 
-    def random_scale_move(self, b: Block.Block, num = 1, anim = True):
+    def random_scale_move_fill(self, b: Block.Block, num = 1, anim = True):
         if anim:
             for _ in range(num):
                 b.generate_target()
                 self.scale_random(b, anim)
                 self.move_random(b, anim)
+                self.fill_random(b, anim)
                 self.update_b(b)
         else:
             self.scale_random(b, anim)
             self.move_random(b, anim)
+            self.fill_random(b, anim)
 
     def add_blocks(self, b: Block.Block, num: int = 1):
         for i in range(num):
             kbi = KB.KnowledgeBlock(
                 str(i), str(i) * 10 + " th KnowledgeBlock")
-            self.random_scale_move(kbi, anim = False)
+            self.random_scale_move_fill(kbi, anim = False)
+            self.fill_random(kbi, anim = False)
             self.add_one_into_other(kbi, b)
 
     def remove_blocks(self, b: Block.Block, num: int = 10):
@@ -91,6 +85,16 @@ class ChainsOfEducation(manim.Scene):
         b.make_finish_target()
         self.play(b.get_animations_to_play())
         self.wait()
+
+    def fill_random(self, b: Block.Block, anim = True):
+        my_color = "#" + str((random.random() * 1000000.0).__ceil__())
+        while len(my_color) != 7:
+            my_color = "#" + str((random.random() * 1000000.0).__ceil__())
+        my_opacity = random.random() * 0.8
+        if anim:
+            b.target.set_fill(my_color, my_opacity)
+        else:
+            b.set_fill(my_color, my_opacity)
 
     def move_random(self, b: Block.Block, anim = True):
         my_pos_x = (random.random() - 0.5) * 6.0

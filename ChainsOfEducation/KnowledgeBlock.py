@@ -5,9 +5,7 @@ import ContainingBlock
 
 DEFAULT_DESCRIPTION_FONT_SIZE: float = 11.0#30.0
 MIN_DESCRIPTION_FONT_SIZE: float = 10.0
-
 DEFAULT_PADDING: float = Block.DEFAULT_PADDING
-DEFAULT_UNDERLINE_TITLE_OFFSET: float = Block.DEFAULT_UNDERLINE_TITLE_OFFSET
 
 
 class KnowledgeBlock(Block.Block):
@@ -17,13 +15,10 @@ class KnowledgeBlock(Block.Block):
         self,
         title: str = "KnowledgeBlockTitle",
         description: str = "KnowledgeBlockDescription",
-        height: float = Block.DEFAULT_HEIGHT,
-        width: float = Block.DEFAULT_WIDTH,
         **kwargs):
         super().__init__(
             title = title,
-            height = height,
-            width = width,
+            fill_color = "#F08A5D",
             **kwargs)
 
         self.containing_b = ContainingBlock.ContainingBlock()
@@ -39,49 +34,49 @@ class KnowledgeBlock(Block.Block):
     def scale_outside(self, scale_factor: float, **kwargs):
         super().scale_outside(scale_factor, **kwargs)
         self.containing_b.scale_outside(scale_factor, **kwargs)
-        text_and_size = self.get_correct_description_text_and_size()
+        self.containing_b.move_to_outside(self.get_containing_b_positions()[0])
+        text_and_size = self.get_description_text_and_size()
         self.description = manim.Text(
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(
-            text_and_size[1]).move_to(self.get_description_correct_position())
+            text_and_size[1]).move_to(self.get_description_position())
 
     def move_to_outside(self, point_or_mobject, **kwargs):
         super().move_to_outside(point_or_mobject, **kwargs)
         self.containing_b.move_to_outside(self.get_containing_b_positions()[0])
-        self.description.move_to(self.get_description_correct_position())
+        self.description.move_to(self.get_description_position())
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
                                     manim.MoveToTarget(self.description),
                                     manim.MoveToTarget(self.containing_b))
 
-    def make_finish_target(self):
-        super().make_finish_target()
-        self.make_containing_b()
-        self.make_description()
-
     def generate_target(self):
         super().generate_target()
         self.containing_b.generate_target()
         self.description.generate_target()
 
-    def make_containing_b(self):
+    def make_finish_target(self):
+        super().make_finish_target()
+        self.make_containing_b()
+        self.make_description()
 
+    def make_containing_b(self):
         def hide_containing_b():
-            nonlocal scale_center, pos_cont_b
+            nonlocal scale_cont_b, pos_cont_b
             self.containing_b.save_all_opacity()
             self.containing_b.hidden = True
             self.containing_b.target = ContainingBlock.ContainingBlock("0")
             self.containing_b.target.scale(
-                scale_center / self.containing_b.target.width
+                scale_cont_b[0] / self.containing_b.target.width
                 ).move_to(pos_cont_b[0])
             self.containing_b.target.hide()
 
-        scale_center = self.get_subb_scale(0, True, True)
-        scale_DR = self.get_subb_scale(3, from_target = True)
+        scale_cont_b = self.get_containing_b_scales(True)
         pos_cont_b = self.get_containing_b_positions(True)
         len_all_subbs = len(self.get_all_subbs())
-        self.containing_b.target.scale(scale_DR / self.containing_b.target.width)
+        self.containing_b.target.scale(
+            scale_cont_b[1] / self.containing_b.target.width)
         if self.target.is_hidden():
             hide_containing_b()
             return
@@ -91,7 +86,7 @@ class KnowledgeBlock(Block.Block):
                 self.containing_b.target = ContainingBlock.ContainingBlock(
                     str(len_all_subbs))
                 self.containing_b.target.scale(
-                    scale_center / self.containing_b.target.width
+                    scale_cont_b[0] / self.containing_b.target.width
                     ).move_to(pos_cont_b[0])
                 self.containing_b.target.display()
             else:
@@ -102,32 +97,38 @@ class KnowledgeBlock(Block.Block):
                 self.containing_b.target = ContainingBlock.ContainingBlock(
                     str(len_all_subbs - 3))
                 self.containing_b.target.scale(
-                    scale_DR / self.containing_b.target.width
+                    scale_cont_b[1] / self.containing_b.target.width
                     ).move_to(pos_cont_b[1])
                 self.containing_b.target.display()
             else:
                 hide_containing_b()
 
     def make_description(self):
-        text_and_size = self.get_correct_description_text_and_size(True)
+        text_and_size = self.get_description_text_and_size(True)
         self.description.target = manim.Text(
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.target.scale(text_and_size[1]).move_to(
-            self.get_description_correct_position(True))
+            self.get_description_position(True))
         self.display_description()
         if self.description_should_be_hidden or self.target.is_hidden():
             self.description_should_be_hidden = False
             self.save_description_opacity()
             self.hide_description()
 
+    def get_containing_b_scales(self, from_target = False):
+        used_b = self
+        if from_target:
+            used_b = self.target
+        containing_scale = Block.DEFAULT_SUBB_PROPORTION * used_b.width
+        return [containing_scale, 0.5 * containing_scale]
+
     def get_containing_b_positions(self, from_target = False):
         used_b = self
         if from_target:
             used_b = self.target
         vertical_space = used_b.get_vertical_space()
-        containing_pos = (manim.RIGHT * 0.25 * used_b.width + manim.DOWN
-                          * (0.5 * used_b.height - 0.5 * vertical_space
-                             - DEFAULT_PADDING * used_b.get_proportion())
+        containing_pos = (manim.RIGHT * 0.25 * used_b.width
+                          + used_b.get_middle_space(vertical_space)
                           + used_b.get_center())
         containing_pos2 = (containing_pos - used_b.get_horizontal_sub_part()
                            - used_b.get_vertical_sub_part() * vertical_space)
@@ -145,21 +146,21 @@ class KnowledgeBlock(Block.Block):
 
     def is_acceptable_description_height(self, descr: manim.Text):
         return (descr.height < self.height - self.title.height
-                - (2.0 * DEFAULT_PADDING + DEFAULT_UNDERLINE_TITLE_OFFSET)
+                - (2.0 * DEFAULT_PADDING + Block.DEFAULT_UNDERLINE_TITLE_OFFSET)
                 * self.get_proportion())
 
     def build_description(self):
-        text_and_size = self.get_correct_description_text_and_size()
+        text_and_size = self.get_description_text_and_size()
         self.description = manim.Text(
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(text_and_size[1])
-        self.description.move_to(self.get_description_correct_position())
+        self.description.move_to(self.get_description_position())
 
-    def get_correct_description_text_and_size(self, from_target = False):
+    def get_description_text_and_size(self, from_target = False):
         used_b = self
         if from_target:
             used_b = self.target
-        scale_const = 0.8
+        scale_const: float = 0.8
         correct_text = used_b.get_splited_description_text()
         new_description = manim.Text(
             correct_text, font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
@@ -169,8 +170,8 @@ class KnowledgeBlock(Block.Block):
                 self.description_should_be_hidden = True
                 correct_text = used_b.get_splited_description_text(
                     MIN_DESCRIPTION_FONT_SIZE / DEFAULT_DESCRIPTION_FONT_SIZE)
-                return (correct_text, (MIN_DESCRIPTION_FONT_SIZE
-                                       / DEFAULT_DESCRIPTION_FONT_SIZE))
+                return (correct_text,
+                        MIN_DESCRIPTION_FONT_SIZE / DEFAULT_DESCRIPTION_FONT_SIZE)
             new_description.scale(scale_const)
             scale_factor *= scale_const
             correct_text = used_b.get_splited_description_text(scale_factor)
@@ -181,11 +182,9 @@ class KnowledgeBlock(Block.Block):
                                        / DEFAULT_DESCRIPTION_FONT_SIZE))
             new_description.scale(scale_const)
             scale_factor *= scale_const
-
         return (correct_text, scale_factor)
 
     def get_splited_description_text(self, scale_ratio: float = 1.0):
-
         def is_there_another_word():
             nonlocal current_word_index, len_all_text
             return current_word_index < len_all_text
@@ -225,22 +224,13 @@ class KnowledgeBlock(Block.Block):
             splited_text += current_str
             if is_there_another_word():
                 splited_text += "\n"
-
         return splited_text
 
-    def get_description_correct_position(self, from_target = False):
+    def get_description_position(self, from_target = False):
         used_b = self
         if from_target:
             used_b = self.target
-        vertical_space = (used_b.height - used_b.title.height
-                          - (DEFAULT_UNDERLINE_TITLE_OFFSET
-                             + 2.0 * DEFAULT_PADDING)
-                          * used_b.get_proportion())
-        description_pos = (manim.DOWN * (0.5 * used_b.height
-                                         - 0.5 * vertical_space
-                                         - DEFAULT_PADDING
-                                         * used_b.get_proportion())
-                           + used_b.get_center())
+        description_pos = used_b.get_middle_space() + used_b.get_center()
         if len(self.get_all_subbs()) >= 1:
             description_pos += manim.LEFT * 0.25 * used_b.width
         return description_pos
@@ -267,6 +257,6 @@ class KnowledgeBlock(Block.Block):
         if not self.is_description_hidden():
             return False
         self.description_hidden = False
-        self.description.target.set_fill(opacity = self.all_old_opacity[6])
-        self.description.target.set_stroke(opacity = self.all_old_opacity[7])
+        self.description.target.set_fill(opacity = self.all_old_opacity[7])
+        self.description.target.set_stroke(opacity = self.all_old_opacity[8])
         return True
