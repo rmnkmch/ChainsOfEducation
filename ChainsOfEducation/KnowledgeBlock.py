@@ -1,6 +1,7 @@
 ﻿import manim
 import Block
 import ContainingBlock
+import EllipsisBlock
 
 
 DEFAULT_DESCRIPTION_FONT_SIZE: float = 11.0#30.0
@@ -22,6 +23,7 @@ class KnowledgeBlock(Block.Block):
             **kwargs)
 
         self.containing_b = ContainingBlock.ContainingBlock()
+        self.ellipsis_b = EllipsisBlock.EllipsisBlock()
 
         self.description = manim.Text(
             description,
@@ -40,6 +42,7 @@ class KnowledgeBlock(Block.Block):
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(
             text_and_size[1]).move_to(self.get_description_position())
+        self.ellipsis_b.scale(scale_factor, **kwargs)
 
     def move_to_outside(self, point_or_mobject, **kwargs):
         super().move_to_outside(point_or_mobject, **kwargs)
@@ -48,13 +51,15 @@ class KnowledgeBlock(Block.Block):
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
+                                    manim.MoveToTarget(self.containing_b),
                                     manim.MoveToTarget(self.description),
-                                    manim.MoveToTarget(self.containing_b))
+                                    manim.MoveToTarget(self.ellipsis_b))
 
     def generate_target(self):
         super().generate_target()
         self.containing_b.generate_target()
         self.description.generate_target()
+        self.ellipsis_b.generate_target()
 
     def make_finish_target(self):
         super().make_finish_target()
@@ -110,10 +115,20 @@ class KnowledgeBlock(Block.Block):
         self.description.target.scale(text_and_size[1]).move_to(
             self.get_description_position(True))
         self.display_description()
+        if not self.ellipsis_b.is_hidden():
+            self.ellipsis_b.save_all_opacity()
+            self.ellipsis_b.hidden = True
+            self.ellipsis_b.target.hide()
         if self.description_should_be_hidden or self.target.is_hidden():
             self.description_should_be_hidden = False
             self.save_description_opacity()
             self.hide_description()
+            if not self.target.is_hidden() and self.ellipsis_b.is_hidden():
+                self.ellipsis_b.target.scale(
+                    self.get_ellipsis_b_scale(True) / self.ellipsis_b.target.width
+                    ).move_to(self.get_description_position(True))
+                self.ellipsis_b.hidden = False
+                self.ellipsis_b.target.display()
 
     def get_containing_b_scales(self, from_target = False):
         used_b = self
@@ -234,6 +249,12 @@ class KnowledgeBlock(Block.Block):
         if len(self.get_all_subbs()) >= 1:
             description_pos += manim.LEFT * 0.25 * used_b.width
         return description_pos
+
+    def get_ellipsis_b_scale(self, from_target = False):
+        used_b = self
+        if from_target:
+            used_b = self.target
+        return 0.4 * used_b.width
 
     def is_description_hidden(self):
         return self.description_hidden

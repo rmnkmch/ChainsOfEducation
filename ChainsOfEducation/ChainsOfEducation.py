@@ -30,7 +30,7 @@ class ChainsOfEducation(manim.Scene):
 
         for _ in range(4):
             self.add_blocks(self.kb, 1)
-        for _ in range(1):
+        for _ in range(2):
             self.add_blocks(kb2, 1)
         self.add_one_into_other(kb2, self.kb)
         for _ in range(0):
@@ -118,13 +118,13 @@ class ChainsOfEducation(manim.Scene):
         super().add(*mobjects)
         for b in mobjects:
             if isinstance(b, KB.KnowledgeBlock):
-                self.add(b.containing_b, b.description)
+                self.add(b.containing_b, b.description, b.ellipsis_b)
 
     def remove(self, *mobjects: manim.Mobject):
         super().remove(*mobjects)
         for b in mobjects:
             if isinstance(b, KB.KnowledgeBlock):
-                self.remove(b.containing_b, b.description)
+                self.remove(b.containing_b, b.description, b.ellipsis_b)
 
 """
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation

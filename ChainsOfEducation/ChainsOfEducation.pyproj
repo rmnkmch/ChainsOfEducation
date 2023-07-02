@@ -29,10 +29,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Droplet.py" />
+    <Compile Include="EllipsisBlock.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="KnowledgeBlock.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MainCharacter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TitleBlock.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
