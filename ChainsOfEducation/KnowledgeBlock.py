@@ -42,12 +42,15 @@ class KnowledgeBlock(Block.Block):
             text_and_size[0], font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.description.scale(
             text_and_size[1]).move_to(self.get_description_position())
-        self.ellipsis_b.scale(scale_factor, **kwargs)
+        self.ellipsis_b.scale(
+            scale_factor, **kwargs).move_to(
+                self.get_description_position())
 
     def move_to_outside(self, point_or_mobject, **kwargs):
         super().move_to_outside(point_or_mobject, **kwargs)
         self.containing_b.move_to_outside(self.get_containing_b_positions()[0])
         self.description.move_to(self.get_description_position())
+        self.ellipsis_b.move_to(self.get_description_position())
 
     def get_animations_to_play(self):
         return manim.AnimationGroup(super().get_animations_to_play(),
@@ -115,6 +118,9 @@ class KnowledgeBlock(Block.Block):
         self.description.target.scale(text_and_size[1]).move_to(
             self.get_description_position(True))
         self.display_description()
+        self.ellipsis_b.target.scale(
+            self.get_ellipsis_b_scale(True) / self.ellipsis_b.target.width
+            ).move_to(self.get_description_position(True))
         if not self.ellipsis_b.is_hidden():
             self.ellipsis_b.save_all_opacity()
             self.ellipsis_b.hidden = True
@@ -124,9 +130,6 @@ class KnowledgeBlock(Block.Block):
             self.save_description_opacity()
             self.hide_description()
             if not self.target.is_hidden() and self.ellipsis_b.is_hidden():
-                self.ellipsis_b.target.scale(
-                    self.get_ellipsis_b_scale(True) / self.ellipsis_b.target.width
-                    ).move_to(self.get_description_position(True))
                 self.ellipsis_b.hidden = False
                 self.ellipsis_b.target.display()
 

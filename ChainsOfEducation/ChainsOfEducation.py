@@ -30,8 +30,10 @@ class ChainsOfEducation(manim.Scene):
 
         for _ in range(4):
             self.add_blocks(self.kb, 1)
+            self.random_scale_move_fill(self.kb)
         for _ in range(2):
             self.add_blocks(kb2, 1)
+            self.random_scale_move_fill(kb2)
         self.add_one_into_other(kb2, self.kb)
         for _ in range(0):
             self.random_scale_move_fill(self.kb)

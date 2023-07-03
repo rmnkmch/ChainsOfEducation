@@ -19,6 +19,19 @@ class EllipsisBlock(manim.RoundedRectangle):
             background_stroke_width = 0,
             **kwargs)
 
+        radius_dot = 0.04 * Block.DEFAULT_WIDTH
+        pos_dot = manim.LEFT * 0.5 * (self.width * 0.5 - radius_dot)
+        color_dot = "#FFFFFF"
+
+        self.dot_1 = manim.Circle(
+            radius_dot, color_dot, fill_opacity = 0.1).move_to(pos_dot)
+        self.dot_2 = manim.Circle(
+            radius_dot, color_dot, fill_opacity = 0.1)
+        self.dot_3 = manim.Circle(
+            radius_dot, color_dot, fill_opacity = 0.1).move_to(- pos_dot)
+
+        self.add(self.dot_1, self.dot_2, self.dot_3)
+
         self.hidden = False
         self.all_old_opacity = []
         self.save_all_opacity()
