@@ -24,6 +24,9 @@
     <Compile Include="Block.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CacheDatabase.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ChainsOfEducation.py" />
     <Compile Include="ContainingBlock.py">
       <SubType>Code</SubType>
@@ -36,6 +39,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MainCharacter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SQLDatabase.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TitleBlock.py">

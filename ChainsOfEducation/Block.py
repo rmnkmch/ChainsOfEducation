@@ -37,7 +37,7 @@ class Block(manim.RoundedRectangle):
             background_stroke_width = background_stroke_width,
             **kwargs)
 
-        self.subbs = []
+        self.subbs: list = []
 
         self.title = manim.Text(
             title,
@@ -129,12 +129,11 @@ class Block(manim.RoundedRectangle):
         used_b = self
         if from_target:
             used_b = self.target
-        vertical_space = used_b.get_vertical_space()
         subb_pos = (manim.RIGHT * 0.25 * used_b.width
-                    + used_b.get_middle_space(vertical_space)
+                    + used_b.get_middle_space()
                     + used_b.get_center())
         hor_dop_part = used_b.get_horizontal_sub_part()
-        vert_dop_part = used_b.get_vertical_sub_part() * vertical_space
+        vert_dop_part = used_b.get_vertical_sub_part()
         all_positions = []
         for _ in self.get_all_subbs():
             if len(all_positions) == 0:
@@ -148,10 +147,8 @@ class Block(manim.RoundedRectangle):
                 all_positions.append(subb_pos - hor_dop_part - vert_dop_part)
         return all_positions
 
-    def get_middle_space(self, vertical_space: float | None = None):
-        if vertical_space is None:
-            vertical_space = self.get_vertical_space()
-        return (manim.DOWN * (0.5 * self.height - 0.5 * vertical_space
+    def get_middle_space(self):
+        return (manim.DOWN * (0.5 * self.height - 0.5 * self.get_vertical_space()
                               - DEFAULT_PADDING * self.get_proportion()))
 
     def get_vertical_space(self):
@@ -159,7 +156,7 @@ class Block(manim.RoundedRectangle):
                 * (DEFAULT_UNDERLINE_TITLE_OFFSET + 2.0 * DEFAULT_PADDING))
 
     def get_vertical_sub_part(self):
-        return manim.UP * 0.25
+        return manim.UP * 0.25 * self.get_vertical_space()
 
     def get_horizontal_sub_part(self):
         return manim.LEFT * 0.125 * self.width

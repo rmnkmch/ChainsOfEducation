@@ -20,7 +20,7 @@ class EllipsisBlock(manim.RoundedRectangle):
             **kwargs)
 
         radius_dot = 0.04 * Block.DEFAULT_WIDTH
-        pos_dot = manim.LEFT * 0.5 * (self.width * 0.5 - radius_dot)
+        pos_dot = manim.LEFT * (0.5 * (self.width * 0.5 - radius_dot) + radius_dot)
         color_dot = "#FFFFFF"
 
         self.dot_1 = manim.Circle(

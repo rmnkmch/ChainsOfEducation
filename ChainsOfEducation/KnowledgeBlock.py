@@ -144,12 +144,11 @@ class KnowledgeBlock(Block.Block):
         used_b = self
         if from_target:
             used_b = self.target
-        vertical_space = used_b.get_vertical_space()
         containing_pos = (manim.RIGHT * 0.25 * used_b.width
-                          + used_b.get_middle_space(vertical_space)
+                          + used_b.get_middle_space()
                           + used_b.get_center())
         containing_pos2 = (containing_pos - used_b.get_horizontal_sub_part()
-                           - used_b.get_vertical_sub_part() * vertical_space)
+                           - used_b.get_vertical_sub_part())
         return [containing_pos, containing_pos2]
 
     def is_font_size_clear(self, font_size: float):
@@ -248,10 +247,10 @@ class KnowledgeBlock(Block.Block):
         used_b = self
         if from_target:
             used_b = self.target
-        description_pos = used_b.get_middle_space() + used_b.get_center()
+        description_position = used_b.get_middle_space() + used_b.get_center()
         if len(self.get_all_subbs()) >= 1:
-            description_pos += manim.LEFT * 0.25 * used_b.width
-        return description_pos
+            description_position += manim.LEFT * 0.25 * used_b.width
+        return description_position
 
     def get_ellipsis_b_scale(self, from_target = False):
         used_b = self
