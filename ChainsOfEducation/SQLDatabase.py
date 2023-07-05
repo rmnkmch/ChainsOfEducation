@@ -11,47 +11,45 @@ class SQLDatabase(object):
             self.connection = sqlite3.connect(path)
             self.cursor = self.connection.cursor()
         except:
-            print("The create_connection error")
+            print("create_connection error")
 
     def close_connection(self):
         try:
             self.cursor.close()
             self.connection.close()
         except:
-            print("The close_connection error")
+            print("close_connection error")
 
     def execute_query(self, query):
         try:
             self.cursor.execute(query)
             self.connection.commit()
         except:
-            print("The execute_query error")
+            print(f"execute_query: {query}")
 
     def execute_read_query(self, query):
         try:
             self.cursor.execute(query)
             return self.cursor.fetchall()
         except:
-            print("The execute_read_query error")
+            print(f"execute_read_query: {query}")
 
     def create_table_query(self):
         return """
         CREATE TABLE IF NOT EXISTS KnowledgeBlocks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
+        title TEXT PRIMARY KEY NOT NULL,
         description TEXT NOT NULL);"""
 
     def create_KB_query(self, title, description):
         return f"""
-        INSERT INTO
-        KnowledgeBlocks (title, description)
-        VALUES ({title}, {description});"""
+        INSERT INTO KnowledgeBlocks (title, description)
+        VALUES ('{title}', '{description}');"""
 
     def update_KB_query(self, title, description):
         return f"""
         UPDATE KnowledgeBlocks
-        SET description = {description}
-        WHERE title = {title}"""
+        SET description = '{description}'
+        WHERE title = '{title}'"""
 
 
 """

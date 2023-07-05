@@ -45,20 +45,19 @@ class ChainsOfEducation(manim.Scene):
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
         self.sql_db.create_connection("SQLData\KnowledgeBlocks.sqlite")
-        ret = self.sql_db.execute_read_query(
-            "SELECT title, description FROM KnowledgeBlocks")
+        self.sql_db.execute_query(self.sql_db.create_table_query())
+        ret = self.sql_db.execute_read_query("SELECT * FROM KnowledgeBlocks")
         if ret is not None:
             for text in ret:
                 print(text)
 
     def save_all(self):
-        self.sql_db.execute_query(self.sql_db.create_table_query())
         self.save_kb(self.kb)
         self.sql_db.close_connection()
 
     def save_kb(self, kb: KB.KnowledgeBlock):
         if self.sql_db.execute_read_query(
-            f"SELECT * FROM KnowledgeBlocks WHERE title = {kb.title.text}") is None:
+            f"SELECT * FROM KnowledgeBlocks WHERE title = '{kb.title.text}'") is None:
             self.sql_db.execute_query(
                 self.sql_db.create_KB_query(kb.title.text, kb.description.text))
 
