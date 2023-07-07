@@ -128,7 +128,7 @@ class KnowledgeBlock(Block.Block):
         if self.description_should_be_hidden or self.target.is_hidden():
             self.description_should_be_hidden = False
             self.save_description_opacity()
-            self.hide_description()
+            self.hide_description(True)
             if not self.target.is_hidden() and self.ellipsis_b.is_hidden():
                 self.ellipsis_b.hidden = False
                 self.ellipsis_b.target.display()
@@ -268,12 +268,15 @@ class KnowledgeBlock(Block.Block):
         self.all_old_opacity.append(self.description.get_stroke_opacity())
         return True
 
-    def hide_description(self):
+    def hide_description(self, target = True):
         if self.is_description_hidden():
             return False
         self.description_hidden = True
-        self.description.target.set_fill(opacity = 0.0)
-        self.description.target.set_stroke(opacity = 0.0)
+        used_description = self.description
+        if target:
+            used_description = self.description.target
+        used_description.set_fill(opacity = 0.0)
+        used_description.set_stroke(opacity = 0.0)
         return True
 
     def display_description(self):

@@ -7,7 +7,9 @@ import SQLDatabase
 
 class ChainsOfEducation(manim.Scene):
     def construct(self):
-        self.load_all()
+        self.chapter_1()
+        """self.load_all()
+        self.chapter_1()
         grid = manim.NumberPlane()
         self.kb = KB.KnowledgeBlock("Хи́мия!", '''
         Хи́мия - одна из 
@@ -35,12 +37,12 @@ class ChainsOfEducation(manim.Scene):
         for _ in range(0):
             self.add_blocks(kb2, 1)
             self.random_scale_move_fill(kb2)
-        self.add_one_into_other(kb2, self.kb)
+        #self.add_one_into_other(kb2, self.kb)
         for _ in range(0):
             self.random_scale_move_fill(self.kb)
         self.wait(1.0)
 
-        self.save_all()
+        self.save_all()"""
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -68,7 +70,7 @@ class ChainsOfEducation(manim.Scene):
                 self.scale_random(b, anim)
                 self.move_random(b, anim)
                 self.fill_random(b, anim)
-                self.update_b(b)
+                self.update_b(b, False)
         else:
             self.scale_random(b, anim)
             self.move_random(b, anim)
@@ -92,7 +94,6 @@ class ChainsOfEducation(manim.Scene):
                            one: Block.Block,
                            other: Block.Block):
         other.add_subb(one)
-        other.generate_target()
         self.update_b(other)
 
     def remove_one_outof_other(self,
@@ -102,10 +103,11 @@ class ChainsOfEducation(manim.Scene):
         for subb in one.get_all_subbs():
             self.remove(subb)
         self.remove(one)
-        other.generate_target()
         self.update_b(other)
 
-    def update_b(self, b: Block.Block):
+    def update_b(self, b: Block.Block, gen_tar = True):
+        if gen_tar:
+            b.generate_target()
         b.make_finish_target()
         self.play(b.get_animations_to_play())
         self.wait()
@@ -150,10 +152,32 @@ class ChainsOfEducation(manim.Scene):
             if isinstance(b, KB.KnowledgeBlock):
                 self.remove(b.containing_b, b.description, b.ellipsis_b)
 
-"""
+    def create_kb_no_descr(self, kb: KB.KnowledgeBlock):
+        kb.save_description_opacity()
+        kb.hide_description(False)
+        self.play(manim.Create(kb, lag_ratio = 0.1, run_time = 5.0))
+        self.wait()
+
+    """
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
 """
+
+    def chapter_1(self):
+        #intro_text = manim.Text("Ну что ж ...")
+        #self.play(manim.Write(intro_text, run_time = 3.0))
+        kb_1 = KB.KnowledgeBlock("Хи́мия!", '''
+        Хи́мия - одна из 
+        важнейших и обширных областей естествознания,
+        наука, изучающая вещества, также их состав и
+        строение, их свойства, зависящие от состава и
+        строения, их превращения, ведущие к изменению
+        состава.''')
+        kb_1.move_to_outside(manim.LEFT)
+        kb_1.scale_outside(1.5)
+        self.create_kb_no_descr(kb_1)
+        self.update_b(kb_1)
+        self.wait(1.0)
