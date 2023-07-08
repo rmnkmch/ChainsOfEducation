@@ -3,52 +3,21 @@ import Block
 import KnowledgeBlock as KB
 import random
 import SQLDatabase
+import ComplexArrow
+
+
+FAST_RUN_TIME: float = 0.1
 
 
 class ChainsOfEducation(manim.Scene):
     def construct(self):
-        self.chapter_1()
-        """self.load_all()
-        self.chapter_1()
-        grid = manim.NumberPlane()
-        self.kb = KB.KnowledgeBlock("Хи́мия!", '''
-        Хи́мия - одна из 
-        важнейших и обширных областей естествознания,
-        наука, изучающая вещества, также их состав и
-        строение, их свойства, зависящие от состава и
-        строения, их превращения, ведущие к изменению
-        состава.''')
-        self.kb.move_to_outside(3.0 * manim.LEFT)
-        self.kb.scale_outside(0.6)
-        kb2 = KB.KnowledgeBlock("Биоло́гия!", '''
-        Биоло́гия (греч. βιολογία; от др.-греч.
-        βίος «жизнь» + λόγος «учение, наука»[1]) —
-        наука о живых существах и их взаимодействии со
-        средой обитания. Изучает все аспекты жизни,
-        в частности''')
-        kb2.move_to_outside(3.0 * manim.RIGHT)
-
-        self.add(self.kb, kb2, grid)
-        self.wait()
-
-        for _ in range(0):
-            self.add_blocks(self.kb, 1)
-            self.random_scale_move_fill(self.kb)
-        for _ in range(0):
-            self.add_blocks(kb2, 1)
-            self.random_scale_move_fill(kb2)
-        #self.add_one_into_other(kb2, self.kb)
-        for _ in range(0):
-            self.random_scale_move_fill(self.kb)
-        self.wait(1.0)
-
-        self.save_all()"""
+        self.test_1()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
-        self.sql_db.create_connection("SQLData\KnowledgeBlocks.sqlite")
+        self.sql_db.create_connection(r"SQLData\KnowledgeBlocks.sqlite")
         self.sql_db.execute_query(self.sql_db.create_table_query())
-        ret = self.sql_db.execute_read_query("SELECT * FROM KnowledgeBlocks")
+        ret = self.sql_db.execute_read_query(r"SELECT * FROM KnowledgeBlocks")
         if ret is not None:
             for text in ret:
                 print(text)
@@ -58,8 +27,9 @@ class ChainsOfEducation(manim.Scene):
         self.sql_db.close_connection()
 
     def save_kb(self, kb: KB.KnowledgeBlock):
-        if self.sql_db.execute_read_query(
-            f"SELECT * FROM KnowledgeBlocks WHERE title = '{kb.title.text}'") is None:
+        if (self.sql_db.execute_read_query(
+            f"SELECT * FROM KnowledgeBlocks WHERE title = '{kb.title.text}'")
+            is None):
             self.sql_db.execute_query(
                 self.sql_db.create_KB_query(kb.title.text, kb.description.text))
 
@@ -105,12 +75,26 @@ class ChainsOfEducation(manim.Scene):
         self.remove(one)
         self.update_b(other)
 
-    def update_b(self, b: Block.Block, gen_tar = True):
+    def update_b(self, b: Block.Block, gen_tar = True, fast = False,
+                 other_animations = None):
         if gen_tar:
             b.generate_target()
         b.make_finish_target()
-        self.play(b.get_animations_to_play())
-        self.wait()
+        if other_animations is None:
+            if fast:
+                self.play(b.get_animations_to_play().set_run_time(FAST_RUN_TIME))
+            else:
+                self.play(b.get_animations_to_play())
+                self.wait()
+        else:
+            if fast:
+                self.play(manim.AnimationGroup(
+                    b.get_animations_to_play(), other_animations,
+                    run_time = FAST_RUN_TIME))
+            else:
+                self.play(manim.AnimationGroup(
+                    b.get_animations_to_play(), other_animations))
+                self.wait()
 
     def fill_random(self, b: Block.Block, anim = True):
         my_color = "#" + str((random.random() * 1000000.0).__ceil__())
@@ -137,7 +121,7 @@ class ChainsOfEducation(manim.Scene):
         else:
             b.scale_outside(my_scl)
 
-    def wait(self, duration: float = 0.25, **kwargs):
+    def wait(self, duration: float = 0.2, **kwargs):
         super().wait(duration, **kwargs)
 
     def add(self, *mobjects: manim.Mobject):
@@ -152,32 +136,64 @@ class ChainsOfEducation(manim.Scene):
             if isinstance(b, KB.KnowledgeBlock):
                 self.remove(b.containing_b, b.description, b.ellipsis_b)
 
-    def create_kb_no_descr(self, kb: KB.KnowledgeBlock):
+    def create_kb_no_descr(self, kb: KB.KnowledgeBlock, fast = False):
         kb.save_description_opacity()
         kb.hide_description(False)
-        self.play(manim.Create(kb, lag_ratio = 0.1, run_time = 5.0))
-        self.wait()
+        if fast:
+            self.play(manim.Create(kb, run_time = FAST_RUN_TIME))
+        else:
+            self.play(manim.Create(kb, lag_ratio = 0.04, run_time = 5.0))
+            self.wait()
 
-    """
+    def write_text(self, text, fast = False):
+        if fast:
+            self.play(manim.Write(text, run_time = FAST_RUN_TIME))
+        else:
+            self.play(manim.Write(text, run_time = 3.0))
+            self.wait()
+
+    def unwrite_text(self, text, fast = False):
+        if fast:
+            self.play(manim.Unwrite(text, run_time = FAST_RUN_TIME,
+                                    reverse = False))
+        else:
+            self.play(manim.Unwrite(text, run_time = 3.0))
+            self.wait()
+
+    r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
-"""
+    """
 
     def chapter_1(self):
-        #intro_text = manim.Text("Ну что ж ...")
-        #self.play(manim.Write(intro_text, run_time = 3.0))
-        kb_1 = KB.KnowledgeBlock("Хи́мия!", '''
-        Хи́мия - одна из 
-        важнейших и обширных областей естествознания,
-        наука, изучающая вещества, также их состав и
-        строение, их свойства, зависящие от состава и
-        строения, их превращения, ведущие к изменению
-        состава.''')
+        fast_1 = True
+        fast_2 = False
+        intro_text = manim.Text("Ну что ж ...")
+        self.write_text(intro_text, fast_1)
+        self.unwrite_text(intro_text, fast_1)
+        kb_1 = KB.KnowledgeBlock("Осознанность!", '''
+        Очень сильный и важный инструмент.''')
         kb_1.move_to_outside(manim.LEFT)
-        kb_1.scale_outside(1.5)
-        self.create_kb_no_descr(kb_1)
-        self.update_b(kb_1)
+        kb_1.scale_outside(1.4)
+        self.create_kb_no_descr(kb_1, fast_1)
+        self.update_b(kb_1, fast = fast_1)
+        kb_1.generate_target()
+        kb_1.target.move_to(manim.UP * 7.0)
+        self.update_b(kb_1, False, fast_2)
+        text_1 = manim.Text("""Любые суждения или мысли кажутся непонятными
+        и автоматически бессмысленными, если у слушателя нет
+        достаточного основания для их понимания.""")
+        self.wait(1.0)
+
+    def test_1(self):
+        """st = manim.UP * 3.0
+        end = manim.DR * 3.5
+        arrow = manim.CurvesAsSubmobjects(st, end)#ComplexArrow.ComplexArrow(st, end)
+        #arrow.split_by_lines(7)
+        self.add(arrow, manim.Dot(st), manim.Dot(end))"""
+        circ = manim.TipableVMobject()
+        self.add(circ)
         self.wait(1.0)
