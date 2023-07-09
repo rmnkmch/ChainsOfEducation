@@ -189,11 +189,18 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def test_1(self):
-        """st = manim.UP * 3.0
+        st = manim.UP * 3.0
         end = manim.DR * 3.5
-        arrow = manim.CurvesAsSubmobjects(st, end)#ComplexArrow.ComplexArrow(st, end)
-        #arrow.split_by_lines(7)
-        self.add(arrow, manim.Dot(st), manim.Dot(end))"""
-        circ = manim.TipableVMobject()
-        self.add(circ)
+        arrow = KB.KnowledgeBlock()
+        #self.add(arrow, manim.Dot(st), manim.Dot(end))
+
+        x_values = [-6, -3, -1, 0, 1, 3, 6]
+        y_values = [1, 3, 2, 3.5, -1, -3.5, 3]
+        coords = [(x, y, 0) for x, y in zip(x_values, y_values)]
+        plot = manim.VMobject(color=manim.BLUE).set_points_smoothly(coords)
+        self.play(manim.Create(plot, run_time = 5))
+        self.wait()
+        plot.generate_target()
+        plot.target = manim.DashedVMobject(plot, 100, 0.5)
+        self.play(manim.MoveToTarget(plot, run_time = 5))
         self.wait(1.0)
