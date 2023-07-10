@@ -1,28 +1,34 @@
 import manim
+import SimpleCurve
 
 
-POINT_ANGLES: list = [0.0, 45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0]
-
-
-class ComplexArrow(manim.Line):
+class ComplexArrow(manim.VMobject):
     """ComplexArrow"""
 
-    def __init__(self, start, end, path_arc = None, **kwargs):
+    def __init__(self, points, **kwargs):
         super().__init__(
-            start = start,
-            end = end,
-            stroke_width = 6,
-            buff = 0.0,
-            path_arc = path_arc,
+            stroke_color = "#FFFFFF",
+            stroke_opacity = 1.0,
+            stroke_width = 4,
+            background_stroke_color = "#000000",
+            background_stroke_opacity = 1.0,
+            background_stroke_width = 0,
             **kwargs)
 
-    def split_by_lines(self, num = 3):
-        self.lines = []
-        line_part = (self.end - self.start) / num
-        print(self.start)
-        print(self.end)
-        for part in range(num):
-            comp_arr = ComplexArrow(
-                self.start + line_part * part, self.start + line_part * (part + 1))
-            self.lines.append(comp_arr)
-            self.add(comp_arr)
+        self.set_points_smoothly(points)
+
+        self.num_created_curves: int = 0
+
+    def get_next_curve(self):
+        curve = None
+        if self.is_created():
+            curve = SimpleCurve.SimpleCurve(
+                self.get_nth_curve_points(self.num_created_curves))
+        else:
+            curve = SimpleCurve.SimpleCurve(
+                self.get_nth_curve_points(self.num_created_curves))
+            self.num_created_curves += 1
+        return curve
+
+    def is_created(self):
+        return self.num_created_curves >= self.get_num_curves()

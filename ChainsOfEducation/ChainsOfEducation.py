@@ -189,18 +189,55 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def test_1(self):
-        st = manim.UP * 3.0
-        end = manim.DR * 3.5
-        arrow = KB.KnowledgeBlock()
-        #self.add(arrow, manim.Dot(st), manim.Dot(end))
-
-        x_values = [-6, -3, -1, 0, 1, 3, 6]
-        y_values = [1, 3, 2, 3.5, -1, -3.5, 3]
-        coords = [(x, y, 0) for x, y in zip(x_values, y_values)]
-        plot = manim.VMobject(color=manim.BLUE).set_points_smoothly(coords)
-        self.play(manim.Create(plot, run_time = 5))
-        self.wait()
-        plot.generate_target()
-        plot.target = manim.DashedVMobject(plot, 100, 0.5)
-        self.play(manim.MoveToTarget(plot, run_time = 5))
+        x_values = [-5, -4, -2, 2, 5, 2, -4, -1, 6]
+        y_values = [-3, -1, -2, 2, 3, -2, 2, -3, -1]
+        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
+        for plots in coords:
+            self.add(manim.Dot(plots))
+        arrow = ComplexArrow.ComplexArrow(coords)
+        self.play(manim.Create(arrow))
+        #self.play(ChainsOfEducation.MyMoveAlongPath(
+            #manim.Rectangle().scale(0.1), arrow, run_time = 20.0))
+        ar = manim.Triangle(fill_opacity = 0.8).scale(0.2).rotate(- manim.PI * 0.5)
+        self.play(ChainsOfEducation.MyMoveAlongPath(ar, arrow, run_time = 25.0))
         self.wait(1.0)
+
+    class MyMoveAlongPath(manim.Animation):
+        def __init__(
+            self,
+            mobject: manim.Mobject,
+            path: manim.VMobject,
+            suspend_mobject_updating: bool | None = False,
+            **kwargs) -> None:
+            self.path = path
+            self.previous_pos = self.path.point_from_proportion(0.0)
+            self.previous_angle = 0.0
+            super().__init__(
+                mobject,
+                suspend_mobject_updating = suspend_mobject_updating,
+                **kwargs)
+
+        def interpolate_mobject(self, alpha: float) -> None:
+            pos = self.path.point_from_proportion(self.rate_func(alpha))
+            diff_pos = pos - self.previous_pos
+            self.previous_pos = pos
+            angle = 0.0
+            if diff_pos[0] != 0.0:
+                from math import atan
+                if diff_pos[0] > 0.0 and diff_pos[1] > 0.0:
+                    angle = atan(diff_pos[1] / diff_pos[0])
+                elif diff_pos[0] > 0.0 and diff_pos[1] < 0.0:
+                    angle = 2.0 * manim.PI - atan(abs(diff_pos[1] / diff_pos[0]))
+                elif diff_pos[0] < 0.0 and diff_pos[1] > 0.0:
+                    angle = manim.PI - atan(abs(diff_pos[1] / diff_pos[0]))
+                else:
+                    angle = manim.PI + atan(abs(diff_pos[1] / diff_pos[0]))
+            else:
+                if diff_pos[1] > 0.0:
+                    angle = manim.PI * 0.5
+                elif diff_pos[1] < 0.0:
+                    angle = manim.PI * 1.5
+            diff_angle = angle - self.previous_angle
+            self.previous_angle = angle
+            self.mobject.move_to(pos)
+            self.mobject.rotate(diff_angle)

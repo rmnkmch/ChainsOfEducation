@@ -44,6 +44,9 @@
     <Compile Include="MainCharacter.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SimpleCurve.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SQLDatabase.py">
       <SubType>Code</SubType>
     </Compile>
