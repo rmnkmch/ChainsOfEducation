@@ -196,10 +196,8 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
             self.add(manim.Dot(plots))
         arrow = ComplexArrow.ComplexArrow(coords)
         self.play(manim.Create(arrow))
-        #self.play(ChainsOfEducation.MyMoveAlongPath(
-            #manim.Rectangle().scale(0.1), arrow, run_time = 20.0))
-        ar = manim.Triangle(fill_opacity = 0.8).scale(0.2).rotate(- manim.PI * 0.5)
-        self.play(ChainsOfEducation.MyMoveAlongPath(ar, arrow, run_time = 25.0))
+        ar = manim.Triangle(fill_opacity = 0.9).scale(0.3).rotate(- manim.PI * 0.5)
+        self.play(ChainsOfEducation.MyMoveAlongPath(ar, arrow, run_time = 5.0))
         self.wait(1.0)
 
     class MyMoveAlongPath(manim.Animation):
