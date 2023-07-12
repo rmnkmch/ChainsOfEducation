@@ -189,15 +189,16 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def test_1(self):
-        x_values = [-5, -4, -2, 2, 5, 2, -4, -1, 6]
-        y_values = [-3, -1, -2, 2, 3, -2, 2, -3, -1]
+        x_values = [-5, -2, 6]
+        y_values = [-2, -1.5, 2.5]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         for plots in coords:
             self.add(manim.Dot(plots))
         arrow = ComplexArrow.ComplexArrow(coords)
-        self.play(manim.Create(arrow))
-        ar = manim.Triangle(fill_opacity = 0.9).scale(0.3).rotate(- manim.PI * 0.5)
-        self.play(ChainsOfEducation.MyMoveAlongPath(ar, arrow, run_time = 5.0))
+        self.play(
+            
+            ChainsOfEducation.MyMoveAlongPath(arrow.end_tip, arrow, run_time = 2)),
+        manim.Create(arrow, run_time = 2),
         self.wait(1.0)
 
     class MyMoveAlongPath(manim.Animation):

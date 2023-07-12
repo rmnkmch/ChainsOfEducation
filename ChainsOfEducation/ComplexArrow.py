@@ -19,6 +19,8 @@ class ComplexArrow(manim.VMobject):
 
         self.num_created_curves: int = 0
 
+        self.end_tip = manim.ArrowTriangleFilledTip().rotate(manim.PI)
+
     def get_next_curve(self):
         curve = None
         if self.is_created():
