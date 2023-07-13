@@ -4,6 +4,7 @@ import KnowledgeBlock as KB
 import random
 import SQLDatabase
 import ComplexArrow
+import TopicBlock
 
 
 FAST_RUN_TIME: float = 0.1
@@ -157,7 +158,7 @@ class ChainsOfEducation(manim.Scene):
             self.play(manim.Unwrite(text, run_time = FAST_RUN_TIME,
                                     reverse = False))
         else:
-            self.play(manim.Unwrite(text, run_time = 3.0))
+            self.play(manim.Unwrite(text, run_time = 3.0, reverse = False))
             self.wait()
 
     r"""
@@ -182,23 +183,24 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.update_b(kb_1, fast = fast_1)
         kb_1.generate_target()
         kb_1.target.move_to(manim.UP * 7.0)
-        self.update_b(kb_1, False, fast_2)
+        self.update_b(kb_1, False, fast_1)
         text_1 = manim.Text("""Любые суждения или мысли кажутся непонятными
-        и автоматически бессмысленными, если у слушателя нет
+        и автоматически бессмысленными, если у нас нет
         достаточного основания для их понимания.""")
-        self.wait(1.0)
-
-    def test_1(self):
         x_values = [-5, -2, 6]
         y_values = [-2, -1.5, 2.5]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         for plots in coords:
             self.add(manim.Dot(plots))
         arrow = ComplexArrow.ComplexArrow(coords)
-        self.play(
-            
-            ChainsOfEducation.MyMoveAlongPath(arrow.end_tip, arrow, run_time = 2)),
-        manim.Create(arrow, run_time = 2),
+        self.play(ChainsOfEducation.MyMoveAlongPath(
+            arrow.end_tip, arrow, run_time = 2),
+                  manim.Create(arrow, run_time = 2))
+        self.wait(1.0)
+
+    def test_1(self):
+        tb = TopicBlock.TopicBlock()
+        self.play(manim.Create(tb))
         self.wait(1.0)
 
     class MyMoveAlongPath(manim.Animation):
