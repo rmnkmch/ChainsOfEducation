@@ -161,6 +161,24 @@ class ChainsOfEducation(manim.Scene):
             self.play(manim.Unwrite(text, run_time = 3.0, reverse = False))
             self.wait()
 
+    def create_topic_no_briefs(self, topic: TopicBlock.TopicBlock, fast = False):
+        if fast:
+            animationGroup = manim.AnimationGroup()
+            for brief in topic.get_all_briefs_dots():
+                animationGroup = manim.AnimationGroup(
+                    animationGroup, manim.Create(brief, run_time = FAST_RUN_TIME))
+            self.play(manim.AnimationGroup(
+                animationGroup, manim.Create(topic, run_time = FAST_RUN_TIME)))
+        else:
+            animationGroup = manim.AnimationGroup()
+            for brief in topic.get_all_briefs_dots():
+                animationGroup = manim.AnimationGroup(
+                    animationGroup, manim.Create(brief), lag_ratio = 0.2)
+            self.play(manim.AnimationGroup(
+                manim.Create(topic, lag_ratio = 0.04, run_time = 3.0),
+                animationGroup, lag_ratio = 0.5))
+            self.wait()
+
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
@@ -175,32 +193,50 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         intro_text = manim.Text("Ну что ж ...")
         self.write_text(intro_text, fast_1)
         self.unwrite_text(intro_text, fast_1)
-        kb_1 = KB.KnowledgeBlock("Осознанность!", '''
-        Очень сильный и важный инструмент.''')
-        kb_1.move_to_outside(manim.LEFT)
-        kb_1.scale_outside(1.4)
-        self.create_kb_no_descr(kb_1, fast_1)
-        self.update_b(kb_1, fast = fast_1)
-        kb_1.generate_target()
-        kb_1.target.move_to(manim.UP * 7.0)
-        self.update_b(kb_1, False, fast_1)
-        text_1 = manim.Text("""Любые суждения или мысли кажутся непонятными
-        и автоматически бессмысленными, если у нас нет
-        достаточного основания для их понимания.""")
-        x_values = [-5, -2, 6]
-        y_values = [-2, -1.5, 2.5]
+        x_values = [-7, -4, 0, 4, 7]
+        y_values = [1, 1, 1, 1, 1]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         for plots in coords:
             self.add(manim.Dot(plots))
         arrow = ComplexArrow.ComplexArrow(coords)
-        self.play(ChainsOfEducation.MyMoveAlongPath(
-            arrow.end_tip, arrow, run_time = 2),
-                  manim.Create(arrow, run_time = 2))
+        anim_1 = ChainsOfEducation.MyMoveAlongPath(
+            arrow.end_tip, arrow.copy(), run_time = 5.0)
+        anim_2 = manim.Create(arrow, run_time = 5.0)
+        tb_1 = TopicBlock.TopicBlock("???").move_to(
+            2.0 * manim.UP + 3.0 * manim.LEFT)
+        tb_2 = TopicBlock.TopicBlock("???").move_to(manim.DOWN)
+        tb_3 = TopicBlock.TopicBlock("???").move_to(
+            2.0 * manim.UP + 3.0 * manim.RIGHT)
+        grp = manim.VGroup(tb_1, tb_2, tb_3)
+        anims = manim.AnimationGroup()
+        for i in range(3):
+            anims = manim.AnimationGroup(
+                anims, manim.Create(manim.Line(
+                    manim.UP * y_values[i + 1] + manim.RIGHT * x_values[i + 1],
+                    grp[i].get_all_points()[1])), lag_ratio = 0.4)
+        self.play(anim_1, anim_2, anims)
+        
+        self.create_topic_no_briefs(tb_1, fast_1)
+        #self.play(tb_1.prepare_to_briefs())
+        #for _ in range(len(tb_1.get_all_briefs_dots())):
+            #self.play(tb_1.show_next_brief())
+        kb_1 = KB.KnowledgeBlock("Осознанность!", '''
+        Очень сильный и важный инструмент.''')
+        kb_1.move_to_outside(manim.LEFT)
+        kb_1.scale_outside(1.4)
+        #self.create_kb_no_descr(kb_1, fast_1)
+        #self.update_b(kb_1, fast = fast_1)
+        kb_1.generate_target()
+        #kb_1.target.move_to(manim.UP * 7.0)
+        #self.update_b(kb_1, False, fast_1)
+        text_1 = manim.Text("""Любые суждения или мысли кажутся непонятными
+        и автоматически бессмысленными, если у нас нет
+        достаточного основания для их понимания.""")
+        
         self.wait(1.0)
 
     def test_1(self):
-        tb = TopicBlock.TopicBlock()
-        self.play(manim.Create(tb))
+        self.play(manim.Write(manim.SVGMobject(str(7)).scale(3.5), run_time = 15.0))
         self.wait(1.0)
 
     class MyMoveAlongPath(manim.Animation):
@@ -220,11 +256,12 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 
         def interpolate_mobject(self, alpha: float) -> None:
             pos = self.path.point_from_proportion(self.rate_func(alpha))
+            self.mobject.move_to(pos)
             diff_pos = pos - self.previous_pos
-            self.previous_pos = pos
-            angle = 0.0
-            if diff_pos[0] != 0.0:
+            if abs(diff_pos[0]) >= 0.001 and abs(diff_pos[1]) >= 0.001:
                 from math import atan
+                self.previous_pos = pos
+                angle = 0.0
                 if diff_pos[0] > 0.0 and diff_pos[1] > 0.0:
                     angle = atan(diff_pos[1] / diff_pos[0])
                 elif diff_pos[0] > 0.0 and diff_pos[1] < 0.0:
@@ -233,12 +270,6 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
                     angle = manim.PI - atan(abs(diff_pos[1] / diff_pos[0]))
                 else:
                     angle = manim.PI + atan(abs(diff_pos[1] / diff_pos[0]))
-            else:
-                if diff_pos[1] > 0.0:
-                    angle = manim.PI * 0.5
-                elif diff_pos[1] < 0.0:
-                    angle = manim.PI * 1.5
-            diff_angle = angle - self.previous_angle
-            self.previous_angle = angle
-            self.mobject.move_to(pos)
-            self.mobject.rotate(diff_angle)
+                diff_angle = angle - self.previous_angle
+                self.previous_angle = angle
+                self.mobject.rotate(diff_angle)
