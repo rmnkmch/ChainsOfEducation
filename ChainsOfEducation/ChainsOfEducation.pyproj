@@ -27,6 +27,9 @@
     <Compile Include="CacheDatabase.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Chain.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ChainsOfEducation.py" />
     <Compile Include="ComplexArrow.py">
       <SubType>Code</SubType>
