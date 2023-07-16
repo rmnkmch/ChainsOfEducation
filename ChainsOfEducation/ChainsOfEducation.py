@@ -13,7 +13,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(manim.Scene):
     def construct(self):
-        self.chapter_1()
+        self.chapter_1_0()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -144,7 +144,7 @@ class ChainsOfEducation(manim.Scene):
         if fast:
             self.play(manim.Create(kb, run_time = FAST_RUN_TIME))
         else:
-            self.play(manim.Create(kb, lag_ratio = 0.05, run_time = 5.0))
+            self.play(manim.Create(kb, lag_ratio = 0.1, run_time = 3.0))
             self.wait()
 
     def write_text(self, text, fast = False):
@@ -162,28 +162,37 @@ class ChainsOfEducation(manim.Scene):
             self.play(manim.Unwrite(text, run_time = 3.0, reverse = False))
             self.wait()
 
-    def creating_topics_anims(self, topics: manim.VGroup, fast = False):
+    def creating_topic_anim(self, topic: TopicBlock.TopicBlock, fast = False):
         if fast:
-            animationGroup = manim.AnimationGroup()
-            for topic in topics:
-                for brief in topic.get_all_briefs_dots():
-                    animationGroup = manim.AnimationGroup(
-                        animationGroup,
-                        manim.Create(brief, run_time = FAST_RUN_TIME))
-                animationGroup = (manim.AnimationGroup(
-                    animationGroup, manim.Create(topic, run_time = FAST_RUN_TIME)))
-            return animationGroup
+            return manim.Create(topic, run_time = FAST_RUN_TIME)
         else:
-            animationGroup = manim.AnimationGroup(rate_func = manim.linear)
-            for topic in topics:
-                for brief in topic.get_all_briefs_dots():
-                    animationGroup = manim.AnimationGroup(
-                        animationGroup, manim.Create(brief),
-                        lag_ratio = 1.0, rate_func = manim.linear)
-                animationGroup = manim.AnimationGroup(
-                    manim.Create(topic, lag_ratio = 0.05, run_time = 1.0),
-                    animationGroup, lag_ratio = 1.0, rate_func = manim.linear)
-            return animationGroup
+            return manim.Create(topic, lag_ratio = 0.1)
+
+    def creating_chain_anim(self, chain: Chain.Chain, fast = False):
+        if fast:
+            return manim.AnimationGroup(
+                manim.FadeIn(chain.start_dot),
+                manim.Write(chain),
+                manim.Create(chain.end_dot),
+                run_time = FAST_RUN_TIME)
+        else:
+            return manim.AnimationGroup(
+                manim.FadeIn(chain.start_dot),
+                manim.Write(chain),
+                manim.Create(chain.end_dot),
+                lag_ratio = 0.75)
+
+    def creating_chain_and_topic_anim(self, chain, topic, fast = False):
+        if fast:
+            return manim.AnimationGroup(
+                self.creating_chain_anim(chain, fast),
+                self.creating_topic_anim(topic, fast),
+                run_time = FAST_RUN_TIME)
+        else:
+            return manim.AnimationGroup(
+                self.creating_chain_anim(chain, fast),
+                self.creating_topic_anim(topic, fast),
+                lag_ratio = 0.5)
 
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
@@ -193,73 +202,90 @@ manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
     """
 
-    def chapter_1(self):
-        def get_start_chain(i):
-            return manim.UP * y_values[i + 1] + manim.RIGHT * x_values[i + 1]
-
-        def get_end_chain(i):
-            return grp[i].get_all_points()[0]
-
-        def get_start_chain_func(n):
-            return lambda: get_start_chain(n)
-
-        def get_end_chain_func(n):
-            return lambda: get_end_chain(n)
+    def chapter_1_0(self):
+        self.nnn = 0
+        def get_start_chain_func():
+            n = self.nnn
+            self.nnn += 1
+            return (lambda: manim.UP * y_values[n + 1]
+                    + manim.RIGHT * x_values[n + 1])
 
         fast_1 = True
         fast_2 = False
-        intro_text = manim.Text("Ну что ж ...")
+        """intro_text = manim.Text("Ну что ж ...")
         self.write_text(intro_text, fast_1)
         self.unwrite_text(intro_text, fast_1)
-        x_values = [-7, -3, 1, 5, 7]
-        y_values = [0, 0, 0, 0, 0]
+        x_values = [-7, -4, 0, 4, 7]
+        y_values = [3.2, 2.8, 3.2, 2.8, 3.2]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
-        for plots in coords:
-            self.add(manim.Dot(plots))
         arrow = ComplexArrow.ComplexArrow(coords)
         anim_1 = ChainsOfEducation.MyMoveAlongPath(
-            arrow.end_tip, arrow.copy(), run_time = 3.0)
-        anim_2 = manim.Create(arrow, run_time = 3.0)
+            arrow.end_tip, arrow.copy(), run_time = 1.0)
+        anim_2 = manim.Create(arrow, run_time = 1.0)
         anim_3 = manim.AnimationGroup(anim_1, anim_2)
-        tb_1 = TopicBlock.TopicBlock("???").move_to(
-            2.0 * manim.UP + 5.0 * manim.LEFT).scale(0.4)
+        tb_1 = TopicBlock.TopicBlock(
+            "Осознание", ["Что такое осознанность?",
+                          "Несколько\nуниверсальных методов"]).move_to(
+            1.9 * manim.UP + 4.0 * manim.LEFT).scale(0.3)
+        tb_1.set_chain(get_start_chain_func())
         tb_2 = TopicBlock.TopicBlock("???").move_to(
-            2.0 * manim.DOWN + 1.0 * manim.LEFT).scale(0.4)
+            1.9 * manim.UP + 0.0 * manim.LEFT).scale(0.3)
+        tb_2.set_chain(get_start_chain_func())
         tb_3 = TopicBlock.TopicBlock("???").move_to(
-            2.0 * manim.UP + 3.0 * manim.RIGHT).scale(0.4)
-        grp = manim.VGroup(tb_1, tb_2, tb_3)
-        anims = manim.AnimationGroup(rate_func = manim.linear)
-        for i in range(len(grp)):
-            anims = manim.AnimationGroup(
-                anims,
-                manim.AnimationGroup(
-                    manim.Create(Chain.Chain(
-                        get_start_chain_func(i),
-                        get_end_chain_func(i))),
-                    self.creating_topics_anims(manim.VGroup(grp[i]), fast_2),
-                    lag_ratio = 1.0, rate_func = manim.linear),
-                lag_ratio = 0.4, rate_func = manim.linear)
-        played = manim.AnimationGroup(anim_3, anims,
-                                      lag_ratio = 0.3, rate_func = manim.linear)
+            1.9 * manim.UP + 4.0 * manim.RIGHT).scale(0.3)
+        tb_3.set_chain(get_start_chain_func())
+        grp = [tb_1, tb_2, tb_3]
+        anims = []
+        for topic_block in grp:
+            anims.append(self.creating_chain_and_topic_anim(
+                topic_block.chain, topic_block, fast_1))
+            topic_block.chain.stop_follow()
+        anims = manim.AnimationGroup(*anims, lag_ratio = 0.1)
+        played = manim.AnimationGroup(anim_3, anims, lag_ratio = 0.3)
         self.play(played)
-        self.play(grp.animate.scale(2.0).shift(manim.DOWN))
-        
-        #self.play(tb_1.prepare_to_briefs())
-        #for _ in range(len(tb_1.get_all_briefs_dots())):
-            #self.play(tb_1.show_next_brief())
-        kb_1 = KB.KnowledgeBlock("Осознанность!", '''
-        Очень сильный и важный инструмент.''')
-        kb_1.move_to_outside(manim.LEFT)
-        kb_1.scale_outside(1.4)
-        #self.create_kb_no_descr(kb_1, fast_1)
-        #self.update_b(kb_1, fast = fast_1)
+        for topic_block in grp:
+            topic_block.chain.start_follow()
+        tb_1.generate_target()
+        tb_1.target.move_to(1.5 * manim.DOWN + 3.0 * manim.LEFT).scale(1.0 / 0.3)
+        tb_1.target.activate()
+        self.play(manim.MoveToTarget(tb_1))
+        self.play(tb_1.prepare_to_briefs())
+        for _ in range(len(tb_1.get_all_briefs_dots())):
+            self.play(tb_1.show_next_brief())"""
+
+        kb_1 = KB.KnowledgeBlock("Осознанность!",
+        '''Очень сильный и важный инструмент.''')
+        self.create_kb_no_descr(kb_1, fast_1)
+        self.update_b(kb_1, fast = fast_1)
         kb_1.generate_target()
-        #kb_1.target.move_to(manim.UP * 7.0)
-        #self.update_b(kb_1, False, fast_1)
-        text_1 = manim.Text("""Любые суждения или мысли кажутся непонятными
+        kb_1.target.move_to(manim.UP * 2.2).scale(0.5)
+        self.update_b(kb_1, False, fast_1)
+        x_values_2 = [0, 0]
+        y_values_2 = [0.8, -1.0]
+        coords_2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
+        arrow_2 = ComplexArrow.ComplexArrow(coords_2)
+        arrow_2.end_tip.rotate(- 0.5 * manim.PI)
+        anim_10 = ChainsOfEducation.MyMoveAlongPath(
+            arrow_2.end_tip, arrow_2.copy())
+        anim_11 = manim.Create(arrow_2)
+        text_1 = manim.Text(
+        "Осознавая свои принятые решения,\nжелаемое будет достигаться быстрее.",
+        font_size = 30).move_to(2.0 * manim.DOWN)
+        anim_12 = manim.AddTextLetterByLetter(text_1, time_per_char = 0.03)
+        anim_13 = manim.AnimationGroup(anim_11, anim_10)
+        anim_14 = manim.AnimationGroup(anim_13, anim_12, lag_ratio = 0.5)
+        self.play(anim_14)
+
+       
+
+        self.wait(1.0)
+
+    def chapter_1_2(self):
+        text_2 = manim.Text("""Любые суждения или мысли кажутся непонятными
         и автоматически бессмысленными, если у нас нет
         достаточного основания для их понимания.""")
-        self.wait(1.0)
+        pass
+
 
     def test_1(self):
         self.wait(1.0)

@@ -1,4 +1,5 @@
 import manim
+import Chain
 
 
 class TopicBlock(manim.RoundedRectangle):
@@ -36,21 +37,22 @@ class TopicBlock(manim.RoundedRectangle):
 
         self.title = manim.Text(title, font_size = 56.0, weight = manim.BOLD)
         self.title_underline = manim.Underline(self.title)
+        self.add(self.title, self.title_underline)
+
+        self.chain = None
 
         self.briefs = []
         self.brief_shown = 0
-        self.chain = manim.Line(self)
-
         for brief in briefs:
             offset = (len(briefs) - 1) * 0.25
             if len(briefs) <= 1:
                 offset = 0.0
-            self.briefs.append(manim.Dot().move_to(
+            d = manim.Dot().move_to(
                 manim.DOWN + manim.RIGHT
-                * (0.5 * briefs.index(brief) - offset)))
+                * (0.5 * briefs.index(brief) - offset))
+            self.briefs.append(d)
+            self.add(d)
             self.briefs.append(manim.Text(brief, font_size = 32.0))
-
-        self.add(self.title, self.title_underline)
 
         self.deactivate()
 
@@ -73,7 +75,7 @@ class TopicBlock(manim.RoundedRectangle):
 
     def get_briefs_pos(self):
         ret = []
-        vert = (self.get_center() + 2.5 * manim.LEFT
+        vert = (self.get_center() + 3.0 * manim.LEFT
                 + manim.UP * (0.5 * self.height - self.title.height - 0.5))
         hor = manim.DOWN * ((self.height - self.title.height - 0.5)
                / (len(self.get_all_briefs_dots()) + 1))
@@ -100,6 +102,12 @@ class TopicBlock(manim.RoundedRectangle):
             self.brief_shown += 1
         return manim.FadeIn(br)
 
+    def get_chain_end(self):
+        return self.get_all_points()[4]
+
+    def set_chain(self, start_func):
+        self.chain = Chain.Chain(start_func, lambda: self.get_chain_end())
+
     def deactivate(self):
         self.set_fill(opacity = 0.1)
         self.set_stroke(opacity = 0.75)
@@ -115,3 +123,5 @@ class TopicBlock(manim.RoundedRectangle):
         self.title.set_stroke(opacity = 1.0)
         self.title_underline.set_fill(opacity = 1.0)
         self.title_underline.set_stroke(opacity = 1.0)
+        for dot in self.get_all_briefs_dots():
+            dot.set_fill(opacity = 1.0)
