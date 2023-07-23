@@ -112,9 +112,9 @@ class ChainsOfEducation(M.Scene):
         my_pos_x = (random.random() - 0.5) * 6.0
         my_pos_y = (random.random() - 0.5) * 3.0
         if anim:
-            b.target.move_to(my_pos_x * M.RIGHT + my_pos_y * M.UP)
+            b.target.move_to(self.pos_by(my_pos_x, my_pos_y))
         else:
-            b.move_to_outside(my_pos_x * M.RIGHT + my_pos_y * M.UP)
+            b.move_to_outside(self.pos_by(my_pos_x, my_pos_y))
 
     def scale_random(self, b: Block.Block, anim = True):
         my_scl = 1.0 + (random.random() - 0.5) * 0.6
@@ -194,6 +194,25 @@ class ChainsOfEducation(M.Scene):
                 self.creating_topic_anim(topic, fast),
                 lag_ratio = 0.5)
 
+    def pos_by(self, x: float, y: float):
+        return M.RIGHT * x + M.UP * y
+
+    def shift_by_text(self, text: str):
+        caps = "бё"#ДЁЙЦЩQJ
+        caps_2 = "йАБВГЕЖЗИКЛМНОПРСТУФХЧШЪЫЬЭЮЯABCDEFGHIKLMNOPRSTUVWXYZ"
+        lows = "дцщ"
+        lows_2 = "ру"
+        caps = [i for i in caps]
+        caps_2 = [i for i in caps_2]
+        lows = [i for i in lows]
+        lows_2 = [i for i in lows_2]
+        for char in text:
+            if char in caps: return 0.084
+            elif char in caps_2: return 0.065
+            elif char in lows: return - 0.041
+            elif char in lows_2: return - 0.056
+        return 0.0
+
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
@@ -207,8 +226,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         def get_start_chain_func():
             n = self.nnn
             self.nnn += 1
-            return (lambda: M.UP * y_values[n + 1]
-                    + M.RIGHT * x_values[n + 1])
+            return lambda: self.pos_by(x_values[n + 1], y_values[n + 1])
 
         fast_1 = True
         fast_2 = False
@@ -224,15 +242,16 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         anim_2 = M.Create(arrow, run_time = 1.0)
         anim_3 = M.AnimationGroup(anim_1, anim_2)
         tb_1 = TopicBlock.TopicBlock(
-            "Осознание", ["Что такое осознанность?",
-                          "Несколько\nуниверсальных методов"]).move_to(
-            1.9 * M.UP + 4.0 * M.LEFT).scale(0.3)
+            "Осознание",
+            ["Что такое осознанность?",
+             "Несколько\nуниверсальных методов"]).move_to(
+                 self.pos_by(- 4.0, 1.9)).scale(0.3)
         tb_1.set_chain(get_start_chain_func())
         tb_2 = TopicBlock.TopicBlock("???").move_to(
-            1.9 * M.UP + 0.0 * M.LEFT).scale(0.3)
+            self.pos_by(0.0, 1.9)).scale(0.3)
         tb_2.set_chain(get_start_chain_func())
         tb_3 = TopicBlock.TopicBlock("???").move_to(
-            1.9 * M.UP + 4.0 * M.RIGHT).scale(0.3)
+            self.pos_by(4.0, 1.9)).scale(0.3)
         tb_3.set_chain(get_start_chain_func())
         grp = [tb_1, tb_2, tb_3]
         anims = []
@@ -285,11 +304,46 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def chapter_1_1(self):
-        text_2 = M.Text("""Любые суждения или мысли кажутся непонятными
-        и автоматически бессмысленными, если у нас нет
-        достаточного основания для их понимания.""")
-        for word in text_2.original_text.split():
-            self.play(M.FadeIn(M.Text(word)))
+        self.add(M.NumberPlane())
+        text_2 = M.Text("""Любые суждения или мысли
+кажутся непонятными
+и автоматически бессмысленными,
+если у нас нет достаточного основания
+для их понимания.""")
+        self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.02))
+        texts_2 = ["Любые суждения или мысли",
+                   "Всё когда-либо",
+                   "сказанное нами,",
+                   "нашими друзьями и знакомыми,",
+                   "и даже незнакомыми,",
+                   "прочитанное в интернете,",
+                   "книгах,",
+                   "газетах,",
+                   "услышанное по радио,",
+                   "придуманное во сне или наяву,",
+                   "увиденное на улице или по телевизору и т.д"]
+        mtexts = [[texts_2[0], self.pos_by(0.0, 3.0)],
+                  [texts_2[1], self.pos_by(-2.0, 1.0)],
+                  [texts_2[2], self.pos_by(1.0, 1.0)],
+                  [texts_2[3], self.pos_by(-2.0, 0.0)],
+                  [texts_2[4], self.pos_by(3.0, 0.0)],
+                  [texts_2[5], self.pos_by(-2.0, -1.0)],
+                  [texts_2[6], self.pos_by(0.0, -1.0)],
+                  [texts_2[7], self.pos_by(1.0, -1.0)],
+                  [texts_2[8], self.pos_by(3.0, -1.0)],
+                  [texts_2[9], self.pos_by(-1.0, -2.0)],
+                  [texts_2[10], self.pos_by(-1.0, -3.0)]]
+        self.play(M.FadeIn(M.Text(mtexts[0][0]).move_to(mtexts[0][1])))
+        x_values_2 = [-7, -4, 0, 4, 7]
+        y_values_2 = [3.2, 2.8, 3.2, 2.8, 3.2]
+        coords = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
+        arrow_2 = ComplexArrow.ComplexArrow(coords)
+        anim_1 = ChainsOfEducation.MyMoveAlongPath(
+            arrow_2.end_tip, arrow_2.copy())
+        anim_2 = M.Create(arrow_2)
+        anim_3 = M.AnimationGroup(anim_1, anim_2)
+        self.play(anim_3)
+        self.wait(1.0)
 
     def test_1(self):
         self.wait(1.0)
