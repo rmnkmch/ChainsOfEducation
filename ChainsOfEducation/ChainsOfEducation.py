@@ -13,7 +13,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.chapter_1_1()
+        self.test_1()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -305,12 +305,11 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 
     def chapter_1_1(self):
         self.add(M.NumberPlane())
-        text_2 = M.Text("""Любые суждения или мысли
-кажутся непонятными
+        text_2 = M.Text("""Любые суждения или мысли кажутся непонятными
 и автоматически бессмысленными,
 если у нас нет достаточного основания
-для их понимания.""")
-        self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.02))
+для их понимания.""", font_size = 30).move_to(2.0 * M.UP)
+        self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.01))
         texts_2 = ["Любые суждения или мысли",
                    "Всё когда-либо",
                    "сказанное нами,",
@@ -322,7 +321,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
                    "услышанное по радио,",
                    "придуманное во сне или наяву,",
                    "увиденное на улице или по телевизору и т.д"]
-        mtexts = [[texts_2[0], self.pos_by(0.0, 3.0)],
+        mtexts = [[texts_2[0], self.pos_by(-3.0, 1.0)],
                   [texts_2[1], self.pos_by(-2.0, 1.0)],
                   [texts_2[2], self.pos_by(1.0, 1.0)],
                   [texts_2[3], self.pos_by(-2.0, 0.0)],
@@ -334,8 +333,8 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
                   [texts_2[9], self.pos_by(-1.0, -2.0)],
                   [texts_2[10], self.pos_by(-1.0, -3.0)]]
         self.play(M.FadeIn(M.Text(mtexts[0][0]).move_to(mtexts[0][1])))
-        x_values_2 = [-7, -4, 0, 4, 7]
-        y_values_2 = [3.2, 2.8, 3.2, 2.8, 3.2]
+        x_values_2 = [- 3, -6, -5]
+        y_values_2 = [2, 2, 1]
         coords = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
         arrow_2 = ComplexArrow.ComplexArrow(coords)
         anim_1 = ChainsOfEducation.MyMoveAlongPath(
@@ -345,7 +344,28 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.play(anim_3)
         self.wait(1.0)
 
+        r"""
+manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+"""
+
     def test_1(self):
+        x_values = [-6, -4, -2, 2, 4, 6]
+        y_values = [1.2, 2.7, -1.3, 2.4, -2, -2.2]
+        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
+        arrow = ComplexArrow.ComplexArrow(coords)
+        arrow_2 = ComplexArrow.ComplexArrow(coords).shift(M.DOWN)
+        anim_1 = ChainsOfEducation.MyMoveAlongPath(
+            arrow.end_tip, arrow.copy())
+        anim_2 = M.Create(arrow)
+        anim_3 = M.AnimationGroup(anim_1, anim_2)
+        anim_4 = M.Succession(
+            M.Create(arrow.get_next_curves(1), rate_func = lambda t: M.rush_into(t, inflection = 50)),
+            M.Create(arrow.get_next_curves(2), rate_func = M.linear),
+            M.Create(arrow.get_next_curves(3), rate_func = lambda t: M.rush_from(t, inflection = 50)))
+        anim_5 = M.AnimationGroup(M.Create(arrow_2.get_next_curves(10),
+                                           run_time = 3.0, rate_func = lambda t: M.smooth(t, inflection = 5)))
+        self.play(anim_4, anim_5)
+
         self.wait(1.0)
 
     class MyMoveAlongPath(M.Animation):
