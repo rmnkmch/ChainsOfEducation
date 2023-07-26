@@ -1,5 +1,6 @@
 import manim
 import SimpleCurve
+import Tip
 
 
 class ComplexArrow(manim.VMobject):
@@ -17,17 +18,21 @@ class ComplexArrow(manim.VMobject):
 
         self.set_points_smoothly(points)
 
+        self.curves: list = []
         self.num_created_curves: int = 0
 
-        self.end_tip = manim.ArrowTriangleFilledTip().rotate(manim.PI)
+        self.end_tip = Tip.RectangleTip().move_to(points[0])
 
     def get_next_curves(self, n: int):
         if self.is_created():
-            return self.get_n_curves(self.get_num_curves() - 1, 1)
+            curve = self.get_n_curves(self.get_num_curves() - 1, 1)
+            self.curves.append(curve)
+            return curve
         else:
             if self.num_created_curves + n > self.get_num_curves():
                 n = self.get_num_curves() - self.num_created_curves
             curve = self.get_n_curves(self.num_created_curves, n)
+            self.curves.append(curve)
             self.num_created_curves += n
             return curve
 

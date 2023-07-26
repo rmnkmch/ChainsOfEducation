@@ -53,6 +53,12 @@
     <Compile Include="SQLDatabase.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TextBlock.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tip.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TitleBlock.py">
       <SubType>Code</SubType>
     </Compile>

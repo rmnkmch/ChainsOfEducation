@@ -349,24 +349,29 @@ manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
 """
 
     def test_1(self):
-        x_values = [-6, -4, -2, 2, 4, 6]
-        y_values = [1.2, 2.7, -1.3, 2.4, -2, -2.2]
+        x_values = [-2.5, 2.5, 2.5, -2.5, -2.5]
+        y_values = [2.5, 2.5, -2.5, -2.5, 2.5]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         arrow = ComplexArrow.ComplexArrow(coords)
-        arrow_2 = ComplexArrow.ComplexArrow(coords).shift(M.DOWN)
-        anim_1 = ChainsOfEducation.MyMoveAlongPath(
-            arrow.end_tip, arrow.copy())
-        anim_2 = M.Create(arrow)
-        anim_3 = M.AnimationGroup(anim_1, anim_2)
-        anim_4 = M.Succession(
-            M.Create(arrow.get_next_curves(1), rate_func = lambda t: M.rush_into(t, inflection = 50)),
-            M.Create(arrow.get_next_curves(2), rate_func = M.linear),
-            M.Create(arrow.get_next_curves(3), rate_func = lambda t: M.rush_from(t, inflection = 50)))
-        anim_5 = M.AnimationGroup(M.Create(arrow_2.get_next_curves(10),
-                                           run_time = 3.0, rate_func = lambda t: M.smooth(t, inflection = 5)))
-        self.play(anim_4, anim_5)
-
+        self.add(arrow.end_tip)
+        arrow_2 = ComplexArrow.ComplexArrow(coords).shift(0.2 * M.DOWN)
+        arrr_curr = arrow_2.get_next_curves(50)
+        arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
         self.wait(1.0)
+        anim_4 = M.Succession(
+            M.Create(arrow.get_next_curves(1), rate_func = lambda t: M.rush_into(t, inflection = 8)),
+            M.Create(arrow.get_next_curves(2), rate_func = M.linear),
+            M.Create(arrow.get_next_curves(3), rate_func = lambda t: M.rush_from(t, inflection = 8)))
+        anim_5 = M.AnimationGroup(M.Create(
+            arrr_curr, run_time = 10.0, rate_func = lambda t: M.smooth(t, inflection = 8)))
+        self.play(anim_4, anim_5)
+        self.wait(1.0)
+        '''arrr_curr = arrow_2.get_next_curves(10)
+        arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
+        self.wait(1.0)
+        anim_6 = M.AnimationGroup(M.Create(arrr_curr, run_time = 3.0))
+        self.play(anim_6)
+        self.wait(1.0)'''
 
     class MyMoveAlongPath(M.Animation):
         def __init__(
