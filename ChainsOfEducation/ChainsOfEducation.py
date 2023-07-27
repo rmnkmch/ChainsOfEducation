@@ -345,26 +345,22 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
         r"""
-manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pqk --disable_caching ChainsOfEducation.py ChainsOfEducation
 """
 
     def test_1(self):
-        x_values = [-2.5, 2.5, 2.5, -2.5, -2.5]
-        y_values = [2.5, 2.5, -2.5, -2.5, 2.5]
+        M.always_redraw()
+        x_values = [-2.3, 2.3, 2.3, -2.3, -2.3]
+        y_values = [2.3, 2.3, -2.3, -2.3, 2.3]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         arrow = ComplexArrow.ComplexArrow(coords)
         self.add(arrow.end_tip)
-        arrow_2 = ComplexArrow.ComplexArrow(coords).shift(0.2 * M.DOWN)
-        arrr_curr = arrow_2.get_next_curves(50)
+        arrr_curr = arrow.get_next_curves(50)
         arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
-        self.wait(1.0)
-        anim_4 = M.Succession(
-            M.Create(arrow.get_next_curves(1), rate_func = lambda t: M.rush_into(t, inflection = 8)),
-            M.Create(arrow.get_next_curves(2), rate_func = M.linear),
-            M.Create(arrow.get_next_curves(3), rate_func = lambda t: M.rush_from(t, inflection = 8)))
         anim_5 = M.AnimationGroup(M.Create(
-            arrr_curr, run_time = 10.0, rate_func = lambda t: M.smooth(t, inflection = 8)))
-        self.play(anim_4, anim_5)
+            arrr_curr, run_time = 10.0,
+            rate_func = lambda t: M.smooth(t, inflection = 8)))
+        self.play(anim_5)
         self.wait(1.0)
         '''arrr_curr = arrow_2.get_next_curves(10)
         arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())

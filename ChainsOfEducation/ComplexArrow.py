@@ -21,7 +21,7 @@ class ComplexArrow(manim.VMobject):
         self.curves: list = []
         self.num_created_curves: int = 0
 
-        self.end_tip = Tip.RectangleTip().move_to(points[0])
+        self.end_tip = Tip.EllipseTip().move_to(points[0])
 
     def get_next_curves(self, n: int):
         if self.is_created():
