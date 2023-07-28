@@ -1,4 +1,5 @@
-﻿import manim as M
+﻿from operator import index
+import manim as M
 import Block
 import KnowledgeBlock as KB
 import random
@@ -349,6 +350,109 @@ manim -pqk --disable_caching ChainsOfEducation.py ChainsOfEducation
 """
 
     def test_1(self):
+        txt = """竹 | бамбук. | たけ. | チク.
+田 | рисовое поле. рисовые плантации. | た. | デン.
+雨 | дождь. | あめ. あま. さめ. | ウ.
+花 | цветок. | はな. | カ. ケ.
+草 | трава. сорняки. пастбище. | くさ. ぐさ. | ソウ.
+石 | камень. | いし. | セキ. シャク. コク.
+貝 | моллюск. | かい. | バイ.
+生 | жизнь. рождение. | いきる. いかす. いける. うまれる. うまれ. うむ. おう. はえる. はやす. き. なま. なる. なす. むす. う. | セイ. ショウ.
+人 | человек. | ひと. り. と. | ジン. ニン.
+女 | женщина. самка. | おんな. め. | ジョ. ニョ. ニョウ.
+男 | мужчина. самец. | おとこ. お. | ダン. ナン.
+子 | ребёнок. дитя. | こ. ね. | シ. ス. ツ.
+犬 | собака. | いぬ. | ケン.
+虫 | насекомое. букашка. | むし. | チュウ. キ.
+白 | белый. | しろ. しら. しろい. | ハク. ビャク.
+青 | синий. зелёный. голубой. | あお. あおい. | セイ. ショウ.
+赤 | красный. | あか. あかい. あからむ. あからめる. | セキ. シャク."""
+        txt2 = """
+
+挨拶より円札. あいさつよりえんさつ. лучше деньги, чем сладкие слова."""
+        txt3 = """生
+5 strokes
+Radical: life 生
+Parts: 生
+life, genuine, birth
+Kun: い.きる、 い.かす、 い.ける、 う.まれる、 うま.れる、 う.まれ、 うまれ、 う.む、 お.う、 は.える、 は.やす、 き、 なま、 なま-、 な.る、 な.す、 む.す、 -う
+On: セイ、 ショウ
+目
+5 strokes
+Radical: eye 目
+Parts: 目
+eye, class, look, insight, experience, care, favor
+Kun: め、 -め、 ま-
+On: モク、 ボク
+耳
+6 strokes
+Radical: ear 耳
+Parts: 耳
+ear
+Kun: みみ
+On: ジ
+口
+3 strokes
+Radical: mouth, opening 口
+Parts: 口 囗
+mouth
+Kun: くち
+On: コウ、 ク
+手
+4 strokes
+Radical: hand 手 (扌龵)
+Parts: 手
+hand
+Kun: て、 て-、 -て、 た-
+On: シュ、 ズ
+足
+7 strokes
+Radical: foot 足 (⻊)
+Parts: 口 止 足
+leg, foot, be sufficient, counter for pairs of footwear
+Kun: あし、 た.りる、 た.る、 た.す
+On: ソク
+見
+7 strokes
+Radical: see 見
+Parts: 儿 目 見
+see, hopes, chances, idea, opinion, look at, visible
+Kun: み.る、 み.える、 み.せる
+On: ケン
+音
+9 strokes
+Radical: sound 音
+Parts: 日 立 音
+sound, noise
+Kun: おと、 ね
+On: オン、 イン、 -ノン
+気
+6 strokes
+Radical: steam, breath 气
+Parts: 丶 ノ 气 乞
+Variants: 氣 炁
+spirit, mind, air, atmosphere, mood
+Kun: き
+On: キ、 ケ
+力
+2 strokes
+Radical: power, force 力
+Parts: 力
+power, strength, strong, strain, bear up, exert
+Kun: ちから
+On: リョク、 リキ、 リイ
+円
+4 strokes
+Radical: open country 冂
+Parts: 一 ｜ 亠 冂
+Variants: 圓
+circle, yen, round
+Kun: まる.い、 まる、 まど、 まど.か、 まろ.やか
+On: エン"""
+
+        self.resplit_to_JP_read(txt3)
+
+        """
         M.always_redraw()
         x_values = [-2.3, 2.3, 2.3, -2.3, -2.3]
         y_values = [2.3, 2.3, -2.3, -2.3, 2.3]
@@ -361,7 +465,7 @@ manim -pqk --disable_caching ChainsOfEducation.py ChainsOfEducation
             arrr_curr, run_time = 10.0,
             rate_func = lambda t: M.smooth(t, inflection = 8)))
         self.play(anim_5)
-        self.wait(1.0)
+        self.wait(1.0)"""
         '''arrr_curr = arrow_2.get_next_curves(10)
         arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
         self.wait(1.0)
@@ -403,3 +507,91 @@ manim -pqk --disable_caching ChainsOfEducation.py ChainsOfEducation
                 diff_angle = angle - self.previous_angle
                 self.previous_angle = angle
                 self.mobject.rotate(diff_angle)
+
+    def resplit_JP(self, text: str):
+        lines = text.split("\n")
+        for line in lines:
+            ln = " "
+            parts = line.split("|")
+            parts = [parts[0], parts[2], parts[3], parts[1]]
+            for part in parts:
+                part_striped = part.rstrip(". ")
+                part_striped = part_striped.lstrip()
+                words = part_striped.split(". ")
+                for word in words:
+                    ln += word
+                    if words.index(word) < len(words) - 1:
+                        ln += ", "
+                if parts.index(part) < len(parts) - 1:
+                    if parts.index(part) == 0 or parts.index(part) == 2:
+                        ln += " - "
+                    else:
+                        ln += "; "
+            print(ln)
+
+    def resplit_JP2(self, text: str):
+        lines = text.split("\n")
+        for line in lines:
+            ln = ""
+            parts = line.split(". ", 2)
+            for part in parts:
+                part_striped = part.rstrip(". ")
+                part_striped = part_striped.lstrip()
+                words = part_striped.split(". ")
+                for word in words:
+                    ln += word
+                    if words.index(word) < len(words) - 1:
+                        ln += ", "
+                if parts.index(part) < len(parts) - 1:
+                    if parts.index(part) == 0:
+                        ln += " ("
+                    elif parts.index(part) == 1:
+                        ln += ") - "
+            print(ln)
+
+    def resplit_to_post_kanji(self, text: str): #native kanji kun, on
+        lines = text.split("\n")
+        ln = ""
+        trlt = ""
+        for line in lines:
+            if len(line) == 1: ln = " " + line + " - "
+            elif not line[0].isupper(): trlt = line
+            elif line.startswith("Kun: "):
+                kuns = line.removeprefix("Kun: ")
+                kuns = kuns.split("、 ")
+                for kun in kuns:
+                    ln += kun
+                    if kuns.index(kun) < len(kuns) - 1:
+                        ln += ", "
+            elif line.startswith("On: "):
+                ons = line.removeprefix("On: ")
+                ons = ons.split("、 ")
+                ln += "; "
+                for on in ons:
+                    ln += on
+                    if ons.index(on) < len(ons) - 1:
+                        ln += ", "
+                ln += " - " + trlt
+                print(ln)
+
+    def resplit_to_JP_read(self, text: str): #native kanji kun, on
+        lines = text.split("\n")
+        ln = ""
+        for line in lines:
+            if len(line) == 1: ln = line + ",-. / "
+            elif line.startswith("Kun: "):
+                kuns = line.removeprefix("Kun: ")
+                kuns = kuns.split("、 ")
+                for kun in kuns:
+                    ln += kun + ",-. "
+            elif line.startswith("On: "):
+                ons = line.removeprefix("On: ")
+                ons = ons.split("、 ")
+                ln += " / "
+                for on in ons:
+                    ln += on + ",-. "
+                print(ln)
+
+        r"""
+manim ChainsOfEducation.py ChainsOfEducation
+"""
