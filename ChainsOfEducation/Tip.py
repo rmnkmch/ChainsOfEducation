@@ -2,37 +2,42 @@ import manim
 
 
 class Tip(manim.VMobject):
-    """Tip"""
+    """Base Tip Class"""
 
     def __init__(self, **kwargs):
         self.init_length: float = 0.0
         self.init_width: float = 0.0
+        self.shift_x_anchor: float = 0.5
+        self.shift_y_anchor: float = 0.5
         self.angle: float = manim.PI * 0.5
         self.prev_angle: float = manim.PI * 0.5
-        self.prev_pos = self.get_center()
+        self.update_prev_pos()
         self.pos_func = None
         self.add_updater(Tip.update_pos)
         self.add_updater(Tip.update_angle)
-        self.add_updater(Tip.update_scale)
+        #self.add_updater(Tip.update_scale)
+
+    def get_angle_by_dx_dy(self, dx: float, dy: float):#to static
+        from math import atan
+        if dx > 0.0:
+            if dy > 0.0: return atan(abs(dy / dx))
+            elif dy < 0.0: return 2.0 * manim.PI - atan(abs(dy / dx))
+            else: return 0.0
+        elif dx < 0.0:
+            if dy > 0.0: return manim.PI - atan(abs(dy / dx))
+            elif dy < 0.0: return manim.PI + atan(abs(dy / dx))
+            else: return manim.PI
+        else:
+            if dy > 0.0: return 0.5 * manim.PI
+            elif dy < 0.0: return 1.5 * manim.PI
+            else: return 0.0
 
     def update_angle(self):
-        shift = self.get_shift()
-        pos_difference = self.get_center() - shift - self.prev_pos
+        pos_difference = self.get_center() - self.get_shift() - self.prev_pos
         if abs(pos_difference[0]) >= 0.001 and abs(pos_difference[1]) >= 0.001:
-            from math import atan
-            if pos_difference[0] > 0.0 and pos_difference[1] > 0.0:
-                self.angle = atan(pos_difference[1] / pos_difference[0])
-            elif pos_difference[0] > 0.0 and pos_difference[1] < 0.0:
-                self.angle = (2.0 * manim.PI
-                         - atan(abs(pos_difference[1] / pos_difference[0])))
-            elif pos_difference[0] < 0.0 and pos_difference[1] > 0.0:
-                self.angle = (
-                    manim.PI - atan(abs(pos_difference[1] / pos_difference[0])))
-            elif pos_difference[0] < 0.0 and pos_difference[1] < 0.0:
-                self.angle = (
-                    manim.PI + atan(abs(pos_difference[1] / pos_difference[0])))
-            self.prev_pos = self.get_center() - shift
-            self.set_angle(self.angle)
+            angle = self.get_angle_by_dx_dy(pos_difference[0], pos_difference[1])
+            self.update_prev_pos()
+            self.set_angle(angle)
 
     def update_pos(self):
         if self.pos_func is not None:
@@ -45,8 +50,10 @@ class Tip(manim.VMobject):
 
     def get_shift(self):
         from math import cos, sin
-        return (manim.RIGHT * self.init_length * cos(self.angle) * 0.5
-                + manim.UP * self.init_length * sin(self.angle) * 0.5)
+        return (manim.RIGHT * cos(self.angle)
+                * self.init_length * self.shift_x_anchor
+                + manim.UP * sin(self.angle)
+                * self.init_length * self.shift_y_anchor)
 
     def set_pos_func(self, pos_func):
         self.pos_func = pos_func
@@ -59,6 +66,9 @@ class Tip(manim.VMobject):
         angle_difference = self.angle - self.prev_angle
         self.prev_angle = self.angle
         self.rotate(angle_difference)
+
+    def update_prev_pos(self):
+        self.prev_pos = self.get_center() - self.get_shift()
 
 
 class TriangleTip(Tip, manim.Triangle):
@@ -144,8 +154,8 @@ class RectangleTip(Tip, manim.Rectangle):
         shade_in_3d = False,
         tolerance_for_point_equality = 1e-6,
         n_points_per_cubic_curve = 4,
-        length = 2.6,
-        width = 0.2,
+        length = 0.5,
+        width = 0.5,
         **kwargs):
         manim.Rectangle.__init__(
             self,
@@ -184,11 +194,11 @@ class EllipseTip(Tip, manim.Ellipse):
 
     def __init__(
         self,
-        fill_color = "#00EF12",
-        fill_opacity = 0.2,
-        stroke_color = "#981624",
+        fill_color = "#FFFFFF",
+        fill_opacity = 0.0,
+        stroke_color = "#FFFFFF",
         stroke_opacity = 1.0,
-        stroke_width = 1,
+        stroke_width = 3,
         background_stroke_color = "#000000",
         background_stroke_opacity = 1.0,
         background_stroke_width = 0,
@@ -202,7 +212,7 @@ class EllipseTip(Tip, manim.Ellipse):
         shade_in_3d = False,
         tolerance_for_point_equality = 1e-6,
         n_points_per_cubic_curve = 4,
-        length = 1.5,
+        length = 0.5,
         width = 0.5,
         **kwargs):
         manim.Ellipse.__init__(
