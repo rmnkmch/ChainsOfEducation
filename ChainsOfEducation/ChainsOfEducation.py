@@ -10,11 +10,25 @@ import Tip
 
 
 FAST_RUN_TIME: float = 0.1
+c_1 = "1⃣"
+c_2 = "2⃣"
+c_3 = "3⃣"
+c_4 = "4⃣"
+c_5 = "5⃣"
+c_6 = "6⃣"
+c_7 = "7⃣"
+c_8 = "8⃣"
+c_9 = "9⃣"
+c_0 = "0⃣"
+c_off = "🏢"
+c_cap = "🏛"
+c_lang = "👅"
+c_mon = "💰"
 
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.chapter_1_0()
+        self.test_1()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -344,7 +358,16 @@ manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
     """
 
     def test_1(self):
-        pass
+        text = M.Text("Neither he nor the sword had the power\nto slay me forever. And neither do you.", font_size = 48)
+        self.play(M.Write(text, run_time = 1))
+        self.wait(1.0)
+
+        """
+        #menu
+        #Geography
+        #Japanese
+        #English
+        #Quote"""
 
     def Jpn_Geo(self):
         native_examples = """花火. はなび. фейрверк.
@@ -356,199 +379,14 @@ manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
 Nigeria; Federal Republic of Nigeria
 Абуджа; Abuja
 английский; English
-NGN, найра; Nigerian naira
-Венесуэла; Боливарианская Республика Венесуэла
-государство на севере Южной Америки.
-Venezuela; Bolivarian Republic of Venezuela
-Каракас; Caracas
-испанский; Spanish
-VES, боливар соберано; Venezuelan bolívar
-Намибия; Республика Намибия
-государство в Южной Африке.
-Namibia, Republic of Namibia
-Виндхук; Windhoek
-английский; English
-NAD, доллар Намибии; Namibian dollar
-Пакистан; Исламская Республика Пакистан
-государство в Южной Азии.
-Pakistan; Islamic Republic of Pakistan
-Исламабад; Islamabad
-английский, урду; English, Urdu
-PKR, пакистанская рупия; Pakistani rupee
-Мозамбик; Республика Мозамбик
-государство в Юго-Восточной Африке.
-Mozambique; Republic of Mozambique
-Мапуту; Maputo
-португальский; Portuguese
-MZN, мозамбикский метикал; Mozambican metical
-Турция; Турецкая Республика
-государство в Западной Азии и Южной Европе.
-Turkey; Republic of Türkiye
-Анкара; Ankara
-турецкий; Turkish
-TRY, Турецкая лира; Turkish lira &&&&&&&&&&&&&
-Чили; Республика Чили
-государство на юго-западе Южной Америки.
-Chile; Republic of Chile
-Сантьяго; Santiago
-испанский; Spanish
-CLP, Чилийское песо; Chilean peso
-Замбия; Республика Замбия
-государство в Южной Африке.
-Zambia; Republic of Zambia
-Лусака; Lusaka
-английский; English
-ZMW, Замбийская квача; Zambian kwacha
-Мьянма; Республика Союз Мьянма
-государство в Юго-Восточной Азии.
-Myanmar; Republic of the Union of Myanmar
-Нейпьидо; Naypyidaw
-бирманский; Burmese
-MMK, Кьят; Myanmar kyat
-Афганистан; Исламский Эмират Афганистан
-государство в Центральной Азии.
-Afghanistan; Islamic Emirate of Afghanistan
-Кабул; Kabul
-дари, пушту; Dari, Pashto
-AFN, Афгани; Afghan afghani
-Сомали; Федеративная Республика Сомали
-восточноафриканское государство.
-Somalia; Federal Republic of Somalia
-Могадишо; Mogadishu
-сомалийский, арабский; Somali, Arabic
-SOS, Сомалийский шиллинг; Somali shilling
-Центральноафриканская Республика; ЦАР
-государство в Центральной Африке.
-Central African Republic; CAR
-Банги; Bangui
-французский, санго; French, Sango
-XAF, Центральноафриканский франк КФА; Central African CFA franc
-Южный Судан; Республика Южный Судан
-государство в Африке.
-South Sudan; Republic of South Sudan
-Джуба; Juba
-английский; English
-SSP, Южносуданский фунт; South Sudanese pound
-Украина
-государство в Восточной Европе.
-Ukraine
-Киев; Kyiv
-украинский; Ukrainian
-UAH, Украинская гривна; Ukrainian hryvnia
-Мадагаскар; Республика Мадагаскар
-островное государство в Индийском океане, расположенное на одноимённом острове.
-Madagascar; Republic of Madagascar
-Антананариву; Antananarivo
-малагасийский, французский; Malagasy, French
-MGA, Малагасийский ариари; Malagasy ariary
-Кения; Республика Кения
-государство в Восточной Африке.
-Kenya; Republic of Kenya
-Найроби; Nairobi
-английский, суахили; English, Swahili
-KES, Кенийский шиллинг; Kenyan shilling
-Ботсвана; Республика Ботсвана
-государство в Южной Африке.
-Botswana; Republic of Botswana
-Габороне; Gaborone
-английский, тсвана; English, Tswana
-BWP, Ботсванская пула; Botswana pula
-Франция; Французская Республика
-трансконтинентальное государство, включающее основную территорию в Западной Европе и ряд заморских регионов и территорий.
-France; French Republic
-Париж; Paris
-французский; French
-EUR, Евро; Euro
-Йемен; Йеменская Республика
-государство в Юго-Западной Азии.
-Yemen; Republic of Yemen
-Сана; Sanaa
-арабский; Arabic
-YER, Йеменский риал; Yemeni rial
-Таиланд; Королевство Таиланд
-государство в Юго-Восточной Азии.
-Thailand; Kingdom of Thailand
-Бангкок; Bangkok
-тайский; Thai
-THB, Тайский бат; Thai baht
-Испания; Королевство Испания
-трансконтинентальное государство в Южной Европе, имеющее часть территорий в Африке.
-Spain; Kingdom of Spain
-Мадрид; Madrid
-испанский; Spanish
-EUR, Евро; Euro
-Туркменистан; Туркмения
-государство в Центральной Азии.
-Turkmenistan; Turkmen
-Ашхабад; Ashgabat
-туркменский; Turkmen
-TMT, Туркменский манат; Turkmenistani manat
-Камерун; Республика Камерун
-государство в западной части Центральной Африки.
-Cameroon; Republic of Cameroon
-Яунде; Yaoundé
-французский, английский; French, English
-XAF, Центральноафриканский франк КФА; Central African CFA franc
-Папуа - Новая Гвинея; Независимое Государство Папуа Новая Гвинея
-государство в Океании.
-Papua New Guinea; Independent State of Papua New Guinea
-Порт-Морсби; Port Moresby
-английский, ток-писин; English, Tok Pisin
-PGK, Кина; Papua New Guinean kina
-Швеция; Королевство Швеция
-государство в Северной Европе на Скандинавском полуострове.
-Sweden; Kingdom of Sweden
-Стокгольм; Stockholm
-шведский; Swedish
-SEK, Шведская крона; Swedish krona
-Узбекистан; Республика Узбекистан
-государство, расположенное в центральной части Средней Азии.
-Uzbekistan; Republic of Uzbekistan
-Ташкент; Tashkent
-узбекский; Uzbek
-UZS, Узбекский сум; Uzbekistani sum
-Марокко; Королевство Марокко
-государство на крайнем западе Северной Африки.
-Morocco; Kingdom of Morocco
-Рабат; Rabat
-арабский, берберский; Arabic, Berber
-MAD, Марокканский дирхам; Moroccan dirham
-Ирак; Республика Ирак
-государство на Ближнем Востоке.
-Iraq; Republic of Iraq
-Багдад; Baghdad
-арабский, курдский; Arabic, Kurdish
-IQD, Иракский динар; Iraqi dinar
-Парагвай; Республика Парагвай
-государство в Южной Америке.
-Paraguay; Republic of Paraguay
-Асунсьон; Asunción
-испанский, гуарани; Spanish, Guarani
-PYG, Парагвайский гуарани; Paraguayan guaraní
-Зимбабве; Республика Зимбабве
-государство в южной части африканского континента.
-Zimbabwe; Republic of Zimbabwe
-Хараре; Harare
-английский, шона, северный ндебеле; English, Shona, Northern Ndebele
-USD, GBP, Доллар США, Фунт стерлингов; United States dollar, Pound sterling
-Япония
-островное государство в Восточной Азии.
-Japan
-Токио; Tokyo
-японский; Japanese
-JPY, Иена; Japanese yen
-Германия; Федеративная Республика Германия
-государство в Центральной Европе.
-Germany; Federal Republic of Germany
-Берлин; Berlin
-немецкий; German
-EUR, Евро; Euro"""
+NGN, найра; Nigerian naira"""
 
-        gs = """1⃣2⃣3⃣4⃣5⃣6⃣7⃣8⃣9⃣0⃣🏛🏢👅💰"""
         self.resplit_to_JP_read_kanji(native_kun_on)
         self.resplit_to_RU_read_kanji(native_kun_on)
         self.resplit_to_post_kanji(native_kun_on)
         self.resplit_to_post_examples(native_examples)
+        self.resplit_to_post_geo(geo)
+        self.resplit_to_z_name_geo(geo)
         """
         M.always_redraw()
         x_values = [-2.3, 2.3, 2.3, -2.3, -2.3]
@@ -604,6 +442,58 @@ EUR, Евро; Euro"""
                 diff_angle = angle - self.previous_angle
                 self.previous_angle = angle
                 self.mobject.rotate(diff_angle)
+
+    def resplit_to_post_geo(self, text: str):
+        lines = text.split("\n")
+        num_line = 0
+        ln = ""
+        rus = ""
+        for line in lines:
+            if num_line == 0:
+                num_line = 1
+                print("#Geography")
+                rus = line.split("; ")
+                ln = rus[0] + " - "
+            elif num_line == 1:
+                num_line = 2
+                ln += line
+                print(ln)
+            elif num_line == 2:
+                num_line = 3
+                eng = line.split("; ")
+                ln = c_off + " - "
+                for word_num in range(len(eng)):
+                    ln += rus[word_num] + " (" + eng[word_num] + ")"
+                    if word_num < len(eng) - 1: ln += " / "
+                print(ln)
+            elif num_line == 3:
+                num_line = 4
+                wr = line.split("; ")
+                print(c_cap + " - " + wr[0] + " (" + wr[1] + ")")
+            elif num_line == 4:
+                num_line = 5
+                part = line.split("; ")
+                ln = c_lang + " - " + part[0] + " (" + part[1] + ")"
+                print(ln)
+            elif num_line == 5:
+                num_line = 0
+                part = line.split("; ")
+                lower = part[0][:5] + part[0][5].lower() + part[0][6:]
+                ln = c_mon + " - " + lower + " (" + part[1] + ")"
+                print(ln)
+
+    def resplit_to_z_name_geo(self, text: str):
+        lines = text.split("\n")
+        num_line = 0
+        num = 63
+        for line in lines:
+            if num_line == 2:
+                num_line = 3
+                eng = line.split("; ")
+                print("#" + str(num) + " z_" + eng[0])
+                num += 1
+            elif num_line == 5: num_line = 0
+            else: num_line += 1
 
     def resplit_to_post_examples(self, text: str):
         lines = text.split("\n")
