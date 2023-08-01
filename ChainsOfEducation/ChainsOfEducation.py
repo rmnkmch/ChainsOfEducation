@@ -7,6 +7,7 @@ import ComplexArrow
 import TopicBlock
 import Chain
 import Tip
+import TextBlock
 
 
 FAST_RUN_TIME: float = 0.1
@@ -319,7 +320,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 и автоматически бессмысленными,
 если у нас нет достаточного основания
 для их понимания.""", font_size = 30).move_to(2.0 * M.UP)
-        self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.01))
+        #self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.001))
         texts_2 = ["Любые суждения или мысли",
                    "Всё когда-либо",
                    "сказанное нами,",
@@ -351,25 +352,66 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait()
         anim_1 = M.Create(arrow_2)
         self.play(anim_1)
-        self.wait(1.0)
+
+       
+        x_values = [-2.3, 2.3, 2.3, -2.3, -2.3]
+        y_values = [2.3, 2.3, -2.3, -2.3, 2.3]
+        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
+        arrow = ComplexArrow.ComplexArrow(coords)
+        self.add(arrow.end_tip)
+        arrr_curr = arrow.get_next_curves(50)
+        def fnc():
+            return M.Text(str(1)).move_to(arrr_curr.get_last_point())
+        tx = M.always_redraw(fnc)
+        self.add(tx)
+        arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
+        anim_5 = M.AnimationGroup(M.Create(
+            arrr_curr, run_time = 5.0))
+        self.play(anim_5)
+        self.wait(5.0)
 
         r"""
 manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
     """
 
     def test_1(self):
-        text = M.Text("Neither he nor the sword had the power\nto slay me forever. And neither do you.", font_size = 48)
-        self.play(M.Write(text, run_time = 1))
+        tb = TextBlock.TextBlock("""нашими друзьями и знакомыми,""").move_to(2.0 * M.UP)
+        tb.rotate(-0.15)
+        tb2 = TextBlock.TextBlock("""нашими друзьями и знакомыми,
+        ми друзьями
+        ми друзьями
+        ми друзьями""").move_to(2.0 * M.DOWN)
+        tb2.rotate(0.2)
+        self.add(tb, tb2)
+        x_values_2 = [4]
+        y_values_2 = [2]
+        coords = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
+        coords.append(tb.get_buff_arrup())
+        coords.append(tb.get_arrup())
+        self.add(M.Dot(tb.get_buff_arrup()))
+        self.add(M.Dot(tb.get_arrup()))
+        coords2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
+        coords2.append(tb2.get_buff_arrup())
+        coords2.append(tb2.get_arrup())
+        self.add(M.Dot(tb2.get_buff_arrup()))
+        self.add(M.Dot(tb2.get_arrup()))
+        arrow = ComplexArrow.ComplexArrow(coords)
+        arrow2 = ComplexArrow.ComplexArrow(coords2)
+        self.add(arrow.end_tip, arrow2.end_tip)
+        anim_1 = M.Create(arrow)
+        anim_2 = M.Create(arrow2)
+        self.play(anim_1)
+        self.wait(1.0)
+        self.play(anim_2)
         self.wait(1.0)
 
+    def Jpn_Geo(self):
         """
         #menu
         #Geography
         #Japanese
         #English
         #Quote"""
-
-    def Jpn_Geo(self):
         native_examples = """花火. はなび. фейрверк.
 """
         native_kun_on = """
@@ -387,26 +429,6 @@ NGN, найра; Nigerian naira"""
         self.resplit_to_post_examples(native_examples)
         self.resplit_to_post_geo(geo)
         self.resplit_to_z_name_geo(geo)
-        """
-        M.always_redraw()
-        x_values = [-2.3, 2.3, 2.3, -2.3, -2.3]
-        y_values = [2.3, 2.3, -2.3, -2.3, 2.3]
-        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
-        arrow = ComplexArrow.ComplexArrow(coords)
-        self.add(arrow.end_tip)
-        arrr_curr = arrow.get_next_curves(50)
-        arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
-        anim_5 = M.AnimationGroup(M.Create(
-            arrr_curr, run_time = 10.0,
-            rate_func = lambda t: M.smooth(t, inflection = 8)))
-        self.play(anim_5)
-        self.wait(1.0)"""
-        '''arrr_curr = arrow_2.get_next_curves(10)
-        arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
-        self.wait(1.0)
-        anim_6 = M.AnimationGroup(M.Create(arrr_curr, run_time = 3.0))
-        self.play(anim_6)
-        self.wait(1.0)'''
 
     class MyMoveAlongPath(M.Animation):
         def __init__(
