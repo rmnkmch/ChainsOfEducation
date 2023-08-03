@@ -213,30 +213,6 @@ class ChainsOfEducation(M.Scene):
     def pos_by(self, x: float, y: float):
         return M.RIGHT * x + M.UP * y
 
-    def get_arrow_between_tbs(
-        self,
-        tb_from: TextBlock.TextBlock,
-        tb_to: TextBlock.TextBlock,
-        from_direction: TextBlock.Directions = TextBlock.Directions.UP,
-        to_direction: TextBlock.Directions = TextBlock.Directions.UP,
-        from_buff: float = 1.0,
-        to_buff: float = 1.0,
-        from_outer_buff_num: int = 1,
-        to_outer_buff_num: int = 1,
-        from_inner_buff_num: int = 10,
-        to_inner_buff_num: int = 10,
-        through_points: list = []):
-        points: list = tb_from.get_smooth_arrow_side(
-            tb_from.direction2pp(from_direction),
-            from_buff, from_outer_buff_num, from_inner_buff_num)
-        for point in through_points:
-            points.append(point)
-        for point in tb_to.get_smooth_arrow_side(
-            tb_to.direction2pp(to_direction),
-            to_buff, to_outer_buff_num, to_inner_buff_num):
-            points.append(point)
-        return ComplexArrow.ComplexArrow(points)
-
     def shift_by_text(self, text: str):
         caps = "бё"#ДЁЙЦЩQJ
         caps_2 = "йАБВГЕЖЗИКЛМНОПРСТУФХЧШЪЫЬЭЮЯABCDEFGHIKLMNOPRSTUVWXYZ"
@@ -400,25 +376,28 @@ manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
 
     def test_1(self):
         self.add(M.NumberPlane())
-        tb = TextBlock.TextBlock("""
-        нашими друзьями и знакомыми,""").move_to(2.0 * M.UP)
+        tb = TextBlock.TextBlock(
+            """нашими друзьями\nи знакомыми,""")
         tb.rotate(0.01)
         tb2 = TextBlock.TextBlock("""нашими друзьями и знакомыми,
         ми друзьями
         ми друзьями
-        ми друзьями""").move_to(2.0 * M.DOWN)
+        ми друзьями""").move_to(2.0 * M.DL)
         tb2.rotate(-0.01)
         self.add(tb, tb2)
-        x_values_1 = [-5.6, -6, -5.6]
+        x_values_1 = [-5.8, -6.0, -5.8]
         y_values_1 = [1.1, 0.0, -1.1]
         coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
-        arrow = self.get_arrow_between_tbs(
-            tb, tb2, TextBlock.Directions.UP, TextBlock.Directions.UP,
-            0.99, 0.99, 1, 1, 1, 1)
+        arrow = tb2.get_arrow_to_tb(
+            tb, TextBlock.Directions.UP, TextBlock.Directions.DOWN,
+            0.99, 0.99, 0, 0, 1, 1)
+        for tupl in arrow.get_curve_functions_with_lengths():
+            pass
+            #print(tupl)
         for pos in arrow.get_anchors():
             self.add(M.Dot(pos, color = "#56F288"))
         self.add(arrow.end_tip)
-        anim_1 = M.Create(arrow, run_time = 10.0)
+        anim_1 = M.Create(arrow, run_time = 5.0)
         self.play(anim_1)
         self.wait(1.0)
 

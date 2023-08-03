@@ -1,4 +1,5 @@
 import manim
+import ComplexArrow
 import enum
 
 
@@ -178,3 +179,159 @@ class TextBlock(manim.Text):
     def get_smooth_arrdr(self, buff = 1.0):
         return self.get_smooth_arrow_side(
             self.direction2pp(Directions.DR), buff)
+
+    def get_arrow_to_tb(
+        self,
+        tb_to,
+        from_direction: Directions = Directions.UP,
+        to_direction: Directions = Directions.UP,
+        from_buff: float = 1.0,
+        to_buff: float = 1.0,
+        from_outer_buff_num: int = 1,
+        to_outer_buff_num: int = 1,
+        from_inner_buff_num: int = 1,
+        to_inner_buff_num: int = 1,
+        through_points: list = []):
+        points: list = self.get_smooth_arrow_side(
+            self.direction2pp(from_direction),
+            from_buff, from_outer_buff_num, from_inner_buff_num)
+        if len(through_points) == 0:
+            through_points = self.get_round_arrow_points(
+                tb_to, from_direction, to_direction, from_buff, to_buff)
+        for point in through_points:
+            points.append(point)
+        for point in tb_to.get_smooth_arrow_side(
+            tb_to.direction2pp(to_direction),
+            to_buff, to_outer_buff_num, to_inner_buff_num):
+            points.append(point)
+        return ComplexArrow.ComplexArrow(points)
+
+    def get_round_arrow_points(
+        self,
+        tb_to,
+        from_direction: Directions = Directions.UP,
+        to_direction: Directions = Directions.UP,
+        from_buff: float = 1.0,
+        to_buff: float = 1.0,
+        samples = 5, all_samples = 8,
+        start_angle = 0.5 * manim.PI, clockwise = False,
+        without_sides = True):
+        points: list = []
+        radius = (self.get_center() - tb_to.get_center()) * 0.5
+        sa = self.get_start_angle(radius, from_direction, to_direction)
+        if sa is not None: start_angle = sa
+        cw = self.get_clockwise(radius, from_direction, to_direction)
+        if cw is not None: clockwise = cw
+        rp = self.get_round_points(
+            samples, all_samples, start_angle, clockwise, without_sides)
+        buff = self.get_buff(tb_to, from_direction, to_direction)
+        radius = self.get_radius(radius, from_direction, to_direction)
+        if without_sides: samples -= 2
+        for i in range(samples):
+            points.append(
+                buff + manim.RIGHT * radius * rp[i][0]
+                + manim.UP * radius * rp[i][1])
+        return points
+
+    def get_start_angle(self, radius, from_direction, to_direction):
+        pi = manim.PI
+        match from_direction:
+            case Directions.UP:
+                if to_direction == Directions.DOWN:
+                    if radius[0] < 0.0: return pi
+                    else: return 0.0
+            case Directions.DOWN:
+                if to_direction == Directions.UP:
+                    if radius[0] < 0.0: return pi
+                    else: return 0.0
+            case Directions.RIGHT:
+                if to_direction == Directions.LEFT:
+                    if radius[1] < 0.0: return 1.5 * pi
+                    else: return 0.5 * pi
+            case Directions.LEFT:
+                if to_direction == Directions.RIGHT:
+                    if radius[1] < 0.0: return 1.5 * pi
+                    else: return 0.5 * pi
+        return None
+
+    def get_clockwise(self, radius, from_direction, to_direction):
+        match from_direction:
+            case Directions.UP:
+                if to_direction == Directions.DOWN:
+                    if radius[0] > 0.0: return True
+                    else: return False
+            case Directions.DOWN:
+                if to_direction == Directions.UP:
+                    if radius[0] < 0.0: return True
+                    else: return False
+            case Directions.RIGHT:
+                if to_direction == Directions.LEFT:
+                    if radius[1] < 0.0: return True
+                    else: return False
+            case Directions.LEFT:
+                if to_direction == Directions.RIGHT:
+                    if radius[1] > 0.0: return True
+                    else: return False
+        return None
+
+    def get_far_side(self, tb_to, direction):
+        slf = self.get_arrow_point(self.direction2pp(direction))
+        tbt = tb_to.get_arrow_point(tb_to.direction2pp(direction))
+        match direction:
+            case Directions.UP:
+                if slf[1] > tbt[1]: return slf[1] * manim.UP
+                else: return tbt[1] * manim.UP
+            case Directions.DOWN:
+                if slf[1] < tbt[1]: return slf[1] * manim.UP
+                else: return tbt[1] * manim.UP
+            case Directions.RIGHT:
+                if slf[0] > tbt[0]: return slf[0] * manim.RIGHT
+                else: return tbt[0] * manim.RIGHT
+            case Directions.LEFT:
+                if slf[0] < tbt[0]: return slf[0] * manim.RIGHT
+                else: return tbt[0] * manim.RIGHT
+        return manim.UP
+
+    def get_mid_point(self, tb_to, direction):
+        slf = self.get_arrow_point(self.direction2pp(direction))
+        tbt = tb_to.get_arrow_point(tb_to.direction2pp(direction))
+        match direction:
+            case Directions.UP | Directions.DOWN:
+                return (slf + tbt)[0] * 0.5 * manim.RIGHT
+            case Directions.RIGHT | Directions.LEFT:
+                return (slf + tbt)[1] * 0.5 * manim.UP
+        return (0.0, 0.0, 0.0)
+
+    def get_buff(self, tb_to, from_direction, to_direction):
+        return (self.get_mid_point(tb_to, to_direction)
+                + self.get_far_side(tb_to, to_direction))
+
+    def get_radius(self, radius, from_direction, to_direction):
+        if from_direction == Directions.UP and to_direction == Directions.DOWN:
+            return abs(radius[0])
+        elif from_direction == Directions.DOWN and to_direction == Directions.UP:
+            return abs(radius[0])
+        elif from_direction == Directions.RIGHT and to_direction == Directions.LEFT:
+            return abs(radius[1])
+        elif from_direction == Directions.LEFT and to_direction == Directions.RIGHT:
+            return abs(radius[1])
+        return radius[0]
+
+    def get_round_points(
+        self, samples: int = 5, all_samples: int = 8,
+        start_angle: float = 0.0, clockwise = False,
+        without_sides = True):
+        from math import sin, cos
+        points: list[(float, float, float)] = []
+        rng = range(0, samples, 1)
+        if clockwise: rng = range(0, -samples, -1)
+        if without_sides:
+            rng = range(1, samples - 1, 1)
+            if clockwise: rng = range(-1, -samples + 1, -1)
+        for i in rng:
+            points.append((cos(start_angle + 2.0 * manim.PI
+                               * i / all_samples),
+                           sin(start_angle + 2.0 * manim.PI
+                               * i / all_samples),
+                           0.0))
+        return points
