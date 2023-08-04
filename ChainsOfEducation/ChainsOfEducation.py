@@ -378,26 +378,24 @@ manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
         self.add(M.NumberPlane())
         tb = TextBlock.TextBlock(
             """нашими друзьями\nи знакомыми,""")
-        tb.rotate(0.01)
         tb2 = TextBlock.TextBlock("""нашими друзьями и знакомыми,
         ми друзьями
         ми друзьями
-        ми друзьями""").move_to(2.0 * M.DL)
-        tb2.rotate(-0.01)
+        ми друзьями""").move_to(2.0 * M.UR)
         self.add(tb, tb2)
-        x_values_1 = [-5.8, -6.0, -5.8]
-        y_values_1 = [1.1, 0.0, -1.1]
+        x_values_1 = [-5, 0.0, 2.5, 0.0, -2.5, 0.0, 5]
+        y_values_1 = [2.5, 2.5, 0.0, -2.5, 0.0, 2.5, 2.5]
         coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
         arrow = tb2.get_arrow_to_tb(
-            tb, TextBlock.Directions.UP, TextBlock.Directions.DOWN,
-            0.99, 0.99, 0, 0, 1, 1)
+            tb, TextBlock.Directions.RIGHT, TextBlock.Directions.LEFT,
+            0.99, 0.99, 0, 0, 100, 100)
         for tupl in arrow.get_curve_functions_with_lengths():
             pass
             #print(tupl)
         for pos in arrow.get_anchors():
             self.add(M.Dot(pos, color = "#56F288"))
         self.add(arrow.end_tip)
-        anim_1 = M.Create(arrow, run_time = 5.0)
+        anim_1 = M.Create(arrow, run_time = 6.0, rate_func = M.linear)
         self.play(anim_1)
         self.wait(1.0)
 

@@ -5,8 +5,8 @@ class Tip(manim.VMobject):
     """Base Tip Class"""
 
     def __init__(self, **kwargs):
-        self.init_length: float = 0.0
-        self.init_width: float = 0.0
+        self.init_length: float = self.height
+        self.init_width: float = self.width
         self.shift_x_anchor: float = 0.5
         self.shift_y_anchor: float = 0.5
         self.angle: float = manim.PI * 0.5
@@ -16,6 +16,7 @@ class Tip(manim.VMobject):
         self.add_updater(Tip.update_pos)
         self.add_updater(Tip.update_angle)
         #self.add_updater(Tip.update_scale)
+        self.add_background_rectangle(opacity = 0.0)
 
     def get_angle_by_dx_dy(self, dx: float, dy: float):#to static
         from math import atan
@@ -122,13 +123,11 @@ class TriangleTip(Tip, manim.Triangle):
             n_points_per_cubic_curve = n_points_per_cubic_curve,
             start_angle = start_angle,
             **kwargs)
-        Tip.__init__(self, **kwargs)
 
         self.width = width
         self.stretch_to_fit_height(length)
         self.stretch_to_fit_width(width)
-        self.init_length = self.height
-        self.init_width = self.width
+        Tip.__init__(self, **kwargs)
 
 
 class RectangleTip(Tip, manim.Rectangle):
@@ -180,13 +179,68 @@ class RectangleTip(Tip, manim.Rectangle):
             tolerance_for_point_equality = tolerance_for_point_equality,
             n_points_per_cubic_curve = n_points_per_cubic_curve,
             **kwargs)
-        Tip.__init__(self, **kwargs)
 
         self.width = width
         self.stretch_to_fit_height(length)
         self.stretch_to_fit_width(width)
-        self.init_length = self.height
-        self.init_width = self.width
+        Tip.__init__(self, **kwargs)
+
+
+class RhombTip(Tip, manim.Square):
+    """RhombTip"""
+
+    def __init__(
+        self,
+        fill_color = "#FFFFFF",
+        fill_opacity = 0.0,
+        stroke_color = "#FFFFFF",
+        stroke_opacity = 1.0,
+        stroke_width = 3,
+        background_stroke_color = "#000000",
+        background_stroke_opacity = 1.0,
+        background_stroke_width = 0,
+        sheen_factor = 0.0,
+        joint_type = None,
+        sheen_direction = manim.UL,
+        close_new_points = False,
+        pre_function_handle_to_anchor_scale_factor = 0.01,
+        make_smooth_after_applying_functions = False,
+        background_image = None,
+        shade_in_3d = False,
+        tolerance_for_point_equality = 1e-6,
+        n_points_per_cubic_curve = 4,
+        length = 0.5,
+        width = 0.5,
+        **kwargs):
+        manim.Square.__init__(
+            self,
+            fill_color = fill_color,
+            fill_opacity = fill_opacity,
+            stroke_color = stroke_color,
+            stroke_opacity = stroke_opacity,
+            stroke_width = stroke_width,
+            background_stroke_color = background_stroke_color,
+            background_stroke_opacity = background_stroke_opacity,
+            background_stroke_width = background_stroke_width,
+            sheen_factor = sheen_factor,
+            joint_type = joint_type,
+            sheen_direction = sheen_direction,
+            close_new_points = close_new_points,
+            pre_function_handle_to_anchor_scale_factor =
+            pre_function_handle_to_anchor_scale_factor,
+            make_smooth_after_applying_functions =
+            make_smooth_after_applying_functions,
+            background_image = background_image,
+            shade_in_3d = shade_in_3d,
+            tolerance_for_point_equality = tolerance_for_point_equality,
+            n_points_per_cubic_curve = n_points_per_cubic_curve,
+            **kwargs)
+
+        self.rotate(manim.PI * 0.25)
+        self.width = width
+        self.stretch_to_fit_height(length)
+        self.stretch_to_fit_width(width)
+        Tip.__init__(self, **kwargs)
 
 
 class EllipseTip(Tip, manim.Ellipse):
@@ -238,10 +292,8 @@ class EllipseTip(Tip, manim.Ellipse):
             tolerance_for_point_equality = tolerance_for_point_equality,
             n_points_per_cubic_curve = n_points_per_cubic_curve,
             **kwargs)
-        Tip.__init__(self, **kwargs)
 
         self.width = width
         self.stretch_to_fit_height(length)
         self.stretch_to_fit_width(width)
-        self.init_length = self.height
-        self.init_width = self.width
+        Tip.__init__(self, **kwargs)

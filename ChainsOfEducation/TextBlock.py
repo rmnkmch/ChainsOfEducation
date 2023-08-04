@@ -131,7 +131,7 @@ class TextBlock(manim.Text):
         return self.get_buff_arrow_point(self.get_arrdown(), buff)
 
     def get_smooth_arrow_side(
-        self, direction, buff = 1.0, outer_buff_num = 1, inner_buff_num = 20):
+        self, direction, buff = 1.0, outer_buff_num = 1, inner_buff_num = 1):
         from math import floor
         opposite = direction + 0.5
         if opposite > 1.0: opposite -= 1.0
@@ -180,6 +180,12 @@ class TextBlock(manim.Text):
         return self.get_smooth_arrow_side(
             self.direction2pp(Directions.DR), buff)
 
+    def get_v_x(self, vector):
+        return vector[0]
+
+    def get_v_y(self, vector):
+        return vector[1]
+
     def get_arrow_to_tb(
         self,
         tb_to,
@@ -192,12 +198,29 @@ class TextBlock(manim.Text):
         from_inner_buff_num: int = 1,
         to_inner_buff_num: int = 1,
         through_points: list = []):
-        points: list = self.get_smooth_arrow_side(
-            self.direction2pp(from_direction),
-            from_buff, from_outer_buff_num, from_inner_buff_num)
         if len(through_points) == 0:
             through_points = self.get_round_arrow_points(
                 tb_to, from_direction, to_direction, from_buff, to_buff)
+        if len(through_points) >= 2:
+            from math import floor
+            vl = self.vector_len([
+                through_points[0][0] - through_points[1][0],
+                through_points[0][1] - through_points[1][1]])
+            from_buff = vl
+            to_buff = vl
+            fs = self.get_far_side(tb_to, to_direction)
+            func = self.get_v_x
+            if to_direction in [Directions.UP, Directions.DOWN]:
+                func = self.get_v_y
+            from_outer_buff_num = floor(abs((
+                func(fs - self.get_arrow_point(self.direction2pp(to_direction))))
+                                            / vl))
+            to_outer_buff_num = floor(abs((
+                func(fs - tb_to.get_arrow_point(tb_to.direction2pp(to_direction))))
+                                          / vl))
+        points: list = self.get_smooth_arrow_side(
+            self.direction2pp(from_direction),
+            from_buff, from_outer_buff_num, from_inner_buff_num)
         for point in through_points:
             points.append(point)
         for point in tb_to.get_smooth_arrow_side(
@@ -213,7 +236,7 @@ class TextBlock(manim.Text):
         to_direction: Directions = Directions.UP,
         from_buff: float = 1.0,
         to_buff: float = 1.0,
-        samples = 5, all_samples = 8,
+        samples = 10, all_samples = 18,
         start_angle = 0.5 * manim.PI, clockwise = False,
         without_sides = True):
         points: list = []
