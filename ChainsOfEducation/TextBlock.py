@@ -87,6 +87,18 @@ class TextBlock(manim.Text):
             case _:
                 return 0.0
 
+    def opposite_direction(self, direction: Directions):
+        match direction:
+            case Directions.UP: return Directions.DOWN
+            case Directions.DOWN: return Directions.UP
+            case Directions.RIGHT: return Directions.LEFT
+            case Directions.LEFT: return Directions.RIGHT
+            case Directions.UL: return Directions.DR
+            case Directions.UR: return Directions.DL
+            case Directions.DL: return Directions.UR
+            case Directions.DR: return Directions.UL
+            case _: return  Directions.UP
+
     def get_arrow_point(self, pp = 0.0):
         return self.background_rectangle.point_from_proportion(pp)
 
@@ -206,18 +218,30 @@ class TextBlock(manim.Text):
             vl = self.vector_len([
                 through_points[0][0] - through_points[1][0],
                 through_points[0][1] - through_points[1][1]])
+            vl = max(vl, 0.001)
             from_buff = vl
             to_buff = vl
             fs = self.get_far_side(tb_to, to_direction)
             func = self.get_v_x
             if to_direction in [Directions.UP, Directions.DOWN]:
                 func = self.get_v_y
-            from_outer_buff_num = floor(abs((
-                func(fs - self.get_arrow_point(self.direction2pp(to_direction))))
-                                            / vl))
-            to_outer_buff_num = floor(abs((
-                func(fs - tb_to.get_arrow_point(tb_to.direction2pp(to_direction))))
-                                          / vl))
+            from_outer_buff_num = floor(abs((func(
+                fs - self.get_arrow_point(
+                    self.direction2pp(to_direction)))) / vl))
+            to_outer_buff_num = floor(abs((func(
+                fs - tb_to.get_arrow_point(
+                    tb_to.direction2pp(to_direction)))) / vl))
+            from_inner_buff_num = floor(abs(func(
+                self.get_arrow_point(
+                    self.direction2pp(self.opposite_direction(to_direction)))
+                - self.get_arrow_point(self.direction2pp(to_direction))
+                ) / (vl * 2.0)))
+            to_inner_buff_num = floor(abs(func(
+                tb_to.get_arrow_point(
+                    tb_to.direction2pp(tb_to.opposite_direction(to_direction)))
+                - tb_to.get_arrow_point(tb_to.direction2pp(to_direction))
+                ) / (vl * 2.0)))
+            print(from_outer_buff_num, to_outer_buff_num, from_inner_buff_num, to_inner_buff_num, vl)
         points: list = self.get_smooth_arrow_side(
             self.direction2pp(from_direction),
             from_buff, from_outer_buff_num, from_inner_buff_num)
@@ -227,7 +251,11 @@ class TextBlock(manim.Text):
             tb_to.direction2pp(to_direction),
             to_buff, to_outer_buff_num, to_inner_buff_num):
             points.append(point)
-        return ComplexArrow.ComplexArrow(points)
+        ret_CA = ComplexArrow.ComplexArrow(points)
+        ret_CA.set_points(ret_CA.pop_first_and_last_points(
+            from_inner_buff_num * 2 + from_outer_buff_num,
+            to_inner_buff_num * 2 + to_outer_buff_num))
+        return (ret_CA, ComplexArrow.ComplexArrow(points))
 
     def get_round_arrow_points(
         self,
@@ -236,7 +264,7 @@ class TextBlock(manim.Text):
         to_direction: Directions = Directions.UP,
         from_buff: float = 1.0,
         to_buff: float = 1.0,
-        samples = 10, all_samples = 18,
+        samples = 13, all_samples = 24,
         start_angle = 0.5 * manim.PI, clockwise = False,
         without_sides = True):
         points: list = []

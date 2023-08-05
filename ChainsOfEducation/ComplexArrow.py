@@ -52,3 +52,8 @@ class ComplexArrow(manim.VMobject):
 
     def is_created(self):
         return self.num_created_curves >= self.get_num_curves()
+
+    def pop_first_and_last_points(self, first, last):
+        return self.get_all_points()[
+            first * self.n_points_per_curve
+            : self.get_num_points() - last * self.n_points_per_curve]

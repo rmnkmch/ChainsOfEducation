@@ -29,7 +29,7 @@ c_mon = "💰"
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.Jpn_Geo()
+        self.test_1()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -371,32 +371,36 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(5.0)
 
         r"""
-manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
     """
 
     def test_1(self):
         self.add(M.NumberPlane())
         tb = TextBlock.TextBlock(
-            """нашими друзьями\nи знакомыми,""")
+            """нашими друзьями\nи знакомыми,""").move_to(0.2 * M.UR)
         tb2 = TextBlock.TextBlock("""нашими друзьями и знакомыми,
         ми друзьями
         ми друзьями
-        ми друзьями""").move_to(2.0 * M.UR)
+        ми друзьями""")
         self.add(tb, tb2)
-        x_values_1 = [-5, 0.0, 2.5, 0.0, -2.5, 0.0, 5]
-        y_values_1 = [2.5, 2.5, 0.0, -2.5, 0.0, 2.5, 2.5]
+        x_values_1 = [0.0, 2.7, 2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0]
+        y_values_1 = [2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0, 2.7, 2.7]
         coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
-        arrow = tb2.get_arrow_to_tb(
-            tb, TextBlock.Directions.RIGHT, TextBlock.Directions.LEFT,
-            0.99, 0.99, 0, 0, 100, 100)
-        for tupl in arrow.get_curve_functions_with_lengths():
-            pass
-            #print(tupl)
-        for pos in arrow.get_anchors():
-            self.add(M.Dot(pos, color = "#56F288"))
-        self.add(arrow.end_tip)
-        anim_1 = M.Create(arrow, run_time = 6.0, rate_func = M.linear)
-        self.play(anim_1)
+        def get_arr():
+            return tb2.get_arrow_to_tb(
+                tb, TextBlock.Directions.DOWN, TextBlock.Directions.UP,
+                1.0, 1.0, 1, 1, 1, 1)[0]
+        arrow = M.always_redraw(get_arr)
+        self.add(arrow)
+        self.play(M.MoveAlongPath(tb2, ComplexArrow.ComplexArrow(coords),
+                                  run_time = 4.0, rate_func = M.linear))
+        """for pos in arrow[1].get_anchors():
+            self.add(M.Dot(pos, color = "#56F288", radius = 0.1))
+        for pos in arrow[0].get_anchors():
+            self.add(M.Dot(pos, color = "#2121D8", radius = 0.05))
+        self.add(arrow[0].end_tip)
+        anim_1 = M.Create(arrow[0], run_time = 4.0, rate_func = M.linear)
+        self.play(anim_1)"""
         self.wait(1.0)
 
     def Jpn_Geo(self):
@@ -913,7 +917,6 @@ NGN, найра; Nigerian naira"""
 
     def resplit_to_menu_kanji(self, text: str):
         lines = text.split("\n")
-        ln = ""
         for line in lines:
             if len(line) == 1: print(line, end = " ")
 
