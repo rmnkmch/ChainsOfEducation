@@ -13,12 +13,10 @@ class Tip(manim.VMobject):
         self.prev_angle: float = manim.PI * 0.5
         self.update_prev_pos()
         self.pos_func = None
-        self.add_updater(Tip.update_pos)
-        self.add_updater(Tip.update_angle)
-        #self.add_updater(Tip.update_scale)
         self.add_background_rectangle(opacity = 0.0)
 
-    def get_angle_by_dx_dy(self, dx: float, dy: float):#to static
+    @staticmethod
+    def get_angle_by_dx_dy(dx: float, dy: float):
         from math import atan
         if dx > 0.0:
             if dy > 0.0: return atan(abs(dy / dx))
@@ -33,21 +31,34 @@ class Tip(manim.VMobject):
             elif dy < 0.0: return 1.5 * manim.PI
             else: return 0.0
 
-    def update_angle(self):
-        pos_difference = self.get_center() - self.get_shift() - self.prev_pos
-        if abs(pos_difference[0]) >= 0.001 and abs(pos_difference[1]) >= 0.001:
-            angle = self.get_angle_by_dx_dy(pos_difference[0], pos_difference[1])
-            self.update_prev_pos()
-            self.set_angle(angle)
+    def set_shift_anchors(self, x: float, y: float):
+        self.shift_x_anchor = x
+        self.shift_y_anchor = y
+        return self
 
-    def update_pos(self):
+    def prepare_to_create(self):
+        self.add_updater(Tip.update_pos_when_creating)
+        self.add_updater(Tip.update_angle_when_creating)
+        #self.add_updater(Tip.update_scale)
+
+    def stop_update(self):
+        self.clear_updaters()
+
+    def update_pos_when_creating(self):
         if self.pos_func is not None:
             self.move_to(self.pos_func() + self.get_shift())
 
-    def update_scale(self):
+    def update_angle_when_creating(self):
+        pos_difference = self.get_center() - self.get_shift() - self.prev_pos
+        if abs(pos_difference[0]) >= 0.001 and abs(pos_difference[1]) >= 0.001:
+            angle = Tip.get_angle_by_dx_dy(pos_difference[0], pos_difference[1])
+            self.update_prev_pos()
+            self.set_angle(angle)
+
+    def update_scale_when_creating(self):
         self.scale(1.02)
         if self.width > 0.5:
-            self.remove_updater(Tip.update_scale)
+            self.remove_updater(Tip.update_scale_when_creating)
 
     def get_shift(self):
         from math import cos, sin

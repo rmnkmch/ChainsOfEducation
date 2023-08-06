@@ -29,7 +29,7 @@ c_mon = "💰"
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.test_1()
+        self.chapter_1_0()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -187,15 +187,11 @@ class ChainsOfEducation(M.Scene):
     def creating_chain_anim(self, chain: Chain.Chain, fast = False):
         if fast:
             return M.AnimationGroup(
-                M.FadeIn(chain.start_dot),
                 M.Write(chain),
-                M.Create(chain.end_dot),
                 run_time = FAST_RUN_TIME)
         else:
             return M.AnimationGroup(
-                M.FadeIn(chain.start_dot),
                 M.Write(chain),
-                M.Create(chain.end_dot),
                 lag_ratio = 0.75)
 
     def creating_chain_and_topic_anim(self, chain, topic, fast = False):
@@ -242,7 +238,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         def get_start_chain_func():
             n = self.nnn
             self.nnn += 1
-            return lambda: self.pos_by(x_values[n + 1], y_values[n + 1])
+            return self.pos_by(x_values[n + 1], y_values[n + 1])
 
         fast_1 = True
         fast_2 = False
@@ -254,7 +250,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         arrow = ComplexArrow.ComplexArrow(coords, Tip.EllipseTip())
         self.add(arrow.end_tip)
-        anim_1 = M.Create(arrow, run_time = 3.0)
+        anim_1 = M.Create(arrow, run_time = 5.0)
         tb_1 = TopicBlock.TopicBlock(
             "Осознание",
             ["Что такое осознанность?",
@@ -272,12 +268,9 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         for topic_block in grp:
             anims.append(self.creating_chain_and_topic_anim(
                 topic_block.chain, topic_block, fast_1))
-            topic_block.chain.stop_follow()
         anims = M.AnimationGroup(*anims, lag_ratio = 0.1)
         played = M.AnimationGroup(anim_1, anims, lag_ratio = 0.3)
         self.play(played)
-        for topic_block in grp:
-            topic_block.chain.start_follow()
         tb_1.generate_target()
         tb_1.target.move_to(1.5 * M.DOWN + 3.0 * M.LEFT).scale(1.0 / 0.3)
         tb_1.target.activate()
@@ -285,6 +278,21 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.play(tb_1.prepare_to_briefs())
         for _ in range(len(tb_1.get_all_briefs_dots())):
             self.play(tb_1.show_next_brief())
+        self.wait()
+        anm = []
+        for mob in grp:
+            mob.generate_target()
+            mob.target.set_opacity(0.0)
+            mob.chain.generate_target()
+            mob.chain.target.set_opacity(0.0)
+            anm.append(M.MoveToTarget(mob))
+            anm.append(M.MoveToTarget(mob.chain))
+        arrow.generate_target()
+        arrow.target.set_opacity(0.0)
+        anm.append(M.MoveToTarget(arrow))
+        tb_1.target.scale(5.0).move_to(M.ORIGIN)
+        anim_20 = M.AnimationGroup(*anm)
+        self.play(anim_20)
 
         kb_1 = KB.KnowledgeBlock("Осознанность!",
         '''Очень сильный и важный инструмент.''')
@@ -304,14 +312,14 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         font_size = 30).move_to(2.0 * M.DOWN)
         anim_12 = M.AddTextLetterByLetter(text_1, time_per_char = 0.01)
         anim_14 = M.AnimationGroup(anim_11, anim_12, lag_ratio = 0.5)
-        self.play(anim_14)
+        #self.play(anim_14)
         vgrp_1 = M.VGroup(arrow_2, arrow_2.end_tip, text_1)
         vgrp_1.generate_target()
         vgrp_1.target.shift(14.0 * M.LEFT)
         kb_1.generate_target()
         kb_1.target.shift(14.0 * M.LEFT)
         kb_1.make_finish_target()
-        self.play(M.MoveToTarget(vgrp_1), kb_1.get_animations_to_play())
+        #self.play(M.MoveToTarget(vgrp_1), kb_1.get_animations_to_play())
         self.wait(1.0)
 
     def chapter_1_1(self):
@@ -371,7 +379,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(5.0)
 
         r"""
-manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
     """
 
     def test_1(self):
@@ -387,9 +395,9 @@ manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
         y_values_1 = [2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0, 2.7, 2.7]
         coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
         def get_arr():
-            return tb2.get_arrow_to_tb(
-                tb, TextBlock.Directions.DOWN, TextBlock.Directions.UP,
-                1.0, 1.0, 1, 1, 1, 1)[0]
+            return tb.get_arrow_to_tb(
+                tb2, TextBlock.Directions.LEFT, TextBlock.Directions.RIGHT,
+                0.3, 0.3, 1, 1, 1, 1)[0]
         arrow = M.always_redraw(get_arr)
         self.add(arrow)
         self.play(M.MoveAlongPath(tb2, ComplexArrow.ComplexArrow(coords),
@@ -410,8 +418,7 @@ manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
         #Japanese
         #English
         #Quote"""
-        native_examples = """1
- 校長 	 こうちょう 
+        native_examples = """ 校長 	 こうちょう 
 директор школы
 33
  校服 	 こうふく 
@@ -467,7 +474,7 @@ manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
 13
  鼻先 	 はなさき 
 кончик носа
- 61
+61
  時代の先端を行く 	 じだいのせんたんをいく 
 идти в ногу со временем;
 62
@@ -837,23 +844,19 @@ NGN, найра; Nigerian naira"""
 
     def resplit_to_post_examples(self, text: str):
         lines = text.split("\n")
+        ln = ""
         for line in lines:
-            ln = ""
-            parts = line.split(". ", 2)
-            for part in parts:
-                part_striped = part.rstrip(". ")
-                part_striped = part_striped.lstrip()
-                words = part_striped.split(". ")
-                for word in words:
-                    ln += word
-                    if words.index(word) < len(words) - 1:
-                        ln += ", "
-                if parts.index(part) < len(parts) - 1:
-                    if parts.index(part) == 0:
-                        ln += " ("
-                    elif parts.index(part) == 1:
-                        ln += ") - "
-            print(ln)
+            if line[0].isnumeric():
+                continue
+            elif len(line) > 1 and line[0] == " ":
+                parts = line.split()
+                ln = parts[0] + " (" + parts[1] + ") - "
+            elif not line[0].isupper():
+                if ";" in line:
+                    s = line.split("; ")
+                    print(ln + ", ".join(s) + ".")
+                else:
+                    print(ln + line + ".")
 
     def resplit_to_post_kanji(self, text: str):
         lines = text.split("\n")

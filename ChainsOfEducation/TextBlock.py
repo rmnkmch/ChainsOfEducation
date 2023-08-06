@@ -22,7 +22,7 @@ class TextBlock(manim.Text):
     def __init__(
         self,
         text: str,
-        fill_opacity: float  = 0.5,
+        fill_opacity: float  = 1.0,
         stroke_width: float = 0.0,
         color: str = "#FFFFFF",
         font_size: float = 30.0,
@@ -50,7 +50,7 @@ class TextBlock(manim.Text):
             warn_missing_font, height, width,
             should_center, disable_ligatures, **kwargs)
 
-        self.add_background_rectangle(color, 0.05)
+        self.add_background_rectangle(color, 0.3)
         self.init_width = self.background_rectangle.width
         self.init_height = self.background_rectangle.height
 
@@ -210,38 +210,48 @@ class TextBlock(manim.Text):
         from_inner_buff_num: int = 1,
         to_inner_buff_num: int = 1,
         through_points: list = []):
-        if len(through_points) == 0:
-            through_points = self.get_round_arrow_points(
-                tb_to, from_direction, to_direction, from_buff, to_buff)
+        if (len(through_points) == 0 and
+            (from_direction == Directions.UP and to_direction == Directions.DOWN) or
+            (from_direction == Directions.DOWN and to_direction == Directions.UP) or
+            (from_direction == Directions.RIGHT and to_direction == Directions.LEFT) or
+            (from_direction == Directions.LEFT and to_direction == Directions.RIGHT)):
+            radius = (self.get_center() - tb_to.get_center()) * 0.5
+            sa = self.get_start_angle(radius, from_direction, to_direction)
+            cw = self.get_clockwise(radius, from_direction, to_direction)
+            centr = (self.get_mid_point(tb_to, to_direction)
+                     + self.get_far_side(tb_to, to_direction))
+            radius = self.get_radius(radius, from_direction, to_direction)
+            through_points = ComplexArrow.ComplexArrow.get_round(
+                centr, radius, 13, 24, sa, cw, True)
         if len(through_points) >= 2:
             from math import floor
             vl = self.vector_len([
                 through_points[0][0] - through_points[1][0],
                 through_points[0][1] - through_points[1][1]])
-            vl = max(vl, 0.001)
-            from_buff = vl
-            to_buff = vl
-            fs = self.get_far_side(tb_to, to_direction)
+            vl = max(vl, 0.01)
             func = self.get_v_x
             if to_direction in [Directions.UP, Directions.DOWN]:
                 func = self.get_v_y
-            from_outer_buff_num = floor(abs((func(
-                fs - self.get_arrow_point(
-                    self.direction2pp(to_direction)))) / vl))
-            to_outer_buff_num = floor(abs((func(
-                fs - tb_to.get_arrow_point(
-                    tb_to.direction2pp(to_direction)))) / vl))
-            from_inner_buff_num = floor(abs(func(
+            from_len = abs(func(
                 self.get_arrow_point(
                     self.direction2pp(self.opposite_direction(to_direction)))
-                - self.get_arrow_point(self.direction2pp(to_direction))
-                ) / (vl * 2.0)))
-            to_inner_buff_num = floor(abs(func(
+                - self.get_arrow_point(self.direction2pp(to_direction))) * 0.49)
+            to_len = abs(func(
                 tb_to.get_arrow_point(
                     tb_to.direction2pp(tb_to.opposite_direction(to_direction)))
-                - tb_to.get_arrow_point(tb_to.direction2pp(to_direction))
-                ) / (vl * 2.0)))
-            print(from_outer_buff_num, to_outer_buff_num, from_inner_buff_num, to_inner_buff_num, vl)
+                - tb_to.get_arrow_point(tb_to.direction2pp(to_direction))) * 0.49)
+            vl = min(vl, from_len, to_len)
+            from_buff = vl
+            to_buff = vl
+            fs = self.get_far_side(tb_to, to_direction)
+            from_outer_buff_num = floor(abs(func(
+                fs - self.get_arrow_point(
+                    self.direction2pp(to_direction))) / vl))
+            to_outer_buff_num = floor(abs(func(
+                fs - tb_to.get_arrow_point(
+                    tb_to.direction2pp(to_direction))) / vl))
+            from_inner_buff_num = floor(from_len / vl)
+            to_inner_buff_num = floor(to_len / vl)
         points: list = self.get_smooth_arrow_side(
             self.direction2pp(from_direction),
             from_buff, from_outer_buff_num, from_inner_buff_num)
@@ -256,33 +266,6 @@ class TextBlock(manim.Text):
             from_inner_buff_num * 2 + from_outer_buff_num,
             to_inner_buff_num * 2 + to_outer_buff_num))
         return (ret_CA, ComplexArrow.ComplexArrow(points))
-
-    def get_round_arrow_points(
-        self,
-        tb_to,
-        from_direction: Directions = Directions.UP,
-        to_direction: Directions = Directions.UP,
-        from_buff: float = 1.0,
-        to_buff: float = 1.0,
-        samples = 13, all_samples = 24,
-        start_angle = 0.5 * manim.PI, clockwise = False,
-        without_sides = True):
-        points: list = []
-        radius = (self.get_center() - tb_to.get_center()) * 0.5
-        sa = self.get_start_angle(radius, from_direction, to_direction)
-        if sa is not None: start_angle = sa
-        cw = self.get_clockwise(radius, from_direction, to_direction)
-        if cw is not None: clockwise = cw
-        rp = self.get_round_points(
-            samples, all_samples, start_angle, clockwise, without_sides)
-        buff = self.get_buff(tb_to, from_direction, to_direction)
-        radius = self.get_radius(radius, from_direction, to_direction)
-        if without_sides: samples -= 2
-        for i in range(samples):
-            points.append(
-                buff + manim.RIGHT * radius * rp[i][0]
-                + manim.UP * radius * rp[i][1])
-        return points
 
     def get_start_angle(self, radius, from_direction, to_direction):
         pi = manim.PI
@@ -303,7 +286,7 @@ class TextBlock(manim.Text):
                 if to_direction == Directions.RIGHT:
                     if radius[1] < 0.0: return 1.5 * pi
                     else: return 0.5 * pi
-        return None
+        return 0.0
 
     def get_clockwise(self, radius, from_direction, to_direction):
         match from_direction:
@@ -323,7 +306,7 @@ class TextBlock(manim.Text):
                 if to_direction == Directions.RIGHT:
                     if radius[1] > 0.0: return True
                     else: return False
-        return None
+        return False
 
     def get_far_side(self, tb_to, direction):
         slf = self.get_arrow_point(self.direction2pp(direction))
@@ -341,7 +324,7 @@ class TextBlock(manim.Text):
             case Directions.LEFT:
                 if slf[0] < tbt[0]: return slf[0] * manim.RIGHT
                 else: return tbt[0] * manim.RIGHT
-        return manim.UP
+        return manim.ORIGIN
 
     def get_mid_point(self, tb_to, direction):
         slf = self.get_arrow_point(self.direction2pp(direction))
@@ -351,11 +334,7 @@ class TextBlock(manim.Text):
                 return (slf + tbt)[0] * 0.5 * manim.RIGHT
             case Directions.RIGHT | Directions.LEFT:
                 return (slf + tbt)[1] * 0.5 * manim.UP
-        return (0.0, 0.0, 0.0)
-
-    def get_buff(self, tb_to, from_direction, to_direction):
-        return (self.get_mid_point(tb_to, to_direction)
-                + self.get_far_side(tb_to, to_direction))
+        return manim.ORIGIN
 
     def get_radius(self, radius, from_direction, to_direction):
         if from_direction == Directions.UP and to_direction == Directions.DOWN:
@@ -366,23 +345,4 @@ class TextBlock(manim.Text):
             return abs(radius[1])
         elif from_direction == Directions.LEFT and to_direction == Directions.RIGHT:
             return abs(radius[1])
-        return radius[0]
-
-    def get_round_points(
-        self, samples: int = 5, all_samples: int = 8,
-        start_angle: float = 0.0, clockwise = False,
-        without_sides = True):
-        from math import sin, cos
-        points: list[(float, float, float)] = []
-        rng = range(0, samples, 1)
-        if clockwise: rng = range(0, -samples, -1)
-        if without_sides:
-            rng = range(1, samples - 1, 1)
-            if clockwise: rng = range(-1, -samples + 1, -1)
-        for i in rng:
-            points.append((cos(start_angle + 2.0 * manim.PI
-                               * i / all_samples),
-                           sin(start_angle + 2.0 * manim.PI
-                               * i / all_samples),
-                           0.0))
-        return points
+        return abs(radius[0])

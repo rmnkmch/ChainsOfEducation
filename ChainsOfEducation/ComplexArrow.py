@@ -6,7 +6,7 @@ import Tip
 class ComplexArrow(manim.VMobject):
     """ComplexArrow"""
 
-    def __init__(self, points, end_tip = None, **kwargs):
+    def __init__(self, points, end_tip = None, start_tip = None, **kwargs):
         super().__init__(
             stroke_color = "#FFFFFF",
             stroke_opacity = 1.0,
@@ -23,11 +23,46 @@ class ComplexArrow(manim.VMobject):
 
         if end_tip is None: end_tip = Tip.TriangleTip()
         self.end_tip = end_tip
-        diff = self.point_from_proportion(0.001) - points[0]
-        self.end_tip.set_angle(self.end_tip.get_angle_by_dx_dy(diff[0], diff[1]))
-        self.end_tip.move_to(points[0] + self.end_tip.get_shift())
-        self.end_tip.update_prev_pos()
-        self.end_tip.set_pos_func(self.get_end)
+        if start_tip is None:
+            start_tip = Tip.EllipseTip().set_shift_anchors(-0.5, -0.5)
+        self.start_tip = start_tip
+
+        self.make_tips()
+        self.add(self.end_tip, self.start_tip)
+
+    @staticmethod
+    def get_round(
+        center = manim.ORIGIN, radius: float = 1.0,
+        samples: int = 13, all_samples: int = 24,
+        start_angle: float = 0.5 * manim.PI, clockwise = False,
+        without_sides = False):
+        from math import sin, cos
+        points: list = []
+        rng = range(0, samples, 1)
+        if clockwise: rng = range(0, -samples, -1)
+        if without_sides:
+            rng = range(1, samples - 1, 1)
+            if clockwise: rng = range(-1, -samples + 1, -1)
+        for i in rng:
+            points.append(
+                center
+                + manim.RIGHT * radius
+                * cos(start_angle + 2.0 * manim.PI * i / all_samples)
+                + manim.UP * radius
+                * sin(start_angle + 2.0 * manim.PI * i / all_samples))
+        return points
+
+    @staticmethod
+    def get_line(
+        start = manim.ORIGIN, end = manim.RIGHT,
+        all_samples: int = 21,
+        without_sides = False):
+        points: list = []
+        rng = range(0, all_samples + 1, 1)
+        if without_sides: rng = range(1, all_samples, 1)
+        for i in rng:
+            points.append(start * (1.0 - i / all_samples) + end * i / all_samples)
+        return points
 
     def get_next_curves(self, n: int):
         if self.is_created():
@@ -57,3 +92,32 @@ class ComplexArrow(manim.VMobject):
         return self.get_all_points()[
             first * self.n_points_per_curve
             : self.get_num_points() - last * self.n_points_per_curve]
+
+    def make_tips(self):
+        diff = self.get_end() - self.point_from_proportion(0.999)
+        self.end_tip.set_angle(Tip.Tip.get_angle_by_dx_dy(diff[0], diff[1]))
+        self.end_tip.move_to(self.get_end() + self.end_tip.get_shift())
+        self.end_tip.update_prev_pos()
+        diff = self.point_from_proportion(0.001) - self.get_start()
+        self.start_tip.set_angle(Tip.Tip.get_angle_by_dx_dy(diff[0], diff[1]))
+        self.start_tip.move_to(self.get_start() + self.start_tip.get_shift())
+        self.start_tip.update_prev_pos()
+
+    def set_points(self, points):
+        super().set_points(points)
+        self.make_tips()
+        return self
+
+    def start_update_tips(self):
+        self.end_tip.set_pos_func(self.get_end)
+        self.start_tip.set_pos_func(self.get_start)
+        self.end_tip.prepare_to_create()
+        self.start_tip.prepare_to_create()
+        self.remove(self.end_tip, self.start_tip)
+
+    def stop_update_tips(self):
+        self.end_tip.clear_pos_func()
+        self.start_tip.clear_pos_func()
+        self.end_tip.stop_update()
+        self.start_tip.stop_update()
+        self.add(self.end_tip, self.start_tip)

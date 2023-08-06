@@ -103,10 +103,10 @@ class TopicBlock(manim.RoundedRectangle):
         return manim.FadeIn(br)
 
     def get_chain_end(self):
-        return self.get_all_points()[4]
+        return self.point_from_proportion(0.25)
 
-    def set_chain(self, start_func):
-        self.chain = Chain.Chain(start_func, lambda: self.get_chain_end())
+    def set_chain(self, start):
+        self.chain = manim.always_redraw(lambda: Chain.Chain(start, self.get_chain_end()))
 
     def deactivate(self):
         self.set_fill(opacity = 0.1)
