@@ -92,7 +92,7 @@ class TitleBlock(manim.RoundedRectangle):
                     print(ln + line + ".")
 
     @staticmethod
-    def resplit_to_post_kanji(self, text: str):
+    def resplit_to_post_kanji(text: str):
         lines = text.split("\n")
         ln = ""
         trlt = ""
@@ -101,7 +101,7 @@ class TitleBlock(manim.RoundedRectangle):
         for line in lines:
             if len(line) == 1:
                 if mod3 % 3 == 0: print("#Japanese")
-                ln = self.num2sticker(num) + " " + line + " - "
+                ln = TitleBlock.num2sticker(num) + " " + line + " - "
                 num += 1
                 mod3 += 1
             elif len(line) > 1 and not line[0].isupper(): trlt = line
@@ -123,7 +123,8 @@ class TitleBlock(manim.RoundedRectangle):
                 ln += " - " + trlt
                 print(ln)
 
-    def resplit_to_JP_read_kanji(self, text: str):
+    @staticmethod
+    def resplit_to_JP_read_kanji(text: str):
         lines = text.split("\n")
         ln = ""
         for line in lines:
@@ -141,7 +142,8 @@ class TitleBlock(manim.RoundedRectangle):
                     ln += on + ",-. "
                 print(ln)
 
-    def resplit_to_RU_read_kanji(self, text: str):
+    @staticmethod
+    def resplit_to_RU_read_kanji(text: str):
         lines = text.split("\n")
         ln = ""
         for line in lines:
@@ -152,12 +154,14 @@ class TitleBlock(manim.RoundedRectangle):
                 print(ln)
                 ln = ""
 
-    def resplit_to_menu_kanji(self, text: str):
+    @staticmethod
+    def resplit_to_menu_kanji(text: str):
         lines = text.split("\n")
         for line in lines:
             if len(line) == 1: print(line, end = " ")
 
-    def num2sticker(self, num: int):
+    @staticmethod
+    def num2sticker(num: int):
         dct: dict = {1: c_1, 2: c_2, 3: c_3, 4: c_4, 5: c_5,
                      6: c_6, 7: c_7, 8: c_8, 9: c_9, 0: c_0}
         st = ""
@@ -166,7 +170,8 @@ class TitleBlock(manim.RoundedRectangle):
             num = int(num / 10)
         return st
 
-    def Jpn_Geo(self):
+    @staticmethod
+    def Jpn_Geo():
         """
         #menu
         #English
@@ -500,10 +505,10 @@ Nigeria; Federal Republic of Nigeria
 английский; English
 NGN, найра; Nigerian naira"""
 
-        #self.resplit_to_JP_read_kanji(native_kun_on)
-        #self.resplit_to_RU_read_kanji(native_kun_on)
-        #self.resplit_to_post_kanji(native_kun_on)
-        #self.resplit_to_menu_kanji(native_kun_on)
-        self.resplit_to_post_examples(native_examples)
-        #self.resplit_to_post_geo(geo)
-        #self.resplit_to_z_name_geo(geo)
+        #TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
+        #TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
+        #TitleBlock.resplit_to_post_kanji(native_kun_on)
+        #TitleBlock.resplit_to_menu_kanji(native_kun_on)
+        TitleBlock.resplit_to_post_examples(native_examples)
+        #TitleBlock.resplit_to_post_geo(geo)
+        #TitleBlock.resplit_to_z_name_geo(geo)

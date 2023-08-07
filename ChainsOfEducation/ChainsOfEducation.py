@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.chapter_1_1()
+        self.chapter_1_2()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -276,7 +276,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         text_1 = TextBlock.TextBlock(
             "Осознавая свои принятые решения,\nжелаемое будет достигаться быстрее.",
         font_size = 30).move_to(2.0 * M.DOWN)
-        anim_12 = M.AddTextLetterByLetter(text_1, time_per_char = 0.01)
+        anim_12 = M.FadeIn(text_1)
         anim_14 = M.AnimationGroup(anim_11, anim_12, lag_ratio = 0.5)
         self.play(anim_14)
         vgrp_1 = M.VGroup(arrow_2, arrow_2.end_tip, text_1)
@@ -294,7 +294,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 и автоматически бессмысленными,
 если у нас нет достаточного основания
 для их понимания.""", font_size = 30).move_to(2.0 * M.UP)
-        #self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.001))
+        self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.001))
         texts_2 = ["Любые суждения или мысли",
                    "Всё когда-либо",
                    "сказанное нами,",
@@ -326,21 +326,6 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait()
         anim_1 = M.Create(arrow_2)
         self.play(anim_1)
-
-        x_values = [-2.3, 2.3, 2.3, -2.3, -2.3]
-        y_values = [2.3, 2.3, -2.3, -2.3, 2.3]
-        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
-        arrow = ComplexArrow.ComplexArrow(coords)
-        self.add(arrow.end_tip)
-        arrr_curr = arrow.get_next_curves(50)
-        def fnc():
-            return M.Text(str(1)).move_to(arrr_curr.get_last_point())
-        tx = M.always_redraw(fnc)
-        self.add(tx)
-        arrow.end_tip.set_pos_func(lambda: arrr_curr.get_last_point())
-        anim_5 = M.AnimationGroup(M.Create(
-            arrr_curr, run_time = 5.0))
-        self.play(anim_5)
         self.wait(5.0)
 
     def test_1(self):
