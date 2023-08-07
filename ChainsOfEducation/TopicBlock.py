@@ -39,20 +39,20 @@ class TopicBlock(manim.RoundedRectangle):
         self.title_underline = manim.Underline(self.title)
         self.add(self.title, self.title_underline)
 
-        self.chain = None
+        self.chain_line = None
 
         self.briefs = []
         self.brief_shown = 0
         for brief in briefs:
             offset = (len(briefs) - 1) * 0.25
-            if len(briefs) <= 1:
-                offset = 0.0
+            if len(briefs) <= 1: offset = 0.0
             d = manim.Dot().move_to(
                 manim.DOWN + manim.RIGHT
                 * (0.5 * briefs.index(brief) - offset))
             self.briefs.append(d)
             self.add(d)
-            self.briefs.append(manim.Text(brief, font_size = 32.0))
+            dtext = manim.Text(brief, font_size = 32.0)
+            self.briefs.append(dtext)
 
         self.deactivate()
 
@@ -105,8 +105,14 @@ class TopicBlock(manim.RoundedRectangle):
     def get_chain_end(self):
         return self.point_from_proportion(0.2)
 
-    def set_chain(self, start):
-        self.chain = Chain.Chain(start, self.get_chain_end())
+    def set_ordinary_chain(self, start):
+        self.chain_line = Chain.Chain(start, self.get_chain_end())
+
+    def make_chain_redrawable(self):
+        self.chain_line.add_updater(
+            lambda m: self.chain_line.become(
+                Chain.Chain(
+                    self.chain_line.get_start(), self.get_chain_end())))
 
     def deactivate(self):
         self.set_fill(opacity = 0.1)
@@ -126,8 +132,23 @@ class TopicBlock(manim.RoundedRectangle):
         for dot in self.get_all_briefs_dots():
             dot.set_fill(opacity = 1.0)
 
+    def prepare_to_create(self):
+        self.chain_line.prepare_to_create()
+        for br in self.get_all_briefs_texts():
+            self.remove(br)
+
     def get_creating_anim(self):
         return manim.AnimationGroup(
-            self.chain.get_creating_anim(),
+            self.chain_line.get_creating_anim(),
             manim.Create(self, lag_ratio = 0.1),
             lag_ratio = 0.5)
+
+    def after_create(self):
+        self.chain_line.after_create()
+        self.make_chain_redrawable()
+
+    def prepare_to_destroy(self):
+        self.chain_line.clear_updaters()
+        self.add(self.chain_line)
+        for br in self.get_all_briefs_texts():
+            self.add(br)

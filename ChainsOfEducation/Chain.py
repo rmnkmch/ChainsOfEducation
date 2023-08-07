@@ -10,12 +10,18 @@ class Chain(ComplexArrow.ComplexArrow):
         super().__init__(
             [start, end],
             Tip.EllipseTip(
-                fill_opacity = 0.6, length = 0.3, width = 0.3
+                fill_opacity = 1.0, length = 0.2, width = 0.2
                 ).set_shift_anchors(0.0, 0.0),
             Tip.EllipseTip(
-                fill_opacity = 0.6, length = 0.3, width = 0.3
+                fill_opacity = 1.0, length = 0.2, width = 0.2
                 ).set_shift_anchors(0.0, 0.0))
+
+    def prepare_to_create(self):
+        self.remove(self.end_tip, self.start_tip)
 
     def get_creating_anim(self):
         return manim.AnimationGroup(
-            manim.Write(self), lag_ratio = 0.75)
+            manim.FadeIn(self.start_tip),
+            manim.Write(self),
+            manim.Create(self.end_tip),
+            lag_ratio = 0.75)
