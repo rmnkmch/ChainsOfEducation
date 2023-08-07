@@ -61,9 +61,6 @@ class TextBlock(manim.Text):
         from math import sqrt
         return sqrt(vector[0] * vector[0] + vector[1] * vector[1])
 
-    def pp2direction(self):
-        pass
-
     def direction2pp(self, direction: Directions):
         match direction:
             case Directions.UP:

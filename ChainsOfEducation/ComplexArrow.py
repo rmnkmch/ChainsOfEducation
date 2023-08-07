@@ -116,8 +116,27 @@ class ComplexArrow(manim.VMobject):
         self.remove(self.end_tip, self.start_tip)
 
     def stop_update_tips(self):
-        self.end_tip.clear_pos_func()
-        self.start_tip.clear_pos_func()
         self.end_tip.stop_update()
         self.start_tip.stop_update()
         self.add(self.end_tip, self.start_tip)
+
+    def prepare_to_create_1(self):
+        diff = self.point_from_proportion(0.001) - self.get_start()
+        self.end_tip.set_angle(Tip.Tip.get_angle_by_dx_dy(diff[0], diff[1]))
+        self.end_tip.move_to(self.get_start() + self.end_tip.get_shift())
+        self.end_tip.update_prev_pos()
+
+    def prepare_to_create_2(self):
+        self.start_update_tips()
+
+    def get_creating_anim_1(self):
+        return manim.AnimationGroup(
+            manim.FadeIn(self.start_tip),
+            manim.FadeIn(self.end_tip),
+            lag_ratio = 0.5)
+
+    def get_creating_anim_2(self):
+        return manim.Write(self)
+
+    def after_create(self):
+        self.stop_update_tips()

@@ -26,8 +26,7 @@ class KnowledgeBlock(Block.Block):
         self.ellipsis_b = EllipsisBlock.EllipsisBlock()
 
         self.description = manim.Text(
-            description,
-            font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
+            description, font_size = DEFAULT_DESCRIPTION_FONT_SIZE)
         self.build_description()
         self.description_hidden = False
         self.save_description_opacity()

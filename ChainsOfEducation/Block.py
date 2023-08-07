@@ -40,9 +40,7 @@ class Block(manim.RoundedRectangle):
         self.subbs: list = []
 
         self.title = manim.Text(
-            title,
-            font_size = 56.0,
-            weight = manim.BOLD)
+            title, font_size = 56.0, weight = manim.BOLD)
         self.set_normal_title()
         self.title_underline = manim.Underline(self.title)
 

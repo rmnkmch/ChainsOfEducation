@@ -103,10 +103,10 @@ class TopicBlock(manim.RoundedRectangle):
         return manim.FadeIn(br)
 
     def get_chain_end(self):
-        return self.point_from_proportion(0.25)
+        return self.point_from_proportion(0.2)
 
     def set_chain(self, start):
-        self.chain = manim.always_redraw(lambda: Chain.Chain(start, self.get_chain_end()))
+        self.chain = Chain.Chain(start, self.get_chain_end())
 
     def deactivate(self):
         self.set_fill(opacity = 0.1)
@@ -125,3 +125,9 @@ class TopicBlock(manim.RoundedRectangle):
         self.title_underline.set_stroke(opacity = 1.0)
         for dot in self.get_all_briefs_dots():
             dot.set_fill(opacity = 1.0)
+
+    def get_creating_anim(self):
+        return manim.AnimationGroup(
+            self.chain.get_creating_anim(),
+            manim.Create(self, lag_ratio = 0.1),
+            lag_ratio = 0.5)

@@ -178,34 +178,6 @@ class ChainsOfEducation(M.Scene):
             self.play(M.Unwrite(text, run_time = 3.0, reverse = False))
             self.wait()
 
-    def creating_topic_anim(self, topic: TopicBlock.TopicBlock, fast = False):
-        if fast:
-            return M.Create(topic, run_time = FAST_RUN_TIME)
-        else:
-            return M.Create(topic, lag_ratio = 0.1)
-
-    def creating_chain_anim(self, chain: Chain.Chain, fast = False):
-        if fast:
-            return M.AnimationGroup(
-                M.Write(chain),
-                run_time = FAST_RUN_TIME)
-        else:
-            return M.AnimationGroup(
-                M.Write(chain),
-                lag_ratio = 0.75)
-
-    def creating_chain_and_topic_anim(self, chain, topic, fast = False):
-        if fast:
-            return M.AnimationGroup(
-                self.creating_chain_anim(chain, fast),
-                self.creating_topic_anim(topic, fast),
-                run_time = FAST_RUN_TIME)
-        else:
-            return M.AnimationGroup(
-                self.creating_chain_anim(chain, fast),
-                self.creating_topic_anim(topic, fast),
-                lag_ratio = 0.5)
-
     def pos_by(self, x: float, y: float):
         return M.RIGHT * x + M.UP * y
 
@@ -240,17 +212,19 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
             self.nnn += 1
             return self.pos_by(x_values[n + 1], y_values[n + 1])
 
-        fast_1 = True
+        fast_1 = False
         fast_2 = False
         intro_text = M.Text("Ну что ж ...")
-        self.write_text(intro_text, fast_1)
-        self.unwrite_text(intro_text, fast_1)
+        #self.write_text(intro_text, fast_1)
+        #self.unwrite_text(intro_text, fast_1)
         x_values = [-6, -4, 0, 4, 6]
         y_values = [3.0, 2.8, 3.0, 2.8, 3.0]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         arrow = ComplexArrow.ComplexArrow(coords, Tip.EllipseTip())
-        self.add(arrow.end_tip)
-        anim_1 = M.Create(arrow, run_time = 5.0)
+        arrow.prepare_to_create_1()
+        self.play(arrow.get_creating_anim_1())
+        arrow.prepare_to_create_2()
+        anim_1 = arrow.get_creating_anim_2().set_run_time(4.0)
         tb_1 = TopicBlock.TopicBlock(
             "Осознание",
             ["Что такое осознанность?",
@@ -266,11 +240,11 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         grp = [tb_1, tb_2, tb_3]
         anims = []
         for topic_block in grp:
-            anims.append(self.creating_chain_and_topic_anim(
-                topic_block.chain, topic_block, fast_1))
+            anims.append(topic_block.get_creating_anim())
         anims = M.AnimationGroup(*anims, lag_ratio = 0.1)
         played = M.AnimationGroup(anim_1, anims, lag_ratio = 0.3)
         self.play(played)
+        arrow.after_create()
         tb_1.generate_target()
         tb_1.target.move_to(1.5 * M.DOWN + 3.0 * M.LEFT).scale(1.0 / 0.3)
         tb_1.target.activate()
@@ -296,16 +270,15 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 
         kb_1 = KB.KnowledgeBlock("Осознанность!",
         '''Очень сильный и важный инструмент.''')
-        self.create_kb_no_descr(kb_1, fast_1)
-        self.update_b(kb_1, fast = fast_1)
+        #self.create_kb_no_descr(kb_1, fast_1)
+        #self.update_b(kb_1, fast = fast_1)
         kb_1.generate_target()
         kb_1.target.move_to(M.UP * 2.2).scale(0.5)
-        self.update_b(kb_1, False, fast_1)
+        #self.update_b(kb_1, False, fast_1)
         x_values_2 = [0.01, -0.01, 0.01]
         y_values_2 = [0.8, -0.1, -1.0]
         coords_2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
         arrow_2 = ComplexArrow.ComplexArrow(coords_2)
-        self.add(arrow_2.end_tip)
         anim_11 = M.Create(arrow_2)
         text_1 = M.Text(
         "Осознавая свои принятые решения,\nжелаемое будет достигаться быстрее.",

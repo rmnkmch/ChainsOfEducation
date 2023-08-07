@@ -37,12 +37,16 @@ class Tip(manim.VMobject):
         return self
 
     def prepare_to_create(self):
+        self.start_update()
+
+    def start_update(self):
         self.add_updater(Tip.update_pos_when_creating)
         self.add_updater(Tip.update_angle_when_creating)
-        #self.add_updater(Tip.update_scale)
+        #self.add_updater(Tip.update_scale_when_creating)
 
     def stop_update(self):
         self.clear_updaters()
+        self.clear_pos_func()
 
     def update_pos_when_creating(self):
         if self.pos_func is not None:
