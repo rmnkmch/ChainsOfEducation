@@ -57,10 +57,6 @@ class TextBlock(manim.Text):
     def perimeter(self):
         return 2.0 * (self.init_width + self.init_height)
 
-    def vector_len(self, vector):
-        from math import sqrt
-        return sqrt(vector[0] * vector[0] + vector[1] * vector[1])
-
     def direction2pp(self, direction: Directions):
         match direction:
             case Directions.UP:
@@ -125,7 +121,7 @@ class TextBlock(manim.Text):
 
     def get_buff_arrow_point(self, direction, buff = 0.5):
         vect = direction - self.get_center()
-        return vect / self.vector_len(vect) * buff + direction
+        return vect / ComplexArrow.ComplexArrow.vector_len(vect) * buff + direction
 
     def get_buff_arrright(self, buff = 0.5):
         return self.get_buff_arrow_point(self.get_arrright(), buff)
@@ -145,7 +141,7 @@ class TextBlock(manim.Text):
         opposite = direction + 0.5
         if opposite > 1.0: opposite -= 1.0
         points: list = []
-        dops = (self.vector_len(
+        dops = (ComplexArrow.ComplexArrow.vector_len(
             self.get_arrow_point(direction) - self.get_center()) / buff)
         dops = min(floor(dops), inner_buff_num)
         for i in range(outer_buff_num, -dops, -1):
@@ -207,22 +203,26 @@ class TextBlock(manim.Text):
         from_inner_buff_num: int = 1,
         to_inner_buff_num: int = 1,
         through_points: list = []):
+        from math import floor
         if (len(through_points) == 0 and
             (from_direction == Directions.UP and to_direction == Directions.DOWN) or
             (from_direction == Directions.DOWN and to_direction == Directions.UP) or
-            (from_direction == Directions.RIGHT and to_direction == Directions.LEFT) or
-            (from_direction == Directions.LEFT and to_direction == Directions.RIGHT)):
+            (from_direction == Directions.RIGHT
+             and to_direction == Directions.LEFT) or
+            (from_direction == Directions.LEFT
+             and to_direction == Directions.RIGHT)):
             radius = (self.get_center() - tb_to.get_center()) * 0.5
             sa = self.get_start_angle(radius, from_direction, to_direction)
             cw = self.get_clockwise(radius, from_direction, to_direction)
             centr = (self.get_mid_point(tb_to, to_direction)
-                     + self.get_far_side(tb_to, to_direction))
+                     + self.get_far_side(tb_to, to_direction)
+                     + self.get_buff_added(
+                         tb_to, from_direction, from_buff, to_buff))
             radius = self.get_radius(radius, from_direction, to_direction)
             through_points = ComplexArrow.ComplexArrow.get_round(
-                centr, radius, 13, 24, sa, cw, True)
+                centr, radius, 10, 18, sa, cw, True)
         if len(through_points) >= 2:
-            from math import floor
-            vl = self.vector_len([
+            vl = ComplexArrow.ComplexArrow.vector_len([
                 through_points[0][0] - through_points[1][0],
                 through_points[0][1] - through_points[1][1]])
             vl = max(vl, 0.01)
@@ -238,31 +238,40 @@ class TextBlock(manim.Text):
                     tb_to.direction2pp(tb_to.opposite_direction(to_direction)))
                 - tb_to.get_arrow_point(tb_to.direction2pp(to_direction))) * 0.49)
             vl = min(vl, from_len, to_len)
-            from_buff = vl
-            to_buff = vl
+            buff = vl
             fs = self.get_far_side(tb_to, to_direction)
-            from_outer_buff_num = floor(abs(func(
+            from_outer_buff_num = floor(abs((func(
                 fs - self.get_arrow_point(
-                    self.direction2pp(to_direction))) / vl))
-            to_outer_buff_num = floor(abs(func(
+                    self.direction2pp(to_direction))) + from_buff) / vl))
+            to_outer_buff_num = floor(abs((func(
                 fs - tb_to.get_arrow_point(
-                    tb_to.direction2pp(to_direction))) / vl))
+                    tb_to.direction2pp(to_direction))) + to_buff) / vl))
             from_inner_buff_num = floor(from_len / vl)
             to_inner_buff_num = floor(to_len / vl)
         points: list = self.get_smooth_arrow_side(
             self.direction2pp(from_direction),
-            from_buff, from_outer_buff_num, from_inner_buff_num)
+            buff, from_outer_buff_num, from_inner_buff_num)
         for point in through_points:
             points.append(point)
         for point in tb_to.get_smooth_arrow_side(
             tb_to.direction2pp(to_direction),
-            to_buff, to_outer_buff_num, to_inner_buff_num):
+            buff, to_outer_buff_num, to_inner_buff_num):
             points.append(point)
         ret_CA = ComplexArrow.ComplexArrow(points)
-        ret_CA.set_points(ret_CA.pop_first_and_last_points(
+        ret_CA.pop_first_and_last_points(
             from_inner_buff_num * 2 + from_outer_buff_num,
-            to_inner_buff_num * 2 + to_outer_buff_num))
-        return (ret_CA, ComplexArrow.ComplexArrow(points))
+            to_inner_buff_num * 2 + to_outer_buff_num)
+        ret_CA.short(from_buff, False)
+        ret_CA.short(to_buff, True)
+        ppts = [
+            self.get_buff_arrow_point(
+                self.get_arrow_point(self.direction2pp(to_direction)), from_buff),
+            *ret_CA.get_anchors(),
+            tb_to.get_buff_arrow_point(
+                tb_to.get_arrow_point(tb_to.direction2pp(to_direction)), to_buff)]
+        print(ppts)
+        rca2 = ComplexArrow.ComplexArrow(ppts)
+        return (rca2, ret_CA, ComplexArrow.ComplexArrow(points))
 
     def get_start_angle(self, radius, from_direction, to_direction):
         pi = manim.PI
@@ -332,6 +341,22 @@ class TextBlock(manim.Text):
             case Directions.RIGHT | Directions.LEFT:
                 return (slf + tbt)[1] * 0.5 * manim.UP
         return manim.ORIGIN
+
+    def get_buff_added(self, tb_to, direction, from_buff, to_buff):
+        slf = self.get_arrow_point(self.direction2pp(direction))
+        tbt = tb_to.get_arrow_point(tb_to.direction2pp(direction))
+        func = self.get_v_x
+        if direction in [Directions.UP, Directions.DOWN]:
+            func = self.get_v_y
+        ed_v = manim.ORIGIN
+        if direction == Directions.UP: ed_v = manim.DOWN
+        elif direction == Directions.DOWN: ed_v = manim.UP
+        elif direction == Directions.RIGHT: ed_v = manim.LEFT
+        elif direction == Directions.LEFT: ed_v = manim.RIGHT
+        if func(slf) > func(tbt):
+            return from_buff * ed_v
+        else:
+            return to_buff * ed_v
 
     def get_radius(self, radius, from_direction, to_direction):
         if from_direction == Directions.UP and to_direction == Directions.DOWN:

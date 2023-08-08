@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.chapter_1_2()
+        self.test_1()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -332,22 +332,31 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.add(M.NumberPlane())
         tb = TextBlock.TextBlock(
             """нашими друзьями\nи знакомыми,""").move_to(0.2 * M.UR)
-        tb2 = TextBlock.TextBlock("""нашими друзьями и знакомыми,
+        tb2 = TextBlock.TextBlock("""нашими друзьями
+        и знакомыми,
         ми друзьями
         ми друзьями
         ми друзьями""")
         self.add(tb, tb2)
-        x_values_1 = [0.0, 2.7, 2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0]
-        y_values_1 = [2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0, 2.7, 2.7]
+        x_values_1 = [0.0, 2.7, 2.7, 2.7]#, 0.0, -2.7, -2.7, -2.7, 0.0]
+        y_values_1 = [2.7, 2.7, 0.0, -2.7]#, -2.7, -2.7, 0.0, 2.7, 2.7]
         coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
         def get_arr():
-            return tb.get_arrow_to_tb(
+            b = tb.get_arrow_to_tb(
                 tb2, TextBlock.Directions.LEFT, TextBlock.Directions.RIGHT,
-                0.3, 0.3, 1, 1, 1, 1)[0]
+                1.0, 1.0, 1, 1, 1, 1)[0]
+            vg = b
+            '''vg = M.VGroup()
+            a = []
+            for dot in b.get_anchors():
+                a.append(M.Dot(dot, radius = 0.04, color = "#1312F5"))
+            vg = M.VGroup(b, *a)'''
+            return vg
         arrow = M.always_redraw(get_arr)
         self.add(arrow)
         self.play(M.MoveAlongPath(tb2, ComplexArrow.ComplexArrow(coords),
-                                  run_time = 4.0, rate_func = M.linear))
+                                  run_time = 1.0, rate_func = M.linear))
+        #self.add(M.ThreeDScene())
         self.wait(1.0)
 
     class MyMoveAlongPath(M.Animation):

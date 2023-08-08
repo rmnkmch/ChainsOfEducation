@@ -31,6 +31,11 @@ class ComplexArrow(manim.VMobject):
         self.add(self.end_tip, self.start_tip)
 
     @staticmethod
+    def vector_len(vector):
+        from math import sqrt
+        return sqrt(vector[0] * vector[0] + vector[1] * vector[1])
+
+    @staticmethod
     def get_round(
         center = manim.ORIGIN, radius: float = 1.0,
         samples: int = 13, all_samples: int = 24,
@@ -88,10 +93,30 @@ class ComplexArrow(manim.VMobject):
     def is_created(self):
         return self.num_created_curves >= self.get_num_curves()
 
-    def pop_first_and_last_points(self, first, last):
-        return self.get_all_points()[
+    def pop_first_and_last_points(self, first: int, last: int):
+        return self.set_points(self.get_all_points()[
             first * self.n_points_per_curve
-            : self.get_num_points() - last * self.n_points_per_curve]
+            : self.get_num_points() - last * self.n_points_per_curve])
+
+    def short(self, length: float, end = True):
+        lengths = self.get_curve_functions_with_lengths()
+        lts: list = []
+        for tup in lengths:
+            lts.append(tup)
+        i: int = 1
+        lng: float = 0.0
+        if end:
+            while lng < length:
+                lng += lts[-i][1]
+                i += 1
+            self.pop_first_and_last_points(i - 1, 0)
+        else:
+            i = 0
+            while lng < length:
+                lng += lts[i][1]
+                i += 1
+            self.pop_first_and_last_points(0, i)
+        return self
 
     def make_tips(self):
         diff = self.get_end() - self.point_from_proportion(0.999)
