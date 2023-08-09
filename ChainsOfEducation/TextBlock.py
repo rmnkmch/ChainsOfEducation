@@ -263,15 +263,7 @@ class TextBlock(manim.Text):
             to_inner_buff_num * 2 + to_outer_buff_num)
         ret_CA.short(from_buff, False)
         ret_CA.short(to_buff, True)
-        ppts = [
-            self.get_buff_arrow_point(
-                self.get_arrow_point(self.direction2pp(to_direction)), from_buff),
-            *ret_CA.get_anchors(),
-            tb_to.get_buff_arrow_point(
-                tb_to.get_arrow_point(tb_to.direction2pp(to_direction)), to_buff)]
-        print(ppts)
-        rca2 = ComplexArrow.ComplexArrow(ppts)
-        return (rca2, ret_CA, ComplexArrow.ComplexArrow(points))
+        return (ret_CA, ComplexArrow.ComplexArrow(points))
 
     def get_start_angle(self, radius, from_direction, to_direction):
         pi = manim.PI

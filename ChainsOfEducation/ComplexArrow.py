@@ -109,13 +109,13 @@ class ComplexArrow(manim.VMobject):
             while lng < length:
                 lng += lts[-i][1]
                 i += 1
-            self.pop_first_and_last_points(i - 1, 0)
+            if i > 2: self.pop_first_and_last_points(i - 2, 0)
         else:
             i = 0
             while lng < length:
                 lng += lts[i][1]
                 i += 1
-            self.pop_first_and_last_points(0, i)
+            if i > 1: self.pop_first_and_last_points(0, i - 1)
         return self
 
     def make_tips(self):

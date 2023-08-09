@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.Scene):
     def construct(self):
-        self.test_1()
+        self.chapter_1_0()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -148,21 +148,6 @@ class ChainsOfEducation(M.Scene):
             self.play(M.Create(kb, lag_ratio = 0.1, run_time = 3.0))
             self.wait()
 
-    def write_text(self, text, fast = False):
-        if fast:
-            self.play(M.Write(text, run_time = FAST_RUN_TIME))
-        else:
-            self.play(M.Write(text, run_time = 3.0))
-            self.wait()
-
-    def unwrite_text(self, text, fast = False):
-        if fast:
-            self.play(
-                M.Unwrite(text, run_time = FAST_RUN_TIME, reverse = False))
-        else:
-            self.play(M.Unwrite(text, run_time = 3.0, reverse = False))
-            self.wait()
-
     def pos_by(self, x: float, y: float):
         return M.RIGHT * x + M.UP * y
 
@@ -191,14 +176,145 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
     """
 
     def chapter_1_0(self):
+        self.add(M.NumberPlane())
+        sv = M.SVGMobject(
+            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\logo_1",
+            stroke_color="#FFFFFF").scale(3.0)
+        self.play(M.Write(sv, run_time = 3.0))
+        intro_text = M.Text("Ну что ж ...")
+        #self.play(M.Write(intro_text, run_time = 1.0))
+        #self.wait()
+        #self.play(M.Unwrite(intro_text, run_time = 1.0, reverse = False))
+        #self.wait()
+        natp = '''0.016 0
+0.42 0.136
+0.78 0.12
+1.084 −0.09
+1.42 −0.32
+1.83 −0.46
+2.31 −0.476
+2.694 −0.21
+3.076 0.094
+3.466 0.373
+3.96 0.36
+4.31 0.2
+4.43 −0.184
+4.155 −0.423
+3.67 −0.42
+3.255 −0.17
+2.81 0.133
+2.415 0.34
+1.965 0.476
+1.586 0.31
+1.386 −0.03
+1.62 −0.447
+1.98 −0.725
+2.17 −0.97
+2.17 −1.294
+1.96 −1.61
+1.617 −1.76
+1.2 −1.684
+0.79 −1.5
+0.316 −1.6
+−0.07 −1.86
+−0.48 −2.03
+−0.93 −1.873
+−1.383 −1.673
+−1.73 −1.544
+−2.15 −1.357
+−2.567 −1.47
+−3.183 −1.437
+−3.58 −1.673
+−3.96 −1.84
+−4.53 −1.945
+−5.016 −2.07
+−5.51 −2.047
+−6 −2.015
+−6.51 −2.01
+−6.68 −1.91
+−5.836 −1.726
+−5.475 −1.61
+−5.945 −1.36
+−6.32 −1.29
+−6.69 −1.16
+−6.3 −1.04
+−5.83 −1.066
+−5.43 −0.767
+−5.445 −0.507
+−5.34 −0.103
+−5.49 0.295
+−5.67 0.58
+−6.01 1
+−6.055 1.463
+−5.5 1.745
+-4.58 1.803'''
+        natp_2 = '''−8.006 0.524
+−7.22 0.26
+−6.52 0.05
+−6.3 −0.233
+−6.08 −0.454
+−5.85 −0.68
+−6.15 −0.813
+−6.6 −0.907
+−7.1 −1.15
+−6.576 −1.39
+−6.09 −1.56
+−6.47 −1.68
+−7.24 −1.945
+−6.74 −2.107
+−6.22 −2.206
+−5.68 −2.48
+−5.36 −2.86
+−5.13 −3.36'''
+
+        x_values = []
+        y_values = []
+        x_values_2 = []
+        y_values_2 = []
+        for line in natp.split('\n'):
+            s = line.split()
+            if s[0][0] != '−':
+                x_values.append(float(s[0]))
+            else:
+                x_values.append(-float(s[0][1:]))
+            if s[1][0] != '−':
+                y_values.append(float(s[1]))
+            else:
+                y_values.append(-float(s[1][1:]))
+        for line in natp_2.split('\n'):
+            s = line.split()
+            if s[0][0] != '−':
+                x_values_2.append(float(s[0]))
+            else:
+                x_values_2.append(-float(s[0][1:]))
+            if s[1][0] != '−':
+                y_values_2.append(float(s[1]))
+            else:
+                y_values_2.append(-float(s[1][1:]))
+        #x_values = [0, 2, 4, 6, 7, 6, 4, 2, 1, 2, 6, 6.5]
+        #y_values = [0, -1, 0, 1, 0, -1, 0, 1, 0, -1, 1, 3]
+        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
+        coords_2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
+        arrow = ComplexArrow.ComplexArrow(
+            coords, Tip.TriangleTip(length = 0.3, width = 0.3, fill_opacity = 1.0),
+            Tip.EllipseTip(
+                length = 0.3, width = 0.3, fill_opacity = 1.0
+                ).set_shift_anchors(-0.5, -0.5))
+        arrow_2 = ComplexArrow.ComplexArrow(coords_2)
+        #self.add(arrow_2)
+        arrow.prepare_to_create_1()
+        #self.play(arrow.get_creating_anim_1().set_run_time(0.1))
+        arrow.prepare_to_create_2()
+        #self.play(arrow.get_creating_anim_2().set_run_time(0.1))
+        arrow.after_create()
+        self.wait(1.0)
+
+    def chapter_1_1(self):
         self.nnn = 0
         def get_start_chain_func():
             n = self.nnn
             self.nnn += 1
             return self.pos_by(x_values[n + 1], y_values[n + 1])
-        intro_text = M.Text("Ну что ж ...")
-        #self.write_text(intro_text)
-        #self.unwrite_text(intro_text)
         x_values = [-6, -4, 0, 4, 6]
         y_values = [3.0, 2.8, 3.0, 2.8, 3.0]
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
@@ -257,7 +373,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.play(M.FadeOut(vgrp_1, run_time = 1.0))
         self.wait(1.0)
 
-    def chapter_1_1(self):
+    def chapter_1_2(self):
         kb_1 = KB.KnowledgeBlock("Осознанность!",
         '''Очень сильный и важный инструмент.''')
         self.create_kb_no_descr(kb_1)
@@ -288,7 +404,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.play(M.MoveToTarget(vgrp_1), kb_1.get_animations_to_play())
         self.wait(1.0)
 
-    def chapter_1_2(self):
+    def chapter_1_3(self):
         self.add(M.NumberPlane())
         text_2 = M.Text("""Любые суждения или мысли кажутся непонятными
 и автоматически бессмысленными,
@@ -331,26 +447,27 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
     def test_1(self):
         self.add(M.NumberPlane())
         tb = TextBlock.TextBlock(
-            """нашими друзьями\nи знакомыми,""").move_to(0.2 * M.UR)
+            """нашими друзьями\nи знакомыми,""").move_to(0.2 * M.UR).rotate(0.05)
         tb2 = TextBlock.TextBlock("""нашими друзьями
         и знакомыми,
         ми друзьями
         ми друзьями
         ми друзьями""")
         self.add(tb, tb2)
-        x_values_1 = [0.0, 2.7, 2.7, 2.7]#, 0.0, -2.7, -2.7, -2.7, 0.0]
-        y_values_1 = [2.7, 2.7, 0.0, -2.7]#, -2.7, -2.7, 0.0, 2.7, 2.7]
+        x_values_1 = [0.0, 2.7, 2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0]
+        y_values_1 = [2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0, 2.7, 2.7]
         coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
         def get_arr():
             b = tb.get_arrow_to_tb(
                 tb2, TextBlock.Directions.LEFT, TextBlock.Directions.RIGHT,
                 1.0, 1.0, 1, 1, 1, 1)[0]
             vg = b
-            '''vg = M.VGroup()
+            vg = M.VGroup()
             a = []
             for dot in b.get_anchors():
-                a.append(M.Dot(dot, radius = 0.04, color = "#1312F5"))
-            vg = M.VGroup(b, *a)'''
+                a.append(M.Dot(dot, radius = 0.04,
+                               color = "#1312F5", fill_opacity = 0.5))
+            vg = M.VGroup(b, *a)
             return vg
         arrow = M.always_redraw(get_arr)
         self.add(arrow)
@@ -393,3 +510,64 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
                 diff_angle = angle - self.previous_angle
                 self.previous_angle = angle
                 self.mobject.rotate(diff_angle)
+
+class ChangingCameraWidthAndRestore(M.MovingCameraScene):
+        def construct(self):
+            text = M.Text("Hello World").set_color(M.BLUE)
+            self.add(text)
+            self.camera.frame.save_state()
+            self.play(self.camera.frame.animate.set(width=text.width * 1.2))
+            self.wait(0.3)
+            self.play(M.Restore(self.camera.frame))
+
+class MovingAndZoomingCamera(M.MovingCameraScene):
+        def construct(self):
+            s = M.Square(color=M.BLUE, fill_opacity=0.5).move_to(2 * M.LEFT)
+            t = M.Triangle(color=M.YELLOW, fill_opacity=0.5).move_to(2 * M.RIGHT)
+            self.add(s, t)
+            self.play(self.camera.frame.animate.move_to(s).set(width=s.width*2))
+            self.wait(0.3)
+            self.play(self.camera.frame.animate.move_to(t).set(width=t.width*2))
+            self.play(self.camera.frame.animate.move_to(M.ORIGIN).set(width=14))
+
+class MovingCameraOnGraph(M.MovingCameraScene):
+        def construct(self):
+            self.camera.frame.save_state()
+            ax = M.Axes(x_range=[-1, 10], y_range=[-1, 10])
+            graph = ax.plot(lambda x: M.np.sin(x), color=M.WHITE, x_range=[0, 3 * M.PI])
+            dot_1 = M.Dot(ax.i2gp(graph.t_min, graph))
+            dot_2 = M.Dot(ax.i2gp(graph.t_max, graph))
+            self.add(ax, graph, dot_1, dot_2)
+            self.play(self.camera.frame.animate.scale(0.5).move_to(dot_1))
+            self.play(self.camera.frame.animate.move_to(dot_2))
+            self.play(M.Restore(self.camera.frame))
+            self.wait()
+
+class ChangingZoomScale(M.ZoomedScene):
+        def __init__(self, **kwargs):
+            M.ZoomedScene.__init__(
+                self,
+                zoom_factor=0.3,
+                zoomed_display_height=1,
+                zoomed_display_width=3,
+                image_frame_stroke_width=20,
+                zoomed_camera_config={
+                    "default_frame_stroke_width": 3,
+                },
+                **kwargs
+            )
+
+        def construct(self):
+            dot = M.Dot().set_color(M.GREEN)
+            sq = M.Circle(fill_opacity=1, radius=0.2).next_to(dot, M.RIGHT)
+            self.add(dot, sq)
+            self.wait(1)
+            self.activate_zooming(animate=False)
+            self.wait(1)
+            self.play(dot.animate.shift(M.LEFT * 0.3))
+            self.play(self.zoomed_camera.frame.animate.scale(4))
+            self.play(self.zoomed_camera.frame.animate.shift(0.5 * M.DOWN))
+
+'''
+manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
+'''
