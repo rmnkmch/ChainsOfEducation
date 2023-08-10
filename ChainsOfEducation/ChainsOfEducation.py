@@ -12,7 +12,7 @@ import TextBlock
 FAST_RUN_TIME: float = 0.1
 
 
-class ChainsOfEducation(M.Scene):
+class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
         self.chapter_1_0()
 
@@ -167,145 +167,253 @@ class ChainsOfEducation(M.Scene):
             elif char in lows_2: return - 0.056
         return 0.0
 
+    def dots_by_text(self, text):
+        ret_x: list = []
+        ret_y: list = []
+        for line in text.split('\n'):
+            if len(line) <= 1: continue
+            s = line.split()
+            if s[0][0] != '−': ret_x.append(float(s[0]))
+            else: ret_x.append(-float(s[0][1:]))
+            if s[1][0] != '−': ret_y.append(float(s[1]))
+            else: ret_y.append(-float(s[1][1:]))
+        return (ret_x, ret_y)
+
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
-manim -pql --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
-manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
+manim -pqh --disable_caching -s ChainsOfEducation.py ChainsOfEducation
+manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
     """
 
     def chapter_1_0(self):
-        self.add(M.NumberPlane())
-        sv = M.SVGMobject(
-            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\logo_1",
-            stroke_color="#FFFFFF").scale(3.0)
-        self.play(M.Write(sv, run_time = 3.0))
+        #self.add(M.NumberPlane())
         intro_text = M.Text("Ну что ж ...")
         #self.play(M.Write(intro_text, run_time = 1.0))
         #self.wait()
         #self.play(M.Unwrite(intro_text, run_time = 1.0, reverse = False))
         #self.wait()
-        natp = '''0.016 0
-0.42 0.136
+        natp = '''−0.05 0.04
+0.36 0.136
 0.78 0.12
 1.084 −0.09
 1.42 −0.32
-1.83 −0.46
-2.31 −0.476
-2.694 −0.21
+1.9 −0.46
+2.36 −0.47
+2.76 −0.224
 3.076 0.094
-3.466 0.373
-3.96 0.36
-4.31 0.2
-4.43 −0.184
+3.46 0.406
+1
+3.985 0.44
+4.36 0.226
+4.4 −0.184
 4.155 −0.423
-3.67 −0.42
-3.255 −0.17
-2.81 0.133
-2.415 0.34
-1.965 0.476
+3.62 −0.38
+3.23 −0.19
+2.81 0.15
+2.45 0.33
+2.01 0.43
 1.586 0.31
 1.386 −0.03
 1.62 −0.447
-1.98 −0.725
+1.93 −0.7
 2.17 −0.97
 2.17 −1.294
-1.96 −1.61
+1.974 −1.587
 1.617 −1.76
-1.2 −1.684
-0.79 −1.5
-0.316 −1.6
+1.16 −1.725
+0.74 −1.647
+0.286 −1.704
 −0.07 −1.86
-−0.48 −2.03
+−0.51 −1.97
 −0.93 −1.873
 −1.383 −1.673
-−1.73 −1.544
-−2.15 −1.357
-−2.567 −1.47
-−3.183 −1.437
-−3.58 −1.673
-−3.96 −1.84
-−4.53 −1.945
-−5.016 −2.07
-−5.51 −2.047
-−6 −2.015
-−6.51 −2.01
-−6.68 −1.91
-−5.836 −1.726
-−5.475 −1.61
-−5.945 −1.36
-−6.32 −1.29
-−6.69 −1.16
-−6.3 −1.04
-−5.83 −1.066
-−5.43 −0.767
-−5.445 −0.507
-−5.34 −0.103
-−5.49 0.295
-−5.67 0.58
-−6.01 1
-−6.055 1.463
-−5.5 1.745
--4.58 1.803'''
-        natp_2 = '''−8.006 0.524
-−7.22 0.26
-−6.52 0.05
-−6.3 −0.233
-−6.08 −0.454
-−5.85 −0.68
-−6.15 −0.813
-−6.6 −0.907
-−7.1 −1.15
-−6.576 −1.39
-−6.09 −1.56
-−6.47 −1.68
-−7.24 −1.945
-−6.74 −2.107
-−6.22 −2.206
-−5.68 −2.48
-−5.36 −2.86
-−5.13 −3.36'''
+−1.81 −1.52
+−2.22 −1.406
+−2.734 −1.407
+−3.2 −1.55
+−3.61 −1.726
+−3.94 −1.95
+−4.27 −2.223
+−4.464 −2.536
+−4.794 −2.797
+−5.25 −2.994
+−5.74 −3.106
+−6.23 −3.14
+−6.73 −3.13
+−7.35 −3.175
+−8 −3.275
+−8.745 −3.236
+−9.37 −3.05
+−10.2 −2.92
+−10.88 −2.93
+−12.32 −3.14
+−13.38 −3.4
+−14.51 −3.5
+−15.98 −3.37
+−17.25 −3.13
+−19.17 −3.18
+−17.57 −2.41
+−15.32 −2.43
+−13.36 −2.45
+−11.4 −2.26
+−9.825 −2.146
+−9.24 −2.08
+−8.63 −1.89
+−8.13 −1.67
+−7.74 −1.413
+−8 −1.16
+−8.57 −1.09
+−9.13 −1.02
+−9.725 −0.963
+−10.35 −0.51
+−10 −0.33
+−9.19 −0.275
+−8.43 −0.304
+−7.76 0
+−7.24 0.41
+−6.87 1.05
+−6.7 1.84
+−6.53 2.71
+−6.24 3.38
+−5.74 3.955
+−5.1 4.215
+−4.22 4.26
+−3.18 4.3
+−2.3 4.88
+−1.43 5.45
+−0.85 6.5
+−0.07 7.46
+0.72 8.09
+1.74 8
+2.36 7.29
+3.08 6.75
+3.98 6.55
+5.22 6.73
+6.67 6.73
+7.96 6.75
+9.14 6.86
+10.34 7.17
+11.82 7.9
+13.41 7.76
+14.63 6.03
+15.55 2.48
+16.7 −1.52
+17.93 −3.76
+19.02 −4.69
+20.43 −5
+22 −4.6
+23.68 −3.77
+25.23 −2.6
+27.18 −2.05
+29.35 −1.66
+32.92 −1.5
+37.2 −0.85
+51.53 0.41'''
+        natp_2 = '''−25.05 6.3
+−16.56 4.52
+−14.38 3.9
+−9.33 1.59
+−8.18 0.93
+−8.72 0.11
+−10.31 −0.01
+−11.3 −0.4
+−9.76 −1.19
+−8.43 −1.37
+−9.24 −1.8
+−10.58 −1.79
+−12.17 −1.73
+−14.23 −2.06
+−16.14 −1.83
+−19.42 −2.32
+−20.27 −3.78
+−17.8 −3.52
+−15.66 −3.75
+−14.11 −3.85
+−12.7 −3.61
+−11.37 −3.28
+−10.05 −3.3
+−8.97 −3.64
+−8.33 −4.27
+−7.95 −6.64
+−8.25 −11.47
+−14.35 −14.24
+−23.5 −14.25
+−30.2 −10.92
+−32.7 −2.8
+−32.58 3.6
+−27.84 5.93
+−26.12 6.04'''
+        natp_3 ='''−0.01 0.09
+1.12 −0.35
+2.54 −0.74
+4.115 −0.22
+4.81 0.764
+3.68 1.176
+2.62 1.205
+1.53 0.48
+3.18 −0.766
+3.88 −1.39
+4.09 −1.81
+4.27 −2.23
+3.62 −2.745
+2.55 −2.55
+1.05 −2.24
+−0.48 −2.4
+−2.07 −2.25
+−3.47 −2.48
+−4.66 −3.54
+−5.93 −3.8
+−6.89 −3.78
+−7.81 −3.64
+−8.78 −4.06
+−9.82 −3.99
+−10.87 −3.94
+−11.69 −4.04
+3
+−12.6 −4.15
+−13.71 −4.56
+−15.19 −4.57
+−16.55 −4.58
+−16.13 −3.13
+−8.02 −2.3
+−7.74 −0.42
+−6.49 4.55
+−2.6 5.86
+6.66 7.54
+14.78 9.18
+20.13 −4.21
+23.3 −2.3
+29.6 −0.68
+34.64 −0.36'''
 
         x_values = []
         y_values = []
         x_values_2 = []
         y_values_2 = []
-        for line in natp.split('\n'):
-            s = line.split()
-            if s[0][0] != '−':
-                x_values.append(float(s[0]))
-            else:
-                x_values.append(-float(s[0][1:]))
-            if s[1][0] != '−':
-                y_values.append(float(s[1]))
-            else:
-                y_values.append(-float(s[1][1:]))
-        for line in natp_2.split('\n'):
-            s = line.split()
-            if s[0][0] != '−':
-                x_values_2.append(float(s[0]))
-            else:
-                x_values_2.append(-float(s[0][1:]))
-            if s[1][0] != '−':
-                y_values_2.append(float(s[1]))
-            else:
-                y_values_2.append(-float(s[1][1:]))
-        #x_values = [0, 2, 4, 6, 7, 6, 4, 2, 1, 2, 6, 6.5]
-        #y_values = [0, -1, 0, 1, 0, -1, 0, 1, 0, -1, 1, 3]
+        x_values_3 = []
+        y_values_3 = []
+        x_values, y_values = self.dots_by_text(natp)
+        x_values_2, y_values_2 = self.dots_by_text(natp_2)
+        x_values_3, y_values_3 = self.dots_by_text(natp_3)
         coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
         coords_2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
+        coords_3 = [(x, y, 0.0) for x, y in zip(x_values_3, y_values_3)]
         arrow = ComplexArrow.ComplexArrow(
             coords, Tip.TriangleTip(length = 0.3, width = 0.3, fill_opacity = 1.0),
             Tip.EllipseTip(
                 length = 0.3, width = 0.3, fill_opacity = 1.0
                 ).set_shift_anchors(-0.5, -0.5))
-        arrow_2 = ComplexArrow.ComplexArrow(coords_2)
-        #self.add(arrow_2)
+        arrow_2 = ComplexArrow.ComplexArrow(coords_2, fill_color = "#987791", fill_opacity = 0.5)
+        arrow_3 = ComplexArrow.ComplexArrow(coords_3)
+        self.add(arrow_2)
         arrow.prepare_to_create_1()
-        #self.play(arrow.get_creating_anim_1().set_run_time(0.1))
+        anim_3 = M.MoveAlongPath(self.camera.frame.set(width = 40.0, height = 25.0), arrow_3, run_time = 10.0, rate_func = M.linear)
+        self.play(arrow.get_creating_anim_1().set_run_time(1.0))
         arrow.prepare_to_create_2()
-        #self.play(arrow.get_creating_anim_2().set_run_time(0.1))
+        anims = M.AnimationGroup(arrow.get_creating_anim_2().set_run_time(15.0), anim_3)
+        self.play(anims)
         arrow.after_create()
         self.wait(1.0)
 
@@ -519,16 +627,6 @@ class ChangingCameraWidthAndRestore(M.MovingCameraScene):
             self.play(self.camera.frame.animate.set(width=text.width * 1.2))
             self.wait(0.3)
             self.play(M.Restore(self.camera.frame))
-
-class MovingAndZoomingCamera(M.MovingCameraScene):
-        def construct(self):
-            s = M.Square(color=M.BLUE, fill_opacity=0.5).move_to(2 * M.LEFT)
-            t = M.Triangle(color=M.YELLOW, fill_opacity=0.5).move_to(2 * M.RIGHT)
-            self.add(s, t)
-            self.play(self.camera.frame.animate.move_to(s).set(width=s.width*2))
-            self.wait(0.3)
-            self.play(self.camera.frame.animate.move_to(t).set(width=t.width*2))
-            self.play(self.camera.frame.animate.move_to(M.ORIGIN).set(width=14))
 
 class MovingCameraOnGraph(M.MovingCameraScene):
         def construct(self):
