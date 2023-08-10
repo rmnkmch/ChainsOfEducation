@@ -4,7 +4,7 @@ import KnowledgeBlock as KB
 import random
 import SQLDatabase
 import ComplexArrow
-import TopicBlock
+import Topic
 import Tip
 import TextBlock
 
@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
-        self.chapter_1_0()
+        self.chapter_1_1()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -409,7 +409,8 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         arrow_3 = ComplexArrow.ComplexArrow(coords_3)
         self.add(arrow_2)
         arrow.prepare_to_create_1()
-        anim_3 = M.MoveAlongPath(self.camera.frame.set(width = 40.0, height = 25.0), arrow_3, run_time = 10.0, rate_func = M.linear)
+        anim_3 = M.MoveAlongPath(self.camera.frame.set(width = 40.0, height = 25.0),
+                                 arrow_3, run_time = 10.0, rate_func = M.linear)
         self.play(arrow.get_creating_anim_1().set_run_time(1.0))
         arrow.prepare_to_create_2()
         anims = M.AnimationGroup(arrow.get_creating_anim_2().set_run_time(15.0), anim_3)
@@ -418,67 +419,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def chapter_1_1(self):
-        self.nnn = 0
-        def get_start_chain_func():
-            n = self.nnn
-            self.nnn += 1
-            return self.pos_by(x_values[n + 1], y_values[n + 1])
-        x_values = [-6, -4, 0, 4, 6]
-        y_values = [3.0, 2.8, 3.0, 2.8, 3.0]
-        coords = [(x, y, 0.0) for x, y in zip(x_values, y_values)]
-        arrow = ComplexArrow.ComplexArrow(coords, Tip.EllipseTip())
-        arrow.prepare_to_create_1()
-        self.play(arrow.get_creating_anim_1())
-        arrow.prepare_to_create_2()
-        anim_1 = arrow.get_creating_anim_2().set_run_time(2.0)
-        tb_1 = TopicBlock.TopicBlock(
-            "Осознание",
-            ["Что такое осознанность?",
-             "Несколько\nуниверсальных методов"]).move_to(
-                 self.pos_by(- 4.0, 1.9)).scale(0.3)
-        tb_1.set_ordinary_chain(get_start_chain_func())
-        tb_2 = TopicBlock.TopicBlock("???").move_to(
-            self.pos_by(0.0, 1.9)).scale(0.3)
-        tb_2.set_ordinary_chain(get_start_chain_func())
-        tb_3 = TopicBlock.TopicBlock("???").move_to(
-            self.pos_by(4.0, 1.9)).scale(0.3)
-        tb_3.set_ordinary_chain(get_start_chain_func())
-        grp = [tb_1, tb_2, tb_3]
-        anims = []
-        for topic_block in grp:
-            topic_block.prepare_to_create()
-            anims.append(topic_block.get_creating_anim())
-        anims = M.AnimationGroup(*anims, lag_ratio = 0.1)
-        played = M.AnimationGroup(anim_1, anims, lag_ratio = 0.3)
-        self.play(played)
-        arrow.after_create()
-        for topic_block in grp:
-            topic_block.after_create()
-        tb_1.generate_target()
-        tb_1.target.move_to(1.5 * M.DOWN + 3.0 * M.LEFT).scale(1.0 / 0.3)
-        tb_1.target.activate()
-        self.play(M.MoveToTarget(tb_1))
-        self.play(tb_1.prepare_to_briefs())
-        for _ in range(len(tb_1.get_all_briefs_dots())):
-            self.play(tb_1.show_next_brief())
-        self.wait()
-        anm = []
-        sft = M.ORIGIN - tb_1.get_center()
-        vgrp_1 = M.VGroup()
 
-        for mob in grp:
-            vgrp_1 = M.VGroup(vgrp_1, mob)
-            mob.prepare_to_destroy()
-            mob.generate_target()
-            mob.target.set_opacity(0.0)
-            anm.append(M.MoveToTarget(mob))
-        vgrp_1 = M.VGroup(vgrp_1, arrow)
-        arrow.generate_target()
-        arrow.target.set_opacity(0.0)
-        anm.append(M.MoveToTarget(arrow))
-        anim_20 = M.AnimationGroup(*anm)
-        vgrp_1.generate_target()
-        self.play(M.FadeOut(vgrp_1, run_time = 1.0))
         self.wait(1.0)
 
     def chapter_1_2(self):

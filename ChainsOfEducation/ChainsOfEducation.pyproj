@@ -62,6 +62,9 @@
     <Compile Include="TitleBlock.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Topic.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TopicBlock.py">
       <SubType>Code</SubType>
     </Compile>

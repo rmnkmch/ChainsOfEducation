@@ -161,7 +161,7 @@ class ComplexArrow(manim.VMobject):
             lag_ratio = 0.5)
 
     def get_creating_anim_2(self):
-        return manim.Write(self)
+        return manim.Create(self)
 
     def after_create(self):
         self.stop_update_tips()
