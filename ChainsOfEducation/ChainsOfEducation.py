@@ -606,7 +606,3 @@ class ChangingZoomScale(M.ZoomedScene):
             self.play(dot.animate.shift(M.LEFT * 0.3))
             self.play(self.zoomed_camera.frame.animate.scale(4))
             self.play(self.zoomed_camera.frame.animate.shift(0.5 * M.DOWN))
-
-'''
-manim -pqh --disable_caching ChainsOfEducation.py ChainsOfEducation
-'''
