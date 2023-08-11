@@ -1,4 +1,4 @@
-import manim
+﻿import manim
 
 
 DEFAULT_WIDTH: float = 8.0

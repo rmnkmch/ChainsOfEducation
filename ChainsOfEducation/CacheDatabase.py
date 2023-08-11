@@ -1,4 +1,4 @@
-class CacheDatabase(object):
+﻿class CacheDatabase(object):
     """Base of cached data"""
 
     def __init__(self) -> None:

@@ -1,4 +1,4 @@
-import manim
+п»їimport manim
 import ComplexArrow
 import Tip
 import TopicBlock
@@ -51,9 +51,9 @@ class Topic(manim.VGroup):
             self.nnn += 1
             return self.topic_line.point_from_proportion(self.nnn * 0.2)
         tb_1 = TopicBlock.TopicBlock(
-            "Осознание",
-            ["Что такое осознанность?",
-             "Несколько\nуниверсальных методов"]
+            "РћСЃРѕР·РЅР°РЅРёРµ",
+            ["Р§С‚Рѕ С‚Р°РєРѕРµ РѕСЃРѕР·РЅР°РЅРЅРѕСЃС‚СЊ?",
+             "РќРµСЃРєРѕР»СЊРєРѕ\nСѓРЅРёРІРµСЂСЃР°Р»СЊРЅС‹С… РјРµС‚РѕРґРѕРІ"]
             ).move_to(self.pos_by(-4.0, 1.9)).scale(0.3)
         tb_1.set_ordinary_chain(get_start_chain_func())
         self.topic_blocks.append(tb_1)

@@ -1,4 +1,4 @@
-import manim
+﻿import manim
 import ComplexArrow
 import enum
 

@@ -19,7 +19,7 @@ class KnowledgeBlock(Block.Block):
         **kwargs):
         super().__init__(
             title = title,
-            fill_color = "#F08A5D",
+            fill_color = "#F18A5D",
             **kwargs)
 
         self.containing_b = ContainingBlock.ContainingBlock()

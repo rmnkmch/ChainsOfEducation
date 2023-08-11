@@ -419,7 +419,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def chapter_1_1(self):
-
+        t = Topic.Topic()
         self.wait(1.0)
 
     def chapter_1_2(self):

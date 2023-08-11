@@ -1,4 +1,4 @@
-import manim
+﻿import manim
 
 
 class Droplet(manim.Circle):

@@ -510,5 +510,5 @@ NGN, найра; Nigerian naira"""
         #TitleBlock.resplit_to_post_kanji(native_kun_on)
         #TitleBlock.resplit_to_menu_kanji(native_kun_on)
         TitleBlock.resplit_to_post_examples(native_examples)
-        #TitleBlock.resplit_to_post_geo(geo)
+        TitleBlock.resplit_to_post_geo(geo)
         #TitleBlock.resplit_to_z_name_geo(geo)

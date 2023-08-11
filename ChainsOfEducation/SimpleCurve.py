@@ -1,4 +1,4 @@
-import manim
+﻿import manim
 
 
 class SimpleCurve(manim.VMobject):
