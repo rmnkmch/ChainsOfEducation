@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
-        self.chapter_1_1()
+        self.chapter_1_2()
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -420,6 +420,14 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 
     def chapter_1_1(self):
         t = Topic.Topic()
+        self.play(t.get_creating_anim_1())
+        self.play(t.get_creating_anim_2())
+        t.after_create()
+        self.play(t.select_topic_block(0))
+        self.wait()
+        for a in t.show_briefs():
+            self.play(a)
+        self.play(t.get_fade_anim(self))
         self.wait(1.0)
 
     def chapter_1_2(self):

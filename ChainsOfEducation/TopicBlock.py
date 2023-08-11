@@ -97,7 +97,7 @@ class TopicBlock(manim.RoundedRectangle):
 
     def show_next_brief(self):
         br = self.get_all_briefs_texts()[self.brief_shown]
-        br.next_to(self.get_all_briefs_dots()[self.brief_shown])
+        br.next_to(self.get_all_briefs_dots()[self.brief_shown].target)
         if self.brief_shown + 1 < len(self.get_all_briefs_texts()):
             self.brief_shown += 1
         return manim.FadeIn(br)
@@ -150,5 +150,3 @@ class TopicBlock(manim.RoundedRectangle):
     def prepare_to_destroy(self):
         self.chain_line.clear_updaters()
         self.add(self.chain_line)
-        for br in self.get_all_briefs_texts():
-            self.add(br)
