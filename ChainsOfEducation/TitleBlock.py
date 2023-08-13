@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 61
+        num = 79
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -355,6 +355,169 @@ class TitleBlock(manim.RoundedRectangle):
 7
  綿糸 	 めんし 
 хлопчатобумажная пряжа"""
+        native_kun_on2 = """空
+8 strokes
+Radical: cave 穴
+Parts: 儿 宀 工 穴
+пустота, небо, вакуум, свободное пространство
+Kun: そら、 あ.く、 あ.き、 あ.ける、 から、 す.く、 す.かす、 むな.しい
+On: クウ
+糸
+6 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 糸
+Variants: 絲
+нить, леска
+Kun: いと
+On: シ
+数
+13 strokes
+Radical: rap 攴 (攵)
+Parts: 夂 女 米 乞 攵
+Variants: 數
+число, цифра, количество, закон
+Kun: かず、 かぞ.える、 しばしば、 せ.める、 わずらわ.しい
+On: スウ、 ス、 サク、 ソク、 シュ
+多
+6 strokes
+Radical: evening, sunset 夕
+Parts: 夕
+Variants: 夛
+много, часто
+Kun: おお.い、 まさ.に、 まさ.る
+On: タ
+少
+4 strokes
+Radical: small, insignificant 小
+Parts: ノ 小
+немного, мало
+Kun: すく.ない、 すこ.し
+On: ショウ
+万
+3 strokes
+Radical: one 一
+Parts: 一 ｜ ノ
+Variants: 萬
+десять тысяч, 10000
+Kun: よろず
+On: マン、 バン
+半
+5 strokes
+Radical: ten, complete 十
+Parts: ｜ 二 并 十
+половина, средний
+Kun: なか.ば
+On: ハン
+形
+7 strokes
+Radical: bristle, beard 彡
+Parts: 一 ノ 二 廾 彡
+форма, вид, стиль, облик, образ
+Kun: かた、 -がた、 かたち、 なり
+On: ケイ、 ギョウ
+太
+4 strokes
+Radical: big, very 大
+Parts: 丶 大
+полнеть, толстый
+Kun: ふと.い、 ふと.る
+On: タイ、 タ
+細
+11 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 田 糸
+утонченный, похудеть, сужение, стройный, подробный, точный
+Kun: ほそ.い、 ほそ.る、 こま.か、 こま.かい
+On: サイ
+広
+5 strokes
+Radical: house on cliff 广
+Parts: 厶 广
+Variants: 廣
+широкий, обширный, просторный
+Kun: ひろ.い、 ひろ.まる、 ひろ.める、 ひろ.がる、 ひろ.げる
+On: コウ
+長
+8 strokes
+Radical: long, grow 長 (镸)
+Parts: 長
+Variants: 兏 镸
+длинный, лидер, превосходящий, старший
+Kun: なが.い、 おさ
+On: チョウ
+点
+9 strokes
+Radical: fire 火 (灬)
+Parts: 卜 口 杰
+Variants: 點
+пятно, точка, отметка, частичка
+Kun: つ.ける、 つ.く、 た.てる、 さ.す、 とぼ.す、 とも.す、 ぼち
+On: テン
+丸
+3 strokes
+Radical: dot 丶
+Parts: 丶 九
+круглый, таблетки, свернуть
+Kun: まる、 まる.める、 まる.い
+On: ガン
+交
+6 strokes
+Radical: lid 亠
+Parts: 亠 父
+смешивать, сочетать, объединение, пересекать
+Kun: まじ.わる、 まじ.える、 ま.じる、 まじ.る、 ま.ざる、 ま.ぜる、 -か.う、 か.わす、 かわ.す、 こもごも
+On: コウ
+光
+6 strokes
+Radical: legs 儿
+Parts: 一 儿 尚
+Variants: 灮 炗
+луч, свет, сверкать
+Kun: ひか.る、 ひかり
+On: コウ
+角
+7 strokes
+Radical: horn 角
+Parts: ｜ 勹 月 角
+угол, площадь
+Kun: かど、 つの
+On: カク
+計
+9 strokes
+Radical: speech 言 (訁)
+Parts: 十 言
+спланировать, измерять, замышлять
+Kun: はか.る、 はか.らう
+On: ケイ
+直
+8 strokes
+Radical: eye 目
+Parts: 一 ｜ 十 目
+прямой, откровенность, честный, исправить, чинить
+Kun: ただ.ちに、 なお.す、 -なお.す、 なお.る、 なお.き、 す.ぐ
+On: チョク、 ジキ、 ジカ
+線
+15 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 水 白 糸
+Variants: 綫
+линия, дорожка
+Kun: すじ
+On: セン
+矢
+5 strokes
+Radical: arrow 矢
+Parts: 一 ノ 大 矢 乞
+дротик, стрела
+Kun: や
+On: シ
+弱
+10 strokes
+Radical: bow 弓
+Parts: 冫 弓
+слабый, хилый
+Kun: よわ.い、 よわ.る、 よわ.まる、 よわ.める
+On: ジャク"""
         native_kun_on = """校
 10 strokes
 Radical: tree 木
@@ -482,22 +645,7 @@ Radical: jade (king) 玉 (王)
 Parts: 丶 王
 драгоценность, шарик, бусинка
 Kun: たま、 たま-、 -だま
-On: ギョク
-空
-8 strokes
-Radical: cave 穴
-Parts: 儿 宀 工 穴
-пустота, небо, вакуум, свободное пространство
-Kun: そら、 あ.く、 あ.き、 あ.ける、 から、 す.く、 す.かす、 むな.しい
-On: クウ
-糸
-6 strokes
-Radical: silk 糸 (糹)
-Parts: 小 幺 糸
-Variants: 絲
-нить, леска
-Kun: いと
-On: シ"""
+On: ギョク"""
         geo = """Нигерия; Федеративная Республика Нигерия
 государство в Западной Африке.
 Nigeria; Federal Republic of Nigeria
@@ -507,8 +655,8 @@ NGN, найра; Nigerian naira"""
 
         #TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         #TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        #TitleBlock.resplit_to_post_kanji(native_kun_on)
+        TitleBlock.resplit_to_post_kanji(native_kun_on2)
         #TitleBlock.resplit_to_menu_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_examples(native_examples)
-        TitleBlock.resplit_to_post_geo(geo)
+        #TitleBlock.resplit_to_post_examples(native_examples)
+        #TitleBlock.resplit_to_post_geo(geo)
         #TitleBlock.resplit_to_z_name_geo(geo)
