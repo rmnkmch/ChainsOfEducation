@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
-        self.chapter_1_2()
+        self.test_1()
         #from TitleBlock import TitleBlock
         #TitleBlock.Jpn_Geo()
 
@@ -504,8 +504,13 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(5.0)
 
     def test_1(self):
-        self.add(M.NumberPlane())
-        tb = TextBlock.TextBlock(
+        #self.add(M.NumberPlane())
+        sv = M.SVGMobject(
+            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\leaf_1",
+            stroke_color = "#FFFFFF").scale(2.7)
+        self.play(M.Write(sv, run_time = 5.0))
+        
+        '''tb = TextBlock.TextBlock(
             """нашими друзьями\nи знакомыми,""").move_to(0.2 * M.UR).rotate(0.05)
         tb2 = TextBlock.TextBlock("""нашими друзьями
         и знакомыми,
@@ -532,7 +537,7 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.add(arrow)
         self.play(M.MoveAlongPath(tb2, ComplexArrow.ComplexArrow(coords),
                                   run_time = 1.0, rate_func = M.linear))
-        #self.add(M.ThreeDScene())
+        #self.add(M.ThreeDScene())'''
         self.wait(1.0)
 
     class MyMoveAlongPath(M.Animation):
