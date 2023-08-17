@@ -506,8 +506,8 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
     def test_1(self):
         #self.add(M.NumberPlane())
         sv = M.SVGMobject(
-            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\leaf_1",
-            stroke_color = "#FFFFFF").scale(2.7)
+            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\tree_1",
+            stroke_color = "#FFFFFF").scale(2.5)
         self.play(M.Write(sv, run_time = 5.0))
         
         '''tb = TextBlock.TextBlock(
