@@ -14,7 +14,7 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
-        self.test_1()
+        self.chapter_1_2()
         #from TitleBlock import TitleBlock
         #TitleBlock.Jpn_Geo()
 
@@ -189,144 +189,160 @@ manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
     """
 
-    def chapter_1_0(self):
-        #self.add(M.NumberPlane())
+    def chapter_1_000(self):
+        self.wait(1.0)
+        logo = M.SVGMobject(
+            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\logo_1",
+            stroke_color = "#FFFFFF").scale(2.5)
+        self.play(M.Write(logo, run_time = 5.0))
+        self.play(M.Unwrite(logo, run_time = 5.0, reverse = False))
+        self.wait(1.0)
+
+    def chapter_1_00(self):
+        self.wait()
         intro_text = M.Text("Ну что ж ...")
-        #self.play(M.Write(intro_text, run_time = 1.0))
-        #self.wait()
-        #self.play(M.Unwrite(intro_text, run_time = 1.0, reverse = False))
-        #self.wait()
-        natp = '''−0.05 0.04
-0.36 0.136
-0.78 0.12
+        self.play(M.Write(intro_text, run_time = 3.0))
+        self.wait()
+        self.play(M.Unwrite(intro_text, run_time = 3.0, reverse = False))
+        self.wait()
+
+    def chapter_1_0(self):
+        natp = '''0.0 0.0
+0.344 0.153
+0.77 0.11
 1.084 −0.09
-1.42 −0.32
-1.9 −0.46
-2.36 −0.47
+1.453 −0.33
+1.916 −0.46
+2.38 −0.46
 2.76 −0.224
-3.076 0.094
-3.46 0.406
+3.092 0.12
+3.48 0.415
 1
-3.985 0.44
-4.36 0.226
-4.4 −0.184
-4.155 −0.423
-3.62 −0.38
-3.23 −0.19
-2.81 0.15
-2.45 0.33
-2.01 0.43
-1.586 0.31
-1.386 −0.03
-1.62 −0.447
-1.93 −0.7
-2.17 −0.97
-2.17 −1.294
-1.974 −1.587
-1.617 −1.76
-1.16 −1.725
+3.965 0.444
+4.356 0.217
+4.416 −0.163
+4.073 −0.43
+3.624 −0.397
+3.234 −0.19
+2.806 0.15
+2.45 0.347
+2.01 0.44
+1.594 0.323
+1.404 −0.07
+1.632 −0.447
+1.926 −0.7
+2.16 −0.987
+2.12 −1.354
+1.954 −1.626
+1.605 −1.77
+1.164 −1.72
 0.74 −1.647
-0.286 −1.704
-−0.07 −1.86
-−0.51 −1.97
-−0.93 −1.873
-−1.383 −1.673
-−1.81 −1.52
-−2.22 −1.406
-−2.734 −1.407
-−3.2 −1.55
-−3.61 −1.726
-−3.94 −1.95
-−4.27 −2.223
-−4.464 −2.536
-−4.794 −2.797
-−5.25 −2.994
-−5.74 −3.106
-−6.23 −3.14
-−6.73 −3.13
-−7.35 −3.175
-−8 −3.275
+0.286 −1.71
+−0.074 −1.864
+−0.47 −1.97
+−0.91 −2.01
+−1.363 −2.026
+−1.757 −2.055
+−2.196 −2.06
+−2.62 −2.084
+−3.03 −2.16
+−3.406 −2.287
+−3.776 −2.39
+−4.13 −2.51
+−4.47 −2.63
+−4.806 −2.823
+−5.262 −3.03
+−5.71 −3.23
+−6.303 −3.417
+−6.855 −3.546
+−7.56 −3.596
+−8.25 −3.42
 −8.745 −3.236
 −9.37 −3.05
 −10.2 −2.92
 −10.88 −2.93
-−12.32 −3.14
+−12.3 −3.13
 −13.38 −3.4
-−14.51 −3.5
-−15.98 −3.37
-−17.25 −3.13
-−19.17 −3.18
-−17.57 −2.41
-−15.32 −2.43
-−13.36 −2.45
+−14.63 −3.51
+−15.94 −3.39
+−17.16 −3.25
+−18.34 −3.26
+−19.41 −3.44
+−19.02 −2.69
+−17.53 −2.45
+−15.76 −2.48
+−14.21 −2.43
+−12.68 −2.35
 −11.4 −2.26
-−9.825 −2.146
-−9.24 −2.08
-−8.63 −1.89
-−8.13 −1.67
-−7.74 −1.413
-−8 −1.16
-−8.57 −1.09
-−9.13 −1.02
-−9.725 −0.963
-−10.35 −0.51
-−10 −0.33
-−9.19 −0.275
-−8.43 −0.304
-−7.76 0
-−7.24 0.41
-−6.87 1.05
-−6.7 1.84
-−6.53 2.71
-−6.24 3.38
-−5.74 3.955
+−10.08 −2.22
+−9.15 −2.17
+−8.47 −2.01
+−8.04 −1.76
+−7.73 −1.42
+−8 −1.07
+−8.54 −1.04
+−9.21 −0.98
+−9.9 −0.82
+−10.59 −0.52
+−9.87 −0.31
+−9.18 −0.23
+−8.49 −0.17
+−7.78 0.13
+−7.41 0.5
+−7.04 1.09
+−6.67 1.8
+−6.52 2.56
+−6.23 3.36
+−5.8 3.89
 −5.1 4.215
 −4.22 4.26
-−3.18 4.3
+−3.11 4.43
 −2.3 4.88
-−1.43 5.45
-−0.85 6.5
-−0.07 7.46
-0.72 8.09
-1.74 8
-2.36 7.29
-3.08 6.75
+−1.62 5.76
+−1.1 6.85
+−0.62 7.89
+0.24 8.88
+1.36 8.52
+2.2 7.7
+3 7
 3.98 6.55
-5.22 6.73
-6.67 6.73
+5.34 6.3
+6.78 6.42
 7.96 6.75
-9.14 6.86
-10.34 7.17
-11.82 7.9
-13.41 7.76
+9.58 7.32
+10.73 8.34
+12.03 9.35
+14.02 9.7
 14.63 6.03
 15.55 2.48
 16.7 −1.52
-17.93 −3.76
-19.02 −4.69
+17.5 −3.35
+18.78 −4.55
 20.43 −5
 22 −4.6
 23.68 −3.77
-25.23 −2.6
+25.17 −2.76
 27.18 −2.05
-29.35 −1.66
-32.92 −1.5
+29.8 −1.45
+33.17 −1.03
 37.2 −0.85
-51.53 0.41'''
-        natp_2 = '''−25.05 6.3
-−16.56 4.52
-−14.38 3.9
-−9.33 1.59
-−8.18 0.93
-−8.72 0.11
-−10.31 −0.01
-−11.3 −0.4
-−9.76 −1.19
-−8.43 −1.37
+45.4 −0.77
+51.1 −1.06
+55.05 −1.56'''
+        natp_2 = '''−28.27 9.16
+−22.34 8.8
+−15.17 6.8
+−10.8 4.94
+−8.53 2.6
+−8.46 0.67
+−10.35 0.21
+−11.38 −0.48
+−9.81 −1.23
+−8.43 −1.45
 −9.24 −1.8
 −10.58 −1.79
 −12.17 −1.73
-−14.23 −2.06
+−13.78 −2.04
 −16.14 −1.83
 −19.42 −2.32
 −20.27 −3.78
@@ -337,59 +353,48 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
 −11.37 −3.28
 −10.05 −3.3
 −8.97 −3.64
-−8.33 −4.27
-−7.95 −6.64
-−8.25 −11.47
-−14.35 −14.24
-−23.5 −14.25
-−30.2 −10.92
-−32.7 −2.8
-−32.58 3.6
-−27.84 5.93
-−26.12 6.04'''
-        natp_3 ='''−0.01 0.09
-1.12 −0.35
-2.54 −0.74
-4.115 −0.22
-4.81 0.764
-3.68 1.176
-2.62 1.205
-1.53 0.48
-3.18 −0.766
-3.88 −1.39
-4.09 −1.81
-4.27 −2.23
-3.62 −2.745
-2.55 −2.55
-1.05 −2.24
-−0.48 −2.4
-−2.07 −2.25
-−3.47 −2.48
-−4.66 −3.54
-−5.93 −3.8
-−6.89 −3.78
-−7.81 −3.64
-−8.78 −4.06
-−9.82 −3.99
-−10.87 −3.94
-−11.69 −4.04
+−7.98 −4.48
+−6.33 −8.76
+−8.3 −13.95
+−12.83 −15.46
+−21.15 −15.55
+−29.62 −13.1
+−34.18 −7.5
+−34.82 −0.65
+−33.34 5.15
+−29.7 9.07'''
+        natp_3 ='''0.0 0.0
+0.246 −0.05
+0.47 −0.15
+1.01 −0.324
+1.59 −0.403
+2.59 −0.643
+3.21 −0.84
+3.83 −1.48
+3.9 −2.48
+2.92 −2.8
+1.14 −2.94
+−1.49 −3.1
+−5.3 −3.41
+−9.38 −3.63
+−13.5 −4.08
+−15.12 −4.04
+−15.44 −2.65
+−11.72 −2.06
+−6.95 −0.06
+−5.5 3.16
+−1.15 7.62
+1.17 8.03
+8.35 7.38
+14.54 10.47
+19.38 −3.51
+22.5 −3.38
 3
-−12.6 −4.15
-−13.71 −4.56
-−15.19 −4.57
-−16.55 −4.58
-−16.13 −3.13
-−8.02 −2.3
-−7.74 −0.42
-−6.49 4.55
-−2.6 5.86
-6.66 7.54
-14.78 9.18
-20.13 −4.21
-23.3 −2.3
-29.6 −0.68
-34.64 −0.36'''
-
+31.85 −0.24
+38.13 −0.01
+39.7 0.09
+40.73 0.16
+41.38 0.16'''
         x_values = []
         y_values = []
         x_values_2 = []
@@ -403,21 +408,40 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         coords_2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
         coords_3 = [(x, y, 0.0) for x, y in zip(x_values_3, y_values_3)]
         arrow = ComplexArrow.ComplexArrow(
-            coords, Tip.TriangleTip(length = 0.3, width = 0.3, fill_opacity = 1.0),
+            coords,
+            Tip.TriangleTip(length = 0.3, width = 0.3, fill_opacity = 1.0),
             Tip.EllipseTip(
                 length = 0.3, width = 0.3, fill_opacity = 1.0
                 ).set_shift_anchors(-0.5, -0.5))
-        arrow_2 = ComplexArrow.ComplexArrow(coords_2, fill_color = "#987791", fill_opacity = 0.5)
+        arrow_2 = ComplexArrow.ComplexArrow(
+            coords_2, fill_color = "#987791", fill_opacity = 0.5)
         arrow_3 = ComplexArrow.ComplexArrow(coords_3)
-        self.add(arrow_2)
+        text_1 = M.Text("человеческие достижения", font_size = 52.0
+                        ).move_to(M.DOWN * 4.8 + 14.8 * M.LEFT)
+        text_2 = M.Text("сложнейшие\nалгоритмы", font_size = 52.0
+                        ).move_to(M.UP * 10.1 + 1.0 * M.RIGHT)
+        text_3 = M.Text("новые\nсущности", font_size = 52.0
+                        ).move_to(M.UP * 10.9 + 15.6 * M.RIGHT)
+        text_4 = M.Text("несуществующие\nзакономерности", font_size = 52.0
+                        ).move_to(M.DOWN * 5.9 + 20.9 * M.RIGHT)
+        self.add(arrow_2, text_1, text_2, text_3, text_4)
         arrow.prepare_to_create_1()
-        anim_3 = M.MoveAlongPath(self.camera.frame.set(width = 40.0, height = 25.0),
-                                 arrow_3, run_time = 10.0, rate_func = M.linear)
-        self.play(arrow.get_creating_anim_1().set_run_time(1.0))
+        #self.camera.frame.set(width = 20.0, height = 12.0)
+        anim: list = []
+        while not arrow_3.is_created():
+            anim.append(M.MoveAlongPath(
+                self.camera.frame,
+                arrow_3.get_next_curves(1), run_time = 1.0,
+                rate_func = M.linear))
+        anim_5 = M.Succession(*anim)
+        self.play(arrow.get_creating_anim_1().set_run_time(3.0))
         arrow.prepare_to_create_2()
-        anims = M.AnimationGroup(arrow.get_creating_anim_2().set_run_time(15.0), anim_3)
+        anims = M.AnimationGroup(
+            arrow.get_creating_anim_2().set_run_time(
+                28.0).set_rate_func(lambda t: M.smooth(t, 4.0)), anim_5)
         self.play(anims)
         arrow.after_create()
+        self.play(M.FadeOut(arrow))
         self.wait(1.0)
 
     def chapter_1_1(self):
@@ -429,79 +453,23 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait()
         for a in t.show_briefs():
             self.play(a)
+            self.wait(0.5)
+        self.wait(1.9)
         self.play(t.get_fade_anim(self))
         self.wait(1.0)
 
     def chapter_1_2(self):
-        kb_1 = KB.KnowledgeBlock("Осознанность!",
-        '''Очень сильный и важный инструмент.''')
+        kb_1 = KB.KnowledgeBlock("Cущность",
+        '''Любые объекты, вещи, процессы или явления''')
         self.create_kb_no_descr(kb_1)
         self.update_b(kb_1)
         kb_1.generate_target()
         kb_1.target.move_to(M.UP * 2.2).scale(0.5)
         self.update_b(kb_1, False)
-        x_values_2 = [0.0, 0.0, 0.0]
-        y_values_2 = [0.8, -0.1, -1.0]
-        coords_2 = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
-        arrow_2 = ComplexArrow.ComplexArrow(coords_2)
-        arrow_2.prepare_to_create_1()
-        self.play(arrow_2.get_creating_anim_1())
-        arrow_2.prepare_to_create_2()
-        anim_11 = arrow_2.get_creating_anim_2()
-        text_1 = TextBlock.TextBlock(
-            "Осознавая свои принятые решения,\nжелаемое будет достигаться быстрее.",
-        font_size = 30).move_to(2.0 * M.DOWN)
-        anim_12 = M.FadeIn(text_1)
-        anim_14 = M.AnimationGroup(anim_11, anim_12, lag_ratio = 0.5)
-        self.play(anim_14)
-        vgrp_1 = M.VGroup(arrow_2, arrow_2.end_tip, text_1)
-        vgrp_1.generate_target()
-        vgrp_1.target.shift(14.0 * M.LEFT)
-        kb_1.generate_target()
-        kb_1.target.shift(14.0 * M.LEFT)
-        kb_1.make_finish_target()
-        self.play(M.MoveToTarget(vgrp_1), kb_1.get_animations_to_play())
         self.wait(1.0)
 
     def chapter_1_3(self):
-        self.add(M.NumberPlane())
-        text_2 = M.Text("""Любые суждения или мысли кажутся непонятными
-и автоматически бессмысленными,
-если у нас нет достаточного основания
-для их понимания.""", font_size = 30).move_to(2.0 * M.UP)
-        self.play(M.AddTextLetterByLetter(text_2, time_per_char = 0.001))
-        texts_2 = ["Любые суждения или мысли",
-                   "Всё когда-либо",
-                   "сказанное нами,",
-                   "нашими друзьями и знакомыми,",
-                   "и даже незнакомыми,",
-                   "прочитанное в интернете,",
-                   "книгах,",
-                   "газетах,",
-                   "услышанное по радио,",
-                   "придуманное во сне или наяву,",
-                   "увиденное на улице или по телевизору и т.д"]
-        mtexts = [[texts_2[0], self.pos_by(-3.0, 1.0)],
-                  [texts_2[1], self.pos_by(-2.0, 1.0)],
-                  [texts_2[2], self.pos_by(1.0, 1.0)],
-                  [texts_2[3], self.pos_by(-2.0, 0.0)],
-                  [texts_2[4], self.pos_by(3.0, 0.0)],
-                  [texts_2[5], self.pos_by(-2.0, -1.0)],
-                  [texts_2[6], self.pos_by(0.0, -1.0)],
-                  [texts_2[7], self.pos_by(1.0, -1.0)],
-                  [texts_2[8], self.pos_by(3.0, -1.0)],
-                  [texts_2[9], self.pos_by(-1.0, -2.0)],
-                  [texts_2[10], self.pos_by(-1.0, -3.0)]]
-        self.play(M.FadeIn(M.Text(mtexts[0][0]).move_to(mtexts[0][1])))
-        x_values_2 = [- 3, -6, -5]
-        y_values_2 = [2, 2, 1]
-        coords = [(x, y, 0.0) for x, y in zip(x_values_2, y_values_2)]
-        arrow_2 = ComplexArrow.ComplexArrow(coords)
-        self.add(arrow_2.end_tip)
-        self.wait()
-        anim_1 = M.Create(arrow_2)
-        self.play(anim_1)
-        self.wait(5.0)
+        self.wait(1.0)
 
     def test_1(self):
         #self.add(M.NumberPlane())

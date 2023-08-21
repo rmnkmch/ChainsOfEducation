@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 79
+        num = 100
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -172,10 +172,6 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def Jpn_Geo():
-        """
-        #menu
-        #English
-        #Quote"""
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -355,6 +351,157 @@ class TitleBlock(manim.RoundedRectangle):
 7
  綿糸 	 めんし 
 хлопчатобумажная пряжа"""
+        native_kun_on3 = """弱
+10 strokes
+Radical: bow 弓
+Parts: 冫 弓
+слабый, хилый
+Kun: よわ.い、 よわ.る、 よわ.まる、 よわ.める
+On: ジャク
+強
+11 strokes
+Radical: bow 弓
+Parts: 厶 弓 虫
+сильный, мощный
+Kun: つよ.い、 つよ.まる、 つよ.める、 し.いる、 こわ.い
+On: キョウ、 ゴウ
+高
+10 strokes
+Radical: tall 高 (髙)
+Parts: 亠 冂 口 高
+высокий, дорогой
+Kun: たか.い、 たか、 -だか、 たか.まる、 たか.める
+On: コウ
+同
+6 strokes
+Radical: mouth, opening 口
+Parts: 一 冂 口
+равный, одинаковый, такой же, соглашаться
+Kun: おな.じ
+On: ドウ
+親
+16 strokes
+Radical: see 見
+Parts: 亠 并 木 立 見 辛
+родитель, близость, родственник
+Kun: おや、 おや-、 した.しい、 した.しむ
+On: シン
+母
+5 strokes
+Radical: mother, do not 毋 (母, ⺟)
+Parts: 毋 母
+мать
+Kun: はは、 も
+On: ボ
+父
+4 strokes
+Radical: father 父
+Parts: 父
+отец
+Kun: ちち
+On: フ
+姉
+8 strokes
+Radical: woman, female 女
+Parts: 亠 女 巾
+Variants: 姊
+старшая сестра
+Kun: あね、 はは
+On: シ
+兄
+5 strokes
+Radical: legs 儿
+Parts: 儿 口
+старший брат
+Kun: あに
+On: ケイ、 キョウ
+弟
+7 strokes
+Radical: bow 弓
+Parts: ｜ ノ 并 弓
+младший брат
+Kun: おとうと
+On: テイ、 ダイ、 デ
+妹
+8 strokes
+Radical: woman, female 女
+Parts: ｜ 二 亠 ハ 女 木
+младшая сестра
+Kun: いもうと
+On: マイ
+自
+6 strokes
+Radical: self 自
+Parts: 目 自
+сам, лично, самостоятельно
+Kun: みずか.ら、 おの.ずから、 おの.ずと
+On: ジ、 シ
+友
+4 strokes
+Radical: right hand 又
+Parts: 一 ノ 又
+друг
+Kun: とも
+On: ユウ
+体
+7 strokes
+Radical: man, human 人 (亻)
+Parts: 一 化 木
+Variants: 躰 軆 體 骵
+тело, вещество, объект
+Kun: からだ、 かたち
+On: タイ、 テイ
+毛
+4 strokes
+Radical: fur, hair 毛
+Parts: 毛
+мех, шерсть, волос, перо
+Kun: け
+On: モウ
+頭
+16 strokes
+Radical: leaf 頁
+Parts: ハ 并 口 目 豆 貝 頁
+голова, глава
+Kun: あたま、 かしら、 -がしら、 かぶり
+On: トウ、 ズ、 ト
+顔
+18 strokes
+Radical: leaf 頁
+Parts: 亠 ハ 厂 彡 目 立 貝 頁
+Variants: 顏
+лицо, выражение
+Kun: かお
+On: ガン
+首
+9 strokes
+Radical: head 首
+Parts: 并 目 自 首
+шея
+Kun: くび
+On: シュ
+心
+4 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 心
+Variants: 忄
+сердце, ум, душа
+Kun: こころ、 -ごころ
+On: シン
+時
+10 strokes
+Radical: sun, day 日
+Parts: 土 寸 日
+Variants: 旹
+время, час
+Kun: とき、 -どき
+On: ジ
+曜
+18 strokes
+Radical: sun, day 日
+Parts: ヨ 日 隹
+день недели
+On: ヨウ"""
         native_kun_on2 = """空
 8 strokes
 Radical: cave 穴
@@ -510,14 +657,7 @@ Radical: arrow 矢
 Parts: 一 ノ 大 矢 乞
 дротик, стрела
 Kun: や
-On: シ
-弱
-10 strokes
-Radical: bow 弓
-Parts: 冫 弓
-слабый, хилый
-Kun: よわ.い、 よわ.る、 よわ.まる、 よわ.める
-On: ジャク"""
+On: シ"""
         native_kun_on = """校
 10 strokes
 Radical: tree 木
@@ -655,8 +795,8 @@ NGN, найра; Nigerian naira"""
 
         #TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         #TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on2)
-        #TitleBlock.resplit_to_menu_kanji(native_kun_on)
+        #TitleBlock.resplit_to_post_kanji(native_kun_on3)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on3)
         #TitleBlock.resplit_to_post_examples(native_examples)
         #TitleBlock.resplit_to_post_geo(geo)
         #TitleBlock.resplit_to_z_name_geo(geo)

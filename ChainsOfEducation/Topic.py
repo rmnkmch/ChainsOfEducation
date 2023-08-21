@@ -4,8 +4,8 @@ import Tip
 import TopicBlock
 
 
-TOPICS: dict = {"Осознанность": ["Что это такое?",
-                                 "Несколько\nспециальных методов"],
+TOPICS: dict = {"База": ["Базовые принципы",
+                                 "Понятия"],
                 }
 
 DEACTIVATED_PROPORTION: float = 0.3

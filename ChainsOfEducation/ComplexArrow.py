@@ -158,7 +158,7 @@ class ComplexArrow(manim.VMobject):
         return manim.AnimationGroup(
             manim.FadeIn(self.start_tip),
             manim.FadeIn(self.end_tip),
-            lag_ratio = 0.5)
+            lag_ratio = 0.4)
 
     def get_creating_anim_2(self):
         return manim.Create(self)
