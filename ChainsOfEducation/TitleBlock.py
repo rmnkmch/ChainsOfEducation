@@ -64,7 +64,7 @@ class TitleBlock(manim.RoundedRectangle):
     def resplit_to_z_name_geo(text: str):
         lines = text.split("\n")
         num_line = 0
-        num = 63
+        num = 62
         for line in lines:
             if num_line == 2:
                 num_line = 3
@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 100
+        num = 121
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -351,6 +351,224 @@ class TitleBlock(manim.RoundedRectangle):
 7
  綿糸 	 めんし 
 хлопчатобумажная пряжа"""
+        native_kun_on4 = """朝
+12 strokes
+Radical: moon, month 月
+Parts: 十 日 月
+утро, эпоха, период
+Kun: あさ
+On: チョウ
+昼
+9 strokes
+Radical: sun, day 日
+Parts: 一 丶 尸 日
+Variants: 晝
+дневное время, полдень
+Kun: ひる
+On: チュウ
+夜
+8 strokes
+Radical: evening, sunset 夕
+Parts: 亠 化 夕
+ночь, вечер
+Kun: よ、 よる
+On: ヤ
+分
+4 strokes
+Radical: knife, sword 刀 (刂)
+Parts: ハ 刀
+часть, минута, сегмент, доля, понимать, шанс
+Kun: わ.ける、 わ.け、 わ.かれる、 わ.かる、 わ.かつ
+On: ブン、 フン、 ブ
+週
+11 strokes (also 10)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 冂 込 口 土
+неделя
+On: シュウ
+春
+9 strokes
+Radical: sun, day 日
+Parts: 一 二 人 大 日
+Variants: 旾
+весна
+Kun: はる
+On: シュン
+夏
+10 strokes
+Radical: go slowly 夊
+Parts: 一 夂 目 自
+Variants: 夓
+лето
+Kun: なつ
+On: カ、 ガ、 ゲ
+秋
+9 strokes
+Radical: grain 禾
+Parts: 火 禾
+Variants: 穐 龝
+осень
+Kun: あき、 とき
+On: シュウ
+冬
+5 strokes
+Radical: ice 冫
+Parts: 丶 夂 攵
+зима
+Kun: ふゆ
+On: トウ
+今
+4 strokes
+Radical: man, human 人 (亻)
+Parts: 一 个
+сейчас
+Kun: いま
+On: コン、 キン
+新
+13 strokes
+Radical: axe 斤
+Parts: 亠 并 斤 木 立 辛
+новый
+Kun: あたら.しい、 あら.た、 あら-、 にい-
+On: シン
+古
+5 strokes
+Radical: mouth, opening 口
+Parts: 十 口
+старый
+Kun: ふる.い、 ふる-、 -ふる.す
+On: コ
+間
+12 strokes
+Radical: gate 門
+Parts: 日 門
+Variants:
+интервал, пробел
+Kun: あいだ、 ま、 あい
+On: カン、 ケン
+方
+4 strokes
+Radical: square 方
+Parts: 方
+направление, альтернатива
+Kun: かた、 -かた、 -がた
+On: ホウ
+北
+5 strokes
+Radical: spoon 匕
+Parts: 匕 爿
+север
+Kun: きた
+On: ホク
+南
+9 strokes
+Radical: ten, complete 十
+Parts: 并 冂 十 干
+юг
+Kun: みなみ
+On: ナン、 ナ
+東
+8 strokes
+Radical: tree 木
+Parts: 一 ｜ 日 木 田
+восток
+Kun: ひがし
+On: トウ
+西
+6 strokes
+Radical: west 西 (襾, 覀)
+Parts: 西
+Variants:
+запад
+Kun: にし
+On: セイ、 サイ、 ス
+遠
+13 strokes (also 12)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 込 口 土 衣
+далёкий, отдалённый
+Kun: とお.い
+On: エン、 オン
+近
+7 strokes (also 6)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 込 斤
+близкий, ранний, равнозначный
+Kun: ちか.い
+On: キン、 コン
+前
+9 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 一 并 刈 月
+впереди
+Kun: まえ、 -まえ
+On: ゼン
+後
+9 strokes
+Radical: step 彳
+Parts: 夂 幺 彳
+позади
+Kun: のち、 うし.ろ、 うしろ、 あと、 おく.れる
+On: ゴ、 コウ
+内
+4 strokes
+Radical: open country 冂
+Parts: 人 冂
+внутри, между, среди
+Kun: うち
+On: ナイ、 ダイ
+外
+5 strokes
+Radical: evening, sunset 夕
+Parts: 卜 夕
+снаружи
+Kun: そと、 ほか、 はず.す、 はず.れる、 と-
+On: ガイ、 ゲ
+場
+12 strokes
+Radical: earth 土
+Parts: 一 土 日 勿
+Variants: 塲
+местоположение, место
+Kun: ば
+On: ジョウ、 チョウ
+地
+6 strokes
+Radical: earth 土
+Parts: 土 也
+земля, почва
+On: チ、 ジ
+国
+8 strokes
+Radical: enclosure 囗
+Parts: 丶 囗 王
+Variants: 國 圀
+страна
+Kun: くに
+On: コク
+園
+13 strokes
+Radical: enclosure 囗
+Parts: 口 囗 土 衣
+Variants: 薗
+парк, сад, двор, ферма
+Kun: その
+On: エン
+谷
+7 strokes
+Radical: valley 谷
+Parts: 个 ハ 口 谷
+долина
+Kun: たに、 きわ.まる
+On: コク
+野
+11 strokes
+Radical: village, mile 里
+Parts: 亅 矛 里
+Variants: 埜 壄
+равнины, поля
+Kun: の、 の-
+On: ヤ、 ショ"""
         native_kun_on3 = """弱
 10 strokes
 Radical: bow 弓
@@ -791,12 +1009,192 @@ On: ギョク"""
 Nigeria; Federal Republic of Nigeria
 Абуджа; Abuja
 английский; English
-NGN, найра; Nigerian naira"""
+NGN, найра; Nigerian naira
+Республика Конго
+государство в Центральной Африке.
+Republic of the Congo
+Браззавиль; Brazzaville
+французский, китуба; French, Kituba
+XAF, Центральноафриканский франк КФА; Central African CFA franc
+Финляндия; Финляндская Республика
+государство в Северной Европе на восточном побережье Балтийского моря.
+Finland; Republic of Finland
+Хельсинки; Helsinki
+финский, шведский; Finnish, Swedish
+EUR, Евро; Euro
+Малайзия
+государство в Юго-Восточной Азии, состоящее из двух частей, разделённых Южно-Китайским морем.
+Malaysia
+Куала-Лумпур; Kuala Lumpur
+малайский; Malay
+MYR, Малайзийский ринггит; Malaysian ringgit
+Вьетнам; Социалистическая Республика Вьетнам
+государство в Юго-Восточной Азии на полуострове Индокитай.
+Vietnam; Socialist Republic of Vietnam
+Ханой; Hanoi
+вьетнамский; Vietnamese
+VND, Донг; Vietnamese đồng
+Норвегия; Королевство Норвегия
+государство в Северной Европе.
+Norway; Kingdom of Norway
+Осло; Oslo
+норвежский; Norwegian
+NOK, Норвежская крона; Norwegian krone
+Кот-д’Ивуар; Республика Кот-д’Ивуар
+государство в Западной Африке.
+Côte d'Ivoire; Republic of Côte d'Ivoire
+Ямусукро; Yamoussoukro
+французский; French
+XOF, Западноафриканский франк КФА; West African CFA franc
+Польша; Республика Польша
+государство в Центральной Европе.
+Poland; Republic of Poland
+Варшава; Warsaw
+польский; Polish
+PLN, Польский злотый; Polish złoty
+Оман; Султанат Оман
+государство в Передней Азии, на юго-востоке Аравийского полуострова.
+Oman; Sultanate of Oman
+Маскат; Muscat
+арабский; Arabic
+OMR, Оманский риал; Omani rial
+Италия; Итальянская Республика
+государство в Южной Европе, в центре Средиземноморья.
+Italy; Italian Republic
+Рим; Rome
+итальянский; Italian
+EUR, Евро; Euro
+Филиппины; Республика Филиппины
+островное государство в Юго-Восточной Азии.
+Philippines; Republic of the Philippines
+Манила; Manila
+английский, филиппинский; English, Filipino
+PHP, Филиппинское песо; Philippine peso
+Эквадор; Республика Эквадор
+государство на северо-западе Южной Америки.
+Ecuador; Republic of Ecuador
+Кито; Quito
+испанский; Spanish
+USD, Доллар США; United States dollar
+Буркина-Фасо
+государство в Западной Африке.
+Burkina Faso
+Уагадугу; Ouagadougou
+французский; French
+XOF, Западноафриканский франк КФА; West African CFA franc
+Новая Зеландия
+государство в Полинезии.
+New Zealand
+Веллингтон; Wellington
+английский; English
+NZD, Новозеландский доллар; New Zealand dollar
+Габон; Габонская Республика
+государство в Центральной Африке.
+Gabon; Gabonese Republic
+Либревиль; Libreville
+французский; French
+XAF, Центральноафриканский франк КФА; Central African CFA franc
+Гвинея; Гвинейская Республика
+государство в Западной Африке.
+Guinea; Republic of Guinea
+Конакри; Conakry
+французский; French
+GNF, Гвинейский франк; Guinean franc
+Великобритания; Соединённое Королевство Великобритании и Северной Ирландии
+государство у северо-западного побережья континентальной Европы.
+United Kingdom of Great Britain and Northern Ireland
+Лондон; London
+английский; English
+GBP, Фунт стерлингов; Pound sterling
+Гана; Республика Гана
+государство в Западной Африке.
+Ghana; Republic of Ghana
+Аккра; Accra
+английский; English
+GHS, Ганский седи; Ghanaian cedi
+Румыния
+государство в Юго-Восточной Европе.
+Romania
+Бухарест; Bucharest
+румынский; Romanian
+RON, Румынский лей; Romanian leu
+Лаос; Лаосская Народно-Демократическая Республика
+государство в Юго-Восточной Азии.
+Laos; Lao People's Democratic Republic
+Вьентьян; Vientiane
+лаосский; Lao
+LAK, Лаосский кип; Lao kip
+Уганда; Республика Уганда
+государство в Восточной Африке.
+Uganda; Republic of Uganda
+Кампала; Kampala
+английский, суахили; English, Swahili
+UGX, Угандийский шиллинг; Ugandan shilling
+Гайана; Кооперативная Республика Гайана
+государство на северо-востоке Южной Америки.
+Guyana; Co-operative Republic of Guyana
+Джорджтаун; Georgetown
+английский; English
+GYD, Гайанский доллар; Guyanese dollar
+Белоруссия; Республика Беларусь
+государство в Восточной Европе.
+Belarus; Republic of Belarus
+Минск; Minsk
+белорусский, русский; Belarusian, Russian
+BYN, Белорусский рубль; Belarusian ruble
+Киргизия; Кыргызстан; Кыргызская Республика
+государство в Центральной Азии.
+Kyrgyzstan; Kyrgyz Republic
+Бишкек; Bishkek
+киргизский, русский; Kyrgyz, Russian
+KGS, Киргизский сом; Kyrgyz som
+Сенегал; Республика Сенегал
+государство в Западной Африке.
+Senegal; Republic of Senegal
+Дакар; Dakar
+французский; French
+XOF, Западноафриканский франк КФА; West African CFA franc
+Сирия; Сирийская Арабская Республика
+государство на Ближнем Востоке.
+Syria; Syrian Arab Republic
+Дамаск; Damascus
+арабский; Arabic
+SYP, Сирийский фунт; Syrian pound
+Камбоджа; Королевство Камбоджа
+государство в Юго-Восточной Азии.
+Cambodia; Kingdom of Cambodia
+Пномпень; Phnom Penh
+кхмерский; Khmer
+KHR, Риель; Cambodian riel
+Уругвай; Восточная Республика Уругвай
+государство в юго-восточной части Южной Америки.
+Uruguay; Oriental Republic of Uruguay
+Монтевидео; Montevideo
+испанский; Spanish
+UYU, Уругвайское песо; Uruguayan peso
+Суринам; Республика Суринам
+государство на северо-востоке Южной Америки.
+Suriname; Republic of Suriname
+Парамарибо; Paramaribo
+нидерландский; Dutch
+SRD, Суринамский доллар; Surinamese dollar
+Тунис; Тунисская Республика
+государство на крайнем севере Африки.
+Tunisia; Republic of Tunisia
+Тунис; Tunis
+арабский; Arabic
+TND, Тунисский динар; Tunisian dinar
+Бангладеш; Народная Республика Бангладеш
+государство в Южной Азии.
+Bangladesh; People's Republic of Bangladesh
+Дакка; Dhaka
+бенгальский; Bengali
+BDT, Бангладешская така; Bangladeshi taka"""
 
         #TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         #TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        #TitleBlock.resplit_to_post_kanji(native_kun_on3)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on3)
+        #TitleBlock.resplit_to_post_kanji(native_kun_on4)
+        #TitleBlock.resplit_to_menu_kanji(native_kun_on4)
         #TitleBlock.resplit_to_post_examples(native_examples)
         #TitleBlock.resplit_to_post_geo(geo)
-        #TitleBlock.resplit_to_z_name_geo(geo)
+        TitleBlock.resplit_to_z_name_geo(geo)

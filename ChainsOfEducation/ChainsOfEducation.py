@@ -459,13 +459,20 @@ manim -pqh ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def chapter_1_2(self):
-        kb_1 = KB.KnowledgeBlock("Cущность",
+        kb_1 = KB.KnowledgeBlock("Понятия",
         '''Любые объекты, вещи, процессы или явления''')
         self.create_kb_no_descr(kb_1)
         self.update_b(kb_1)
         kb_1.generate_target()
         kb_1.target.move_to(M.UP * 2.2).scale(0.5)
         self.update_b(kb_1, False)
+        kb_2 = KB.KnowledgeBlock("Cущность",
+        '''Любые объекты, вещи, процессы или явления''')
+        self.create_kb_no_descr(kb_2)
+        self.update_b(kb_2)
+        kb_2.generate_target()
+        kb_2.target.move_to(M.UP * 2.2).scale(0.5)
+        self.update_b(kb_2, False)
         self.wait(1.0)
 
     def chapter_1_3(self):
