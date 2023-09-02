@@ -53,6 +53,9 @@
     <Compile Include="SQLDatabase.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SSCTV.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TextBlock.py">
       <SubType>Code</SubType>
     </Compile>
