@@ -128,7 +128,7 @@ class ChainsOfEducation(M.MovingCameraScene):
         else:
             b.scale_outside(my_scl)
 
-    def wait(self, duration: float = 0.2, **kwargs):
+    def wait(self, duration: float = 0.1, **kwargs):
         super().wait(duration, **kwargs)
 
     def add(self, *mobjects: M.Mobject):
@@ -186,6 +186,7 @@ class ChainsOfEducation(M.MovingCameraScene):
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
+manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
 manim -pqh --disable_caching -s ChainsOfEducation.py ChainsOfEducation
 manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
