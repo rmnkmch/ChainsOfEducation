@@ -15,7 +15,8 @@ class SSCTV(object):
     PRB_NUM: int = 2
     UL_CORNER = M.LEFT * 5.5 + M.UP * 3.5
 
-    data_saved = {"example": "Р0.07 Е0.21 П0.32 Л0.31 О0.09"}
+    data_saved = {"example": "Р0.04 Е0.24 П0.49 Л0.14 О0.09",
+                  "example_3": ""}
 
     @staticmethod
     def get_symbols_and_probabilities(text: str):
@@ -131,8 +132,7 @@ class SSCTV(object):
 
     @staticmethod
     def make_all(scene: M.Scene):
-        for i in range(15, 16, 1):
-            SSCTV.make_one(scene, i)
+        SSCTV.make_one(scene, 6)
 
     @staticmethod
     def make_one(scene: M.Scene, nnn = 6):
@@ -238,7 +238,10 @@ class SSCTV(object):
         scene.wait()
         scene.clear()
         SSCTV.make_table(scene, all_ps_old_full)
-        scene.wait(1.0)
+        scene.wait()
+        scene.clear()
+        SSCTV.make_messages(scene, all_ps_old_full)
+        scene.wait()
 
     @staticmethod
     def make_table(scene: M.Scene, all_ps_old_full):
@@ -304,6 +307,136 @@ class SSCTV(object):
                         font_size = 88.0)
         scene.add(tex)
 
+    @staticmethod
+    def ps_by_prb(prb, prb_line, all_ps):
+        for i in range(len(prb_line)):
+            if prb_line[i] > prb:
+                return all_ps[i - 1]
+
+    @staticmethod
+    def get_random_message_1(all_ps, n = 20):
+        prb_line = [0.0]
+        all_ps.sort()
+        for i in range(len(all_ps)):
+            prb_line.append(all_ps[i].probability + prb_line[i])
+        message = []
+        for i in range(n):
+            message.append(SSCTV.ps_by_prb(random.random(), prb_line, all_ps))
+        return message
+
+    @staticmethod
+    def get_random_message_2(all_ps, n = 20):
+        prb_line = [0.0]
+        pbs = 0.0
+        all_ps.sort()
+        a = 0.0
+        b = 0.01
+        ii = 0
+        while a < b:
+            a = all_ps[ii].probability
+            b = all_ps[- ii - 1].probability
+            ii += 1
+        med = (a + b) * 0.5
+        for i in range(len(all_ps)):
+            if all_ps[i].probability <= med:
+                all_ps[i].probability *= 0.25
+            else:
+                all_ps[i].probability *= 4.0
+        for i in range(len(all_ps)):
+            pbs += all_ps[i].probability
+        for i in range(len(all_ps)):
+            all_ps[i].probability = all_ps[i].probability / pbs
+        for i in range(len(all_ps)):
+            prb_line.append(all_ps[i].probability + prb_line[i])
+        message = []
+        for i in range(n):
+            message.append(SSCTV.ps_by_prb(random.random(), prb_line, all_ps))
+        return message
+
+    @staticmethod
+    def get_random_message_3(all_ps, n = 20):
+        prb_line = [0.0]
+        ii = 0
+        while ii < len(all_ps) / 2:
+            a = all_ps[ii].probability
+            b = all_ps[- ii - 1].probability
+            all_ps[ii].probability = b
+            all_ps[- ii - 1].probability = a
+            ii += 1
+        for i in range(len(all_ps)):
+            prb_line.append(all_ps[i].probability + prb_line[i])
+        message = []
+        for i in range(n):
+            message.append(SSCTV.ps_by_prb(random.random(), prb_line, all_ps))
+        return message
+
+    @staticmethod
+    def make_messages(scene: M.Scene, all_ps_old_full):
+        n = 20
+        m1 = SSCTV.get_random_message_1(all_ps_old_full, n)
+        m2 = SSCTV.get_random_message_2(all_ps_old_full, n)
+        m3 = SSCTV.get_random_message_3(all_ps_old_full, n)
+        SSCTV.make_message(scene, m1, 1)
+        scene.wait()
+        SSCTV.make_message(scene, m1, 2)
+        scene.wait()
+        SSCTV.make_message(scene, m2, 1)
+        scene.wait()
+        SSCTV.make_message(scene, m2, 2)
+        scene.wait()
+        c = SSCTV.make_message(scene, m3, 1)
+        scene.wait()
+        rws = 2
+        if c > 75: rws = 4
+        elif c > 50: rws = 3
+        SSCTV.make_message(scene, m3, rws)
+        scene.wait()
+
+    @staticmethod
+    def make_message(scene: M.Scene, sym_code, num_rows = 2):
+        scene.add(M.Rectangle(
+            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
+        syms = []
+        codes = []
+        indexes = []
+        n = 1
+        len_code = 0
+        for mes in sym_code:
+            syms.append(M.Text(mes.symbol, color = SSCTV.get_main_color(),
+                               font_size = 30.0))
+            codes.append(M.Text(mes.code, color = SSCTV.get_main_color()))
+            indexes.append(M.Text(str(n), color = SSCTV.get_main_color(),
+                                  font_size = 16.0))
+            n += 1
+            len_code += len(mes.code)
+        num_full = 0
+        last_vg = None
+        for rows in range(num_rows):
+            num = round(len(codes) / num_rows)
+            codes_i = []
+            if rows == num_rows - 1:
+                num = len(codes) - num_full
+            for i in range(num):
+                codes_i.append(codes[i + num_full])
+            last_vg = M.VGroup(*codes_i).arrange().move_to(
+                2.4 * M.UP + M.DOWN * rows * 1.9)
+            scene.add(last_vg)
+            num_full += num
+        for i in range(len(syms)):
+            scene.add(syms[i].next_to(codes[i], direction = M.UP))
+            scene.add(indexes[i].next_to(syms[i], direction = M.UP))
+        if num_rows == 1:
+            sf = 13.5 / last_vg.width
+            M.VGroup(*syms, *codes, *indexes).scale(sf)
+            bit = "Всего бит = " + str(len_code)
+            sym = "Всего символов = " + str(len(syms))
+            bit_sym = "Бит на символ = " + str(round(len_code / len(syms), 3))
+            b = M.Text(bit, color = SSCTV.get_main_color())
+            s = M.Text(sym, color = SSCTV.get_main_color()).next_to(b, M.DOWN)
+            bs = M.Text(bit_sym, color = SSCTV.get_main_color()).next_to(s, M.DOWN)
+            scene.add(b, s, bs)
+        return len_code
+
 
 class ProbabilitySymbol(object):
     def __init__(self, symbol: str, probability: str, merged: bool, code: str = ""):
@@ -313,10 +446,10 @@ class ProbabilitySymbol(object):
         self.code = code
 
     def __str__(self):
-        return f"{self.symbol}: {self.probability} - {self.merged} - {self.code}"
+        return f"{self.symbol}: {round(self.probability, 3)} - {self.code}"
 
     def __repr__(self):
-        return self.__str__()
+        return self.__str__() + "\n"
 
     def __lt__(self, other):
         if self.probability == other.probability:
