@@ -11,14 +11,12 @@ class SSCTV(object):
     RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-    data_my = "A0.2 B0.05 C0.15 D0.1 E0.49 F0.01"
     PRB_NUM: int = 2
     UL_CORNER = M.LEFT * 5.5 + M.UP * 3.5
 
-    data_saved = {"example": "Р0.04 Е0.24 П0.49 Л0.14 О0.09",
-                  "example_1": "ПППППРОПРЕПЛПЕЕПЛЕЕП",
-                  "example_2": "ППППЕППППППЕППППППОЕ",
-                  "example_3": "ОРРЕРОРРРРОРРООРРОРР"}
+    data_saved = {"my": "A0.2 B0.06 C0.14 D0.1 E0.47 F0.03",
+                  "exmpl": "Р0.04 Е0.24 П0.49 Л0.14 О0.09",
+                  "used": "В0.11 Х0.21 Э0.03 П0.07 Н0.34 Ш0.24"}
 
     @staticmethod
     def get_symbols_and_probabilities(text: str):
@@ -35,7 +33,7 @@ class SSCTV(object):
         p = 0.0
         for ps in all_ps:
             p += ps.probability
-        print(p)
+        #print(p)
         return round(p, SSCTV.PRB_NUM) == 1.0
 
     @staticmethod
@@ -71,15 +69,14 @@ class SSCTV(object):
         while abs(sum(pb) - 1.0) > 0.005:
             pb = SSCTV.get_random_probabilities(n)
         sm = SSCTV.get_random_symbols(n, SSCTV.RU)
-        data = ""
+        data = []
         for i in range(len(pb)):
-            data += sm[i] + str(round(pb[i], SSCTV.PRB_NUM)) + " "
-        print(data)
-        return data
+            data.append(sm[i] + str(round(pb[i], SSCTV.PRB_NUM)))
+        return " ".join(data)
 
     @staticmethod
     def sym_size_by_n(n):
-        if n <= 6: return 54.0
+        if n <= 6: return 52.0
         elif n <= 8: return 50.0
         elif n <= 10: return 44.0
         elif n <= 12: return 40.0
@@ -122,7 +119,12 @@ class SSCTV(object):
     @staticmethod
     def find_ps_by_symbol(symbol, all_ps):
         for ps in all_ps:
-            if ps.symbol == symbol: return ps
+            if ps.symbol == symbol:
+                return ps
+
+    @staticmethod
+    def find_index_by_symbol(symbol, all_ps):
+        return all_ps.index(SSCTV.find_ps_by_symbol(symbol, all_ps))
 
     @staticmethod
     def get_main_color():
@@ -133,11 +135,38 @@ class SSCTV(object):
         return "#FFFFFF"
 
     @staticmethod
+    def make_background(scene):
+        scene.add(M.Rectangle(
+            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
+
+    @staticmethod
     def make_all(scene: M.Scene):
-        full = SSCTV.make_haffman(scene, 6)
+        SSCTV.random_SPIK1()
+        SSCTV.make_SPIK1(scene)
+
+    @staticmethod
+    def random_SPIK1():
+        pss = SSCTV.get_random_ps(6)
+        pss = SSCTV.data_saved["used"]
+        print(pss)
+        all_ps = SSCTV.get_symbols_and_probabilities(pss)
+        SSCTV.print_sym_prb_octave(all_ps)
+        if not SSCTV.check_probability(all_ps): print("prb != 1")
+        n = 20
+        all_ps_copy = [ProbabilitySymbol.get_full_copy(ps) for ps in all_ps]
+        m1 = SSCTV.get_random_message_1(all_ps_copy, n)
+        m2 = SSCTV.get_random_message_2(all_ps_copy, n)
+        m3 = SSCTV.get_random_message_3(all_ps_copy, n)
+        SSCTV.print_random_message_20(m1, all_ps)
+        SSCTV.print_random_message_20(m2, all_ps)
+        SSCTV.print_random_message_20(m3, all_ps)
+
+    @staticmethod
+    def make_SPIK1(scene: M.Scene):
+        full = SSCTV.make_haffman(scene)
         scene.wait()
         scene.clear()
-        '''SSCTV.make_table_1(scene, full)
+        SSCTV.make_table_1(scene, full)
         scene.wait()
         scene.clear()
         SSCTV.make_table_2(scene, full)
@@ -146,7 +175,8 @@ class SSCTV(object):
         SSCTV.make_formula_1(scene, full)
         scene.wait()
         scene.clear()
-        m = SSCTV.make_messages(scene, full)
+        '''full2 = [ProbabilitySymbol.get_full_copy(ps) for ps in full]
+        rand = SSCTV.make_messages_20(scene, full2)
         scene.wait()
         scene.clear()
         SSCTV.make_golomb(scene, full)
@@ -155,24 +185,37 @@ class SSCTV(object):
         SSCTV.make_table_1(scene, full)
         scene.wait()
         scene.clear()
-        m = SSCTV.make_messages(scene, full)
+        full2 = [ProbabilitySymbol.get_full_copy(ps) for ps in full]
+        m = SSCTV.make_messages_20(scene, full2, rand[0], rand[1], rand[2])
+        scene.wait()
+        scene.clear()
+        num = SSCTV.make_arith(scene, m[3], full)
+        scene.wait()
+        scene.clear()
+        SSCTV.make_count_1(scene, num)
         scene.wait()
         scene.clear()'''
 
     @staticmethod
-    def make_haffman(scene: M.Scene, nnn = 6):
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
-        #all_ps = SSCTV.get_symbols_and_probabilities(SSCTV.get_random_ps(nnn))
-        #all_ps = SSCTV.get_symbols_and_probabilities(SSCTV.data_my)
-        all_ps = SSCTV.get_symbols_and_probabilities(SSCTV.data_saved["example"])
+    def print_sym_prb_octave(all_ps):
+        syms = []
+        prbs = []
+        for i in range(len(all_ps)):
+            syms.append(all_ps[i].symbol)
+            prbs.append(str(round(all_ps[i].probability * 100)))
+        print(", ".join(syms))
+        print(", ".join(prbs))
+
+    @staticmethod
+    def make_haffman(scene: M.Scene):
+        SSCTV.make_background(scene)
+        all_ps = SSCTV.get_symbols_and_probabilities(SSCTV.data_saved["used"])
         all_len = len(all_ps)
         vert_offset = 8.0 / (all_len + 2)
         prb_size = SSCTV.prb_size_by_n(all_len)
         zline_size = SSCTV.zline_size_by_n(all_len)
         zline_stroke_width = SSCTV.zline_stroke_width_by_n(all_len)
         horz_offset = 12.0 / (all_len - 1)
-        if not SSCTV.check_probability(all_ps): return
         all_ps_old_full = all_ps.copy()
         all_ps.sort()
         all_ps.reverse()
@@ -208,12 +251,12 @@ class SSCTV(object):
                     stroke_width = zline_stroke_width,
                     color = SSCTV.get_main_color())
                 n0 = M.Text("0", font_size = prb_size,
-                            color = SSCTV.get_main_color()).next_to(
-                    line, M.UR, max_width * 0.1)
+                            color = SSCTV.get_main_color()
+                            ).next_to(line, M.UR, max_width * 0.1)
                 n0.shift(M.DOWN * n0.height)
                 n1 = M.Text("1", font_size = prb_size,
-                            color = SSCTV.get_main_color()).next_to(
-                    line, M.DR, max_width * 0.1)
+                            color = SSCTV.get_main_color()
+                            ).next_to(line, M.DR, max_width * 0.1)
                 n1.shift(M.UP * n1.height)
                 scene.add(line, n0, n1)
                 p1 = all_ps.pop()
@@ -263,67 +306,63 @@ class SSCTV(object):
         return all_ps_old_full
 
     @staticmethod
-    def make_table_1(scene: M.Scene, all_ps_old_full):
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
+    def make_table_1(scene: M.Scene, all_ps):
+        SSCTV.make_background(scene)
         table = Table(
-            [[all_ps_old_full[i].symbol, all_ps_old_full[i].code]
-             for i in range(len(all_ps_old_full))],
+            [[all_ps[i].symbol, all_ps[i].code]
+             for i in range(len(all_ps))],
              include_outer_lines = True,
-             v_buff = 0.48 * SSCTV.sym_size_by_n(len(all_ps_old_full)) / 54.0,
+             v_buff = 0.48 * SSCTV.sym_size_by_n(len(all_ps)) / 54.0,
              h_buff = 2.0,
              element_to_mobject_config = {
-                 "font_size": SSCTV.prb_size_by_n(len(all_ps_old_full)),
+                 "font_size": SSCTV.prb_size_by_n(len(all_ps)),
                  "color": SSCTV.get_main_color()},
              line_config = {"color": SSCTV.get_main_color()})
         scene.add(table)
 
     @staticmethod
-    def make_table_2(scene: M.Scene, all_ps_old_full):
+    def make_table_2(scene: M.Scene, all_ps):
         from math import log2
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
-        rows = [sym.symbol for sym in all_ps_old_full]
-        prbs = [str(sym.probability) for sym in all_ps_old_full]
-        logs = [str(- round(log2(sym.probability), 3)) for sym in all_ps_old_full]
-        prbs_logs = [str(- round(log2(sym.probability) * sym.probability, 3))
-                     for sym in all_ps_old_full]
+        SSCTV.make_background(scene)
+        syms = [ps.symbol for ps in all_ps]
+        prbs = [str(ps.probability) for ps in all_ps]
+        logs = [str(- round(log2(ps.probability), 3)) for ps in all_ps]
+        prbs_logs = [str(- round(log2(ps.probability) * ps.probability, 3))
+                     for ps in all_ps]
         table = Table(
-            [[prbs[i], logs[i], prbs_logs[i]] for i in range(len(all_ps_old_full))],
-            row_labels = [M.Text(
-                rt, font_size = (SSCTV.sym_size_by_n(len(all_ps_old_full) + 3)
-                                 - 8.0),
-                color = SSCTV.get_main_color())
-                          for rt in rows],
+            [[prbs[i], logs[i], prbs_logs[i]] for i in range(len(all_ps))],
+            row_labels = [
+                M.Text(rt, font_size = (
+                    SSCTV.sym_size_by_n(len(all_ps) + 3) - 8.0),
+                       color = SSCTV.get_main_color()) for rt in syms],
             col_labels = [
                 M.MathTex(
                     r"p_i", color = SSCTV.get_main_color(),
-                    font_size = (SSCTV.sym_size_by_n(len(all_ps_old_full) + 3)
-                                 - 4.0)),
+                    font_size = (
+                        SSCTV.sym_size_by_n(len(all_ps) + 3) - 4.0)),
                 M.MathTex(
                     r"-\log_2 p_i", color = SSCTV.get_main_color(),
-                    font_size = (SSCTV.sym_size_by_n(len(all_ps_old_full) + 3)
-                                 - 4.0)),
+                    font_size = (
+                        SSCTV.sym_size_by_n(len(all_ps) + 3) - 4.0)),
                 M.MathTex(
                     r"-p_i \cdot \log_2 p_i", color = SSCTV.get_main_color(),
-                    font_size = (SSCTV.sym_size_by_n(len(all_ps_old_full) + 3)
-                                 - 4.0))],
+                    font_size = (
+                        SSCTV.sym_size_by_n(len(all_ps) + 3) - 4.0))],
             include_outer_lines = True,
-            v_buff = 0.48 * SSCTV.sym_size_by_n(len(all_ps_old_full)) / 54.0,
+            v_buff = 0.48 * SSCTV.sym_size_by_n(len(all_ps)) / 54.0,
             h_buff = 2.0,
             element_to_mobject_config = {
-                "font_size": SSCTV.prb_size_by_n(len(all_ps_old_full)),
+                "font_size": SSCTV.prb_size_by_n(len(all_ps)),
                 "color": SSCTV.get_main_color()},
             line_config = {"color": SSCTV.get_main_color()})
         scene.add(table)
 
     @staticmethod
-    def make_formula_1(scene: M.Scene, all_ps_old_full):
+    def make_formula_1(scene: M.Scene, all_ps):
         from math import log2
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
-        sum_entr = sum([- round(log2(sym.probability) * sym.probability, 3)
-                    for sym in all_ps_old_full])
+        SSCTV.make_background(scene)
+        sum_entr = sum([- log2(sym.probability) * sym.probability
+                        for sym in all_ps])
         tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i = " + str(round(sum_entr, 3))
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
                         font_size = 88.0)
@@ -336,21 +375,23 @@ class SSCTV(object):
                 return all_ps[i - 1]
 
     @staticmethod
-    def get_random_message_1(all_ps, n = 20):
-        prb_line = [0.0]
-        all_ps.sort()
+    def get_prb_line(all_ps, lowest):
+        prb_line = [lowest]
         for i in range(len(all_ps)):
-            prb_line.append(all_ps[i].probability + prb_line[i])
+            prb_line.append(all_ps[i].probability + prb_line[i] + lowest)
+        return prb_line
+
+    @staticmethod
+    def get_random_message_1(all_ps, n = 20):
+        all_ps.sort()
+        prb_line = SSCTV.get_prb_line(all_ps, 0.0)
         message = []
-        for i in range(n):
+        for _ in range(n):
             message.append(SSCTV.ps_by_prb(random.random(), prb_line, all_ps))
         return message
 
     @staticmethod
     def get_random_message_2(all_ps, n = 20):
-        prb_line = [0.0]
-        pbs = 0.0
-        all_ps.sort()
         a = 0.0
         b = 0.01
         ii = 0
@@ -364,12 +405,12 @@ class SSCTV(object):
                 all_ps[i].probability *= 0.25
             else:
                 all_ps[i].probability *= 4.0
+        pbrs = 0.0
         for i in range(len(all_ps)):
-            pbs += all_ps[i].probability
+            pbrs += all_ps[i].probability
         for i in range(len(all_ps)):
-            all_ps[i].probability = all_ps[i].probability / pbs
-        for i in range(len(all_ps)):
-            prb_line.append(all_ps[i].probability + prb_line[i])
+            all_ps[i].probability = all_ps[i].probability / pbrs
+        prb_line = SSCTV.get_prb_line(all_ps, 0.0)
         message = []
         for i in range(n):
             message.append(SSCTV.ps_by_prb(random.random(), prb_line, all_ps))
@@ -377,73 +418,56 @@ class SSCTV(object):
 
     @staticmethod
     def get_random_message_3(all_ps, n = 20):
-        prb_line = [0.0]
         ii = 0
-        while ii < len(all_ps) / 2:
+        while ii < len(all_ps) // 2:
             a = all_ps[ii].probability
             b = all_ps[- ii - 1].probability
             all_ps[ii].probability = b
             all_ps[- ii - 1].probability = a
             ii += 1
-        for i in range(len(all_ps)):
-            prb_line.append(all_ps[i].probability + prb_line[i])
+        prb_line = SSCTV.get_prb_line(all_ps, 0.0)
         message = []
-        for i in range(n):
+        for _ in range(n):
             message.append(SSCTV.ps_by_prb(random.random(), prb_line, all_ps))
         return message
 
     @staticmethod
-    def print_message(all_ps):
+    def print_random_message_20(mess, compr):
         syms = []
-        for ps in all_ps:
-            syms.append(ps.symbol)
-        stroke = "".join(syms)
-        print(stroke)
-        return stroke
+        letrs = []
+        for ps in mess:
+            syms.append(str(SSCTV.find_index_by_symbol(ps.symbol, compr) + 1))
+            letrs.append(ps.symbol)
+        print(", ".join(syms))
+        print(", ".join(letrs))
 
     @staticmethod
-    def get_message_by_str(mess, all_ps):
-        def get_ps_by_symbol(symbol):
-            for ps in all_ps:
-                if symbol == ps.symbol:
-                    return ps
-            return "!!!!!ERROR!!!!!"
-        pss = []
-        for char in mess:
-            pss.append(get_ps_by_symbol(char))
-        return pss
+    def get_message_20_by_str(mess_str, all_ps):
+        mess = []
+        for char in mess_str:
+            mess.append(SSCTV.find_ps_by_symbol(char, all_ps))
+        return mess
 
     @staticmethod
-    def make_messages(scene: M.Scene, all_ps_old_full):
-        n = 20
-        #m1 = SSCTV.get_random_message_1(all_ps_old_full, n)
-        #m2 = SSCTV.get_random_message_2(all_ps_old_full, n)
-        #m3 = SSCTV.get_random_message_3(all_ps_old_full, n)
-        m1 = SSCTV.get_message_by_str(
-            SSCTV.data_saved["example_1"], all_ps_old_full)
-        m2 = SSCTV.get_message_by_str(
-            SSCTV.data_saved["example_2"], all_ps_old_full)
-        m3 = SSCTV.get_message_by_str(
-            SSCTV.data_saved["example_3"], all_ps_old_full)
-        SSCTV.make_message(scene, m1, 1)
+    def make_messages_20(scene, m1, m2, m3):
+        ret_m = SSCTV.make_message(scene, m1, 1)
         scene.wait()
-        ret_m = SSCTV.make_message(scene, m2, 1)
+        SSCTV.make_message_20(scene, m2, 1)
         scene.wait()
-        SSCTV.make_message(scene, m3, 1)
+        SSCTV.make_message_20(scene, m3, 1)
         scene.wait()
         return ret_m
 
     @staticmethod
-    def make_message(scene: M.Scene, sym_code, num_rows = 1, with_text = True):
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
+    def make_message_20(scene, mess, num_rows = 1, with_text = True):
+        SSCTV.make_background(scene)
         syms = []
         codes = []
         indexes = []
         n = 1
         len_code = 0
-        ret_str = ""
-        for mes in sym_code:
+        ret_str = []
+        for mes in mess:
             syms.append(M.Text(mes.symbol, color = SSCTV.get_main_color(),
                                font_size = 30.0))
             codes.append(M.Text(mes.code, color = SSCTV.get_main_color()))
@@ -451,7 +475,7 @@ class SSCTV(object):
                                   font_size = 16.0))
             n += 1
             len_code += len(mes.code)
-            ret_str += mes.symbol
+            ret_str.append(mes.symbol)
         num_full = 0
         last_vg = None
         for rows in range(num_rows):
@@ -471,42 +495,42 @@ class SSCTV(object):
         if num_rows == 1 and with_text:
             sf = 13.5 / last_vg.width
             M.VGroup(*syms, *codes, *indexes).scale(sf)
-            bit = "Всего бит = " + str(len_code)
-            sym = "Всего символов = " + str(len(syms))
-            bit_sym = "Бит на символ = " + str(round(len_code / len(syms), 3))
+            bit = r"Всего бит = " + str(len_code)
+            sym = r"Всего символов = " + str(len(syms))
+            bit_sym = r"Бит на символ = " + str(round(len_code / len(syms), 3))
             b = M.Text(bit, color = SSCTV.get_main_color())
             s = M.Text(sym, color = SSCTV.get_main_color()).next_to(b, M.DOWN)
             bs = M.Text(bit_sym, color = SSCTV.get_main_color()).next_to(s, M.DOWN)
             scene.add(b, s, bs)
-        return ret_str
+        return "".join(ret_str)
 
     @staticmethod
-    def check_decode_haffman(scene: M.Scene, str_message, all_ps_old_full):
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
-        m = SSCTV.get_message_by_str(str_message, all_ps_old_full)
-        SSCTV.make_message(scene, m, 1, False)
+    def decode_haffman(scene, str_message, all_ps):
+        SSCTV.make_background(scene)
+        m = SSCTV.get_message_by_str(str_message, all_ps)
+        SSCTV.make_message_20(scene, m, 1, False)
         scene.wait()
 
     @staticmethod
-    def make_golomb(scene: M.Scene, all_ps_old_full):
+    def make_golomb(scene, all_ps_old):
         golomb_r = {0: "0", 1: "10", 2: "11"}
-        golomb_q = {0: "0", 1: "10", 2: "110"}
-        scene.add(M.Rectangle(
-            SSCTV.get_background_color(), 9.0, 15.0, fill_opacity = 1.0))
-        all_ps = all_ps_old_full.copy()
+        golomb_q = {0: "0", 1: "10", 2: "110", 3: "1110"}
+        SSCTV.make_background(scene)
+        all_ps = all_ps_old.copy()
         all_ps.sort()
         all_ps.reverse()
         all_len = len(all_ps)
         for psi in range(all_len):
-            t = (str(psi + 1) + " - " + all_ps[psi].symbol + ": "
-                 + str(all_ps[psi].probability) + ";")
+            t = str(psi + 1) + r" - " + all_ps[psi].symbol + r":"
+            p = str(round(all_ps[psi].probability, SSCTV.PRB_NUM)) + ";"
             mobt = M.Text(
                 t, font_size = 44.0,
                 color = SSCTV.get_main_color()).move_to(
-                    SSCTV.UL_CORNER + M.RIGHT * 0.3 + M.UP * 0.07
+                    SSCTV.UL_CORNER + M.RIGHT * 0.0 + M.UP * 0.07
                     + M.DOWN * (8.0 / (all_len + 2)) * (psi + 1))
-            scene.add(mobt)
+            mobp = M.Text(p, font_size = 30.0,
+                          color = SSCTV.get_main_color()).next_to(mobt)
+            scene.add(mobt, mobp)
             m = 3
             q = psi // m
             r = psi - q * m
@@ -517,8 +541,99 @@ class SSCTV(object):
             tex = M.MathTex(texstr, color = SSCTV.get_main_color(),
                             font_size = 30.0).next_to(mobt)
             scene.add(tex)
-            SSCTV.find_ps_by_symbol(all_ps[psi].symbol, all_ps_old_full
-                                    ).code = golomb_q[q] + golomb_r[r]
+            found_ps = SSCTV.find_ps_by_symbol(
+                all_ps[psi].symbol, all_ps)
+            found_ps.code = golomb_q[q] + golomb_r[r]
+
+    @staticmethod
+    def make_arith(scene, str_message, all_ps):
+        def prb_size(cycle):
+            if cycle <= 2: return 18.0
+            elif cycle <= 4: return 16.0
+            return 14.0
+
+        left_side = M.LEFT * 6.6
+        SSCTV.make_background(scene)
+        str_message = str_message[:6]
+        mes_len = len(str_message)
+        horz_offset = 12.0 / mes_len
+        prb_line_old = SSCTV.get_prb_line(all_ps, 0.0)
+        prb_line = SSCTV.get_prb_line(all_ps, 0.0)
+        for cycle in range(mes_len + 1):
+            nl = M.NumberLine(
+                x_range = [0.0, 1.0, 1.0],
+                length = 7.0,
+                include_tip = False,
+                include_numbers = False,
+                rotation = 90.0 * M.DEGREES,
+                color = SSCTV.get_main_color(),
+                tick_size = 0.1,
+                stroke_width = 3,
+            ).move_to(left_side + M.RIGHT * horz_offset * cycle)
+            scene.add(nl)
+            if cycle != mes_len:
+                for psi in range(len(all_ps) + 1):
+                    new_text = M.Text(
+                        str(round(prb_line[psi], (cycle + 1) * 2)),
+                        font_size = prb_size(cycle), color = SSCTV.get_main_color()
+                    ).next_to(nl, buff = 0.1)
+                    new_text.shift(M.UP * 7.0 * (prb_line_old[psi] - 0.5))
+                    new_line = M.Line(
+                        left_side - M.LEFT * 0.1 + M.RIGHT * horz_offset * cycle,
+                        left_side + M.LEFT * 0.1 + M.RIGHT * horz_offset * cycle,
+                        color = SSCTV.get_main_color(),
+                        stroke_width = 3.0
+                    ).next_to(nl, buff = - 0.2)
+                    new_line.shift(M.UP * 7.0 * (prb_line_old[psi] - 0.5))
+                    scene.add(new_text, new_line)
+                g_indx = SSCTV.find_index_by_symbol(
+                    str_message[cycle], all_ps)
+                p1, p2 = (prb_line[g_indx], prb_line[g_indx + 1])
+                diff = p2 - p1
+                for i in range(len(all_ps) + 1):
+                    prb_line[i] = p1 + prb_line_old[i] * diff
+                ln1 = ZLine([
+                    M.UP * 7.0 * (prb_line_old[g_indx] - 0.5)
+                    + left_side + M.RIGHT * horz_offset * cycle,
+                    M.UP * - 3.5
+                    + left_side + M.RIGHT * horz_offset * (cycle + 1)
+                    ], 0.1, 2.0, SSCTV.get_main_color())
+                ln2 = ZLine([
+                    M.UP * 7.0 * (prb_line_old[g_indx + 1] - 0.5)
+                    + left_side + M.RIGHT * horz_offset * cycle,
+                    M.UP * 3.5
+                    + left_side + M.RIGHT * horz_offset * (cycle + 1)
+                    ], 0.1, 2.0, SSCTV.get_main_color())
+                scene.add(ln1, ln2)
+            else:
+                num1 = str(round(prb_line[-1], (cycle + 1) * 2))
+                num2 = str(round(prb_line[0], (cycle + 1) * 2))
+                new_text = M.Text(
+                    num1,
+                    font_size = prb_size(cycle), color = SSCTV.get_main_color()
+                    ).next_to(nl, buff = 0.1)
+                new_text.shift(M.UP * 3.5)
+                new_text2 = M.Text(
+                    num2,
+                    font_size = prb_size(cycle), color = SSCTV.get_main_color()
+                    ).next_to(nl, buff = 0.1)
+                new_text2.shift(M.UP * -3.5)
+                scene.add(new_text, new_text2)
+                a = 2
+                ret_str = []
+                while len(num1) > a and num1[a] == num2[a]:
+                    ret_str.append(num2[a])
+                    a += 1
+                ret_str.append(str(int(num2[a]) + 1))
+                return ret_str
+
+    @staticmethod
+    def make_count_1(scene, num):
+        SSCTV.make_background(scene)
+        s_str = num + r"_{10} = " + bin(int(num))[2:] + r"_2"
+        show = M.MathTex(s_str, color = SSCTV.get_main_color(),
+                         font_size = 64.0)
+        scene.add(show)
 
 
 class ProbabilitySymbol(object):
@@ -543,6 +658,13 @@ class ProbabilitySymbol(object):
 
     def __eq__(self, other):
         return self.probability == other.probability
+
+    @staticmethod
+    def get_full_copy(probability_symbol):
+        return ProbabilitySymbol(probability_symbol.symbol,
+                                 probability_symbol.probability,
+                                 probability_symbol.merged,
+                                 probability_symbol.code)
 
 
 class ZLine(M.TipableVMobject):
