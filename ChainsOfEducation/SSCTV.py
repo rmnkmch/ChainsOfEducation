@@ -15,12 +15,18 @@ class SSCTV(object):
     UL_CORNER = M.LEFT * 5.5 + M.UP * 3.5
 
     data_saved = {"my": "A0.2 B0.06 C0.14 D0.1 E0.47 F0.03",
-                  "1": ""}
+                  "Саша": "У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07"}
 
-    used_ps_str = "Ы0.01 В0.24 П0.21 Й0.18 Ю0.23 Д0.13"
-    m1 = "ПЮЮЫЮЮЮЮППВПЮВЙЙДЮДЮ"
-    m2 = "ВВЮПВВЮПЮПВПЮВВППВПЮ"
-    m3 = "ЙЫЙЙЙЙЙЙЫЙЙДЫДЙЙДЫДЙ"
+    used_ps_str = "A0.2 B0.06 C0.14 D0.1 E0.47 F0.03"
+    m1 = ""
+    m2 = ""
+    m3 = ""
+    entropy = 0.0
+    table_data = []
+    mean_bit_over_symb1 = 0.0
+    mean_bit_over_symb2 = 0.0
+    mean_bit_over_symb3 = 0.0
+    new = True
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -179,7 +185,9 @@ class SSCTV(object):
                 SSCTV.find_index_ps_by_symbol(ps.symbol, compare_to) + 1))
             leters.append(ps.symbol)
         print(", ".join(syms))
-        print("".join(leters))
+        ret = "".join(leters)
+        print(ret)
+        return ret
 
     @staticmethod
     def get_message_20_by_str(mess_str: str, all_ps: list):
@@ -190,21 +198,20 @@ class SSCTV(object):
 
     @staticmethod
     def make_all(scene: M.Scene):
-        new = True
-        SSCTV.random_SPIK1(new)
-        if not new:
-            SSCTV.make_SPIK1(scene)
+        SSCTV.random_SPIK1(SSCTV.new)
+        SSCTV.make_SPIK1(scene)
 
     @staticmethod
     def random_SPIK1(new_random = False):
         pss = SSCTV.used_ps_str
         if new_random:
-            pss = SSCTV.get_random_ps(12)
+            pss = SSCTV.get_random_ps(6)
+            SSCTV.used_ps_str = pss
         print(pss)
         all_ps = SSCTV.get_all_ps_by_str(pss)
         SSCTV.print_sp_octave(all_ps)
         if not SSCTV.check_probabilities(all_ps): print("prb != 1")
-        n = 22
+        n = 20
         all_ps_copy = [ProbabilitySymbol.get_full_copy(ps) for ps in all_ps]
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, all_ps_copy)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, all_ps_copy)
@@ -213,9 +220,9 @@ class SSCTV(object):
             m1 = SSCTV.get_random_message_1(all_ps_copy, n)
             m2 = SSCTV.get_random_message_2(all_ps_copy, n)
             m3 = SSCTV.get_random_message_3(all_ps_copy, n)
-        SSCTV.print_message_20(m1, all_ps)
-        SSCTV.print_message_20(m2, all_ps)
-        SSCTV.print_message_20(m3, all_ps)
+        SSCTV.m1 = SSCTV.print_message_20(m1, all_ps)
+        SSCTV.m2 = SSCTV.print_message_20(m2, all_ps)
+        SSCTV.m3 = SSCTV.print_message_20(m3, all_ps)
 
     @staticmethod
     def make_SPIK1(scene: M.Scene):
@@ -230,15 +237,27 @@ class SSCTV(object):
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, ps_full)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, ps_full)
         m3 = SSCTV.get_message_20_by_str(SSCTV.m3, ps_full)
-        SSCTV.make_messages_20(scene, m1, m2, m3)
+        SSCTV.make_messages_20(scene, m1, m2, m3, True)
         SSCTV.make_golomb(scene, ps_full)
         SSCTV.make_pause(scene)
         SSCTV.make_table_1(scene, ps_full)
         SSCTV.make_pause(scene)
-        m = SSCTV.make_messages_20(scene, m1, m2, m3)
+        SSCTV.make_messages_20(scene, m1, m2, m3, True)
         num = SSCTV.make_arithm(scene, SSCTV.m1, ps_full)
         SSCTV.make_pause(scene)
         SSCTV.make_count_1(scene, num)
+        SSCTV.make_pause(scene)
+        SSCTV.make_formula_2(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.make_formula_3(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.make_formula_4(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.make_formula_5(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.make_formula_6(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.make_table_3(scene, SSCTV.table_data, SSCTV.entropy)
         SSCTV.make_pause(scene)
 
     @staticmethod
@@ -392,11 +411,12 @@ class SSCTV(object):
     def make_formula_1(scene: M.Scene, all_ps: list):
         from math import log2
         SSCTV.make_background(scene)
-        sum_entr = sum([- log2(sym.probability) * sym.probability
+        SSCTV.entropy = sum([- log2(sym.probability) * sym.probability
                         for sym in all_ps])
-        tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i = " + str(round(sum_entr, 3))
+        tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i = " + str(
+            round(SSCTV.entropy, 3))
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 80.0)
+                        font_size = 64.0)
         scene.add(tex)
 
     @staticmethod
@@ -450,16 +470,18 @@ class SSCTV(object):
         return mess_ps
 
     @staticmethod
-    def make_messages_20(scene: M.Scene, m1: list, m2: list, m3: list):
-        SSCTV.make_message_20(scene, m1)
+    def make_messages_20(scene: M.Scene, m1: list, m2: list, m3: list,
+                         add: bool = False):
+        SSCTV.make_message_20(scene, m1, add)
         SSCTV.make_pause(scene)
-        SSCTV.make_message_20(scene, m2)
+        SSCTV.make_message_20(scene, m2, add)
         SSCTV.make_pause(scene)
-        SSCTV.make_message_20(scene, m3)
+        SSCTV.make_message_20(scene, m3, add)
         SSCTV.make_pause(scene)
 
     @staticmethod
-    def make_message_20(scene: M.Scene, mess_ps: list, with_text: bool = True):
+    def make_message_20(scene: M.Scene, mess_ps: list,
+                        with_text: bool = True, add: bool = False):
         SSCTV.make_background(scene)
         syms = []
         codes = []
@@ -474,7 +496,7 @@ class SSCTV(object):
                                   font_size = 16.0))
             n += 1
             len_code += len(mes.code)
-        vg = M.VGroup(*codes).arrange().move_to(2.4 * M.UP)
+        vg = M.VGroup(*codes).arrange().move_to(1.5 * M.UP)
         scene.add(vg)
         for i in range(len(syms)):
             scene.add(syms[i].next_to(codes[i], direction = M.UP))
@@ -489,6 +511,8 @@ class SSCTV(object):
             s = M.Text(sym, color = SSCTV.get_main_color()).next_to(b, M.DOWN)
             bs = M.Text(bit_sym, color = SSCTV.get_main_color()).next_to(s, M.DOWN)
             scene.add(b, s, bs)
+            if add:
+                SSCTV.table_data.append(round(len_code / len(syms), 3))
 
     @staticmethod
     def decode_haffman(scene: M.Scene, mess_str: str, all_ps: list):
@@ -622,6 +646,92 @@ class SSCTV(object):
         show = M.MathTex(t, color = SSCTV.get_main_color(),
                          font_size = 64.0)
         scene.add(show)
+
+    @staticmethod
+    def make_formula_2(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"I_s = log_2 M"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 64.0)
+        scene.add(tex)
+
+    @staticmethod
+    def make_formula_3(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 64.0)
+        scene.add(tex)
+
+    @staticmethod
+    def make_formula_4(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"R = \log_2 M - H"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 64.0)
+        scene.add(tex)
+
+    @staticmethod
+    def make_formula_5(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"H \le n_{cp} \le H + 1"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 64.0)
+        scene.add(tex)
+
+    @staticmethod
+    def make_formula_6(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"R_c = L_{cp} - H"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 64.0)
+        scene.add(tex)
+
+    @staticmethod
+    def make_table_3(scene: M.Scene, data: list, H: float):
+        SSCTV.make_background(scene)
+        fs = 20.0
+        data.append(SSCTV.mean_bit_over_symb1)
+        data.append(SSCTV.mean_bit_over_symb2)
+        data.append(SSCTV.mean_bit_over_symb3)
+        print(data)
+        table_data = []
+        for i in range(0, 6, 3):
+            table_data.append([str(data[i]), str(data[i + 1]), str(data[i + 2])])
+            data.append((data[i] + data[i + 1] + data[i + 2]) / 3.0)
+            data.append(data[- 1] - H)
+        table_data.append([str(data[10]), str(data[12]), str(data[14])])
+        table_data.append([str(data[11]), str(data[13]), str(data[15])])
+        table = Table(
+            table_data,
+            row_labels = [
+                M.Text("Сообщение,\nсоответствующее статистике", font_size = fs,
+                       color = SSCTV.get_main_color()),
+                M.Text("Сообщение,\nсостоящее из символов\nс высокими вероятностями",
+                       font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("Сообщение,\nсостоящее из символов\nс низкими вероятностями",
+                       font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("Cреднее количество\nбит/символ", font_size = fs,
+                       color = SSCTV.get_main_color()),
+                M.Text("Избыточность", font_size = fs,
+                       color = SSCTV.get_main_color())
+                ],
+            col_labels = [
+                M.Text("Алгоритм\nХаффмана", font_size = fs,
+                       color = SSCTV.get_main_color()),
+                M.Text("Алгоритм\nГоломба", font_size = fs,
+                       color = SSCTV.get_main_color()),
+                M.Text("Арифметическое\nкодирование", font_size = fs,
+                       color = SSCTV.get_main_color())
+                ],
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 1.0,
+            element_to_mobject_config = {
+                "font_size": fs,
+                "color": SSCTV.get_main_color()},
+            line_config = {"color": SSCTV.get_main_color()})
+        scene.add(table)
 
 
 class ProbabilitySymbol(object):
