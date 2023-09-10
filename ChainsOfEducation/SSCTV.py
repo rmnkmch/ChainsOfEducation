@@ -14,25 +14,33 @@ class SSCTV(object):
     PRB_NUM: int = 2
     UL_CORNER = M.LEFT * 5.5 + M.UP * 3.5
 
-    data_saved = {"my": "A0.2 B0.06 C0.14 D0.1 E0.47 F0.03",
-                  "Саша": "У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07"}
-
-    '''
+    data_saved = '''
+    my - A0.2 B0.06 C0.14 D0.1 E0.47 F0.03
     EEEDCAEEEAEACDAECEAE
     ECAEEEEEAEAEEAECEEEE
     FDFFFBFBFFFFFFFFFFBD
+
+    Саша - У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07
+
+    Э0.15 Ы0.07 В0.06 Й0.26 Х0.19 Е0.27
+    ЙХЭЫВЙЕВЭЕЭЙЙЕВЙЕЙЫЕ
+    ЙЙЙЕЕЙЙЫЕЕЕЕХЕЙЙЙХЙХ
+    ВВЫЫЭЫЫЫЭЫЫВЫЫЭЫВЭЫЭ
     '''
 
-    used_ps_str = "Э0.15 Ы0.07 В0.06 Й0.26 Х0.19 Е0.27"
-    m1 = "ЙХЭЫВЙЕВЭЕЭЙЙЕВЙЕЙЫЕ"
-    m2 = "ЙЙЙЕЕЙЙЫЕЕЕЕХЕЙЙЙХЙХ"
-    m3 = "ВВЫЫЭЫЫЫЭЫЫВЫЫЭЫВЭЫЭ"
+    used_ps_str = ""
+    m1 = ""
+    m2 = ""
+    m3 = ""
     entropy = 0.0
     table_data = []
     symbol_num = 6
     mean_bit_over_symb1 = round(1.0 / 20.0, 3)
     mean_bit_over_symb2 = round(1.0 / 20.0, 3)
     mean_bit_over_symb3 = round(1.0 / 20.0, 3)
+
+    tv1_var = 12
+
     new = False
 
     @staticmethod
@@ -204,9 +212,21 @@ class SSCTV(object):
         return mess
 
     @staticmethod
+    def fill_zeros(str_to_fill, n):
+        return "0" * (n - len(str_to_fill)) + str_to_fill
+
+    @staticmethod
+    def sum_mod_2(ch1: str, ch2: str):
+        if (ch1 == "0" and ch2 == "0") or (ch1 == "1" and ch2 == "1"):
+            return "0"
+        else:
+            return "1"
+
+    @staticmethod
     def make_all(scene: M.Scene):
-        SSCTV.random_SPIK1(SSCTV.new)
-        SSCTV.make_SPIK1(scene)
+        #SSCTV.random_SPIK1(SSCTV.new)
+        #SSCTV.make_SPIK1(scene)
+        SSCTV.make_tv1(scene)
 
     @staticmethod
     def random_SPIK1(new_random = False):
@@ -664,9 +684,6 @@ class SSCTV(object):
                 in_file_old = file
             return [p1, p2]
 
-        def fill_zeros(str_to_fill, n):
-            return "0" * (n - len(str_to_fill)) + str_to_fill
-
         SSCTV.make_background(scene)
         num_symbols = 8
         mess_str = mess_str[:6]
@@ -683,9 +700,9 @@ class SSCTV(object):
             diff = p2 - p1
             for i in range(len(all_ps) + 1):
                 prb_line[i] = p1 + prb_line_old[i] * diff
-            p1_str = fill_zeros(str(round(
+            p1_str = SSCTV.fill_zeros(str(round(
                 p1 * 10 ** (num_symbols + in_file))), num_symbols)
-            p2_str = fill_zeros(str(round(
+            p2_str = SSCTV.fill_zeros(str(round(
                 p2 * 10 ** (num_symbols + in_file))), num_symbols)
             pref = pop_prefix(p1_str, p2_str)
             in_file = max(in_file, pref)
@@ -695,9 +712,10 @@ class SSCTV(object):
             if cycle == mes_len - 1:
                 sdv = ["-", "-"]
                 in_file_str += str(int(p1_str[in_file - in_file_old]) + 1)
-            sdv = get_sdv(p1_str, p2_str, in_file)
-            if in_file_str == "":
-                in_file_str = "-"
+            else:
+                sdv = get_sdv(p1_str, p2_str, in_file)
+                if in_file_str == "":
+                    in_file_str = "-"
             data.append([mess_str[cycle], p1_str, p2_str,
                          in_file_str, sdv[0], sdv[1]])
         fs = 20.0
@@ -828,8 +846,216 @@ class SSCTV(object):
         scene.add(table)
 
     @staticmethod
-    def tv1_draw_sceme_1(scene: M.Scene):
+    def random_tv1(new_random = False):
+        pass
+
+    @staticmethod
+    def make_tv1(scene: M.Scene):
+        key = SSCTV.fill_zeros(bin(int(SSCTV.tv1_var))[2:], 4)
+        print(key)
+        psb_str = SSCTV.tv1_make_table_1(scene, key)
+        print(psb_str)
+        SSCTV.make_pause(scene)
+        data01 = SSCTV.tv1_make_table_2(scene, "001111000011110", psb_str)
+        SSCTV.make_pause(scene)
+        SSCTV.tv1_make_text_1(scene, data01)
+        SSCTV.make_pause(scene)
+
+    @staticmethod
+    def tv1_make_table_1(scene: M.Scene, key: str):
+        def update_0_1(ch, i):
+            nonlocal zeroes, ones, curr_max, max_ind, zeroes_max_ind, ones_max_ind
+            nonlocal zeroes_max, ones_max, prev_ch
+            if prev_ch == "":
+                pass
+            elif ch == "0":
+                zeroes += 1
+                if prev_ch == ch:
+                    curr_max += 1
+                    if zeroes_max < curr_max:
+                        zeroes_max = curr_max
+                        zeroes_max_ind = [max_ind, i]
+                else:
+                    max_ind = i
+                    curr_max = 1
+            elif ch == "1":
+                ones += 1
+                if prev_ch == ch:
+                    curr_max += 1
+                    if ones_max < curr_max:
+                        ones_max = curr_max
+                        ones_max_ind = [max_ind, i]
+                else:
+                    max_ind = i
+                    curr_max = 1
+            prev_ch = ch
+
         SSCTV.make_background(scene)
+        data = []
+        table_data = []
+        ones_max = 0
+        zeroes_max = 0
+        zeroes = 0
+        ones = 0
+        prev_ch = ""
+        curr_max = 1
+        max_ind = 0
+        zeroes_max_ind = []
+        ones_max_ind = []
+        ret_str = []
+        for i in range(16):
+            update_0_1(key[0], i)
+            last = SSCTV.sum_mod_2(key[0], key[1])
+            data.append([str(i), key[3], key[2], key[1], key[0], last])
+            ret_str.append(key[0])
+            key = key[1:] + last
+        for i in range(len(data[0])):
+            table_data.append([])
+            for j in range(len(data)):
+                table_data[-1].append(data[j][i])
+        fs = 24.0
+        table = Table(
+            table_data,
+            row_labels = [
+                M.Text("N", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("1", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("2", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("3", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("4", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("C", font_size = fs, color = SSCTV.get_main_color()),
+                ],
+            include_outer_lines = True,
+            v_buff = 0.5,
+            h_buff = 0.5,
+            element_to_mobject_config = {
+                "font_size": fs,
+                "color": SSCTV.get_main_color()},
+            line_config = {"color": SSCTV.get_main_color()}
+            ).next_to(M.UP * 3.8, M.DOWN)
+        text_1_0 = M.Text(f"Для триггера 4: 0 - {zeroes} раз; 1 - {ones} раз",
+                          font_size = 28.0, color = SSCTV.get_main_color()
+                          ).next_to(table, M.DOWN, 0.6)
+        t0 = f"Серия нулей - {zeroes_max} подряд "
+        t0 += f"в тактах {zeroes_max_ind[0]} - {zeroes_max_ind[1]}"
+        text_0 = M.Text(t0, font_size = 28.0, color = SSCTV.get_main_color()
+                        ).next_to(text_1_0, M.DOWN)
+        t1 = f"Серия единиц - {ones_max} подряд "
+        t1 += f"в тактах {ones_max_ind[0]} - {ones_max_ind[1]}"
+        text_1 = M.Text(t1, font_size = 28.0, color = SSCTV.get_main_color()
+                        ).next_to(text_0, M.DOWN)
+        scene.add(table, text_1_0, text_0, text_1)
+        ret_str = "".join(ret_str)
+        return ret_str[:-1]
+
+    @staticmethod
+    def tv1_make_table_2(scene: M.Scene, in_str: str, pcp_str: str):
+        def update_0_1(ch, i):
+            nonlocal zeroes, ones, curr_max, max_ind, zeroes_max_ind, ones_max_ind
+            nonlocal zeroes_max, ones_max, prev_ch
+            if prev_ch == "":
+                pass
+            elif ch == "0":
+                zeroes += 1
+                if prev_ch == ch:
+                    curr_max += 1
+                    if zeroes_max < curr_max:
+                        zeroes_max = curr_max
+                        zeroes_max_ind = [max_ind, i]
+                else:
+                    max_ind = i
+                    curr_max = 1
+            elif ch == "1":
+                ones += 1
+                if prev_ch == ch:
+                    curr_max += 1
+                    if ones_max < curr_max:
+                        ones_max = curr_max
+                        ones_max_ind = [max_ind, i]
+                else:
+                    max_ind = i
+                    curr_max = 1
+            prev_ch = ch
+
+        data = []
+        table_data = []
+        ones_max = 0
+        zeroes_max = 0
+        zeroes = 0
+        ones = 0
+        prev_ch = ""
+        curr_max = 1
+        max_ind = 0
+        zeroes_max_ind = []
+        ones_max_ind = []
+        SSCTV.make_background(scene)
+        hemming_dist = 0
+        for i in range(len(pcp_str)):
+            skr = SSCTV.sum_mod_2(in_str[i], pcp_str[i])
+            dskr = SSCTV.sum_mod_2(skr, pcp_str[i])
+            update_0_1(skr, i)
+            pcp_prev = pcp_str[i - 1]
+            dskr_with_prev = SSCTV.sum_mod_2(skr, pcp_prev)
+            data.append([str(i), in_str[i], pcp_str[i],
+                         skr, dskr, pcp_prev, dskr_with_prev])
+            if dskr != dskr_with_prev:
+                hemming_dist += 1
+        skr = SSCTV.sum_mod_2(in_str[0], pcp_str[0])
+        dskr = SSCTV.sum_mod_2(skr, pcp_str[0])
+        update_0_1(skr, 15)
+        pcp_prev = pcp_str[14]
+        dskr_with_prev = SSCTV.sum_mod_2(skr, pcp_prev)
+        data.append([str(15), in_str[0], pcp_str[0],
+                     skr, dskr, pcp_prev, dskr_with_prev])
+        for i in range(len(data[0])):
+            table_data.append([])
+            for j in range(len(data)):
+                table_data[-1].append(data[j][i])
+        fs = 24.0
+        table = Table(
+            table_data,
+            row_labels = [
+                M.Text("N", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("Вход", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("ПСП", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("Скр", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("Дскр", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("ПСП>>", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("Дскр>>", font_size = fs, color = SSCTV.get_main_color()),
+                ],
+            include_outer_lines = True,
+            v_buff = 0.5,
+            h_buff = 0.5,
+            element_to_mobject_config = {
+                "font_size": fs,
+                "color": SSCTV.get_main_color()},
+            line_config = {"color": SSCTV.get_main_color()}
+            ).next_to(M.UP * 3.8, M.DOWN)
+        scene.add(table)
+        return [zeroes, ones, zeroes_max, zeroes_max_ind,
+                ones_max, ones_max_ind, hemming_dist]
+
+    @staticmethod
+    def tv1_make_text_1(scene: M.Scene, data01):
+        SSCTV.make_background(scene)
+        zeroes, ones = (data01[0], data01[1])
+        zeroes_max, zeroes_max_ind = (data01[2], data01[3])
+        ones_max, ones_max_ind = (data01[4], data01[5])
+        hemming_dist = data01[6]
+        text_1_0 = M.Text(f"Для Скр: 0 - {zeroes} раз; 1 - {ones} раз",
+                          font_size = 28.0, color = SSCTV.get_main_color()
+                          ).next_to(M.UP, M.DOWN, 0.6)
+        t0 = f"Серия нулей - {zeroes_max} подряд "
+        t0 += f"в тактах {zeroes_max_ind[0]} - {zeroes_max_ind[1]}"
+        text_0 = M.Text(t0, font_size = 28.0, color = SSCTV.get_main_color()
+                        ).next_to(text_1_0, M.DOWN)
+        t1 = f"Серия единиц - {ones_max} подряд "
+        t1 += f"в тактах {ones_max_ind[0]} - {ones_max_ind[1]}"
+        text_1 = M.Text(t1, font_size = 28.0, color = SSCTV.get_main_color()
+                        ).next_to(text_0, M.DOWN)
+        text_hemm = M.Text(f"Расстояние Хэмминга = {hemming_dist}",
+                           font_size = 28.0, color = SSCTV.get_main_color()
+                           ).next_to(text_1, M.DOWN)
+        scene.add(text_1_0, text_1, text_0, text_hemm)
 
 
 class ProbabilitySymbol(object):
