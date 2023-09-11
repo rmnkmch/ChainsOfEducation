@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 121
+        num = 151
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -351,6 +351,226 @@ class TitleBlock(manim.RoundedRectangle):
 7
  綿糸 	 めんし 
 хлопчатобумажная пряжа"""
+        native_kun_on_151_180 = """原
+10 strokes
+Radical: cliff 厂
+Parts: 厂 小 白
+Variants: 厡
+луг, поле, равнина
+Kun: はら
+On: ゲン
+里
+7 strokes
+Radical: village, mile 里
+Parts: 里
+деревня, родина
+Kun: さと
+On: リ
+市
+5 strokes
+Radical: turban, scarf 巾
+Parts: 亠 巾
+город, рынок
+Kun: いち
+On: シ
+京
+8 strokes
+Radical: lid 亠
+Parts: 亠 口 小
+Variants: 亰
+столица
+Kun: みやこ
+On: キョウ、 ケイ、 キン
+風
+9 strokes
+Radical: wind 風
+Parts: ノ 几 虫 風
+Variants: 凮 飌
+ветер, воздух
+Kun: かぜ、 かざ-
+On: フウ、 フ
+雪
+11 strokes
+Radical: rain 雨
+Parts: ヨ 雨
+снег
+Kun: ゆき
+On: セツ
+雲
+12 strokes
+Radical: rain 雨
+Parts: 一 二 厶 雨
+облако, туча
+Kun: くも、 -ぐも
+On: ウン
+池
+6 strokes
+Radical: water 水 (氵, 氺)
+Parts: 汁 也
+пруд, бассейн, водохранилище
+Kun: いけ
+On: チ
+海
+9 strokes
+Radical: water 水 (氵, 氺)
+Parts: 汁 毋 母 乞
+море, океан
+Kun: うみ
+On: カイ
+岩
+8 strokes
+Radical: mountain 山
+Parts: 口 山 石
+валун, скала, утёс
+Kun: いわ
+On: ガン
+星
+9 strokes
+Radical: sun, day 日
+Parts: 日 生
+Variants: 皨
+звезда
+Kun: ほし、 -ぼし
+On: セイ、 ショウ
+室
+9 strokes
+Radical: roof 宀
+Parts: 厶 土 宀 至
+комната, теплица, погреб
+Kun: むろ
+On: シツ
+戸
+4 strokes
+Radical: door, house 戶 (户, 戸)
+Parts: 一 尸 戸
+дверь, ставня
+Kun: と
+On: コ
+家
+10 strokes
+Radical: roof 宀
+Parts: 宀 豕
+дом, приют, семья
+Kun: いえ、 や、 うち
+On: カ、 ケ
+寺
+6 strokes
+Radical: thumb, inch 寸
+Parts: 土 寸
+буддийский храм
+Kun: てら
+On: ジ
+通
+10 strokes (also 9)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: マ 込 用
+движение, проход, поездка
+Kun: とお.る、 とお.り、 -とお.り、 -どお.り、 とお.す、 とお.し、 -どお.し、 かよ.う
+On: ツウ、 ツ
+門
+8 strokes
+Radical: gate 門
+Parts: 門
+ворота
+Kun: かど、 と
+On: モン
+道
+12 strokes (also 11)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 并 込 自 首
+Variants: 噵 衜 衟
+дорога, путь, курс
+Kun: みち、 いう
+On: ドウ、 トウ
+話
+13 strokes
+Radical: speech 言 (訁)
+Parts: 口 舌 言
+сказка, беседа, разговор
+Kun: はな.す、 はなし
+On: ワ
+言
+7 strokes
+Radical: speech 言 (訁)
+Parts: 言
+говорить, сказать, слово
+Kun: い.う、 こと
+On: ゲン、 ゴン
+答
+12 strokes
+Radical: bamboo 竹 (⺮)
+Parts: 一 个 口 竹 乞
+решение, ответ
+Kun: こた.える、 こた.え
+On: トウ
+声
+7 strokes
+Radical: scholar, bachelor 士
+Parts: 士 尸
+Variants: 聲
+голос
+Kun: こえ、 こわ-
+On: セイ、 ショウ
+聞
+14 strokes
+Radical: ear 耳
+Parts: 耳 門
+Variants:
+слышать, спрашивать
+Kun: き.く、 き.こえる
+On: ブン、 モン
+語
+14 strokes
+Radical: speech 言 (訁)
+Parts: 口 五 言
+слово, речь, язык
+Kun: かた.る、 かた.らう
+On: ゴ
+読
+14 strokes
+Radical: speech 言 (訁)
+Parts: 儿 冖 士 言
+Variants: 讀
+читать
+Kun: よ.む、 -よ.み
+On: ドク、 トク、 トウ
+書
+10 strokes
+Radical: say 曰
+Parts: 日 聿
+писать
+Kun: か.く、 -が.き、 -がき
+On: ショ
+記
+10 strokes
+Radical: speech 言 (訁)
+Parts: 已 言
+отчет, записывать
+Kun: しる.す
+On: キ
+紙
+10 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 氏 糸
+Variants: 帋
+бумага
+Kun: かみ
+On: シ
+画
+8 strokes
+Radical: field 田
+Parts: 一 凵 田
+Variants: 畫
+картина, план
+Kun: えが.く、 かく.する、 かぎ.る、 はかりごと、 はか.る
+On: ガ、 カク、 エ、 カイ
+絵
+12 strokes
+Radical: silk 糸 (糹)
+Parts: 二 个 厶 小 幺 糸
+Variants: 繪
+картина, рисунок, эскиз
+On: カイ、 エ"""
         native_kun_on4 = """朝
 12 strokes
 Radical: moon, month 月
@@ -1193,8 +1413,8 @@ BDT, Бангладешская така; Bangladeshi taka"""
 
         #TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         #TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        #TitleBlock.resplit_to_post_kanji(native_kun_on4)
-        #TitleBlock.resplit_to_menu_kanji(native_kun_on4)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_151_180)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_151_180)
         #TitleBlock.resplit_to_post_examples(native_examples)
         #TitleBlock.resplit_to_post_geo(geo)
-        TitleBlock.resplit_to_z_name_geo(geo)
+        #TitleBlock.resplit_to_z_name_geo(geo)

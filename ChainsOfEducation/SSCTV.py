@@ -39,7 +39,7 @@ class SSCTV(object):
     mean_bit_over_symb2 = round(1.0 / 20.0, 3)
     mean_bit_over_symb3 = round(1.0 / 20.0, 3)
 
-    tv1_var = 12
+    tv1_var = 7
 
     new = False
 
@@ -216,11 +216,22 @@ class SSCTV(object):
         return "0" * (n - len(str_to_fill)) + str_to_fill
 
     @staticmethod
-    def sum_mod_2(ch1: str, ch2: str):
+    def tv1_sum_mod_2(ch1: str, ch2: str):
         if (ch1 == "0" and ch2 == "0") or (ch1 == "1" and ch2 == "1"):
             return "0"
         else:
             return "1"
+
+    @staticmethod
+    def tv1_get_random_in_str(n: int):
+        ret = []
+        for _ in range(n):
+            r = random.random()
+            if r >= 0.5:
+                ret.append("1")
+            else:
+                ret.append("0")
+        return "".join(ret)
 
     @staticmethod
     def make_all(scene: M.Scene):
@@ -846,19 +857,16 @@ class SSCTV(object):
         scene.add(table)
 
     @staticmethod
-    def random_tv1(new_random = False):
-        pass
-
-    @staticmethod
     def make_tv1(scene: M.Scene):
         key = SSCTV.fill_zeros(bin(int(SSCTV.tv1_var))[2:], 4)
-        print(key)
-        psb_str = SSCTV.tv1_make_table_1(scene, key)
-        print(psb_str)
+        psp_str = SSCTV.tv1_make_table_1(scene, key)
         SSCTV.make_pause(scene)
-        data01 = SSCTV.tv1_make_table_2(scene, "001111000011110", psb_str)
+        in_str = "010000010011000"#SSCTV.tv1_get_random_in_str(15)
+        data01 = SSCTV.tv1_make_table_2(scene, in_str, psp_str)
         SSCTV.make_pause(scene)
         SSCTV.tv1_make_text_1(scene, data01)
+        SSCTV.make_pause(scene)
+        SSCTV.tv1_make_text_2(scene)
         SSCTV.make_pause(scene)
 
     @staticmethod
@@ -905,7 +913,7 @@ class SSCTV(object):
         ret_str = []
         for i in range(16):
             update_0_1(key[0], i)
-            last = SSCTV.sum_mod_2(key[0], key[1])
+            last = SSCTV.tv1_sum_mod_2(key[0], key[1])
             data.append([str(i), key[3], key[2], key[1], key[0], last])
             ret_str.append(key[0])
             key = key[1:] + last
@@ -948,7 +956,7 @@ class SSCTV(object):
         return ret_str[:-1]
 
     @staticmethod
-    def tv1_make_table_2(scene: M.Scene, in_str: str, pcp_str: str):
+    def tv1_make_table_2(scene: M.Scene, in_str: str, psp_str: str):
         def update_0_1(ch, i):
             nonlocal zeroes, ones, curr_max, max_ind, zeroes_max_ind, ones_max_ind
             nonlocal zeroes_max, ones_max, prev_ch
@@ -989,22 +997,22 @@ class SSCTV(object):
         ones_max_ind = []
         SSCTV.make_background(scene)
         hemming_dist = 0
-        for i in range(len(pcp_str)):
-            skr = SSCTV.sum_mod_2(in_str[i], pcp_str[i])
-            dskr = SSCTV.sum_mod_2(skr, pcp_str[i])
+        for i in range(len(psp_str)):
+            skr = SSCTV.tv1_sum_mod_2(in_str[i], psp_str[i])
+            dskr = SSCTV.tv1_sum_mod_2(skr, psp_str[i])
             update_0_1(skr, i)
-            pcp_prev = pcp_str[i - 1]
-            dskr_with_prev = SSCTV.sum_mod_2(skr, pcp_prev)
-            data.append([str(i), in_str[i], pcp_str[i],
+            pcp_prev = psp_str[i - 1]
+            dskr_with_prev = SSCTV.tv1_sum_mod_2(skr, pcp_prev)
+            data.append([str(i), in_str[i], psp_str[i],
                          skr, dskr, pcp_prev, dskr_with_prev])
             if dskr != dskr_with_prev:
                 hemming_dist += 1
-        skr = SSCTV.sum_mod_2(in_str[0], pcp_str[0])
-        dskr = SSCTV.sum_mod_2(skr, pcp_str[0])
+        skr = SSCTV.tv1_sum_mod_2(in_str[0], psp_str[0])
+        dskr = SSCTV.tv1_sum_mod_2(skr, psp_str[0])
         update_0_1(skr, 15)
-        pcp_prev = pcp_str[14]
-        dskr_with_prev = SSCTV.sum_mod_2(skr, pcp_prev)
-        data.append([str(15), in_str[0], pcp_str[0],
+        pcp_prev = psp_str[14]
+        dskr_with_prev = SSCTV.tv1_sum_mod_2(skr, pcp_prev)
+        data.append([str(15), in_str[0], psp_str[0],
                      skr, dskr, pcp_prev, dskr_with_prev])
         for i in range(len(data[0])):
             table_data.append([])
@@ -1056,6 +1064,33 @@ class SSCTV(object):
                            font_size = 28.0, color = SSCTV.get_main_color()
                            ).next_to(text_1, M.DOWN)
         scene.add(text_1_0, text_1, text_0, text_hemm)
+
+    @staticmethod
+    def tv1_make_text_2(scene: M.Scene):
+        SSCTV.make_background(scene)
+        dict_vars = {1: 101, 2: 1542, 3: 3160, 4: 4422, 5: 15214,
+                     6: 26700, 7: 37120, 8: 52642, 9: 48592, 10: 59306,
+                     11: 61085, 12: 7706, 13: 11490, 14: 32084, 15: 41056}
+        bit = dict_vars[SSCTV.tv1_var]
+        max_bit = 64800
+        column_bit = 64800 // 3
+        str_bit = f"{1}: {bit}"
+        text_bit = M.Text(str_bit, font_size = 30.0,
+                          color = SSCTV.get_main_color()
+                          ).next_to(M.UP * (3.2) + M.LEFT * 6.0)
+        scene.add(text_bit)
+        for i in range(1, 10, 1):
+            if bit + column_bit >= max_bit:
+                str_bit = f"{i + 1}: {bit} - {column_bit * 2}"
+                str_bit += f" + 1 = {bit - column_bit * 2 + 1}"
+                bit = bit - column_bit * 2 + 1
+            else:
+                str_bit = f"{i + 1}: {bit} + {column_bit} = {bit + column_bit}"
+                bit = bit + column_bit
+            text_bit = M.Text(str_bit, font_size = 30.0,
+                              color = SSCTV.get_main_color()
+                              ).next_to(M.UP * (3.2 - i * 0.7) + M.LEFT * 6.0)
+            scene.add(text_bit)
 
 
 class ProbabilitySymbol(object):
