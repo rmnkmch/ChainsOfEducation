@@ -16,22 +16,19 @@ class SSCTV(object):
 
     data_saved = '''
     my - A0.2 B0.06 C0.14 D0.1 E0.47 F0.03
-    EEEDCAEEEAEACDAECEAE
-    ECAEEEEEAEAEEAECEEEE
-    FDFFFBFBFFFFFFFFFFBD
+    Саша И - У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07
 
-    Саша - У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07
-
-    Э0.15 Ы0.07 В0.06 Й0.26 Х0.19 Е0.27
-    ЙХЭЫВЙЕВЭЕЭЙЙЕВЙЕЙЫЕ
-    ЙЙЙЕЕЙЙЫЕЕЕЕХЕЙЙЙХЙХ
-    ВВЫЫЭЫЫЫЭЫЫВЫЫЭЫВЭЫЭ
+    Артём М - tv"100111110000101" 17
+    Щ0.08 У0.12 Г0.09 З0.04 Д0.24 О0.33
+    ГУОДГЩУЩОДУГООДГГЩГЩ
+    ООУООУООУУУУЗУООГДОГ
+    ДДЗДЩЩЗЗЗЩЗЩДЗЗДДЗЗЩ
     '''
 
-    used_ps_str = ""
-    m1 = ""
-    m2 = ""
-    m3 = ""
+    used_ps_str = "Щ0.19 У0.2 Г0.2 З0.04 Д0.14 О0.23"
+    m1 = "ГУОДГЩУЩОДУГООДГГЩГЩ"
+    m2 = "ООУООУООУУУУЗУООГДОГ"
+    m3 = "ДДЗДЩЩЗЗЗЩЗЩДЗЗДДЗЗЩ"
     entropy = 0.0
     table_data = []
     symbol_num = 6
@@ -39,9 +36,9 @@ class SSCTV(object):
     mean_bit_over_symb2 = round(1.0 / 20.0, 3)
     mean_bit_over_symb3 = round(1.0 / 20.0, 3)
 
-    tv1_var = 7
+    tv1_var = 17 - 15
 
-    new = False
+    new = True
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -235,15 +232,15 @@ class SSCTV(object):
 
     @staticmethod
     def make_all(scene: M.Scene):
-        #SSCTV.random_SPIK1(SSCTV.new)
-        #SSCTV.make_SPIK1(scene)
-        SSCTV.make_tv1(scene)
+        SSCTV.random_SPIK1(SSCTV.new)
+        SSCTV.make_SPIK1(scene)
+        #SSCTV.make_tv1(scene)
 
     @staticmethod
     def random_SPIK1(new_random = False):
         pss = SSCTV.used_ps_str
         if new_random:
-            pss = SSCTV.get_random_ps(SSCTV.symbol_num)
+            #pss = SSCTV.get_random_ps(SSCTV.symbol_num)
             SSCTV.used_ps_str = pss
         print(pss)
         all_ps = SSCTV.get_all_ps_by_str(pss)
@@ -760,7 +757,7 @@ class SSCTV(object):
         SSCTV.make_background(scene)
         t = num + r"_{10} = " + bin(int(num))[2:] + r"_2"
         show = M.MathTex(t, color = SSCTV.get_main_color(),
-                         font_size = 64.0).move_to(2.0 * M.UP)
+                         font_size = 54.0).move_to(2.0 * M.UP)
         bit = r"Всего бит = " + str(len(bin(int(num))[2:]))
         sym = r"Всего символов = " + str(SSCTV.symbol_num)
         bit_sym = r"Бит на символ = " + str(round(
@@ -775,7 +772,7 @@ class SSCTV(object):
         SSCTV.make_background(scene)
         tx = r"I_s = log_2 M"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 64.0)
+                        font_size = 54.0)
         scene.add(tex)
 
     @staticmethod
@@ -783,7 +780,7 @@ class SSCTV(object):
         SSCTV.make_background(scene)
         tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 64.0)
+                        font_size = 54.0)
         scene.add(tex)
 
     @staticmethod
@@ -791,7 +788,7 @@ class SSCTV(object):
         SSCTV.make_background(scene)
         tx = r"R = \log_2 M - H"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 64.0)
+                        font_size = 54.0)
         scene.add(tex)
 
     @staticmethod
@@ -799,7 +796,7 @@ class SSCTV(object):
         SSCTV.make_background(scene)
         tx = r"H \le n_{cp} \le H + 1"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 64.0)
+                        font_size = 54.0)
         scene.add(tex)
 
     @staticmethod
@@ -807,7 +804,7 @@ class SSCTV(object):
         SSCTV.make_background(scene)
         tx = r"R_c = L_{cp} - H"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 64.0)
+                        font_size = 54.0)
         scene.add(tex)
 
     @staticmethod
@@ -861,7 +858,7 @@ class SSCTV(object):
         key = SSCTV.fill_zeros(bin(int(SSCTV.tv1_var))[2:], 4)
         psp_str = SSCTV.tv1_make_table_1(scene, key)
         SSCTV.make_pause(scene)
-        in_str = "010000010011000"#SSCTV.tv1_get_random_in_str(15)
+        in_str = SSCTV.tv1_get_random_in_str(15)
         data01 = SSCTV.tv1_make_table_2(scene, in_str, psp_str)
         SSCTV.make_pause(scene)
         SSCTV.tv1_make_text_1(scene, data01)
@@ -1074,18 +1071,18 @@ class SSCTV(object):
         bit = dict_vars[SSCTV.tv1_var]
         max_bit = 64800
         column_bit = 64800 // 3
-        str_bit = f"{1}: {bit}"
+        str_bit = f"Бит {1}: {bit}"
         text_bit = M.Text(str_bit, font_size = 30.0,
                           color = SSCTV.get_main_color()
                           ).next_to(M.UP * (3.2) + M.LEFT * 6.0)
         scene.add(text_bit)
         for i in range(1, 10, 1):
             if bit + column_bit >= max_bit:
-                str_bit = f"{i + 1}: {bit} - {column_bit * 2}"
+                str_bit = f"Бит {i + 1}: {bit} - {column_bit * 2}"
                 str_bit += f" + 1 = {bit - column_bit * 2 + 1}"
                 bit = bit - column_bit * 2 + 1
             else:
-                str_bit = f"{i + 1}: {bit} + {column_bit} = {bit + column_bit}"
+                str_bit = f"Бит {i + 1}: {bit} + {column_bit} = {bit + column_bit}"
                 bit = bit + column_bit
             text_bit = M.Text(str_bit, font_size = 30.0,
                               color = SSCTV.get_main_color()
