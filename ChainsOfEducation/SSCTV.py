@@ -19,16 +19,16 @@ class SSCTV(object):
     Саша И - У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07
 
     Артём М - tv"100111110000101" 17
-    Щ0.08 У0.12 Г0.09 З0.04 Д0.24 О0.33
-    ГУОДГЩУЩОДУГООДГГЩГЩ
-    ООУООУООУУУУЗУООГДОГ
-    ДДЗДЩЩЗЗЗЩЗЩДЗЗДДЗЗЩ
+    М0.33 О0.27 С0.19 К0.13 В0.05 А0.03
+    КОММВМКСОМСМОАМКОМВО
+    МОММСОСМСМССММКОКОМС
+    ВКАКАВАВВАВВВАВКАААА
     '''
 
-    used_ps_str = "Щ0.19 У0.2 Г0.2 З0.04 Д0.14 О0.23"
-    m1 = "ГУОДГЩУЩОДУГООДГГЩГЩ"
-    m2 = "ООУООУООУУУУЗУООГДОГ"
-    m3 = "ДДЗДЩЩЗЗЗЩЗЩДЗЗДДЗЗЩ"
+    used_ps_str = "М0.33 О0.27 С0.19 К0.13 В0.05 А0.03"
+    m1 = "КОММВМКСОМСМОАМКОМВО"
+    m2 = "МОММСОСМСМССММКОКОМС"
+    m3 = "ВКАКАВАВВАВВВАВКАААА"
     entropy = 0.0
     table_data = []
     symbol_num = 6
@@ -38,7 +38,7 @@ class SSCTV(object):
 
     tv1_var = 17 - 15
 
-    new = True
+    new = False
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -240,7 +240,7 @@ class SSCTV(object):
     def random_SPIK1(new_random = False):
         pss = SSCTV.used_ps_str
         if new_random:
-            #pss = SSCTV.get_random_ps(SSCTV.symbol_num)
+            pss = SSCTV.get_random_ps(SSCTV.symbol_num)
             SSCTV.used_ps_str = pss
         print(pss)
         all_ps = SSCTV.get_all_ps_by_str(pss)
@@ -589,7 +589,7 @@ class SSCTV(object):
             found_ps = SSCTV.find_ps_by_symbol(
                 all_ps_sorted[psi].symbol, all_ps_sorted)
             found_ps.code = golomb_q[q] + golomb_r[r]
-            found_text = M.Text(r" - " + found_ps.code,
+            found_text = M.Text(r" - код: " + found_ps.code,
                                 color = SSCTV.get_main_color(),
                                 font_size = 30.0).next_to(tex)
             scene.add(tex, found_text)
