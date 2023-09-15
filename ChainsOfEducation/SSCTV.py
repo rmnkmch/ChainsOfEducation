@@ -15,20 +15,18 @@ class SSCTV(object):
     UL_CORNER = M.LEFT * 5.5 + M.UP * 3.5
 
     data_saved = '''
-    my - A0.2 B0.06 C0.14 D0.1 E0.47 F0.03
-    Саша И - У0.13 М0.39 И0.15 Р0.05 Э0.21 А0.07
-
-    Артём М - tv"100111110000101" 17
+    my_spik1 - A0.2 B0.06 C0.14 D0.1 E0.47 F0.03
+    Артём М - tv "100111110000101" 17
     М0.33 О0.27 С0.19 К0.13 В0.05 А0.03
     КОММВМКСОМСМОАМКОМВО
     МОММСОСМСМССММКОКОМС
     ВКАКАВАВВАВВВАВКАААА
     '''
 
-    used_ps_str = "М0.33 О0.27 С0.19 К0.13 В0.05 А0.03"
-    m1 = "КОММВМКСОМСМОАМКОМВО"
-    m2 = "МОММСОСМСМССММКОКОМС"
-    m3 = "ВКАКАВАВВАВВВАВКАААА"
+    used_ps_str = ""
+    m1 = ""
+    m2 = ""
+    m3 = ""
     entropy = 0.0
     table_data = []
     symbol_num = 6
@@ -36,9 +34,9 @@ class SSCTV(object):
     mean_bit_over_symb2 = round(1.0 / 20.0, 3)
     mean_bit_over_symb3 = round(1.0 / 20.0, 3)
 
-    tv1_var = 17 - 15
+    tv1_var = 1
 
-    new = False
+    new = True
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -232,12 +230,13 @@ class SSCTV(object):
 
     @staticmethod
     def make_all(scene: M.Scene):
-        SSCTV.random_SPIK1(SSCTV.new)
-        SSCTV.make_SPIK1(scene)
+        #SSCTV.random_sipk1(SSCTV.new)
+        #SSCTV.make_sipk1(scene)
         #SSCTV.make_tv1(scene)
+        SSCTV.make_spik2(scene)
 
     @staticmethod
-    def random_SPIK1(new_random = False):
+    def random_sipk1(new_random = False):
         pss = SSCTV.used_ps_str
         if new_random:
             pss = SSCTV.get_random_ps(SSCTV.symbol_num)
@@ -260,7 +259,7 @@ class SSCTV(object):
         SSCTV.m3 = SSCTV.print_message_20(m3, all_ps)
 
     @staticmethod
-    def make_SPIK1(scene: M.Scene):
+    def make_sipk1(scene: M.Scene):
         ps_full = SSCTV.make_haffman(scene)
         SSCTV.make_pause(scene)
         SSCTV.make_table_1(scene, ps_full)
@@ -453,8 +452,10 @@ class SSCTV(object):
         tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i = " + str(
             round(SSCTV.entropy, 3))
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 64.0)
-        scene.add(tex)
+                        font_size = 54.0).move_to(M.LEFT * 2.0)
+        txt = M.Text("бит/символ", color = SSCTV.get_main_color(),
+                     font_size = 40.0).next_to(tex)
+        scene.add(tex, txt)
 
     @staticmethod
     def get_random_message_1(all_ps: list, n: int = 20):
@@ -693,7 +694,7 @@ class SSCTV(object):
             return [p1, p2]
 
         SSCTV.make_background(scene)
-        num_symbols = 8
+        num_symbols = 5
         mess_str = mess_str[:6]
         mes_len = len(mess_str)
         prb_line_old = SSCTV.get_prb_line(all_ps, 0.0)
@@ -726,7 +727,7 @@ class SSCTV(object):
                     in_file_str = "-"
             data.append([mess_str[cycle], p1_str, p2_str,
                          in_file_str, sdv[0], sdv[1]])
-        fs = 20.0
+        fs = 24.0
         table = Table(
             data,
             col_labels = [
@@ -810,7 +811,7 @@ class SSCTV(object):
     @staticmethod
     def make_table_3(scene: M.Scene, data: list, H: float):
         SSCTV.make_background(scene)
-        fs = 22.0
+        fs = 24.0
         data.append(SSCTV.mean_bit_over_symb1)
         data.append(SSCTV.mean_bit_over_symb2)
         data.append(SSCTV.mean_bit_over_symb3)
@@ -825,11 +826,11 @@ class SSCTV(object):
         table = Table(
             table_data,
             row_labels = [
-                M.Text("Сообщение,\nсоответствующее статистике", font_size = fs,
+                M.Text("Сообщение 1", font_size = fs,
                        color = SSCTV.get_main_color()),
-                M.Text("Сообщение,\nсостоящее из символов\nс высокими вероятностями",
+                M.Text("Сообщение 2",
                        font_size = fs, color = SSCTV.get_main_color()),
-                M.Text("Сообщение,\nсостоящее из символов\nс низкими вероятностями",
+                M.Text("Сообщение 3",
                        font_size = fs, color = SSCTV.get_main_color()),
                 M.Text("Cреднее количество\nбит на символ", font_size = fs,
                        color = SSCTV.get_main_color()),
@@ -837,15 +838,15 @@ class SSCTV(object):
                        color = SSCTV.get_main_color())
                 ],
             col_labels = [
-                M.Text("Алгоритм\nХаффмана", font_size = fs,
+                M.Text("Код\nХаффмана", font_size = fs,
                        color = SSCTV.get_main_color()),
-                M.Text("Алгоритм\nГоломба", font_size = fs,
+                M.Text("Код\nГоломба", font_size = fs,
                        color = SSCTV.get_main_color()),
-                M.Text("Арифметическое\nкодирование", font_size = fs,
+                M.Text("Арифметический\nкод", font_size = fs,
                        color = SSCTV.get_main_color())
                 ],
             include_outer_lines = True,
-            v_buff = 0.4,
+            v_buff = 0.5,
             h_buff = 0.8,
             element_to_mobject_config = {
                 "font_size": fs,
@@ -1089,6 +1090,32 @@ class SSCTV(object):
                               ).next_to(M.UP * (3.2 - i * 0.7) + M.LEFT * 6.0)
             scene.add(text_bit)
 
+    @staticmethod
+    def make_spik2(scene: M.Scene):
+        SSCTV.spik2_num_plane(scene)
+        SSCTV.make_pause(scene)
+
+    @staticmethod
+    def spik2_num_plane(scene: M.Scene):
+        #SSCTV.make_background(scene)
+        number_plane = M.NumberPlane(
+            x_range = (0, 24, 1),
+            y_range = (0, 20, 1),
+            x_length = 13.0,
+            y_length = 7.0,
+            axis_config = {
+                "numbers_to_include": M.np.arange(0, 2, 1),
+                "font_size": 20,
+                },
+            tips = False,
+            )
+
+        graphs = M.VGroup()
+        graphs += number_plane.plot(lambda x: x ** 2.0,
+                                    color = M.WHITE, use_smoothing = False)
+        graphs += M.Dot(point = number_plane.c2p(1, 1, 0), color = M.YELLOW)
+        scene.add(graphs, number_plane)
+
 
 class ProbabilitySymbol(object):
     def __init__(self, symbol: str, probability: str, merged: bool, code: str = ""):
@@ -1143,7 +1170,7 @@ class PromoCode(object):
                    ("o63116012", 50, False),
                    ("o86636403", 25, False),
                    ("o15260943", 10, False),
-                   ("t72539756", 20, False), #до 10.09.2023 включительно
+                   ("t72539756", 20, False),
                    ("s05050505", 50, False)]
 
     class PromoCodeType(enum.Enum):
