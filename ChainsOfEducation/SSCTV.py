@@ -36,6 +36,11 @@ class SSCTV(object):
 
     tv1_var = 1
 
+    sipk2_Nhor = 25
+    sipk2_Nver = 21
+    sipk2_x_n = []
+    sipk2_cffs = []
+
     new = True
 
     @staticmethod
@@ -229,16 +234,25 @@ class SSCTV(object):
         return "".join(ret)
 
     @staticmethod
-    def make_all(scene: M.Scene):
-        #SSCTV.random_sipk1(SSCTV.new)
-        #SSCTV.make_sipk1(scene)
-        #SSCTV.make_tv1(scene)
-        SSCTV.make_spik2(scene)
+    def transpose_list(used_list: list):
+        ret_list: list = []
+        for i in range(len(used_list[0])):
+            ret_list.append([])
+            for j in range(len(used_list)):
+                ret_list[-1].append(used_list[j][i])
+        return ret_list
 
     @staticmethod
-    def random_sipk1(new_random = False):
+    def make_all(scene: M.Scene):
+        #SSCTV.random_sipk1()
+        #SSCTV.make_sipk1(scene)
+        #SSCTV.make_tv1(scene)
+        SSCTV.make_sipk2(scene)
+
+    @staticmethod
+    def random_sipk1():
         pss = SSCTV.used_ps_str
-        if new_random:
+        if SSCTV.new:
             pss = SSCTV.get_random_ps(SSCTV.symbol_num)
             SSCTV.used_ps_str = pss
         print(pss)
@@ -250,7 +264,7 @@ class SSCTV(object):
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, all_ps_copy)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, all_ps_copy)
         m3 = SSCTV.get_message_20_by_str(SSCTV.m3, all_ps_copy)
-        if new_random:
+        if SSCTV.new:
             m1 = SSCTV.get_random_message_1(all_ps_copy, n)
             m2 = SSCTV.get_random_message_2(all_ps_copy, n)
             m3 = SSCTV.get_random_message_3(all_ps_copy, n)
@@ -1091,30 +1105,156 @@ class SSCTV(object):
             scene.add(text_bit)
 
     @staticmethod
-    def make_spik2(scene: M.Scene):
-        SSCTV.spik2_num_plane(scene)
-        SSCTV.make_pause(scene)
+    def sipk2_graph_by_cffs(cffs: list):
+        from math import sin
+        return (lambda x:
+                cffs[0][0] * sin(cffs[0][1] * x + cffs[0][2])
+                + cffs[1][0] * sin(cffs[1][1] * x + cffs[1][2])
+                + cffs[2][0] * sin(cffs[2][1] * x + cffs[2][2])
+                + cffs[3][0] * sin(cffs[3][1] * x + cffs[3][2]))
 
     @staticmethod
-    def spik2_num_plane(scene: M.Scene):
-        #SSCTV.make_background(scene)
+    def sipk2_random_graph_cffs():
+        sin_a = (random.random() - 0.5) * 10.0
+        sin_f = (random.random() - 0.5) * 1.0
+        sin_p = random.random() * 7.0
+        sin_a2 = (random.random() - 0.5) * 8.0
+        sin_f2 = (random.random() - 0.5) * 2.0
+        sin_p2 = random.random() * 7.0
+        sin_a3 = (random.random() - 0.5) * 6.0
+        sin_f3 = (random.random() - 0.5) * 3.0
+        sin_p3 = random.random() * 7.0
+        sin_a4 = (random.random() - 0.5) * 4.0
+        sin_f4 = (random.random() - 0.5) * 4.0
+        sin_p4 = random.random() * 7.0
+        ret = [[sin_a, sin_f, sin_p], [sin_a2, sin_f2, sin_p2],
+               [sin_a3, sin_f3, sin_p3], [sin_a4, sin_f4, sin_p4]]
+        print(ret)
+        return ret
+
+    @staticmethod
+    def sipk2_scale_center_graph(graph, Nver: int = 0, Nhor: int = 0):
+        accuracy: int = 10
+        if SSCTV.new: accuracy = 1
+        if Nver == 0: Nver = SSCTV.sipk2_Nver
+        if Nhor == 0: Nhor = SSCTV.sipk2_Nhor
+        min_g = 100.0
+        max_g = - 100.0
+        for i in range(Nhor):
+            for j in range(accuracy):
+                y = graph(i + j / accuracy)
+                min_g = min(min_g, y)
+                max_g = max(max_g, y)
+        amp = Nver / abs(max_g - min_g) * 0.98
+        corr_vert = (max_g + min_g) * 0.5
+        return lambda x: (graph(x) - corr_vert) * amp + Nver * 0.5
+
+    @staticmethod
+    def make_sipk2(scene: M.Scene):
+        repetitions = 1
+        if SSCTV.new: repetitions = 10
+        for _ in range(repetitions):
+            SSCTV.sipk2_num_plane(scene)
+            SSCTV.make_pause(scene)
+            if not SSCTV.new:
+                SSCTV.sipk2_table_1(scene)
+                SSCTV.make_pause(scene)
+            SSCTV.sipk2_Nhor = random.randint(24, 26)
+            SSCTV.sipk2_Nver = random.randint(20, 30)
+
+    @staticmethod
+    def sipk2_num_plane(scene: M.Scene):
+        SSCTV.make_background(scene)
         number_plane = M.NumberPlane(
-            x_range = (0, 24, 1),
-            y_range = (0, 20, 1),
+            x_range = (0, SSCTV.sipk2_Nhor, 1),
+            y_range = (0, SSCTV.sipk2_Nver, 1),
             x_length = 13.0,
             y_length = 7.0,
+            color = SSCTV.get_main_color(),
             axis_config = {
-                "numbers_to_include": M.np.arange(0, 2, 1),
-                "font_size": 20,
+                "numbers_to_include": M.np.arange(0, SSCTV.sipk2_Nhor + 1, 1),
+                "font_size": 18.0,
+                "stroke_width": 3,
+                "include_ticks": False,
+                "include_tip": False,
+                "line_to_number_buff": 0.11,
+                "label_direction": M.DOWN,
+                "color": SSCTV.get_main_color(),
+                },
+            y_axis_config = {
+                "numbers_to_include": M.np.arange(0, SSCTV.sipk2_Nver + 1, 1),
+                "label_direction": M.LEFT},
+            background_line_style = {
+                "stroke_color": SSCTV.get_main_color(),
+                "stroke_width": 2,
+                "stroke_opacity": 0.5,
                 },
             tips = False,
             )
-
+        number_plane.get_axes().set_color(SSCTV.get_main_color())
         graphs = M.VGroup()
-        graphs += number_plane.plot(lambda x: x ** 2.0,
-                                    color = M.WHITE, use_smoothing = False)
-        graphs += M.Dot(point = number_plane.c2p(1, 1, 0), color = M.YELLOW)
-        scene.add(graphs, number_plane)
+        gr = SSCTV.sipk2_cffs
+        if SSCTV.new: gr = SSCTV.sipk2_random_graph_cffs()
+        gr = SSCTV.sipk2_scale_center_graph(SSCTV.sipk2_graph_by_cffs(gr))
+        graphs += number_plane.plot(
+            gr, x_range = (0, SSCTV.sipk2_Nhor, 0.1),
+            color = SSCTV.get_main_color(), use_smoothing = False)
+        x_n = []
+        for i in range(SSCTV.sipk2_Nhor + 1):
+            graphs += M.Dot(number_plane.c2p(i, round(gr(i)), 0), 0.05,
+                            color = SSCTV.get_main_color())
+            x_n.append(round(gr(i)))
+        SSCTV.sipk2_x_n = x_n
+        scene.add(number_plane, graphs)
+
+    @staticmethod
+    def sipk2_table_1(scene: M.Scene):
+        SSCTV.make_background(scene)
+        table_data = []
+        x_n_1 = 0
+        x_n_2 = 0
+        y_n_1 = 0
+        y_n_2 = 0
+        for i in range(len(SSCTV.sipk2_x_n)):
+            p1 = x_n_1
+            p2 = 2 * x_n_1 - x_n_2
+            if i == 1: p2 = x_n_1
+            e1 = SSCTV.sipk2_x_n[i] - p1
+            e2 = SSCTV.sipk2_x_n[i] - p2
+            y1 = y_n_1 + e1
+            y2 = 2 * y_n_1 - y_n_2 + e2
+            if i == 1: y2 = y_n_1 + e2
+            table_data.append([str(i), str(SSCTV.sipk2_x_n[i]),
+                               str(p1), str(e1), str(y1),
+                               str(p2), str(e2), str(y2),
+                               ])
+            y_n_2 = y_n_1
+            y_n_1 = y1
+            x_n_2 = x_n_1
+            x_n_1 = SSCTV.sipk2_x_n[i]
+        table_data = SSCTV.transpose_list(table_data)
+        fs = 14.0
+        table = Table(
+            table_data,
+            row_labels = [
+                M.Text("n", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("x(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("p1(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("e1(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("y1(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("p2(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("e2(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("y2(n)", font_size = fs, color = SSCTV.get_main_color()),
+                ],
+            include_outer_lines = True,
+            v_buff = 0.3,
+            h_buff = 0.3,
+            element_to_mobject_config = {
+                "font_size": fs,
+                "color": SSCTV.get_main_color()},
+            line_config = {"color": SSCTV.get_main_color()}
+            ).next_to(M.UP * 3.8, M.DOWN)
+        scene.add(table)
 
 
 class ProbabilitySymbol(object):
