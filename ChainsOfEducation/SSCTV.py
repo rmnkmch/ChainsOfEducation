@@ -16,11 +16,10 @@ class SSCTV(object):
 
     data_saved = '''
     my_spik1 - A0.2 B0.06 C0.14 D0.1 E0.47 F0.03
-    Артём М - tv "100111110000101" 17
-    М0.33 О0.27 С0.19 К0.13 В0.05 А0.03
-    КОММВМКСОМСМОАМКОМВО
-    МОММСОСМСМССММКОКОМС
-    ВКАКАВАВВАВВВАВКАААА
+    EEEDCAEEEAEACDAECEAE
+    ECAEEEEEAEAEEAECEEEE
+    FDFFFBFBFFFFFFFFFFBD
+    Артём М - 17
     '''
 
     used_ps_str = ""
@@ -30,20 +29,21 @@ class SSCTV(object):
     entropy = 0.0
     table_data = []
     symbol_num = 6
-    mean_bit_over_symb1 = round(1.0 / 20.0, 3)
-    mean_bit_over_symb2 = round(1.0 / 20.0, 3)
-    mean_bit_over_symb3 = round(1.0 / 20.0, 3)
+    mess_symbol_num = 20
+    mean_bit_over_symb1 = round(1.0 / mess_symbol_num, 3)
+    mean_bit_over_symb2 = round(1.0 / mess_symbol_num, 3)
+    mean_bit_over_symb3 = round(1.0 / mess_symbol_num, 3)
 
     tv1_var = 1
 
     sipk2_Nhor = 25
     sipk2_Nver = 21
     sipk2_x_n = []
-    sipk2_cffs = [[4.985635631419168, -0.2887393933081266, 1.025422527284471], [3.630751490869214, 0.5891657885840054, 1.710639811228165], [1.2556903541031397, 0.9192865042476124, 6.694591077458971], [-0.927892730651902, 0.744528591947407, 1.483784609912846]]
+    sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
 
-    new = False
+    new = True
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -261,15 +261,14 @@ class SSCTV(object):
         all_ps = SSCTV.get_all_ps_by_str(pss)
         SSCTV.print_sp_octave(all_ps)
         if not SSCTV.check_probabilities(all_ps): print("prb != 1")
-        n = 20
         all_ps_copy = [ProbabilitySymbol.get_full_copy(ps) for ps in all_ps]
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, all_ps_copy)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, all_ps_copy)
         m3 = SSCTV.get_message_20_by_str(SSCTV.m3, all_ps_copy)
         if SSCTV.new:
-            m1 = SSCTV.get_random_message_1(all_ps_copy, n)
-            m2 = SSCTV.get_random_message_2(all_ps_copy, n)
-            m3 = SSCTV.get_random_message_3(all_ps_copy, n)
+            m1 = SSCTV.get_random_message_1(all_ps_copy, SSCTV.mess_symbol_num)
+            m2 = SSCTV.get_random_message_2(all_ps_copy, SSCTV.mess_symbol_num)
+            m3 = SSCTV.get_random_message_3(all_ps_copy, SSCTV.mess_symbol_num)
         SSCTV.m1 = SSCTV.print_message_20(m1, all_ps)
         SSCTV.m2 = SSCTV.print_message_20(m2, all_ps)
         SSCTV.m3 = SSCTV.print_message_20(m3, all_ps)
@@ -710,7 +709,7 @@ class SSCTV(object):
             return [p1, p2]
 
         SSCTV.make_background(scene)
-        num_symbols = 5
+        num_symbols = 4
         mess_str = mess_str[:6]
         mes_len = len(mess_str)
         prb_line_old = SSCTV.get_prb_line(all_ps, 0.0)
@@ -718,6 +717,8 @@ class SSCTV(object):
         data = []
         in_file = 0
         in_file_old = 0
+        pow_10 = 0
+        pref_zeroes = 0
         for cycle in range(mes_len):
             g_indx = SSCTV.find_index_ps_by_symbol(
                 mess_str[cycle], all_ps)
@@ -725,13 +726,26 @@ class SSCTV(object):
             diff = p2 - p1
             for i in range(len(all_ps) + 1):
                 prb_line[i] = p1 + prb_line_old[i] * diff
-            p1_str = SSCTV.fill_zeros(str(round(
-                p1 * 10 ** (num_symbols + in_file))), num_symbols)
-            p2_str = SSCTV.fill_zeros(str(round(
-                p2 * 10 ** (num_symbols + in_file))), num_symbols)
+            p1_str_emp = str(round(p1 * 10 ** (num_symbols + pow_10)))
+            p1_str = SSCTV.fill_zeros(p1_str_emp, num_symbols)
+            p2_str_emp = str(round(p2 * 10 ** (num_symbols + pow_10)))
+            p2_str = SSCTV.fill_zeros(p2_str_emp, num_symbols)
             pref = pop_prefix(p1_str, p2_str)
-            in_file = max(in_file, pref)
-            in_file_str = p2_str[in_file_old:in_file]
+            if pref > in_file:
+                if in_file == 0 and p2_str[0] == "0":
+                    pref_zeroes += 1
+                    if p2_str[1] == "0":
+                        pref_zeroes += 1
+                    in_file = pref
+                    pow_10 = pref
+                else:
+                    in_file = pref
+                    pow_10 = pref
+            if pref_zeroes > 0 and in_file_old > 0:
+                in_file_old -= pref_zeroes
+                pow_10 += pref_zeroes
+                pref_zeroes = 0
+            in_file_str = p1_str[in_file_old : in_file]
             p1_str = p1_str[in_file_old:]
             p2_str = p2_str[in_file_old:]
             if cycle == mes_len - 1:
@@ -772,13 +786,20 @@ class SSCTV(object):
     @staticmethod
     def make_count_1(scene: M.Scene, num: str):
         SSCTV.make_background(scene)
-        t = num + r"_{10} = " + bin(int(num))[2:] + r"_2"
+        t = num + r"_{10} = "
+        bin_s = ""
+        if num[0] == "0":
+            bin_s += "0"
+            if num[1] == "0":
+                bin_s += "0"
+        bin_s += bin(int(num))[2:]
+        t += bin_s + r"_2"
         show = M.MathTex(t, color = SSCTV.get_main_color(),
                          font_size = 54.0).move_to(2.0 * M.UP)
-        bit = r"Всего бит = " + str(len(bin(int(num))[2:]))
+        bit = r"Всего бит = " + str(len(bin_s))
         sym = r"Всего символов = " + str(SSCTV.symbol_num)
         bit_sym = r"Бит на символ = " + str(round(
-            len(bin(int(num))[2:]) / SSCTV.symbol_num, 3))
+            len(bin_s) / SSCTV.symbol_num, 3))
         b = M.Text(bit, color = SSCTV.get_main_color())
         s = M.Text(sym, color = SSCTV.get_main_color()).next_to(b, M.DOWN)
         bs = M.Text(bit_sym, color = SSCTV.get_main_color()).next_to(s, M.DOWN)
@@ -842,11 +863,11 @@ class SSCTV(object):
         table = Table(
             table_data,
             row_labels = [
-                M.Text("Сообщение 1", font_size = fs,
+                M.Text("Сообщение,\nсоответствующее\nстатистике", font_size = fs,
                        color = SSCTV.get_main_color()),
-                M.Text("Сообщение 2",
+                M.Text("Сообщение\nс частыми символами",
                        font_size = fs, color = SSCTV.get_main_color()),
-                M.Text("Сообщение 3",
+                M.Text("Сообщение\nс редкими символами",
                        font_size = fs, color = SSCTV.get_main_color()),
                 M.Text("Cреднее количество\nбит на символ", font_size = fs,
                        color = SSCTV.get_main_color()),
