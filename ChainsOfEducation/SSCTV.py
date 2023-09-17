@@ -39,9 +39,11 @@ class SSCTV(object):
     sipk2_Nhor = 25
     sipk2_Nver = 21
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[4.985635631419168, -0.2887393933081266, 1.025422527284471], [3.630751490869214, 0.5891657885840054, 1.710639811228165], [1.2556903541031397, 0.9192865042476124, 6.694591077458971], [-0.927892730651902, 0.744528591947407, 1.483784609912846]]
+    sipk2_e1 = []
+    sipk2_e2 = []
 
-    new = True
+    new = False
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -661,13 +663,13 @@ class SSCTV(object):
                     + left_side + M.RIGHT * horz_offset * cycle,
                     M.UP * - 3.5
                     + left_side + M.RIGHT * horz_offset * (cycle + 1)
-                    ], 0.1, 2.0, SSCTV.get_main_color())
+                    ], 0.1, 2, SSCTV.get_main_color())
                 ln2 = ZLine([
                     M.UP * 7.0 * (prb_line_old[g_indx + 1] - 0.5)
                     + left_side + M.RIGHT * horz_offset * cycle,
                     M.UP * 3.5
                     + left_side + M.RIGHT * horz_offset * (cycle + 1)
-                    ], 0.1, 2.0, SSCTV.get_main_color())
+                    ], 0.1, 2, SSCTV.get_main_color())
                 scene.add(ln1, ln2)
             else:
                 num1 = str(round(prb_line[-1], (cycle + 1) * 2))
@@ -1159,6 +1161,12 @@ class SSCTV(object):
             if not SSCTV.new:
                 SSCTV.sipk2_table_1(scene)
                 SSCTV.make_pause(scene)
+                SSCTV.sipk2_table_2(scene, SSCTV.sipk2_x_n, "x")
+                SSCTV.make_pause(scene)
+                SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e1, "e_1")
+                SSCTV.make_pause(scene)
+                SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2, "e_2")
+                SSCTV.make_pause(scene)
             SSCTV.sipk2_Nhor = random.randint(24, 26)
             SSCTV.sipk2_Nver = random.randint(20, 30)
 
@@ -1194,7 +1202,7 @@ class SSCTV(object):
         number_plane.get_axes().set_color(SSCTV.get_main_color())
         graphs = M.VGroup()
         gr = SSCTV.sipk2_cffs
-        if SSCTV.new: gr = SSCTV.sipk2_random_graph_cffs()
+        if SSCTV.new or len(gr) == 0: gr = SSCTV.sipk2_random_graph_cffs()
         gr = SSCTV.sipk2_scale_center_graph(SSCTV.sipk2_graph_by_cffs(gr))
         graphs += number_plane.plot(
             gr, x_range = (0, SSCTV.sipk2_Nhor, 0.1),
@@ -1215,6 +1223,8 @@ class SSCTV(object):
         x_n_2 = 0
         y_n_1 = 0
         y_n_2 = 0
+        SSCTV.sipk2_e1.clear()
+        SSCTV.sipk2_e2.clear()
         for i in range(len(SSCTV.sipk2_x_n)):
             p1 = x_n_1
             p2 = 2 * x_n_1 - x_n_2
@@ -1232,6 +1242,8 @@ class SSCTV(object):
             y_n_1 = y1
             x_n_2 = x_n_1
             x_n_1 = SSCTV.sipk2_x_n[i]
+            SSCTV.sipk2_e1.append(e1)
+            SSCTV.sipk2_e2.append(e2)
         table_data = SSCTV.transpose_list(table_data)
         fs = 14.0
         table = Table(
@@ -1255,6 +1267,65 @@ class SSCTV(object):
             line_config = {"color": SSCTV.get_main_color()}
             ).next_to(M.UP * 3.8, M.DOWN)
         scene.add(table)
+
+    @staticmethod
+    def sipk2_table_2(scene: M.Scene, data: list, X: str):
+        from math import log2
+        SSCTV.make_background(scene)
+        table_data = []
+        data_dict = {}
+        data.sort()
+        for i in range(len(data)):
+            if data[i] not in data_dict:
+                data_dict[data[i]] = 1
+            else:
+                data_dict[data[i]] += 1
+        SSCTV.entropy = 0.0
+        for i in data_dict:
+            pb = data_dict[i] / len(data)
+            table_data.append([str(i),
+                               str(data_dict[i]),
+                               str(round(pb, 4)),
+                               str(- round(log2(pb), 4)),
+                               str(- round(log2(pb) * pb, 4)),
+                               ])
+            SSCTV.entropy += - log2(pb) * pb
+        table_data = SSCTV.transpose_list(table_data)
+        fs = 14.0
+        table = Table(
+            table_data,
+            row_labels = [
+                M.MathTex(
+                    f"{X}", color = SSCTV.get_main_color(),
+                    font_size = 24.0),
+                M.MathTex(
+                    f"N({X})", color = SSCTV.get_main_color(),
+                    font_size = 24.0),
+                M.MathTex(
+                    f"p({X})", color = SSCTV.get_main_color(),
+                    font_size = 24.0),    
+                M.MathTex(r"-\log_2 p(" + X + r")",
+                          color = SSCTV.get_main_color(), font_size = 24.0),
+                M.MathTex(r"-p(" + X + r") \cdot \log_2 p(" + X + r")",
+                          color = SSCTV.get_main_color(), font_size = 24.0),
+                ],
+            include_outer_lines = True,
+            v_buff = 0.3,
+            h_buff = 0.3,
+            element_to_mobject_config = {
+                "font_size": fs,
+                "color": SSCTV.get_main_color()},
+            line_config = {"color": SSCTV.get_main_color()}
+            ).next_to(M.UP * 3.8, M.DOWN)
+        tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i = " + str(
+            round(SSCTV.entropy, 4))
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 48.0).next_to(table, M.DOWN)
+        txt = M.Text("бит/символ", color = SSCTV.get_main_color(),
+                     font_size = 36.0)
+        tex.shift(M.LEFT * txt.width * 0.5)
+        txt.next_to(tex)
+        scene.add(table, tex, txt)
 
 
 class ProbabilitySymbol(object):
