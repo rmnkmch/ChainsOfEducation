@@ -20,6 +20,17 @@ class SSCTV(object):
     ECAEEEEEAEAEEAECEEEE
     FDFFFBFBFFFFFFFFFFBD
     Артём М - 17
+    Алексей Г - 4
+    Л0.11 И0.16 М0.14 О0.05 Н0.28 А0.03 Д0.23
+    МИЛДДДННМЛИИМННДДНДИ
+    ДДДНДДННИННИННДНИННД
+    ЛААОАЛААААЛОООАОАОЛМ
+    Никто - 0
+    Д0.28 Е0.03 К0.04 А0.09 Б0.08 Р0.21 Ь0.27
+    ДРЕДДДЬРДАРБРАРРЬРАЬ
+    ЬЬДЬРЬДДДРЬДРЬДДРЬРД
+    ЕКЕЕБЕККККЕЕККБКККЕЕ
+    pkg load communications
     '''
 
     used_ps_str = ""
@@ -28,13 +39,15 @@ class SSCTV(object):
     m3 = ""
     entropy = 0.0
     table_data = []
-    symbol_num = 6
+    symbol_num = 7
+    symbol_num_arithm = 6
     mess_symbol_num = 20
-    mean_bit_over_symb1 = round(1.0 / mess_symbol_num, 3)
-    mean_bit_over_symb2 = round(1.0 / mess_symbol_num, 3)
-    mean_bit_over_symb3 = round(1.0 / mess_symbol_num, 3)
+    mean_bit_over_symb1 = round(55.0 / mess_symbol_num, 3)
+    mean_bit_over_symb2 = round(49.0 / mess_symbol_num, 3)
+    mean_bit_over_symb3 = round(95.0 / mess_symbol_num, 3)
 
-    tv1_var = 1
+    tv1_var = 4
+    tv1_in_str = ""
 
     sipk2_Nhor = 25
     sipk2_Nver = 21
@@ -233,6 +246,7 @@ class SSCTV(object):
                 ret.append("1")
             else:
                 ret.append("0")
+        print("".join(ret))
         return "".join(ret)
 
     @staticmethod
@@ -246,10 +260,10 @@ class SSCTV(object):
 
     @staticmethod
     def make_all(scene: M.Scene):
-        #SSCTV.random_sipk1()
-        #SSCTV.make_sipk1(scene)
+        SSCTV.random_sipk1()
+        SSCTV.make_sipk1(scene)
         #SSCTV.make_tv1(scene)
-        SSCTV.make_sipk2(scene)
+        #SSCTV.make_sipk2(scene)
 
     @staticmethod
     def random_sipk1():
@@ -265,7 +279,7 @@ class SSCTV(object):
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, all_ps_copy)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, all_ps_copy)
         m3 = SSCTV.get_message_20_by_str(SSCTV.m3, all_ps_copy)
-        if SSCTV.new:
+        if SSCTV.new or len(m1) == 0:
             m1 = SSCTV.get_random_message_1(all_ps_copy, SSCTV.mess_symbol_num)
             m2 = SSCTV.get_random_message_2(all_ps_copy, SSCTV.mess_symbol_num)
             m3 = SSCTV.get_random_message_3(all_ps_copy, SSCTV.mess_symbol_num)
@@ -298,16 +312,16 @@ class SSCTV(object):
         SSCTV.make_pause(scene)
         SSCTV.make_count_1(scene, num)
         SSCTV.make_pause(scene)
-        SSCTV.make_formula_2(scene)
-        SSCTV.make_pause(scene)
-        SSCTV.make_formula_3(scene)
-        SSCTV.make_pause(scene)
-        SSCTV.make_formula_4(scene)
-        SSCTV.make_pause(scene)
-        SSCTV.make_formula_5(scene)
-        SSCTV.make_pause(scene)
-        SSCTV.make_formula_6(scene)
-        SSCTV.make_pause(scene)
+        # SSCTV.make_formula_2(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.make_formula_3(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.make_formula_4(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.make_formula_5(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.make_formula_6(scene)
+        # SSCTV.make_pause(scene)
         SSCTV.make_table_3(scene, SSCTV.table_data, SSCTV.entropy)
         SSCTV.make_pause(scene)
 
@@ -566,13 +580,7 @@ class SSCTV(object):
             scene.add(b, s, bs)
             if add:
                 SSCTV.table_data.append(round(len_code / len(syms), 3))
-
-    @staticmethod
-    def decode_haffman(scene: M.Scene, mess_str: str, all_ps: list):
-        SSCTV.make_background(scene)
-        m = SSCTV.get_message_20_by_str(mess_str, all_ps)
-        SSCTV.make_message_20(scene, m, False)
-
+                
     @staticmethod
     def make_golomb(scene: M.Scene, all_ps: list):
         golomb_r = {0: "0", 1: "10", 2: "11"}
@@ -619,7 +627,7 @@ class SSCTV(object):
 
         left_side = M.LEFT * 6.6
         SSCTV.make_background(scene)
-        mess_str = mess_str[:6]
+        mess_str = mess_str[:SSCTV.symbol_num_arithm]
         mes_len = len(mess_str)
         horz_offset = 12.0 / mes_len
         prb_line_old = SSCTV.get_prb_line(all_ps, 0.0)
@@ -709,8 +717,8 @@ class SSCTV(object):
             return [p1, p2]
 
         SSCTV.make_background(scene)
-        num_symbols = 4
-        mess_str = mess_str[:6]
+        num_symbols = 5
+        mess_str = mess_str[:SSCTV.symbol_num_arithm]
         mes_len = len(mess_str)
         prb_line_old = SSCTV.get_prb_line(all_ps, 0.0)
         prb_line = SSCTV.get_prb_line(all_ps, 0.0)
@@ -797,9 +805,9 @@ class SSCTV(object):
         show = M.MathTex(t, color = SSCTV.get_main_color(),
                          font_size = 54.0).move_to(2.0 * M.UP)
         bit = r"Всего бит = " + str(len(bin_s))
-        sym = r"Всего символов = " + str(SSCTV.symbol_num)
+        sym = r"Всего символов = " + str(SSCTV.symbol_num_arithm)
         bit_sym = r"Бит на символ = " + str(round(
-            len(bin_s) / SSCTV.symbol_num, 3))
+            len(bin_s) / SSCTV.symbol_num_arithm, 3))
         b = M.Text(bit, color = SSCTV.get_main_color())
         s = M.Text(sym, color = SSCTV.get_main_color()).next_to(b, M.DOWN)
         bs = M.Text(bit_sym, color = SSCTV.get_main_color()).next_to(s, M.DOWN)
@@ -896,7 +904,9 @@ class SSCTV(object):
         key = SSCTV.fill_zeros(bin(int(SSCTV.tv1_var))[2:], 4)
         psp_str = SSCTV.tv1_make_table_1(scene, key)
         SSCTV.make_pause(scene)
-        in_str = SSCTV.tv1_get_random_in_str(15)
+        in_str = SSCTV.tv1_in_str
+        if SSCTV.new:
+            in_str = SSCTV.tv1_get_random_in_str(15)
         data01 = SSCTV.tv1_make_table_2(scene, in_str, psp_str)
         SSCTV.make_pause(scene)
         SSCTV.tv1_make_text_1(scene, data01)
