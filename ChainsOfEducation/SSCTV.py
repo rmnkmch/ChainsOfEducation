@@ -4,7 +4,7 @@ import enum
 
 
 class SSCTV(object):
-    """SSCTV pictures and animations"""
+    """SSCTV and SiPK"""
 
     EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     en = "abcdefghijklmnopqrstuvwxyz"
@@ -33,20 +33,20 @@ class SSCTV(object):
     pkg load communications
     '''
 
-    used_ps_str = ""
-    m1 = ""
-    m2 = ""
-    m3 = ""
+    used_ps_str = "Д0.28 Е0.03 К0.04 А0.09 Б0.08 Р0.21 Ь0.27"
+    m1 = "ДРЕДДДЬРДАРБРАРРЬРАЬ"
+    m2 = "ЬЬДЬРЬДДДРЬДРЬДДРЬРД"
+    m3 = "ЕКЕЕБЕККККЕЕККБКККЕЕ"
     entropy = 0.0
     table_data = []
     symbol_num = 7
     symbol_num_arithm = 6
     mess_symbol_num = 20
-    mean_bit_over_symb1 = round(55.0 / mess_symbol_num, 3)
-    mean_bit_over_symb2 = round(49.0 / mess_symbol_num, 3)
-    mean_bit_over_symb3 = round(95.0 / mess_symbol_num, 3)
+    mean_bit_over_symb1 = round(1.0 / mess_symbol_num, 3)
+    mean_bit_over_symb2 = round(1.0 / mess_symbol_num, 3)
+    mean_bit_over_symb3 = round(1.0 / mess_symbol_num, 3)
 
-    tv1_var = 4
+    tv_var = 7
     tv1_in_str = ""
 
     sipk2_Nhor = 25
@@ -55,8 +55,10 @@ class SSCTV(object):
     sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
+    sipk2_x_n_A = [17, 18, 19, 18, 17, 13, 9, 6, 3, 2, 1,
+                 2, 2, 3, 4, 5, 5, 5, 4, 4, 5, 8, 11, 12, 12]
 
-    new = True
+    new = False
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -264,11 +266,12 @@ class SSCTV(object):
         SSCTV.make_sipk1(scene)
         #SSCTV.make_tv1(scene)
         #SSCTV.make_sipk2(scene)
+        #SSCTV.make_tv3(scene)
 
     @staticmethod
     def random_sipk1():
         pss = SSCTV.used_ps_str
-        if SSCTV.new:
+        if len(pss) == 0:
             pss = SSCTV.get_random_ps(SSCTV.symbol_num)
             SSCTV.used_ps_str = pss
         print(pss)
@@ -279,7 +282,7 @@ class SSCTV(object):
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, all_ps_copy)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, all_ps_copy)
         m3 = SSCTV.get_message_20_by_str(SSCTV.m3, all_ps_copy)
-        if SSCTV.new or len(m1) == 0:
+        if len(m1) == 0:
             m1 = SSCTV.get_random_message_1(all_ps_copy, SSCTV.mess_symbol_num)
             m2 = SSCTV.get_random_message_2(all_ps_copy, SSCTV.mess_symbol_num)
             m3 = SSCTV.get_random_message_3(all_ps_copy, SSCTV.mess_symbol_num)
@@ -289,44 +292,44 @@ class SSCTV(object):
 
     @staticmethod
     def make_sipk1(scene: M.Scene):
-        ps_full = SSCTV.make_haffman(scene)
+        ps_full = SSCTV.sipk1_haffman(scene)
         SSCTV.make_pause(scene)
-        SSCTV.make_table_1(scene, ps_full)
+        SSCTV.sipk1_table_1(scene, ps_full)
         SSCTV.make_pause(scene)
-        SSCTV.make_table_2(scene, ps_full)
+        SSCTV.sipk1_table_2(scene, ps_full)
         SSCTV.make_pause(scene)
-        SSCTV.make_formula_1(scene, ps_full)
+        SSCTV.sipk1_formula_1(scene, ps_full)
         SSCTV.make_pause(scene)
         m1 = SSCTV.get_message_20_by_str(SSCTV.m1, ps_full)
         m2 = SSCTV.get_message_20_by_str(SSCTV.m2, ps_full)
         m3 = SSCTV.get_message_20_by_str(SSCTV.m3, ps_full)
-        SSCTV.make_messages_20(scene, m1, m2, m3, True)
-        SSCTV.make_golomb(scene, ps_full)
+        SSCTV.sipk1_messages_20(scene, m1, m2, m3, True)
+        SSCTV.sipk1_golomb(scene, ps_full)
         SSCTV.make_pause(scene)
-        SSCTV.make_table_1(scene, ps_full)
+        SSCTV.sipk1_table_1(scene, ps_full)
         SSCTV.make_pause(scene)
-        SSCTV.make_messages_20(scene, m1, m2, m3, True)
-        num = SSCTV.make_arithm(scene, SSCTV.m1, ps_full)
+        SSCTV.sipk1_messages_20(scene, m1, m2, m3, True)
+        num = SSCTV.sipk1_arithm(scene, SSCTV.m1, ps_full)
         SSCTV.make_pause(scene)
-        SSCTV.make_arithm_table(scene, SSCTV.m1, ps_full)
+        SSCTV.sipk1_arithm_table(scene, SSCTV.m1, ps_full)
         SSCTV.make_pause(scene)
-        SSCTV.make_count_1(scene, num)
+        SSCTV.sipk1_count_1(scene, num)
         SSCTV.make_pause(scene)
-        # SSCTV.make_formula_2(scene)
+        # SSCTV.sipk1_formula_2(scene)
         # SSCTV.make_pause(scene)
-        # SSCTV.make_formula_3(scene)
+        # SSCTV.sipk1_formula_3(scene)
         # SSCTV.make_pause(scene)
-        # SSCTV.make_formula_4(scene)
+        # SSCTV.sipk1_formula_4(scene)
         # SSCTV.make_pause(scene)
-        # SSCTV.make_formula_5(scene)
+        # SSCTV.sipk1_formula_5(scene)
         # SSCTV.make_pause(scene)
-        # SSCTV.make_formula_6(scene)
+        # SSCTV.sipk1_formula_6(scene)
         # SSCTV.make_pause(scene)
-        SSCTV.make_table_3(scene, SSCTV.table_data, SSCTV.entropy)
+        SSCTV.sipk1_table_3(scene, SSCTV.table_data, SSCTV.entropy)
         SSCTV.make_pause(scene)
 
     @staticmethod
-    def make_haffman(scene: M.Scene):
+    def sipk1_haffman(scene: M.Scene):
         SSCTV.make_background(scene)
         all_ps = SSCTV.get_all_ps_by_str(SSCTV.used_ps_str)
         all_len = len(all_ps)
@@ -425,7 +428,7 @@ class SSCTV(object):
         return all_ps_old_full
 
     @staticmethod
-    def make_table_1(scene: M.Scene, all_ps: list):
+    def sipk1_table_1(scene: M.Scene, all_ps: list):
         SSCTV.make_background(scene)
         table = Table(
             [[all_ps[i].symbol, all_ps[i].code]
@@ -440,7 +443,7 @@ class SSCTV(object):
         scene.add(table)
 
     @staticmethod
-    def make_table_2(scene: M.Scene, all_ps: list):
+    def sipk1_table_2(scene: M.Scene, all_ps: list):
         from math import log2
         SSCTV.make_background(scene)
         syms = [ps.symbol for ps in all_ps]
@@ -473,7 +476,7 @@ class SSCTV(object):
         scene.add(table)
 
     @staticmethod
-    def make_formula_1(scene: M.Scene, all_ps: list):
+    def sipk1_formula_1(scene: M.Scene, all_ps: list):
         from math import log2
         SSCTV.make_background(scene)
         SSCTV.entropy = sum([- log2(sym.probability) * sym.probability
@@ -537,17 +540,17 @@ class SSCTV(object):
         return mess_ps
 
     @staticmethod
-    def make_messages_20(scene: M.Scene, m1: list, m2: list, m3: list,
+    def sipk1_messages_20(scene: M.Scene, m1: list, m2: list, m3: list,
                          add: bool = False):
-        SSCTV.make_message_20(scene, m1, True, add)
+        SSCTV.sipk1_message_20(scene, m1, True, add)
         SSCTV.make_pause(scene)
-        SSCTV.make_message_20(scene, m2, True, add)
+        SSCTV.sipk1_message_20(scene, m2, True, add)
         SSCTV.make_pause(scene)
-        SSCTV.make_message_20(scene, m3, True, add)
+        SSCTV.sipk1_message_20(scene, m3, True, add)
         SSCTV.make_pause(scene)
 
     @staticmethod
-    def make_message_20(scene: M.Scene, mess_ps: list,
+    def sipk1_message_20(scene: M.Scene, mess_ps: list,
                         with_text: bool = True, add: bool = False):
         SSCTV.make_background(scene)
         syms = []
@@ -582,7 +585,7 @@ class SSCTV(object):
                 SSCTV.table_data.append(round(len_code / len(syms), 3))
                 
     @staticmethod
-    def make_golomb(scene: M.Scene, all_ps: list):
+    def sipk1_golomb(scene: M.Scene, all_ps: list):
         golomb_r = {0: "0", 1: "10", 2: "11"}
         golomb_q = {0: "0", 1: "10", 2: "110", 3: "1110", 4: "11110", 5: "111110"}
         SSCTV.make_background(scene)
@@ -619,7 +622,7 @@ class SSCTV(object):
             scene.add(tex, found_text)
 
     @staticmethod
-    def make_arithm(scene: M.Scene, mess_str: str, all_ps: list):
+    def sipk1_arithm(scene: M.Scene, mess_str: str, all_ps: list):
         def prb_size(cycle: int):
             if cycle <= 2: return 18.0
             elif cycle <= 4: return 16.0
@@ -701,7 +704,7 @@ class SSCTV(object):
                 return "".join(ret_str)
 
     @staticmethod
-    def make_arithm_table(scene: M.Scene, mess_str: str, all_ps: list):
+    def sipk1_arithm_table(scene: M.Scene, mess_str: str, all_ps: list):
         def pop_prefix(str1, str2):
             i = 0
             while len(str1) > i and str1[i] == str2[i]:
@@ -792,7 +795,7 @@ class SSCTV(object):
         scene.add(table)
 
     @staticmethod
-    def make_count_1(scene: M.Scene, num: str):
+    def sipk1_count_1(scene: M.Scene, num: str):
         SSCTV.make_background(scene)
         t = num + r"_{10} = "
         bin_s = ""
@@ -814,7 +817,7 @@ class SSCTV(object):
         scene.add(show, b, s, bs)
 
     @staticmethod
-    def make_formula_2(scene: M.Scene):
+    def sipk1_formula_2(scene: M.Scene):
         SSCTV.make_background(scene)
         tx = r"I_s = log_2 M"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
@@ -822,7 +825,7 @@ class SSCTV(object):
         scene.add(tex)
 
     @staticmethod
-    def make_formula_3(scene: M.Scene):
+    def sipk1_formula_3(scene: M.Scene):
         SSCTV.make_background(scene)
         tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
@@ -830,7 +833,7 @@ class SSCTV(object):
         scene.add(tex)
 
     @staticmethod
-    def make_formula_4(scene: M.Scene):
+    def sipk1_formula_4(scene: M.Scene):
         SSCTV.make_background(scene)
         tx = r"R = \log_2 M - H"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
@@ -838,7 +841,7 @@ class SSCTV(object):
         scene.add(tex)
 
     @staticmethod
-    def make_formula_5(scene: M.Scene):
+    def sipk1_formula_5(scene: M.Scene):
         SSCTV.make_background(scene)
         tx = r"H \le n_{cp} \le H + 1"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
@@ -846,7 +849,7 @@ class SSCTV(object):
         scene.add(tex)
 
     @staticmethod
-    def make_formula_6(scene: M.Scene):
+    def sipk1_formula_6(scene: M.Scene):
         SSCTV.make_background(scene)
         tx = r"R_c = L_{cp} - H"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
@@ -854,7 +857,7 @@ class SSCTV(object):
         scene.add(tex)
 
     @staticmethod
-    def make_table_3(scene: M.Scene, data: list, H: float):
+    def sipk1_table_3(scene: M.Scene, data: list, H: float):
         SSCTV.make_background(scene)
         fs = 24.0
         data.append(SSCTV.mean_bit_over_symb1)
@@ -871,13 +874,13 @@ class SSCTV(object):
         table = Table(
             table_data,
             row_labels = [
-                M.Text("Сообщение,\nсоответствующее\nстатистике", font_size = fs,
+                M.Text("Сообщение А", font_size = fs,
                        color = SSCTV.get_main_color()),
-                M.Text("Сообщение\nс частыми символами",
+                M.Text("Сообщение Б",
                        font_size = fs, color = SSCTV.get_main_color()),
-                M.Text("Сообщение\nс редкими символами",
+                M.Text("Сообщение В",
                        font_size = fs, color = SSCTV.get_main_color()),
-                M.Text("Cреднее количество\nбит на символ", font_size = fs,
+                M.Text("Cреднее число\nбит на символ", font_size = fs,
                        color = SSCTV.get_main_color()),
                 M.Text("Избыточность", font_size = fs,
                        color = SSCTV.get_main_color())
@@ -901,21 +904,21 @@ class SSCTV(object):
 
     @staticmethod
     def make_tv1(scene: M.Scene):
-        key = SSCTV.fill_zeros(bin(int(SSCTV.tv1_var))[2:], 4)
-        psp_str = SSCTV.tv1_make_table_1(scene, key)
+        key = SSCTV.fill_zeros(bin(int(SSCTV.tv_var))[2:], 4)
+        psp_str = SSCTV.tv1_table_1(scene, key)
         SSCTV.make_pause(scene)
         in_str = SSCTV.tv1_in_str
-        if SSCTV.new:
+        if len(in_str) == 0:
             in_str = SSCTV.tv1_get_random_in_str(15)
-        data01 = SSCTV.tv1_make_table_2(scene, in_str, psp_str)
+        data01 = SSCTV.tv1_table_2(scene, in_str, psp_str)
         SSCTV.make_pause(scene)
-        SSCTV.tv1_make_text_1(scene, data01)
+        SSCTV.tv1_text_1(scene, data01)
         SSCTV.make_pause(scene)
-        SSCTV.tv1_make_text_2(scene)
+        SSCTV.tv1_text_2(scene)
         SSCTV.make_pause(scene)
 
     @staticmethod
-    def tv1_make_table_1(scene: M.Scene, key: str):
+    def tv1_table_1(scene: M.Scene, key: str):
         def update_0_1(ch, i):
             nonlocal zeroes, ones, curr_max, max_ind, zeroes_max_ind, ones_max_ind
             nonlocal zeroes_max, ones_max, prev_ch
@@ -1001,7 +1004,7 @@ class SSCTV(object):
         return ret_str[:-1]
 
     @staticmethod
-    def tv1_make_table_2(scene: M.Scene, in_str: str, psp_str: str):
+    def tv1_table_2(scene: M.Scene, in_str: str, psp_str: str):
         def update_0_1(ch, i):
             nonlocal zeroes, ones, curr_max, max_ind, zeroes_max_ind, ones_max_ind
             nonlocal zeroes_max, ones_max, prev_ch
@@ -1088,7 +1091,7 @@ class SSCTV(object):
                 ones_max, ones_max_ind, hemming_dist]
 
     @staticmethod
-    def tv1_make_text_1(scene: M.Scene, data01):
+    def tv1_text_1(scene: M.Scene, data01):
         SSCTV.make_background(scene)
         zeroes, ones = (data01[0], data01[1])
         zeroes_max, zeroes_max_ind = (data01[2], data01[3])
@@ -1111,12 +1114,12 @@ class SSCTV(object):
         scene.add(text_1_0, text_1, text_0, text_hemm)
 
     @staticmethod
-    def tv1_make_text_2(scene: M.Scene):
+    def tv1_text_2(scene: M.Scene):
         SSCTV.make_background(scene)
         dict_vars = {1: 101, 2: 1542, 3: 3160, 4: 4422, 5: 15214,
                      6: 26700, 7: 37120, 8: 52642, 9: 48592, 10: 59306,
                      11: 61085, 12: 7706, 13: 11490, 14: 32084, 15: 41056}
-        bit = dict_vars[SSCTV.tv1_var]
+        bit = dict_vars[SSCTV.tv_var]
         max_bit = 64800
         column_bit = 64800 // 3
         str_bit = f"Бит {1}: {bit}"
@@ -1233,7 +1236,7 @@ class SSCTV(object):
         number_plane.get_axes().set_color(SSCTV.get_main_color())
         graphs = M.VGroup()
         gr = SSCTV.sipk2_cffs
-        if SSCTV.new or len(gr) == 0: gr = SSCTV.sipk2_random_graph_cffs()
+        if len(gr) == 0: gr = SSCTV.sipk2_random_graph_cffs()
         gr = SSCTV.sipk2_scale_center_graph(SSCTV.sipk2_graph_by_cffs(gr))
         graphs += number_plane.plot(
             gr, x_range = (0, SSCTV.sipk2_Nhor, 0.1),
@@ -1357,6 +1360,155 @@ class SSCTV(object):
         tex.shift(M.LEFT * txt.width * 0.5)
         txt.next_to(tex)
         scene.add(table, tex, txt)
+
+    @staticmethod
+    def tv3_sigmoid(x: float):
+        from math import exp
+        return 1.0 / (1.0 + exp(- x))
+
+    @staticmethod
+    def tv3_restrict_func_value(
+        func_value: float, x: float, left: float, right: float,
+        left_border: bool = False, right_border: bool = False):
+        if (x > right or x < left
+            or (x == right and right_border)
+            or (x == left and left_border)):
+            return 0.0
+        else:
+            return func_value
+
+    @staticmethod
+    def tv3_func_part_by_2_bits(bits: str, part: int):
+        fall = 25.0
+        amp = 2.0
+        if bits[0] == "0" and bits[1] == "0":
+            return lambda x: - 1.0
+        elif bits[0] == "1" and bits[1] == "1":
+            return lambda x: 1.0
+        elif bits[0] == "0" and bits[1] == "1":
+            if part == 1: return lambda x: SSCTV.tv3_sigmoid(x * fall) * amp - 1.0
+            else: return lambda x: SSCTV.tv3_sigmoid((1.0 - x) * fall) * - amp + 1.0
+        elif bits[0] == "1" and bits[1] == "0":
+            if part == 1: return lambda x: SSCTV.tv3_sigmoid(x * fall) * - amp + 1.0
+            else: return lambda x: SSCTV.tv3_sigmoid((1.0 - x) * fall) * amp - 1.0
+
+    @staticmethod
+    def tv3_func_by_3_bits(bits: str):
+        part_1 = SSCTV.tv3_func_part_by_2_bits(bits[:2], 1)
+        part_2 = SSCTV.tv3_func_part_by_2_bits(bits[1:], 2)
+        return lambda x: (
+            SSCTV.tv3_restrict_func_value(part_1(x), x, 0.0, 0.5)
+            + SSCTV.tv3_restrict_func_value(part_2(x), x, 0.5, 1.0))
+
+    @staticmethod
+    def make_tv3(scene: M.Scene):
+        for i in range(1, 2, 1):
+            SSCTV.tv3_diagram(scene, i)
+            SSCTV.make_pause(scene)
+            SSCTV.tv3_eye_diagram(scene, i)
+            SSCTV.make_pause(scene)
+
+    @staticmethod
+    def tv3_diagram(scene: M.Scene, i):
+        SSCTV.make_background(scene)
+        dict_vars = {1: "011010010101", 2: "110001011011", 3: "010110100101",
+                     4: "100111010100", 5: "001110101100", 6: "111000101001",
+                     7: "001101001110", 8: "101100100110", 9: "010100111001",
+                     10: "110011000110", 11: "011100100110", 12: "110110001010",
+                     13: "010111001101", 14: "100110001011", 15: "011000111010"}
+        bit = dict_vars[i]#SSCTV.tv_var]
+        number_plane = M.NumberPlane(
+            x_range = (0, 12, 1),
+            y_range = (-2, 2, 1),
+            x_length = 13.0,
+            y_length = 4.0,
+            color = SSCTV.get_main_color(),
+            axis_config = {
+                "numbers_to_include": M.np.arange(0, 12, 1),
+                "font_size": 18.0,
+                "stroke_width": 3,
+                "include_ticks": False,
+                "include_tip": False,
+                "line_to_number_buff": 0.11,
+                "label_direction": M.DR,
+                "color": SSCTV.get_main_color(),
+                },
+            y_axis_config = {
+                "numbers_to_include": M.np.arange(-1, 2, 1),
+                "label_direction": M.LEFT},
+            background_line_style = {
+                "stroke_color": SSCTV.get_main_color(),
+                "stroke_width": 1,
+                "stroke_opacity": 0.5,
+                },
+            tips = False,
+            )
+        number_plane.get_axes().set_color(SSCTV.get_main_color())
+        graphs = M.VGroup()
+        prev_bit = ""
+        next_bit = ""
+        for i in range(len(bit)):
+            if i == 0: prev_bit = bit[i]
+            else: prev_bit = bit[i - 1]
+            if i == len(bit) - 1: next_bit = bit[i]
+            else: next_bit = bit[i + 1]
+            graphs += number_plane.plot(
+                lambda x: SSCTV.tv3_func_by_3_bits(
+                    prev_bit + bit[i] + next_bit)(x - i),
+                x_range = (i, i + 1.0, 0.0199),
+                color = SSCTV.get_main_color(),
+                use_smoothing = False)
+        scene.add(number_plane, graphs)
+
+    @staticmethod
+    def tv3_eye_diagram(scene: M.Scene, i):
+        SSCTV.make_background(scene)
+        dict_vars = {1: "011010010101", 2: "110001011011", 3: "010110100101",
+                     4: "100111010100", 5: "001110101100", 6: "111000101001",
+                     7: "001101001110", 8: "101100100110", 9: "010100111001",
+                     10: "110011000110", 11: "011100100110", 12: "110110001010",
+                     13: "010111001101", 14: "100110001011", 15: "011000111010"}
+        dict_colors = {1: M.DARK_BROWN, 2: M.ORANGE, 3: M.GREEN,
+                       4: M.TEAL, 5: M.BLUE, 6: M.YELLOW}
+        bit = dict_vars[i]#SSCTV.tv_var]
+        number_plane = M.NumberPlane(
+            x_range = (0, 17, 1),
+            y_range = (-3, 3, 1),
+            x_length = 13.0,
+            y_length = 5.0,
+            color = SSCTV.get_main_color(),
+            axis_config = {"stroke_width": 0},
+            background_line_style = {"stroke_width": 1})
+        graphs = M.VGroup()
+        offset = 0.0
+        for i in range(len(bit)):
+            if i == 0: prev_bit = bit[i]
+            else: prev_bit = bit[i - 1]
+            if i == len(bit) - 1: next_bit = bit[i]
+            else: next_bit = bit[i + 1]
+            graphs += number_plane.plot(
+                lambda x: 2.0 + SSCTV.tv3_func_by_3_bits(
+                    prev_bit + bit[i] + next_bit)(x - i - offset),
+                x_range = (i + offset, i + offset + 1.0, 0.0199),
+                color = SSCTV.get_main_color(),
+                use_smoothing = False)
+            offset_inner = 0.0
+            for j in range(round((len(bit) - i) * 0.5)):
+                graphs += number_plane.plot(
+                    lambda x: - 1.0 + SSCTV.tv3_func_by_3_bits(
+                        prev_bit + bit[i] + next_bit
+                        )(x - i - offset_inner - offset),
+                    x_range = (i + offset_inner + offset,
+                               i + offset_inner + offset + 1.0, 0.0199),
+                    color = SSCTV.get_main_color(),
+                    use_smoothing = False,
+                    stroke_width = 1 + 2 * len(bit) - 10 * (i // 4),
+                    background_stroke_width = 4 + 2 * len(bit) - 10 * (i // 4),
+                    stroke_color = dict_colors[i // 2 + 1])
+                offset_inner += 3.0
+            if i % 2 == 1 and i != 0:
+                offset += 1.0
+        scene.add(number_plane, graphs)
 
 
 class ProbabilitySymbol(object):
