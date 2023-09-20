@@ -25,23 +25,18 @@ class SSCTV(object):
     МИЛДДДННМЛИИМННДДНДИ
     ДДДНДДННИННИННДНИННД
     ЛААОАЛААААЛОООАОАОЛМ
-    Никто - 0
-    Д0.28 Е0.03 К0.04 А0.09 Б0.08 Р0.21 Ь0.27
-    ДРЕДДДЬРДАРБРАРРЬРАЬ
-    ЬЬДЬРЬДДДРЬДРЬДДРЬРД
-    ЕКЕЕБЕККККЕЕККБКККЕЕ
     pkg load communications
     '''
 
-    used_ps_str = "Д0.28 Е0.03 К0.04 А0.09 Б0.08 Р0.21 Ь0.27"
-    m1 = "ДРЕДДДЬРДАРБРАРРЬРАЬ"
-    m2 = "ЬЬДЬРЬДДДРЬДРЬДДРЬРД"
-    m3 = "ЕКЕЕБЕККККЕЕККБКККЕЕ"
+    used_ps_str = ""
+    m1 = ""
+    m2 = ""
+    m3 = ""
     entropy = 0.0
     table_data = []
     symbol_num = 7
     symbol_num_arithm = 6
-    mess_symbol_num = 20
+    mess_symbol_num = 21
     mean_bit_over_symb1 = round(1.0 / mess_symbol_num, 3)
     mean_bit_over_symb2 = round(1.0 / mess_symbol_num, 3)
     mean_bit_over_symb3 = round(1.0 / mess_symbol_num, 3)
@@ -55,8 +50,7 @@ class SSCTV(object):
     sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
-    sipk2_x_n_A = [17, 18, 19, 18, 17, 13, 9, 6, 3, 2, 1,
-                 2, 2, 3, 4, 5, 5, 5, 4, 4, 5, 8, 11, 12, 12]
+    sipk2_x_n_A = []
 
     new = False
 
@@ -262,10 +256,10 @@ class SSCTV(object):
 
     @staticmethod
     def make_all(scene: M.Scene):
-        SSCTV.random_sipk1()
-        SSCTV.make_sipk1(scene)
+        #SSCTV.random_sipk1()
+        #SSCTV.make_sipk1(scene)
         #SSCTV.make_tv1(scene)
-        #SSCTV.make_sipk2(scene)
+        SSCTV.make_sipk2(scene)
         #SSCTV.make_tv3(scene)
 
     @staticmethod
@@ -874,13 +868,13 @@ class SSCTV(object):
         table = Table(
             table_data,
             row_labels = [
-                M.Text("Сообщение А", font_size = fs,
+                M.Text("Сообщение №1", font_size = fs,
                        color = SSCTV.get_main_color()),
-                M.Text("Сообщение Б",
+                M.Text("Сообщение №2",
                        font_size = fs, color = SSCTV.get_main_color()),
-                M.Text("Сообщение В",
+                M.Text("Сообщение №3",
                        font_size = fs, color = SSCTV.get_main_color()),
-                M.Text("Cреднее число\nбит на символ", font_size = fs,
+                M.Text("Cреднее значение\nбит на символ", font_size = fs,
                        color = SSCTV.get_main_color()),
                 M.Text("Избыточность", font_size = fs,
                        color = SSCTV.get_main_color())
@@ -1402,21 +1396,20 @@ class SSCTV(object):
 
     @staticmethod
     def make_tv3(scene: M.Scene):
-        for i in range(1, 2, 1):
-            SSCTV.tv3_diagram(scene, i)
-            SSCTV.make_pause(scene)
-            SSCTV.tv3_eye_diagram(scene, i)
-            SSCTV.make_pause(scene)
+        SSCTV.tv3_diagram(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.tv3_eye_diagram(scene)
+        SSCTV.make_pause(scene)
 
     @staticmethod
-    def tv3_diagram(scene: M.Scene, i):
+    def tv3_diagram(scene: M.Scene):
         SSCTV.make_background(scene)
         dict_vars = {1: "011010010101", 2: "110001011011", 3: "010110100101",
                      4: "100111010100", 5: "001110101100", 6: "111000101001",
                      7: "001101001110", 8: "101100100110", 9: "010100111001",
                      10: "110011000110", 11: "011100100110", 12: "110110001010",
                      13: "010111001101", 14: "100110001011", 15: "011000111010"}
-        bit = dict_vars[i]#SSCTV.tv_var]
+        bit = dict_vars[SSCTV.tv_var]
         number_plane = M.NumberPlane(
             x_range = (0, 12, 1),
             y_range = (-2, 2, 1),
@@ -1442,9 +1435,14 @@ class SSCTV(object):
                 "stroke_opacity": 0.5,
                 },
             tips = False,
-            )
+            ).next_to(M.UP * 3.8, M.DOWN)
         number_plane.get_axes().set_color(SSCTV.get_main_color())
         graphs = M.VGroup()
+        for i in range(len(bit) // 2):
+            graphs += M.Text(
+                str(i + 1), font_size = 30.0,
+                color = SSCTV.get_main_color()).next_to(
+                    number_plane.c2p(1.0 + i * 2.0, 1.2, 0.0), M.UP)
         prev_bit = ""
         next_bit = ""
         for i in range(len(bit)):
@@ -1461,16 +1459,17 @@ class SSCTV(object):
         scene.add(number_plane, graphs)
 
     @staticmethod
-    def tv3_eye_diagram(scene: M.Scene, i):
+    def tv3_eye_diagram(scene: M.Scene):
         SSCTV.make_background(scene)
         dict_vars = {1: "011010010101", 2: "110001011011", 3: "010110100101",
                      4: "100111010100", 5: "001110101100", 6: "111000101001",
                      7: "001101001110", 8: "101100100110", 9: "010100111001",
                      10: "110011000110", 11: "011100100110", 12: "110110001010",
                      13: "010111001101", 14: "100110001011", 15: "011000111010"}
-        dict_colors = {1: M.DARK_BROWN, 2: M.ORANGE, 3: M.GREEN,
-                       4: M.TEAL, 5: M.BLUE, 6: M.YELLOW}
-        bit = dict_vars[i]#SSCTV.tv_var]
+        dict_colors = {1: M.DARK_BROWN, 2: M.TEAL, 3: M.RED_D,
+                       4: M.ORANGE, 5: M.YELLOW, 6: M.DARK_BLUE}
+        dict_stroke_widths = {1: 28, 2: 23, 3: 18, 4: 13, 5: 8, 6: 3}
+        bit = dict_vars[SSCTV.tv_var]
         number_plane = M.NumberPlane(
             x_range = (0, 17, 1),
             y_range = (-3, 3, 1),
@@ -1478,9 +1477,15 @@ class SSCTV(object):
             y_length = 5.0,
             color = SSCTV.get_main_color(),
             axis_config = {"stroke_width": 0},
-            background_line_style = {"stroke_width": 1})
+            background_line_style = {"stroke_width": 0}
+            ).next_to(M.UP * 3.3, M.DOWN)
         graphs = M.VGroup()
         offset = 0.0
+        for i in range(len(bit) // 2):
+            graphs += M.Text(str(i + 1),
+                             font_size = 30.0,
+                             color = SSCTV.get_main_color()
+                             ).next_to(number_plane.c2p(1.0 + i * 3.0, 3.1, 0.0), M.UP)
         for i in range(len(bit)):
             if i == 0: prev_bit = bit[i]
             else: prev_bit = bit[i - 1]
@@ -1493,17 +1498,16 @@ class SSCTV(object):
                 color = SSCTV.get_main_color(),
                 use_smoothing = False)
             offset_inner = 0.0
-            for j in range(round((len(bit) - i) * 0.5)):
+            for j in range((len(bit) - i + 1) // 2):
                 graphs += number_plane.plot(
                     lambda x: - 1.0 + SSCTV.tv3_func_by_3_bits(
                         prev_bit + bit[i] + next_bit
                         )(x - i - offset_inner - offset),
                     x_range = (i + offset_inner + offset,
                                i + offset_inner + offset + 1.0, 0.0199),
-                    color = SSCTV.get_main_color(),
                     use_smoothing = False,
-                    stroke_width = 1 + 2 * len(bit) - 10 * (i // 4),
-                    background_stroke_width = 4 + 2 * len(bit) - 10 * (i // 4),
+                    stroke_width = 1 + dict_stroke_widths[i // 2 + 1],
+                    background_stroke_width = 3 + dict_stroke_widths[i // 2 + 1],
                     stroke_color = dict_colors[i // 2 + 1])
                 offset_inner += 3.0
             if i % 2 == 1 and i != 0:
