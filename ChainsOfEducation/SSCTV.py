@@ -21,6 +21,7 @@ class SSCTV(object):
     FDFFFBFBFFFFFFFFFFBD
     Артём М - 17
     Алексей Г - 4
+    Данила Л - 14
     Л0.11 И0.16 М0.14 О0.05 Н0.28 А0.03 Д0.23
     МИЛДДДННМЛИИМННДДНДИ
     ДДДНДДННИННИННДНИННД
@@ -41,8 +42,8 @@ class SSCTV(object):
     mean_bit_over_symb2 = round(1.0 / mess_symbol_num, 3)
     mean_bit_over_symb3 = round(1.0 / mess_symbol_num, 3)
 
-    tv_var = 7
-    tv1_in_str = ""
+    tv_var = 14
+    tv1_in_str = "111111101100100"
 
     sipk2_Nhor = 25
     sipk2_Nver = 21
@@ -52,7 +53,7 @@ class SSCTV(object):
     sipk2_e2 = []
     sipk2_x_n_A = []
 
-    new = False
+    new = True
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -258,8 +259,8 @@ class SSCTV(object):
     def make_all(scene: M.Scene):
         #SSCTV.random_sipk1()
         #SSCTV.make_sipk1(scene)
-        #SSCTV.make_tv1(scene)
-        SSCTV.make_sipk2(scene)
+        SSCTV.make_tv1(scene)
+        #SSCTV.make_sipk2(scene)
         #SSCTV.make_tv3(scene)
 
     @staticmethod
@@ -1564,7 +1565,7 @@ class ZLine(M.TipableVMobject):
 
 class PromoCode(object):
 
-    promo_codes = [("o27739521", 100, False),
+    promo_codes = [("o27739521", 90, True),
                    ("o63116012", 50, False),
                    ("o86636403", 25, False),
                    ("o15260943", 10, False),
