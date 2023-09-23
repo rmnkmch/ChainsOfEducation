@@ -42,8 +42,8 @@ class SSCTV(object):
     mean_bit_over_symb2 = round(1.0 / mess_symbol_num, 3)
     mean_bit_over_symb3 = round(1.0 / mess_symbol_num, 3)
 
-    tv_var = 14
-    tv1_in_str = "111111101100100"
+    tv_var = 7
+    tv1_in_str = ""
 
     sipk2_Nhor = 25
     sipk2_Nver = 21
@@ -259,8 +259,8 @@ class SSCTV(object):
     def make_all(scene: M.Scene):
         #SSCTV.random_sipk1()
         #SSCTV.make_sipk1(scene)
-        SSCTV.make_tv1(scene)
-        #SSCTV.make_sipk2(scene)
+        #SSCTV.make_tv1(scene)
+        SSCTV.make_sipk2(scene)
         #SSCTV.make_tv3(scene)
 
     @staticmethod
