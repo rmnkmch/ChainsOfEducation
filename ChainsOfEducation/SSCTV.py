@@ -48,12 +48,25 @@ class SSCTV(object):
     sipk2_Nhor = 25
     sipk2_Nver = 21
     sipk2_x_n = []
+    sipk2_cffs = [[-4.913109193387553, -0.16885295978752146, 3.809125663665785],
+                  [-2.1913979144127422, -0.14994452682462356, 1.0095077375735353],
+                  [-1.3915535072222316, 0.39812003715604316, 4.7412946863241],
+                  [-0.4858021310540286, 0.9200405166373171, 5.025926944623277]]
     sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
+    sipk2_e2_opt = []
     sipk2_x_n_A = []
-
-    new = True
+    sipk2_sum_x_x1_n1 = 0
+    sipk2_sum_x1_x1_n1 = 0
+    sipk2_sum_x_x1_n2 = 0
+    sipk2_sum_x_x2_n2 = 0
+    sipk2_sum_x1_x2_n2 = 0
+    sipk2_sum_x1_x1_n2 = 0
+    sipk2_sum_x2_x2_n2 = 0
+    sipk2_a1 = 0.0
+    sipk2_a21 = 0.0
+    sipk2_a22 = 0.0
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -1166,7 +1179,6 @@ class SSCTV(object):
     @staticmethod
     def sipk2_scale_center_graph(graph, Nver: int = 0, Nhor: int = 0):
         accuracy: int = 10
-        if SSCTV.new: accuracy = 1
         if Nver == 0: Nver = SSCTV.sipk2_Nver
         if Nhor == 0: Nhor = SSCTV.sipk2_Nhor
         min_g = 100.0
@@ -1183,19 +1195,36 @@ class SSCTV(object):
     @staticmethod
     def make_sipk2(scene: M.Scene):
         repetitions = 1
-        if SSCTV.new: repetitions = 10
+        repetitions = 5
         for _ in range(repetitions):
             SSCTV.sipk2_num_plane(scene)
             SSCTV.make_pause(scene)
-            if not SSCTV.new:
-                SSCTV.sipk2_table_1(scene)
-                SSCTV.make_pause(scene)
-                SSCTV.sipk2_table_2(scene, SSCTV.sipk2_x_n, "x")
-                SSCTV.make_pause(scene)
-                SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e1, "e_1")
-                SSCTV.make_pause(scene)
-                SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2, "e_2")
-                SSCTV.make_pause(scene)
+            SSCTV.sipk2_table_1(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_x_n, "x")
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e1, "e_1")
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2, "e_2")
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2_opt, "e_{2opt}")
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_1(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_2(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_3(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_4(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_5(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_6(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_7(scene)
+            SSCTV.make_pause(scene)
+            SSCTV.sipk2_formula_8(scene)
+            SSCTV.make_pause(scene)
             SSCTV.sipk2_Nhor = random.randint(24, 26)
             SSCTV.sipk2_Nver = random.randint(20, 30)
 
@@ -1247,6 +1276,38 @@ class SSCTV(object):
     @staticmethod
     def sipk2_table_1(scene: M.Scene):
         SSCTV.make_background(scene)
+        x_n_1: int = 0
+        x_n_2: int = 0
+        sum_x_x1_n1 = 0
+        sum_x1_x1_n1 = 0
+        sum_x_x1_n2 = 0
+        sum_x_x2_n2 = 0
+        sum_x1_x2_n2 = 0
+        sum_x1_x1_n2 = 0
+        sum_x2_x2_n2 = 0
+        for i in range(len(SSCTV.sipk2_x_n)):
+            sum_x_x1_n1 += SSCTV.sipk2_x_n[i] * x_n_1
+            sum_x1_x1_n1 += x_n_1 * x_n_1
+            if i >= 2:
+                sum_x_x1_n2 += SSCTV.sipk2_x_n[i] * x_n_1
+                sum_x_x2_n2 += SSCTV.sipk2_x_n[i] * x_n_2
+                sum_x1_x2_n2 += x_n_1 * x_n_2
+                sum_x1_x1_n2 += x_n_1 * x_n_1
+                sum_x2_x2_n2 += x_n_2 * x_n_2
+            x_n_2 = x_n_1
+            x_n_1 = SSCTV.sipk2_x_n[i]
+        SSCTV.sipk2_a22 = ((sum_x_x2_n2 * sum_x1_x1_n2 - sum_x_x1_n2 * sum_x1_x2_n2)
+               / (sum_x2_x2_n2 * sum_x1_x1_n2 - sum_x1_x2_n2 * sum_x1_x2_n2))
+        SSCTV.sipk2_a21 = ((sum_x_x1_n2 - SSCTV.sipk2_a22 * sum_x1_x2_n2)
+                           / sum_x1_x1_n2)
+        SSCTV.sipk2_a1 = sum_x_x1_n1 / sum_x1_x1_n1
+        SSCTV.sipk2_sum_x_x1_n1 = sum_x_x1_n1
+        SSCTV.sipk2_sum_x1_x1_n1 = sum_x1_x1_n1
+        SSCTV.sipk2_sum_x_x1_n2 = sum_x_x1_n2
+        SSCTV.sipk2_sum_x_x2_n2 = sum_x_x2_n2
+        SSCTV.sipk2_sum_x1_x2_n2 = sum_x1_x2_n2
+        SSCTV.sipk2_sum_x1_x1_n2 = sum_x1_x1_n2
+        SSCTV.sipk2_sum_x2_x2_n2 = sum_x2_x2_n2
         table_data = []
         x_n_1 = 0
         x_n_2 = 0
@@ -1254,18 +1315,26 @@ class SSCTV(object):
         y_n_2 = 0
         SSCTV.sipk2_e1.clear()
         SSCTV.sipk2_e2.clear()
+        SSCTV.sipk2_e2_opt.clear()
+        highlighted = []
         for i in range(len(SSCTV.sipk2_x_n)):
             p1 = x_n_1
             p2 = 2 * x_n_1 - x_n_2
-            if i == 1: p2 = x_n_1
+            p2_opt = round(SSCTV.sipk2_a21 * x_n_1 + SSCTV.sipk2_a22 * x_n_2)
+            if i == 1:
+                p2 = x_n_1
+                p2_opt = x_n_1
+            if p2 != p2_opt: highlighted.append((9, 2 + i))
             e1 = SSCTV.sipk2_x_n[i] - p1
             e2 = SSCTV.sipk2_x_n[i] - p2
+            e2_opt = SSCTV.sipk2_x_n[i] - p2_opt
             y1 = y_n_1 + e1
             y2 = 2 * y_n_1 - y_n_2 + e2
             if i == 1: y2 = y_n_1 + e2
             table_data.append([str(i), str(SSCTV.sipk2_x_n[i]),
                                str(p1), str(e1), str(y1),
                                str(p2), str(e2), str(y2),
+                               str(p2_opt), str(e2_opt),
                                ])
             y_n_2 = y_n_1
             y_n_1 = y1
@@ -1273,6 +1342,7 @@ class SSCTV(object):
             x_n_1 = SSCTV.sipk2_x_n[i]
             SSCTV.sipk2_e1.append(e1)
             SSCTV.sipk2_e2.append(e2)
+            SSCTV.sipk2_e2_opt.append(e2_opt)
         table_data = SSCTV.transpose_list(table_data)
         fs = 14.0
         table = Table(
@@ -1286,6 +1356,8 @@ class SSCTV(object):
                 M.Text("p2(n)", font_size = fs, color = SSCTV.get_main_color()),
                 M.Text("e2(n)", font_size = fs, color = SSCTV.get_main_color()),
                 M.Text("y2(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("p2опт(n)", font_size = fs, color = SSCTV.get_main_color()),
+                M.Text("e2опт(n)", font_size = fs, color = SSCTV.get_main_color()),
                 ],
             include_outer_lines = True,
             v_buff = 0.3,
@@ -1295,6 +1367,8 @@ class SSCTV(object):
                 "color": SSCTV.get_main_color()},
             line_config = {"color": SSCTV.get_main_color()}
             ).next_to(M.UP * 3.8, M.DOWN)
+        for cell in highlighted:
+            table.add_highlighted_cell(cell, color = "#999999")
         scene.add(table)
 
     @staticmethod
@@ -1349,12 +1423,169 @@ class SSCTV(object):
         tx = r"H = - \sum_{i=1}^M p_i \cdot \log_2 p_i = " + str(
             round(SSCTV.entropy, 4))
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
-                        font_size = 48.0).next_to(table, M.DOWN)
+                        font_size = 44.0).next_to(table, M.DOWN)
         txt = M.Text("бит/символ", color = SSCTV.get_main_color(),
                      font_size = 36.0)
         tex.shift(M.LEFT * txt.width * 0.5)
         txt.next_to(tex)
         scene.add(table, tex, txt)
+
+    @staticmethod
+    def sipk2_formula_1(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"E = \overline{s^2(n)} = \overline{\left["
+        tx += r"x(n) - \sum_{m=1}^M a_m x(n-m) \right]^2}"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        tx2 = r"\frac{\partial E}{\partial a_i} = \overline{2 \left["
+        tx2 += r"x(n) - \sum_{m=1}^M a_m x(n-m) \right] x(n-m)} = 0;\ "
+        tx2 += r"i = 1, \ldots , M"
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex, M.DOWN)
+        tx3 = r"\sum_{m=1}^M a_m R(i,m) = R(m,0);\ "
+        tx3 += r"i = 1, \ldots , M"
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+
+    @staticmethod
+    def sipk2_formula_2(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"E_1 = \overline{\left[x(n) - a_1 x(n-1) \right]^2}"
+        tx += r" = \frac 1 N \sum_{n=1}^N [x(n) - a_1 x(n-1) \right]^2"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        tx2 = r"E_2 = \overline{\left[x(n) - a_1 x(n-1) - a_2 x(n-2) \right]^2} = "
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex, M.DOWN)
+        tx3 = r" = \frac 1 {N-1} \sum_{n=2}^N \left[x(n) - a_1 x(n-1)"
+        tx3 += r" - a_2 x(n-2) \right]^2"
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+
+    @staticmethod
+    def sipk2_formula_3(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"\frac{\partial E_1}{\partial a_1} = "
+        tx += r"\frac {-2} N \sum_{n=1}^N \big(\left[x(n) - "
+        tx += r"a_1 x(n-1) \right] x(n-1) \big) = 0"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        tx2 = r"\frac{\partial E_2}{\partial a_1} = "
+        tx2 += r"\frac {-2} {N-1} \sum_{n=2}^N \big(\left[x(n) - "
+        tx2 += r"a_1 x(n-1) - a_2 x(n-2) \right] x(n-1) \big) = 0"
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex, M.DOWN)
+        tx3 = r"\frac{\partial E_2}{\partial a_2} = "
+        tx3 += r"\frac {-2} {N-1} \sum_{n=2}^N \big(\left[x(n) - "
+        tx3 += r"a_1 x(n-1) - a_2 x(n-2) \right] x(n-2) \big) = 0"
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+
+    @staticmethod
+    def sipk2_formula_4(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"\frac{\partial E_1}{\partial a_1} = "
+        tx += r"\frac {-2} N \sum_{n=1}^N \big(x(n) x(n-1) - "
+        tx += r"a_1 (x(n-1))^2 \big) = 0"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        tx2 = r"\frac{\partial E_2}{\partial a_1} = "
+        tx2 += r"\frac {-2} {N-1} \sum_{n=2}^N \big(x(n) x(n-1) - "
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex, M.DOWN)
+        tx22 = r"- a_1 (x(n-1))^2 - a_2 x(n-2) x(n-1)\big) = 0"
+        tex22 = M.MathTex(tx22, color = SSCTV.get_main_color(),
+                          font_size = 44.0).next_to(tex2, M.DOWN)
+        tx3 = r"\frac{\partial E_2}{\partial a_2} = "
+        tx3 += r"\frac {-2} {N-1} \sum_{n=2}^N \big(x(n) x(n-2) - "
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex22, M.DOWN)
+        tx32 = r"- a_1 x(n-1) x(n-2) - a_2 (x(n-2))^2 \big) = 0"
+        tex32 = M.MathTex(tx32, color = SSCTV.get_main_color(),
+                          font_size = 44.0).next_to(tex3, M.DOWN)
+        scene.add(tex, tex2, tex3, tex22, tex32)
+
+    @staticmethod
+    def sipk2_formula_5(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"\sum_{n=1}^N x(n) x(n-1) - "
+        tx += r"a_1 \sum_{n=1}^N (x(n-1))^2 = 0"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        tx2 = r"\sum_{n=2}^N x(n) x(n-1) - "
+        tx2 += r"a_1 \sum_{n=2}^N (x(n-1))^2 -"
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex, M.DOWN)
+        tx22 = r"- a_2 \sum_{n=2}^N x(n-2) x(n-1) = 0"
+        tex22 = M.MathTex(tx22, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex2, M.DOWN)
+        tx3 = r"\sum_{n=2}^N x(n) x(n-2) - "
+        tx3 += r"a_1 \sum_{n=2}^N x(n-1) x(n-2) -"
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex22, M.DOWN)
+        tx32 = r"- a_2 \sum_{n=2}^N (x(n-2))^2 = 0"
+        tex32 = M.MathTex(tx32, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex3, M.DOWN)
+        scene.add(tex, tex2, tex3, tex22, tex32)
+
+    @staticmethod
+    def sipk2_formula_6(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"a_1 = \frac {\sum_{n=1}^N x(n) x(n-1)}"
+        tx += r"{\sum_{n=1}^N (x(n-1))^2}"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        tx2 = r"a_1 = \frac {\sum_{n=2}^N x(n) x(n-1) - "
+        tx2 += r"a_2 \sum_{n=2}^N x(n-2) x(n-1)}"
+        tx2 += r"{\sum_{n=2}^N (x(n-1))^2}"
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex, M.DOWN)
+        tx3 = r"a_2 = \frac {\sum_{n=2}^N x(n) x(n-2) - "
+        tx3 += r"a_1 \sum_{n=2}^N x(n-1) x(n-2)}"
+        tx3 += r"{\sum_{n=2}^N (x(n-2))^2}"
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = 44.0).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+
+    @staticmethod
+    def sipk2_formula_7(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"a_1 = " + str(round(SSCTV.sipk2_a1, 3))
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        more_less = " меньше"
+        if 1.0 - SSCTV.sipk2_a1 < 0.0: more_less = " больше"
+        tx2 = "на " + str(round(
+            abs(100.0 * (1.0 - SSCTV.sipk2_a1)), 1)) + "%" + more_less
+        tex2 = M.Text(tx2, color = SSCTV.get_main_color(),
+                     font_size = 36.0).next_to(tex, M.DOWN)
+        scene.add(tex, tex2)
+
+    @staticmethod
+    def sipk2_formula_8(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"a_{21} = " + str(round(SSCTV.sipk2_a21, 3))
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(M.UP * 3.8, M.DOWN)
+        more_less = " меньше"
+        if 2.0 - SSCTV.sipk2_a21 < 0.0: more_less = " больше"
+        tx2 = "на " + str(round(
+            abs(100.0 * (1.0 - SSCTV.sipk2_a21 * 0.5)), 1)) + "%" + more_less
+        tex2 = M.Text(tx2, color = SSCTV.get_main_color(),
+                     font_size = 36.0).next_to(tex, M.DOWN)
+        tx3 = r"a_{22} = " + str(round(SSCTV.sipk2_a22, 3))
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                        font_size = 44.0).next_to(tex2, M.DOWN)
+        more_less = " меньше"
+        if -1.0 - SSCTV.sipk2_a22 > 0.0: more_less = " больше"
+        tx4 = "на " + str(round(
+            abs(100.0 * (1.0 + SSCTV.sipk2_a22)), 1)) + "%" + more_less
+        tex4 = M.Text(tx4, color = SSCTV.get_main_color(),
+                     font_size = 36.0).next_to(tex3, M.DOWN)
+        scene.add(tex, tex2, tex3, tex4)
 
     @staticmethod
     def tv3_sigmoid(x: float):
