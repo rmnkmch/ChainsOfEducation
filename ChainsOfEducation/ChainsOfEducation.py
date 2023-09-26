@@ -186,10 +186,10 @@ class ChainsOfEducation(M.MovingCameraScene):
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
+manim -pqh ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
 manim -pqh --disable_caching -s ChainsOfEducation.py ChainsOfEducation
 manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
-manim -pqh ChainsOfEducation.py ChainsOfEducation
     """
 
     def chapter_1_000(self):
