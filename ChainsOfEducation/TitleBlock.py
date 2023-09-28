@@ -1230,60 +1230,6 @@ Nigeria; Federal Republic of Nigeria
 Абуджа; Abuja
 английский; English
 NGN, найра; Nigerian naira
-Уганда; Республика Уганда
-государство в Восточной Африке.
-Uganda; Republic of Uganda
-Кампала; Kampala
-английский, суахили; English, Swahili
-UGX, Угандийский шиллинг; Ugandan shilling
-Гайана; Кооперативная Республика Гайана
-государство на северо-востоке Южной Америки.
-Guyana; Co-operative Republic of Guyana
-Джорджтаун; Georgetown
-английский; English
-GYD, Гайанский доллар; Guyanese dollar
-Белоруссия; Республика Беларусь
-государство в Восточной Европе.
-Belarus; Republic of Belarus
-Минск; Minsk
-белорусский, русский; Belarusian, Russian
-BYN, Белорусский рубль; Belarusian ruble
-Киргизия; Кыргызстан; Кыргызская Республика
-государство в Центральной Азии.
-Kyrgyzstan; Kyrgyz Republic
-Бишкек; Bishkek
-киргизский, русский; Kyrgyz, Russian
-KGS, Киргизский сом; Kyrgyz som
-Сенегал; Республика Сенегал
-государство в Западной Африке.
-Senegal; Republic of Senegal
-Дакар; Dakar
-французский; French
-XOF, Западноафриканский франк КФА; West African CFA franc
-Сирия; Сирийская Арабская Республика
-государство на Ближнем Востоке.
-Syria; Syrian Arab Republic
-Дамаск; Damascus
-арабский; Arabic
-SYP, Сирийский фунт; Syrian pound
-Камбоджа; Королевство Камбоджа
-государство в Юго-Восточной Азии.
-Cambodia; Kingdom of Cambodia
-Пномпень; Phnom Penh
-кхмерский; Khmer
-KHR, Риель; Cambodian riel
-Уругвай; Восточная Республика Уругвай
-государство в юго-восточной части Южной Америки.
-Uruguay; Oriental Republic of Uruguay
-Монтевидео; Montevideo
-испанский; Spanish
-UYU, Уругвайское песо; Uruguayan peso
-Суринам; Республика Суринам
-государство на северо-востоке Южной Америки.
-Suriname; Republic of Suriname
-Парамарибо; Paramaribo
-нидерландский; Dutch
-SRD, Суринамский доллар; Surinamese dollar
 Тунис; Тунисская Республика
 государство на крайнем севере Африки.
 Tunisia; Republic of Tunisia
@@ -1297,10 +1243,10 @@ Bangladesh; People's Republic of Bangladesh
 бенгальский; Bengali
 BDT, Бангладешская така; Bangladeshi taka"""
 
-        #TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
-        #TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_151_180)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_151_180)
-        #TitleBlock.resplit_to_post_examples(native_examples)
-        #TitleBlock.resplit_to_post_geo(geo)
-        #TitleBlock.resplit_to_z_name_geo(geo)
+        # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
+        # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
+        # TitleBlock.resplit_to_post_kanji(native_kun_on_151_180)
+        # TitleBlock.resplit_to_menu_kanji(native_kun_on_151_180)
+        # TitleBlock.resplit_to_post_examples(native_examples)
+        TitleBlock.resplit_to_post_geo(geo)
+        TitleBlock.resplit_to_z_name_geo(geo)
