@@ -15,10 +15,10 @@ FAST_RUN_TIME: float = 0.1
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
         # self.chapter_1_2()
-        from TitleBlock import TitleBlock
-        TitleBlock.Jpn_Geo()
-        # from SSCTV import SSCTV
-        # SSCTV.make_all(self)
+        # from TitleBlock import TitleBlock
+        # TitleBlock.Jpn_Geo()
+        from SSCTV import SSCTV
+        SSCTV.make_all(self)
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()

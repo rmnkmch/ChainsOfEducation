@@ -32,11 +32,7 @@ class SSCTV(object):
     dydoodynyndddyyyonyn
     100000101101000
     Миша З - 9
-    u0.07 p0.18 r0.17 n0.04 y0.24 t0.19 h0.08 j0.03
-    rrtrutytpytyjyhryppr
-    yrypypyyttytptpyphtp
-    jjuhjhnjhnnnnhhuuuun
-    000010000100001
+    Саша И - 6
     pkg load communications
     '''
 
@@ -46,24 +42,22 @@ class SSCTV(object):
     sipk1_m3 = ""
     sipk1_entropy = 0.0
     sipk1_table_data = []
-    sipk1_all_symbol_num = 9
+    sipk1_all_symbol_num = 8
     sipk1_symbol_num_arithm = 6
-    sipk1_mess_all_symbol_num = 2
+    sipk1_mess_all_symbol_num = 21
     sipk1_mean_bit_over_symb1 = round(1.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_mean_bit_over_symb2 = round(1.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_mean_bit_over_symb3 = round(1.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
     
-    tv_var = 10
+    tv_var = 6
     tv1_in_str = ""
 
     sipk2_Nhor = 24
     sipk2_Nver = 21
     sipk2_x_n = []
-    sipk2_cffs = [[2.624, -0.475, 6.535], [-3.482, 0.422, 6.106],
-                  [-0.156, 0.49, 1.542], [-0.763, 1.139, 3.568]]
-    # sipk2_cffs = []
+    sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -245,9 +239,9 @@ class SSCTV(object):
     def make_all(scene: M.Scene):
         # SSCTV.random_sipk1()
         # SSCTV.make_sipk1(scene)
-        SSCTV.make_tv1(scene)
+        # SSCTV.make_tv1(scene)
         # SSCTV.make_sipk2(scene)
-        # SSCTV.make_tv3(scene)
+        SSCTV.make_tv3(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1783,7 +1777,7 @@ class SSCTV(object):
 
     @staticmethod
     def tv3_func_part_by_2_bits(bits: str, part: int):
-        fall = 25.0
+        fall = 20.0
         amp = 2.0
         if bits[0] == "0" and bits[1] == "0":
             return lambda x: - 1.0
@@ -1877,7 +1871,7 @@ class SSCTV(object):
                      10: "110011000110", 11: "011100100110", 12: "110110001010",
                      13: "010111001101", 14: "100110001011", 15: "011000111010"}
         dict_colors = {1: M.DARK_BROWN, 2: M.TEAL, 3: M.RED_D,
-                       4: M.ORANGE, 5: M.YELLOW, 6: M.DARK_BLUE}
+                       4: M.YELLOW, 5: M.DARK_BLUE, 6: M.ORANGE}
         dict_stroke_widths = {1: 28, 2: 23, 3: 18, 4: 13, 5: 8, 6: 3}
         bit = dict_vars[SSCTV.tv_var]
         number_plane = M.NumberPlane(

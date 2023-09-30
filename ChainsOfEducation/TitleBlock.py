@@ -64,7 +64,7 @@ class TitleBlock(manim.RoundedRectangle):
     def resplit_to_z_name_geo(text: str):
         lines = text.split("\n")
         num_line = 0
-        num = 62
+        num = 90
         for line in lines:
             if num_line == 2:
                 num_line = 3
@@ -1241,7 +1241,199 @@ TND, Тунисский динар; Tunisian dinar
 Bangladesh; People's Republic of Bangladesh
 Дакка; Dhaka
 бенгальский; Bengali
-BDT, Бангладешская така; Bangladeshi taka"""
+BDT, Бангладешская така; Bangladeshi taka
+Таджикистан; Республика Таджикистан
+государство в Центральной Азии.
+Tajikistan; Republic of Tajikistan
+Душанбе; Dushanbe
+Таджикский; Tajik
+TJS, Сомони; Tajikistani somoni
+Непал; Федеративная Демократическая Республика Непал
+государство в Гималаях в Южной Азии.
+Nepal; Federal Democratic Republic of Nepal
+Катманду; Kathmandu
+Непальский; Nepali
+NPR, Непальская рупия; Nepalese rupee
+Греция; Греческая Республика
+государство в Южной Европе.
+Greece; Hellenic Republic
+Афины; Athens
+Греческий; Greek
+EUR, Евро; Euro
+Никарагуа; Республика Никарагуа
+государство в Центральной Америке.
+Nicaragua; Republic of Nicaragua
+Манагуа; Managua
+Испанский; Spanish
+NIO, Никарагуанская кордоба; Nicaraguan córdoba
+Эритрея; Государство Эритрея
+государство в Восточной Африке.
+Eritrea; State of Eritrea
+Асмэра; Asmara
+Арабский, Английский; Arabic, English
+ERN, Эритрейская накфа; Eritrean nakfa
+Корейская Народно-Демократическая Республика; КНДР; Северная Корея
+государство в Восточной Азии.
+Democratic People's Republic of Korea; DPRK; North Korea
+Пхеньян; Pyongyang
+Корейский; Korean
+KPW, Северокорейская вона; North Korean won
+Малави; Республика Малави
+государство в регионе Южная Африка.
+Malawi; Republic of Malawi
+Лилонгве; Lilongwe
+Английский, Чива (Ньянджа); English, Chewa (Nyanja)
+MWK, Малавийская квача; Malawian kwacha
+Бенин; Республика Бенин
+государство в Западной Африке.
+Benin; Republic of Benin
+Порто-Ново; Porto-Novo
+Французский; French
+XOF, Западноафриканский франк КФА; West African CFA franc
+Гондурас; Республика Гондурас
+государство в Центральной Америке.
+Honduras; Republic of Honduras
+Тегусигальпа; Tegucigalpa
+Испанский; Spanish
+HNL, Гондурасская лемпира; Honduran lempira
+Либерия; Республика Либерия
+государство в Западной Африке.
+Liberia; Republic of Liberia
+Монровия; Monrovia
+Английский; English
+LRD, Либерийский доллар; Liberian dollar
+Болгария; Республика Болгария
+государство в Юго-Восточной Европе.
+Bulgaria; Republic of Bulgaria
+София; Sofia
+Болгарский; Bulgarian
+BGN, Болгарский лев; Bulgarian lev
+Куба; Республика Куба
+островное государство в Латинской Америке, в Карибском бассейне.
+Cuba; Republic of Cuba
+Гавана; Havana
+Испанский; Spanish
+CUP, Кубинское песо; Cuban peso
+Гватемала; Республика Гватемала
+государство в Центральной Америке.
+Guatemala; Republic of Guatemala
+Гватемала; Guatemala City
+Испанский; Spanish
+GTQ, Гватемальский кетсаль; Guatemalan quetzal
+Исландия
+островное государство, расположенное на западе Северной Европы.
+Iceland
+Рейкьявик; Reykjavík
+Исландский; Icelandic
+ISK, Исландская крона; Icelandic króna
+Республика Корея; Южная Корея
+государство в Восточной Азии.
+Republic of Korea; South Korea
+Сеул; Seoul
+Корейский; Korean
+KRW, Южнокорейская вона; South Korean won
+Венгрия
+государство в Центральной Европе.
+Hungary
+Будапешт; Budapest
+Венгерский; Hungarian
+HUF, Форинт; Hungarian forint
+Португалия; Португальская Республика
+государство в Южной Европе.
+Portugal; Portuguese Republic
+Лиссабон; Lisbon
+Португальский; Portuguese
+EUR, Евро; Euro
+Иордания; Иорданское Хашимитское Королевство
+государство на Ближнем Востоке.
+Jordan; Hashemite Kingdom of Jordan
+Амман; Amman
+Арабский; Arabic
+JOD, Иорданский динар; Jordanian dinar
+Сербия; Республика Сербия
+государство в юго-восточной Европе.
+Serbia; Republic of Serbia
+Белград; Belgrade
+Сербский; Serbian
+RSD, Сербский динар; Serbian dinar
+Азербайджан; Азербайджанская Республика
+государство в восточной части Закавказья на побережье Каспийского моря.
+Azerbaijan; Republic of Azerbaijan
+Баку; Baku
+Азербайджанский; Azerbaijani
+AZN, Азербайджанский манат; Azerbaijani manat
+Австрия; Австрийская Республика
+государство в Центральной Европе.
+Austria; Republic of Austria
+Вена; Vienna
+Австрийский немецкий; Austrian German
+EUR, Евро; Euro
+Объединённые Арабские Эмираты; ОАЭ
+государство на Ближнем Востоке.
+United Arab Emirates; UAE
+Абу-Даби; Abu Dhabi
+Арабский, Английский; Arabic, English
+AED, Дирхам ОАЭ; United Arab Emirates dirham
+Чехия; Чешская Республика
+государство в Центральной Европе.
+Czechia; Czech Republic
+Прага; Prague
+Чешский; Czech
+CZK, Чешская крона; Czech koruna
+Панама; Республика Панама
+государство в Центральной Америке.
+Panama; Republic of Panama
+Панама; Panama City
+Испанский; Spanish
+PAB, USD, Панамский бальбоа, Доллар США; Panamanian balboa, United States dollar
+Сьерра-Леоне; Республика Сьерра-Леоне
+государство в Западной Африке.
+Sierra Leone; Republic of Sierra Leone
+Фритаун; Freetown
+Крио, Английский; Krio, English
+SLE, Леоне; Sierra Leonean leone
+Ирландия; Республика Ирландия
+государство в Северной Европе.
+Ireland; Republic of Ireland
+Дублин; Dublin
+Ирландский, Английский; Irish, English
+EUR, Евро; Euro
+Грузия
+государство, расположенное в западной части Закавказья.
+Georgia
+Тбилиси; Tbilisi
+Грузинский; Georgian
+GEL, Грузинский лари; Georgian lari
+Шри-Ланка; Демократическая Социалистическая Республика Шри-Ланка
+островное государство в Южной Азии.
+Sri Lanka; Democratic Socialist Republic of Sri Lanka
+Шри-Джаяварденепура-Котте; Sri Jayawardenepura Kotte
+Тамильский, Сингальский; Tamil, Sinhala
+LKR, Шри-ланкийская рупия; Sri Lankan rupee
+Литва; Литовская Республика
+государство, расположенное в Северной Европе.
+Lithuania; Republic of Lithuania
+Вильнюс; Vilnius
+Литовский; Lithuanian
+EUR, Евро; Euro
+Латвия; Латвийская Республика
+государство в Северной Европе.
+Latvia; Republic of Latvia
+Рига; Riga
+Латышский; Latvian
+EUR, Евро; Euro
+Того; Тоголезская Республика
+государство в Западной Африке.
+Togo; Togolese Republic
+Ломе; Lomé
+Французский; French
+XOF, Западноафриканский франк КФА; West African CFA franc
+Хорватия; Республика Хорватия
+государство на юге Центральной Европы.
+Croatia; Republic of Croatia
+Загреб; Zagreb
+Хорватский; Croatian
+EUR, Евро; Euro"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
