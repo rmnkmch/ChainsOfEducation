@@ -33,6 +33,16 @@ class SSCTV(object):
     100000101101000
     Миша З - 9
     Саша И - 6
+    Елена Ф
+    а0.15 п0.03 е0.22 л0.12 ь0.04 с0.18 и0.21 н0.05
+    иесеаеллласилльсаансл
+    аеилаееиаииессеааиилс
+    ьлппннппннпььпьллпьпл
+    никто
+    u0.17 w0.04 x0.18 f0.03 p0.11 r0.14 t0.28 q0.05
+    rrrxrwtrtftqxxxpxturr
+    turuuuxxttxuutxxutrru
+    ppfpqfwfqfrwwqqpwrffw
     pkg load communications
     '''
 
