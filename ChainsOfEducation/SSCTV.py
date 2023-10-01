@@ -21,10 +21,15 @@ class SSCTV(object):
     [[2.624, -0.475, 6.535], [-3.482, 0.422, 6.106],
     [-0.156, 0.49, 1.542], [-0.763, 1.139, 3.568]]
     Артём М - 17
-    Алексей Г - 4
     [[3.013, 0.47, 4.333], [-0.506, 0.6, 4.464],
     [-0.165, -0.765, 2.938], [-0.858, -0.284, 5.776]]
+    Алексей Г - 4
+    [[-4.155, 0.475, 4.022], [-3.066, -0.538, 2.759],
+    [-2.095, 0.803, 2.497], [0.9, -0.804, 6.709]]
     Данила Л - 14
+    Taxo
+    [[3.801, 0.285, 3.857], [-1.824, -0.766, 6.24],
+    [-0.998, -0.14, 4.074], [-1.769, -0.589, 5.812]]
     Антон Р - 10
     d0.06 g0.2 m0.27 a0.12 t0.11 y0.05 n0.1 o0.09
     tgmgndmgmamogmtmnmyo
@@ -61,13 +66,14 @@ class SSCTV(object):
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
     
-    tv_var = 6
+    tv_var = 17 - 15
     tv1_in_str = ""
 
     sipk2_Nhor = 24
-    sipk2_Nver = 21
+    sipk2_Nver = 22
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[3.801, 0.285, 3.857], [-1.824, -0.766, 6.24],
+                  [-0.998, -0.14, 4.074], [-1.769, -0.589, 5.812]]
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -250,8 +256,8 @@ class SSCTV(object):
         # SSCTV.random_sipk1()
         # SSCTV.make_sipk1(scene)
         # SSCTV.make_tv1(scene)
-        # SSCTV.make_sipk2(scene)
-        SSCTV.make_tv3(scene)
+        SSCTV.make_sipk2(scene)
+        # SSCTV.make_tv3(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1195,52 +1201,53 @@ class SSCTV(object):
 
     @staticmethod
     def make_sipk2(scene: M.Scene):
-        repetitions = 1
-        for _ in range(repetitions):
-            SSCTV.sipk2_num_plane(scene)
-            SSCTV.make_pause(scene)
-            SSCTV.sipk2_table_1(scene)
-            SSCTV.make_pause(scene)
-            SSCTV.sipk2_decode_1(scene, SSCTV.sipk2_x_n)
-            SSCTV.sipk2_decode_2(scene, SSCTV.sipk2_x_n)
-            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_x_n, "x")
-            SSCTV.make_pause(scene)
-            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e1, "e_1")
-            SSCTV.make_pause(scene)
-            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2, "e_2")
-            SSCTV.make_pause(scene)
-            SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2_opt, "e_{2opt}")
-            SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_1(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_2(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_3(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_4(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_5(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_6(scene)
-            # SSCTV.make_pause(scene)
-            SSCTV.sipk2_formula_7(scene)
-            SSCTV.make_pause(scene)
-            SSCTV.sipk2_formula_8(scene)
-            SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_9(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_10(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_11(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_12(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_13(scene)
-            # SSCTV.make_pause(scene)
-            # SSCTV.sipk2_formula_14(scene)
-            # SSCTV.make_pause(scene)
-            SSCTV.sipk2_Nhor = random.randint(24, 26)
-            SSCTV.sipk2_Nver = random.randint(20, 30)
+        if len(SSCTV.sipk2_cffs) == 0:
+            for _ in range(5):
+                SSCTV.sipk2_num_plane(scene)
+                SSCTV.make_pause(scene)
+            return
+        SSCTV.sipk2_num_plane(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.sipk2_table_1(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.sipk2_decode_1(scene, SSCTV.sipk2_x_n)
+        SSCTV.sipk2_decode_2(scene, SSCTV.sipk2_x_n)
+        SSCTV.sipk2_table_2(scene, SSCTV.sipk2_x_n, "x")
+        SSCTV.make_pause(scene)
+        SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e1, "e_1")
+        SSCTV.make_pause(scene)
+        SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2, "e_2")
+        SSCTV.make_pause(scene)
+        SSCTV.sipk2_table_2(scene, SSCTV.sipk2_e2_opt, "e_{2opt}")
+        SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_1(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_2(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_3(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_4(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_5(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_6(scene)
+        # SSCTV.make_pause(scene)
+        SSCTV.sipk2_formula_7(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.sipk2_formula_8(scene)
+        SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_9(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_10(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_11(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_12(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_13(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk2_formula_14(scene)
+        # SSCTV.make_pause(scene)
 
     @staticmethod
     def sipk2_num_plane(scene: M.Scene):
@@ -1398,6 +1405,9 @@ class SSCTV(object):
     def sipk2_table_2(scene: M.Scene, data: list, X: str):
         from math import log2
         SSCTV.make_background(scene)
+        fs_title = 24.0
+        h_buff = 0.3
+        if X == "x": h_buff = 0.24
         table_data = []
         data_dict = {}
         data.sort()
@@ -1417,29 +1427,28 @@ class SSCTV(object):
                                ])
             SSCTV.sipk1_entropy += - log2(pb) * pb
         table_data = SSCTV.transpose_list(table_data)
-        fs = 14.0
         table = Table(
             table_data,
             row_labels = [
                 M.MathTex(
                     f"{X}", color = SSCTV.get_main_color(),
-                    font_size = 24.0),
+                    font_size = fs_title),
                 M.MathTex(
                     f"N({X})", color = SSCTV.get_main_color(),
-                    font_size = 24.0),
+                    font_size = fs_title),
                 M.MathTex(
                     f"p({X})", color = SSCTV.get_main_color(),
-                    font_size = 24.0),    
+                    font_size = fs_title),    
                 M.MathTex(r"-\log_2 p(" + X + r")",
-                          color = SSCTV.get_main_color(), font_size = 24.0),
+                          color = SSCTV.get_main_color(), font_size = fs_title),
                 M.MathTex(r"-p(" + X + r") \cdot \log_2 p(" + X + r")",
-                          color = SSCTV.get_main_color(), font_size = 24.0),
+                          color = SSCTV.get_main_color(), font_size = fs_title),
                 ],
             include_outer_lines = True,
             v_buff = 0.3,
-            h_buff = 0.3,
+            h_buff = h_buff,
             element_to_mobject_config = {
-                "font_size": fs,
+                "font_size": 14.0,
                 "color": SSCTV.get_main_color()},
             line_config = {"color": SSCTV.get_main_color()}
             ).next_to(SSCTV.upper_side, M.DOWN)
@@ -1709,7 +1718,7 @@ class SSCTV(object):
 
     @staticmethod
     def sipk2_decode_1(scene: M.Scene, data: list):
-        n = [2, 10, 20]
+        n = [3, 13, 23]
         for i in n:
             SSCTV.make_background(scene)
             tx0 = r"n = " + str(i) + r":\ x(" + str(i) + r") = " + str(data[i])
@@ -1737,7 +1746,7 @@ class SSCTV(object):
 
     @staticmethod
     def sipk2_decode_2(scene: M.Scene, data: list):
-        n = [2, 10, 20]
+        n = [3, 13, 23]
         for i in n:
             SSCTV.make_background(scene)
             tx0 = r"n = " + str(i) + r":\ x(" + str(i) + r") = " + str(data[i])
@@ -1787,7 +1796,7 @@ class SSCTV(object):
 
     @staticmethod
     def tv3_func_part_by_2_bits(bits: str, part: int):
-        fall = 20.0
+        fall = 30.0
         amp = 2.0
         if bits[0] == "0" and bits[1] == "0":
             return lambda x: - 1.0
@@ -1979,8 +1988,8 @@ class ZLine(M.TipableVMobject):
 class PromoCode(object):
 
     promo_codes = [("o27739521", 90, True),
-                   ("o63116012", 50, False),
-                   ("o86636403", 25, False),
+                   ("o63116012", 50, True),
+                   ("o86636403", 25, True),
                    ("o15260943", 10, False),
                    ("t72539756", 20, False),
                    ("s05050505", 50, False)]
