@@ -66,14 +66,13 @@ class SSCTV(object):
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
     
-    tv_var = 17 - 15
+    tv_var = 7
     tv1_in_str = ""
 
     sipk2_Nhor = 24
     sipk2_Nver = 22
     sipk2_x_n = []
-    sipk2_cffs = [[3.801, 0.285, 3.857], [-1.824, -0.766, 6.24],
-                  [-0.998, -0.14, 4.074], [-1.769, -0.589, 5.812]]
+    sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -91,6 +90,10 @@ class SSCTV(object):
     sipk2_texsize = 40.0
     sipk2_textsize = 30.0
     upper_side = M.UP * 3.9
+
+    sipk3_R = 0.85
+    sipk3_t = 3
+
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -252,12 +255,31 @@ class SSCTV(object):
         return ret_list
 
     @staticmethod
+    def sipk3_c_n_k(n: int, k: int):
+        numerator = 1
+        denominator = 1
+        if k > n // 2: k = n - k
+        for i in range(n, n - k, -1):
+            numerator *= i
+        for i in range(1, k + 1, 1):
+            denominator *= i
+        return numerator // denominator
+
+    @staticmethod
+    def sipk3_exp10(n: int):
+        s = "{:e}".format(n)
+        if n > 1073741823: s = s[:4] + r" \cdot 10^{" + s[-2:] + r"}"
+        else: s = s[:4] + r" \cdot 10^{" + s[-1:] + r"}"
+        return s
+
+    @staticmethod
     def make_all(scene: M.Scene):
         # SSCTV.random_sipk1()
         # SSCTV.make_sipk1(scene)
         # SSCTV.make_tv1(scene)
-        SSCTV.make_sipk2(scene)
+        # SSCTV.make_sipk2(scene)
         # SSCTV.make_tv3(scene)
+        SSCTV.make_sipk3(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1936,6 +1958,223 @@ class SSCTV(object):
             if i % 2 == 1 and i != 0:
                 offset += 1.0
         scene.add(number_plane, graphs)
+
+    @staticmethod
+    def make_sipk3(scene: M.Scene):
+        SSCTV.sipk3_hemming_example(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.sipk3_graph(scene)
+        SSCTV.make_pause(scene)
+        SSCTV.sipk3_graph_scaled(scene)
+        SSCTV.make_pause(scene)
+        # SSCTV.sipk3_formula_1(scene)
+        # SSCTV.make_pause(scene)
+        # SSCTV.sipk3_formula_2(scene)
+        # SSCTV.make_pause(scene)
+        check = [127, 126]
+        for i in check:
+            SSCTV.sipk3_count_1(scene, i)
+            SSCTV.make_pause(scene)
+        SSCTV.sipk3_count_2(scene, 127, 108)
+        SSCTV.make_pause(scene)
+
+    @staticmethod
+    def sipk3_hemming_example(scene: M.Scene):
+        SSCTV.make_background(scene)
+        num1 = random.randint(0, 255)
+        num2 = random.randint(0, 255)
+        bin1 = SSCTV.fill_zeros(bin(num1)[2:], 8)
+        bin2 = SSCTV.fill_zeros(bin(num2)[2:], 8)
+        eq_text = ""
+        for i in range(8):
+            eq_text += SSCTV.tv1_sum_mod_2(bin1[i], bin2[i])
+        print(bin1, bin2)
+        b1 = M.Text(bin1, color = SSCTV.get_main_color(),
+                    font_size = SSCTV.sipk2_textsize
+                    ).next_to(SSCTV.upper_side, M.DOWN)
+        b2 = M.Text(bin2, color = SSCTV.get_main_color(),
+                    font_size = SSCTV.sipk2_textsize).next_to(b1, M.DOWN)
+        eq = M.Text(eq_text, color = SSCTV.get_main_color(),
+                    font_size = SSCTV.sipk2_textsize).next_to(b2, M.DOWN)
+        crc = M.Text("⊕", color = SSCTV.get_main_color(),
+                     font_size = SSCTV.sipk2_textsize).next_to(b1, M.DL, 0.03)
+        ravn = M.Text("=", color = SSCTV.get_main_color(),
+                      font_size = SSCTV.sipk2_textsize).next_to(b2, M.DL, 0.08)
+        scene.add(b1, b2, eq, crc, ravn)
+
+    @staticmethod
+    def sipk3_graph(scene: M.Scene):
+        from math import log2, ceil
+        SSCTV.make_background(scene)
+        n = 25
+        points = []
+        while n <= 185:
+            attraction_area = 0
+            for i in range(SSCTV.sipk3_t+ 1):
+                attraction_area += SSCTV.sipk3_c_n_k(n, i)
+            p = ceil(log2(attraction_area))
+            k = n - p
+            R_found = k / n
+            points.append((n, R_found))
+            n += 1
+        number_plane = M.NumberPlane(
+            x_range = (20, 190, 10),
+            y_range = (0.5, 0.9, 0.05),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = SSCTV.get_main_color(),
+            axis_config = {
+                "numbers_to_include": M.np.arange(20, 190, 10),
+                "font_size": 18.0,
+                "stroke_width": 3,
+                "include_ticks": False,
+                "include_tip": False,
+                "line_to_number_buff": 0.08,
+                "label_direction": M.DR,
+                "color": SSCTV.get_main_color(),
+                },
+            y_axis_config = {
+                "numbers_to_include": M.np.arange(0.5, 0.9, 0.05),
+                "label_direction": M.LEFT},
+            background_line_style = {
+                "stroke_color": SSCTV.get_main_color(),
+                "stroke_width": 1,
+                "stroke_opacity": 0.5,
+                },
+            tips = False,
+            ).next_to(SSCTV.upper_side, M.DOWN)
+        number_plane.get_axes().set_color(SSCTV.get_main_color())
+        graphs = M.VGroup()
+        for i in points:
+            graphs += M.Dot(number_plane.c2p(i[0], i[1], 0.0),
+                            0.04, color = SSCTV.get_main_color())
+        scene.add(number_plane, graphs)
+
+    @staticmethod
+    def sipk3_graph_scaled(scene: M.Scene):
+        from math import log2, ceil
+        SSCTV.make_background(scene)
+        R_found = 0.0
+        n = 120
+        points = []
+        while n <= 130:
+            attraction_area = 0
+            for i in range(SSCTV.sipk3_t+ 1):
+                attraction_area += SSCTV.sipk3_c_n_k(n, i)
+            p = ceil(log2(attraction_area))
+            k = n - p
+            R_found = k / n
+            points.append((n, R_found))
+            n += 1
+        number_plane = M.NumberPlane(
+            x_range = (119, 131, 1),
+            y_range = (0.84, 0.86, 0.005),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = SSCTV.get_main_color(),
+            axis_config = {
+                "numbers_to_include": M.np.arange(119, 131, 1),
+                "font_size": 18.0,
+                "stroke_width": 3,
+                "include_ticks": False,
+                "include_tip": False,
+                "line_to_number_buff": 0.08,
+                "label_direction": M.DR,
+                "color": SSCTV.get_main_color(),
+                },
+            y_axis_config = {
+                "numbers_to_include": M.np.arange(0.84, 0.86, 0.005),
+                "label_direction": M.LEFT},
+            background_line_style = {
+                "stroke_color": SSCTV.get_main_color(),
+                "stroke_width": 1,
+                "stroke_opacity": 0.5,
+                },
+            tips = False,
+            ).next_to(SSCTV.upper_side, M.DOWN)
+        number_plane.get_axes().set_color(SSCTV.get_main_color())
+        graphs = M.VGroup()
+        for i in points:
+            graphs += M.Dot(number_plane.c2p(i[0], i[1], 0.0),
+                            0.1, color = SSCTV.get_main_color())
+        scene.add(number_plane, graphs)
+
+    @staticmethod
+    def sipk3_formula_1(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"p \ge \log_2 (C_n^0 + C_n^1 + C_n^2 + C_n^3 + C_n^4)"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = SSCTV.sipk2_texsize
+                        ).next_to(SSCTV.upper_side, M.DOWN)
+        tx2 = r"C_n^k = \frac {n!}{k!(n-k)!}"
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex, M.DOWN)
+        scene.add(tex, tex2)
+
+    @staticmethod
+    def sipk3_formula_2(scene: M.Scene):
+        SSCTV.make_background(scene)
+        tx = r"p = n - k \ge \log_2 \left(\sum_{i=0}^t C_n^i \right)"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = SSCTV.sipk2_texsize
+                        ).next_to(SSCTV.upper_side, M.DOWN)
+        scene.add(tex)
+
+    @staticmethod
+    def sipk3_count_1(scene: M.Scene, n: int):
+        from math import log2, ceil
+        SSCTV.make_background(scene)
+        tx = r"n = " + str(n) + r": \ p \ge \log_2 (C_{" + str(n) + r"}^0 + C_{"
+        tx += str(n) + r"}^1 + C_{" + str(n) + r"}^2 + C_{" + str(n) + r"}^3"
+        if SSCTV.sipk3_t == 4: tx += r" + C_{" + str(n) + r"}^4"
+        tx += r")"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = SSCTV.sipk2_texsize
+                        ).next_to(SSCTV.upper_side, M.DOWN)
+        tx2 = r"C_{" + str(n) + r"}^0 = 1;\ "
+        tx2 += r"C_{" + str(n) + r"}^1 = " + str(n) + r";\ "
+        tx2 += r"C_{" + str(n) + r"}^2 = " + str(SSCTV.sipk3_c_n_k(n, 2)) + r";\ "
+        tx2 += r"C_{" + str(n) + r"}^3 = " + str(SSCTV.sipk3_c_n_k(n, 3))
+        attraction_area = 1 + n + SSCTV.sipk3_c_n_k(n, 2) + SSCTV.sipk3_c_n_k(n, 3)
+        if SSCTV.sipk3_t == 4:
+            tx2 += r";\ C_{" + str(n) + r"}^4 = "
+            tx2 += str(SSCTV.sipk3_c_n_k(n, 4))
+            attraction_area += SSCTV.sipk3_c_n_k(n, 4)
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex, M.DOWN, 0.4)
+        tx3 = r"\log_2 (" + str(attraction_area)
+        tx3 += r") = " + str(round(log2(attraction_area), 2))
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex2, M.DOWN, 0.4)
+        p = ceil(log2(attraction_area))
+        tx4 = r"p = " + str(p)
+        tx4 += r";\ k = n - p = " + str(n - p)
+        tx4 += r";\ R = \frac {k}{n} = " + str(round((n - p) / n, 4))
+        tex4 = M.MathTex(tx4, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex3, M.DOWN, 0.4)
+        scene.add(tex, tex2, tex3, tex4)
+
+    @staticmethod
+    def sipk3_count_2(scene: M.Scene, n: int, k: int):
+        SSCTV.make_background(scene)
+        tx = r"N_r = 2^k = 2^{" + str(k) + r"} = " + SSCTV.sipk3_exp10(2 ** k)
+        tx += r";\ N_p = 2^n = 2^{" + str(n) + r"} = " + SSCTV.sipk3_exp10(2 ** n)
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = SSCTV.sipk2_texsize
+                        ).next_to(SSCTV.upper_side, M.DOWN)
+        tx2 = r"2^k \cdot n = " + SSCTV.sipk3_exp10((2 ** k) * n)
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex, M.DOWN)
+        tx3 = r"2^n \cdot (k + 1) = " + SSCTV.sipk3_exp10((2 ** n) * (k + 1))
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
 
 
 class ProbabilitySymbol(object):
