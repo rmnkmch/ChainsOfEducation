@@ -20,29 +20,25 @@ class SSCTV(object):
     my_spik2
     [[2.624, -0.475, 6.535], [-3.482, 0.422, 6.106],
     [-0.156, 0.49, 1.542], [-0.763, 1.139, 3.568]]
-    Артём М - 17
+    А М - 17
     [[3.013, 0.47, 4.333], [-0.506, 0.6, 4.464],
     [-0.165, -0.765, 2.938], [-0.858, -0.284, 5.776]]
-    Алексей Г - 4
+    А Г - 4
     [[-4.155, 0.475, 4.022], [-3.066, -0.538, 2.759],
     [-2.095, 0.803, 2.497], [0.9, -0.804, 6.709]]
-    Данила Л - 14
+    Д Л - 14
     Taxo
     [[3.801, 0.285, 3.857], [-1.824, -0.766, 6.24],
     [-0.998, -0.14, 4.074], [-1.769, -0.589, 5.812]]
-    Антон Р - 10
+    А Р - 10
     d0.06 g0.2 m0.27 a0.12 t0.11 y0.05 n0.1 o0.09
     tgmgndmgmamogmtmnmyo
     aaggmmggtmmmgtattmga
     dydoodynyndddyyyonyn
     100000101101000
-    Миша З - 9
-    Саша И - 6
-    Елена Ф
-    а0.15 п0.03 е0.22 л0.12 ь0.04 с0.18 и0.21 н0.05
-    иесеаеллласилльсаансл
-    аеилаееиаииессеааиилс
-    ьлппннппннпььпьллпьпл
+    М З - 9
+    С И - 6
+    А Ф
     никто
     u0.17 w0.04 x0.18 f0.03 p0.11 r0.14 t0.28 q0.05
     rrrxrwtrtftqxxxpxturr
@@ -279,7 +275,8 @@ class SSCTV(object):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_sipk2(scene)
         # SSCTV.make_tv3(scene)
-        SSCTV.make_sipk3(scene)
+        # SSCTV.make_sipk3(scene)
+        SSCTV.make_tv2(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2175,6 +2172,52 @@ class SSCTV(object):
                          font_size = SSCTV.sipk2_texsize
                          ).next_to(tex2, M.DOWN)
         scene.add(tex, tex2, tex3)
+
+    @staticmethod
+    def make_tv2(scene: M.Scene):
+        SSCTV.tv2_diagram(scene)
+        SSCTV.make_pause(scene)
+
+    @staticmethod
+    def tv2_diagram(scene: M.Scene):
+        SSCTV.make_background(scene)
+        dict_vars = {1: 14, 2: 2, 3: 1, 4: 15, 5: 3, 6: 7, 7: 9, 8: 5,
+                     9: 4, 10: 8, 11: 13, 12: 0, 13: 10, 14: 12, 15: 4}
+        dict_row0 = {0: "0000", 1: "0001", 2: "0101", 3: "0100"}
+        dict_row1 = {0: "1000", 1: "1001", 2: "1101", 3: "1100"}
+        dict_row2 = {0: "1010", 1: "1011", 2: "1111", 3: "1110"}
+        dict_row3 = {0: "0010", 1: "0011", 2: "0111", 3: "0110"}
+        dict_rows = {0: dict_row0, 1: dict_row1, 2: dict_row2, 3: dict_row3}
+        bit_0 = dict_vars[SSCTV.tv_var]
+        codes = []
+        for i in range(16):
+            codes.append("")
+        for i in range(4):
+            bit = bit_0 + i
+            if bit // 4 != bit_0 // 4: bit -= 4
+            for j in range(4):
+                bit2 = (bit + j * 4) % 16
+                codes[bit2] = dict_rows[j][i]
+        number_plane = M.NumberPlane(
+            x_range = (-6, 6, 1),
+            y_range = (-6, 6, 1),
+            x_length = 7.0,
+            y_length = 7.0,
+            color = SSCTV.get_main_color(),
+            axis_config = {"stroke_width": 4},
+            background_line_style = {"stroke_width": 0}
+            ).next_to(SSCTV.upper_side, M.DOWN)
+        number_plane.get_axes().set_color(SSCTV.get_main_color())
+        graphs = M.VGroup()
+        for i in range(16):
+            d = M.Dot(
+                number_plane.c2p(- 4.5 + 3.0 * (i % 4), 4.5 - 3.0 * (i // 4), 0.0),
+                color = SSCTV.get_main_color())
+            graphs += M.Text(codes[i], color = SSCTV.get_main_color(),
+                             font_size = SSCTV.sipk2_textsize
+                             ).next_to(d, M.DOWN, 0.15)
+            graphs += d
+        scene.add(number_plane, graphs)
 
 
 class ProbabilitySymbol(object):
