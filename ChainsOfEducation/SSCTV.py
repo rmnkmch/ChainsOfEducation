@@ -21,8 +21,6 @@ class SSCTV(object):
     [[2.624, -0.475, 6.535], [-3.482, 0.422, 6.106],
     [-0.156, 0.49, 1.542], [-0.763, 1.139, 3.568]]
     А М - 17
-    [[3.013, 0.47, 4.333], [-0.506, 0.6, 4.464],
-    [-0.165, -0.765, 2.938], [-0.858, -0.284, 5.776]]
     А Г - 4
     [[-4.155, 0.475, 4.022], [-3.066, -0.538, 2.759],
     [-2.095, 0.803, 2.497], [0.9, -0.804, 6.709]]
@@ -39,6 +37,8 @@ class SSCTV(object):
     М З - 9
     С И - 6
     А Ф
+    [[3.461, 0.143, 1.818], [0.471, 0.074, 4.959],
+    [1.141, 0.93, 2.732], [-0.207, 1.201, 1.608]]
     никто
     u0.17 w0.04 x0.18 f0.03 p0.11 r0.14 t0.28 q0.05
     rrrxrwtrtftqxxxpxturr
@@ -62,13 +62,14 @@ class SSCTV(object):
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
     
-    tv_var = 7
+    tv_var = 14
     tv1_in_str = ""
 
     sipk2_Nhor = 24
-    sipk2_Nver = 22
+    sipk2_Nver = 24
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[3.461, 0.143, 1.818], [0.471, 0.074, 4.959],
+                  [1.141, 0.93, 2.732], [-0.207, 1.201, 1.608]]
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -85,6 +86,7 @@ class SSCTV(object):
     sipk2_a22 = 0.0
     sipk2_texsize = 40.0
     sipk2_textsize = 30.0
+    sipk2_decode_n = [3, 12, 24]
     upper_side = M.UP * 3.9
 
     sipk3_R = 0.85
@@ -274,9 +276,9 @@ class SSCTV(object):
         # SSCTV.make_sipk1(scene)
         # SSCTV.make_tv1(scene)
         # SSCTV.make_sipk2(scene)
-        # SSCTV.make_tv3(scene)
+        SSCTV.make_tv3(scene)
         # SSCTV.make_sipk3(scene)
-        SSCTV.make_tv2(scene)
+        # SSCTV.make_tv2(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1737,8 +1739,7 @@ class SSCTV(object):
 
     @staticmethod
     def sipk2_decode_1(scene: M.Scene, data: list):
-        n = [3, 13, 23]
-        for i in n:
+        for i in SSCTV.sipk2_decode_n:
             SSCTV.make_background(scene)
             tx0 = r"n = " + str(i) + r":\ x(" + str(i) + r") = " + str(data[i])
             tx0 += r";\ x(" + str(i - 1) + r") = " + str(data[i - 1])
@@ -1765,8 +1766,7 @@ class SSCTV(object):
 
     @staticmethod
     def sipk2_decode_2(scene: M.Scene, data: list):
-        n = [3, 13, 23]
-        for i in n:
+        for i in SSCTV.sipk2_decode_n:
             SSCTV.make_background(scene)
             tx0 = r"n = " + str(i) + r":\ x(" + str(i) + r") = " + str(data[i])
             tx0 += r";\ x(" + str(i - 1) + r") = " + str(data[i - 1])
