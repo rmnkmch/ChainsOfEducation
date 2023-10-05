@@ -92,6 +92,10 @@ class SSCTV(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
+    tv2_F_sym = 30.0#22.5
+    tv2_R = 1.0 / 2.0
+    tv2_R_str = r"\frac {1}{2}"
+
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -276,9 +280,9 @@ class SSCTV(object):
         # SSCTV.make_sipk1(scene)
         # SSCTV.make_tv1(scene)
         # SSCTV.make_sipk2(scene)
-        SSCTV.make_tv3(scene)
+        # SSCTV.make_tv3(scene)
         # SSCTV.make_sipk3(scene)
-        # SSCTV.make_tv2(scene)
+        SSCTV.make_tv2(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2177,6 +2181,8 @@ class SSCTV(object):
     def make_tv2(scene: M.Scene):
         SSCTV.tv2_diagram(scene)
         SSCTV.make_pause(scene)
+        SSCTV.tv2_formula_1(scene)
+        SSCTV.make_pause(scene)
 
     @staticmethod
     def tv2_diagram(scene: M.Scene):
@@ -2218,6 +2224,60 @@ class SSCTV(object):
                              ).next_to(d, M.DOWN, 0.15)
             graphs += d
         scene.add(number_plane, graphs)
+
+    @staticmethod
+    def tv2_formula_1(scene: M.Scene):
+        SSCTV.make_background(scene)
+        V_f = 2.0 * SSCTV.tv2_F_sym
+        V_in2 = V_f * SSCTV.tv2_R
+        tx = r"b_s = 2"
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = SSCTV.sipk2_texsize
+                        ).next_to(SSCTV.upper_side, M.DOWN)
+        txt = M.Text("бит/символ", font_size = SSCTV.sipk2_textsize,
+                     color = SSCTV.get_main_color())
+        tx2 = r"V_f = F_s \cdot b_s = " + str(SSCTV.tv2_F_sym)
+        tx2 += r" \cdot 2 = " + str(V_f)
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex, M.DOWN)
+        txt2 = M.Text("Mбит/с", font_size = SSCTV.sipk2_textsize,
+                      color = SSCTV.get_main_color())
+        tx22 = r" = V_{out2}"
+        tex22 = M.MathTex(tx22, color = SSCTV.get_main_color(),
+                          font_size = SSCTV.sipk2_texsize)
+        tx3 = r"V_{in2} = R \cdot V_{out2} = " + SSCTV.tv2_R_str + r" \cdot "
+        tx3 += str(V_f) + r" = " + str(V_in2)
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex2, M.DOWN)
+        txt3 = M.Text("Mбит/с", font_size = SSCTV.sipk2_textsize,
+                      color = SSCTV.get_main_color())
+        tx4 = r" = V_{out1}"
+        tex4 = M.MathTex(tx4, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize)
+        tx5 = r"V_{in1} = R_{RS} \cdot V_{out1} = 0.92 \cdot "
+        tx5 += str(V_in2) + r" = " + str(V_in2 * 0.92)
+        tex5 = M.MathTex(tx5, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex3, M.DOWN)
+        txt5 = M.Text("Mбит/с", font_size = SSCTV.sipk2_textsize,
+                      color = SSCTV.get_main_color())
+        tx6 = r" = V_p"
+        tex6 = M.MathTex(tx6, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize)
+        tex.shift(M.LEFT * txt.width * 0.5)
+        txt.next_to(tex)
+        tex2.shift(M.LEFT * (txt2.width + tex22.width) * 0.5)
+        txt2.next_to(tex2)
+        tex22.next_to(txt2)
+        tex3.shift(M.LEFT * txt3.width * 0.5)
+        txt3.next_to(tex3)
+        tex4.next_to(txt3)
+        tex5.shift(M.LEFT * (txt5.width + tex6.width) * 0.5)
+        txt5.next_to(tex5)
+        tex6.next_to(txt5)
+        scene.add(tex, txt, tex2, txt2, tex22, tex3, txt3, tex4, tex5, txt5, tex6)
 
 
 class ProbabilitySymbol(object):
