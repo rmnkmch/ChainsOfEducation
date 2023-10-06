@@ -1,10 +1,9 @@
 ﻿import manim as M
 import random
-import enum
 
 
 class SSCTV(object):
-    """SSCTV and SiPK"""
+    """SSCTV"""
 
     EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     en = "abcdefghijklmnopqrstuvwxyz"
@@ -44,9 +43,14 @@ class SSCTV(object):
     rrrxrwtrtftqxxxpxturr
     turuuuxxttxuutxxutrru
     ppfpqfwfqfrwwqqpwrffw
+    Н М
+    а0.42 р0.22 д0.22 о0.04 з0.04 н0.06
+    арадаааоднаарздаарда
+    дааарраадраааадаррда
+    нзоннозонзнзоознооно
     pkg load communications
     '''
-
+    
     sipk1_ps_str = ""
     sipk1_m1 = ""
     sipk1_m2 = ""
@@ -55,7 +59,7 @@ class SSCTV(object):
     sipk1_table_data = []
     sipk1_all_symbol_num = 8
     sipk1_symbol_num_arithm = 6
-    sipk1_mess_all_symbol_num = 21
+    sipk1_mess_all_symbol_num = 22
     sipk1_mean_bit_over_symb1 = round(1.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_mean_bit_over_symb2 = round(1.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_mean_bit_over_symb3 = round(1.0 / sipk1_mess_all_symbol_num, 3)
@@ -92,9 +96,11 @@ class SSCTV(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    tv2_F_sym = 30.0#22.5
-    tv2_R = 1.0 / 2.0
-    tv2_R_str = r"\frac {1}{2}"
+    tv2_F_s = 30.0#22.5
+    tv2_R2 = 1.0 / 2.0
+    tv2_R2_str = r"\frac {1}{2}"
+    tv2_V_p = 16.03
+    tv2_b_s = 5
 
 
     @staticmethod
@@ -160,7 +166,9 @@ class SSCTV(object):
 
     @staticmethod
     def find_index_ps_by_symbol(symbol: str, all_ps: list):
-        return all_ps.index(SSCTV.find_ps_by_symbol(symbol, all_ps))
+        for i in range(len(all_ps)):
+            if all_ps[i].symbol == symbol:
+                return i
 
     @staticmethod
     def get_ps_by_prb(prb: float, prb_line: list, all_ps: list):
@@ -2183,6 +2191,8 @@ class SSCTV(object):
         SSCTV.make_pause(scene)
         SSCTV.tv2_formula_1(scene)
         SSCTV.make_pause(scene)
+        SSCTV.tv2_formula_2(scene)
+        SSCTV.make_pause(scene)
 
     @staticmethod
     def tv2_diagram(scene: M.Scene):
@@ -2228,15 +2238,20 @@ class SSCTV(object):
     @staticmethod
     def tv2_formula_1(scene: M.Scene):
         SSCTV.make_background(scene)
-        V_f = 2.0 * SSCTV.tv2_F_sym
-        V_in2 = V_f * SSCTV.tv2_R
+        V_f = 2.0 * SSCTV.tv2_F_s
+        V_in2 = V_f * SSCTV.tv2_R2
         tx = r"b_s = 2"
         tex = M.MathTex(tx, color = SSCTV.get_main_color(),
                         font_size = SSCTV.sipk2_texsize
                         ).next_to(SSCTV.upper_side, M.DOWN)
-        txt = M.Text("бит/символ", font_size = SSCTV.sipk2_textsize,
+        txt = M.Text("бит/симв", font_size = SSCTV.sipk2_textsize,
                      color = SSCTV.get_main_color())
-        tx2 = r"V_f = F_s \cdot b_s = " + str(SSCTV.tv2_F_sym)
+        tx12 = r";\ F_s = " + str(SSCTV.tv2_F_s)
+        tex12 = M.MathTex(tx12, color = SSCTV.get_main_color(),
+                          font_size = SSCTV.sipk2_texsize)
+        txt12 = M.Text("Мсимв/с", font_size = SSCTV.sipk2_textsize,
+                       color = SSCTV.get_main_color())
+        tx2 = r"V_f = F_s \cdot b_s = " + str(SSCTV.tv2_F_s)
         tx2 += r" \cdot 2 = " + str(V_f)
         tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
                          font_size = SSCTV.sipk2_texsize
@@ -2246,7 +2261,7 @@ class SSCTV(object):
         tx22 = r" = V_{out2}"
         tex22 = M.MathTex(tx22, color = SSCTV.get_main_color(),
                           font_size = SSCTV.sipk2_texsize)
-        tx3 = r"V_{in2} = R \cdot V_{out2} = " + SSCTV.tv2_R_str + r" \cdot "
+        tx3 = r"V_{in2} = R_2 \cdot V_{out2} = " + SSCTV.tv2_R2_str + r" \cdot "
         tx3 += str(V_f) + r" = " + str(V_in2)
         tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
                          font_size = SSCTV.sipk2_texsize
@@ -2256,7 +2271,7 @@ class SSCTV(object):
         tx4 = r" = V_{out1}"
         tex4 = M.MathTex(tx4, color = SSCTV.get_main_color(),
                          font_size = SSCTV.sipk2_texsize)
-        tx5 = r"V_{in1} = R_{RS} \cdot V_{out1} = 0.92 \cdot "
+        tx5 = r"V_{in1} = R_1 \cdot V_{out1} = 0.92 \cdot "
         tx5 += str(V_in2) + r" = " + str(V_in2 * 0.92)
         tex5 = M.MathTex(tx5, color = SSCTV.get_main_color(),
                          font_size = SSCTV.sipk2_texsize
@@ -2266,8 +2281,10 @@ class SSCTV(object):
         tx6 = r" = V_p"
         tex6 = M.MathTex(tx6, color = SSCTV.get_main_color(),
                          font_size = SSCTV.sipk2_texsize)
-        tex.shift(M.LEFT * txt.width * 0.5)
+        tex.shift(M.LEFT * (txt.width + tex12.width + txt12.width) * 0.5)
         txt.next_to(tex)
+        tex12.next_to(txt)
+        txt12.next_to(tex12)
         tex2.shift(M.LEFT * (txt2.width + tex22.width) * 0.5)
         txt2.next_to(tex2)
         tex22.next_to(txt2)
@@ -2277,7 +2294,51 @@ class SSCTV(object):
         tex5.shift(M.LEFT * (txt5.width + tex6.width) * 0.5)
         txt5.next_to(tex5)
         tex6.next_to(txt5)
-        scene.add(tex, txt, tex2, txt2, tex22, tex3, txt3, tex4, tex5, txt5, tex6)
+        scene.add(tex, txt, tex12, txt12, tex2, txt2, tex22,
+                  tex3, txt3, tex4, tex5, txt5, tex6)
+
+    @staticmethod
+    def tv2_formula_2(scene: M.Scene):
+        SSCTV.make_background(scene)
+        V_f = round(SSCTV.tv2_V_p / 0.92, 3)
+        tx = r"b_s = " + str(SSCTV.tv2_b_s)
+        tex = M.MathTex(tx, color = SSCTV.get_main_color(),
+                        font_size = SSCTV.sipk2_texsize
+                        ).next_to(SSCTV.upper_side, M.DOWN)
+        txt = M.Text("бит/симв", font_size = SSCTV.sipk2_textsize,
+                     color = SSCTV.get_main_color())
+        tx12 = r";\ V_p = V_{in} = " + str(SSCTV.tv2_V_p)
+        tex12 = M.MathTex(tx12, color = SSCTV.get_main_color(),
+                          font_size = SSCTV.sipk2_texsize)
+        txt12 = M.Text("Мбит/с", font_size = SSCTV.sipk2_textsize,
+                       color = SSCTV.get_main_color())
+        tx2 = r"V_{out} = \frac {V_{in}}{R} = \frac {" + str(SSCTV.tv2_V_p)
+        tx2 += r"}{0.92} = " + str(V_f)
+        tex2 = M.MathTex(tx2, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex, M.DOWN)
+        txt2 = M.Text("Mбит/с", font_size = SSCTV.sipk2_textsize,
+                      color = SSCTV.get_main_color())
+        tx22 = r" = V_f"
+        tex22 = M.MathTex(tx22, color = SSCTV.get_main_color(),
+                          font_size = SSCTV.sipk2_texsize)
+        tx3 = r"F_s = \frac {V_f}{b_s} = \frac {" + str(V_f)
+        tx3 += r"}{" + str(SSCTV.tv2_b_s) + r"} = " + str(V_f / SSCTV.tv2_b_s)
+        tex3 = M.MathTex(tx3, color = SSCTV.get_main_color(),
+                         font_size = SSCTV.sipk2_texsize
+                         ).next_to(tex2, M.DOWN)
+        txt3 = M.Text("Mсимв/с", font_size = SSCTV.sipk2_textsize,
+                      color = SSCTV.get_main_color())
+        tex.shift(M.LEFT * (txt.width + tex12.width + txt12.width) * 0.5)
+        txt.next_to(tex)
+        tex12.next_to(txt)
+        txt12.next_to(tex12)
+        tex2.shift(M.LEFT * (txt2.width + tex22.width) * 0.5)
+        txt2.next_to(tex2)
+        tex22.next_to(txt2)
+        tex3.shift(M.LEFT * txt3.width * 0.5)
+        txt3.next_to(tex3)
+        scene.add(tex, txt, tex12, txt12, tex2, txt2, tex22, tex3, txt3)
 
 
 class ProbabilitySymbol(object):
@@ -2325,73 +2386,6 @@ class ZLine(M.TipableVMobject):
 
         self.set_points_as_corners(points)
         self.add_tip(self.create_tip(tip_length = size, tip_width = size))
-
-
-class PromoCode(object):
-
-    promo_codes = [("o27739521", 90, True),
-                   ("o63116012", 50, True),
-                   ("o86636403", 25, True),
-                   ("o15260943", 10, False),
-                   ("t72539756", 20, False),
-                   ("s05050505", 50, False)]
-
-    class PromoCodeType(enum.Enum):
-        O = "One-time",
-        T = "Temporary",
-        S = "Special"
-
-    def __init__(self, did: str, discount: int, used: bool):
-        self.did = did
-        self.discount = discount
-        self.used = used
-
-    @staticmethod
-    def get_all_did(with_prefix = False):
-        all_did = []
-        for d in PromoCode.promo_codes:
-            if with_prefix:
-                all_did.append(d[0])
-            else:
-                all_did.append(d[0][1:])
-        return all_did
-
-    @staticmethod
-    def check_promo_code(did: str):
-        return did in PromoCode.get_all_did()
-
-    @staticmethod
-    def check_promo_code_full(did: str):
-        ind = PromoCode.get_all_did(True).index(did)
-        promo = PromoCode.promo_codes[ind]
-        info = ""
-        if promo[2]:
-            info = f"К сожалению, промокод '{promo[0]}' уже недействителен.\
-            Попробуйте другой."
-        else:
-            info = f"Промокод '{promo[0]}' действителен."
-        print(info, promo)
-        return info
-
-    @staticmethod
-    def add_prefix(did: str, type: PromoCodeType):
-        prefix = ""
-        if type is PromoCode.PromoCodeType.O: prefix = "o"
-        elif type is PromoCode.PromoCodeType.T: prefix = "t"
-        elif type is PromoCode.PromoCodeType.S: prefix = "s"
-        else: print("No such type promo code")
-        return prefix + did
-
-    @staticmethod
-    def get_new_promo_code(discount: int, type: PromoCodeType = PromoCodeType.O):
-        r = round(random.random() * 10000000000000000.0)
-        r = r // 100000000
-        while PromoCode.check_promo_code(str(r)):
-            r = round(random.random() * 10000000000000000.0)
-            r = r // 100000000
-        prcd = PromoCode.add_prefix(str(r), type)
-        PromoCode.promo_codes.append((prcd, discount, False))
-        return prcd
 
 
 class Table(M.Table):

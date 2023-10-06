@@ -50,6 +50,12 @@
     <Compile Include="SimpleCurve.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SIPK.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SIPK_SSCTV_functions.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SQLDatabase.py">
       <SubType>Code</SubType>
     </Compile>
