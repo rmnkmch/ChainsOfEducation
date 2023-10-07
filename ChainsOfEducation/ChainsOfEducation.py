@@ -17,8 +17,10 @@ class ChainsOfEducation(M.MovingCameraScene):
         # self.chapter_1_2()
         # from TitleBlock import TitleBlock
         # TitleBlock.Jpn_Geo()
-        from SSCTV import SSCTV
-        SSCTV.make_all(self)
+        # from SSCTV import SSCTV
+        # SSCTV.make_tv(self)
+        from SIPK import SIPK
+        SIPK.make_sipk(self)
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
