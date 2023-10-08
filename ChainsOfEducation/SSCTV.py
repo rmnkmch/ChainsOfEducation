@@ -10,8 +10,8 @@ class SSCTV(object):
     tv1_in_0_1_str = ""
 
     tv2_F_s = 30.0#22.5
-    tv2_R2 = 1.0 / 2.0
-    tv2_R2_str = r"\frac {1}{2}"
+    tv2_R2 = 2.0 / 3.0
+    tv2_R2_str = r"\frac {2}{3}"
     tv2_V_p = 16.03
     tv2_b_s = 5
     tv2_data1 = [9.0, 7.0, 5.0, 3.0, 1.0]
@@ -288,6 +288,7 @@ class SSCTV(object):
         SSCTV.tv2_formula_2(scene)
         SSCTV.tv2_graphs_1(scene)
         SSCTV.tv2_graphs_2(scene)
+        # SSCTV.tv2_graph_3(scene)
 
     @staticmethod
     def tv2_diagram(scene: M.Scene):
@@ -360,7 +361,7 @@ class SSCTV(object):
         tx4 = r" = V_{out1}"
         tex4 = M.MathTex(tx4, font_size = txs, color = mc)
         tx5 = r"V_{in1} = R_1 \cdot V_{out1} = 0.92 \cdot "
-        tx5 += str(V_in2) + r" = " + str(V_in2 * 0.92)
+        tx5 += str(V_in2) + r" = " + str(round(V_in2 * 0.92, 5))
         tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex3, M.DOWN)
         txt5 = M.Text("Mбит/с", font_size = tts, color = mc)
         tx6 = r" = V_p"
@@ -466,7 +467,7 @@ class SSCTV(object):
             vertex_dot_style = dict(stroke_width = 2, fill_color = "#2cf30c",
                                     stroke_color = mc),
             stroke_width = 4)
-        scene.add(number_plane, line_graph1, line_graph2, line_graph3,)
+        scene.add(number_plane, line_graph1, line_graph2, line_graph3)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
@@ -518,7 +519,62 @@ class SSCTV(object):
             vertex_dot_style = dict(stroke_width = 2, fill_color = "#2cf30c",
                                     stroke_color = mc),
             stroke_width = 4)
-        scene.add(number_plane, line_graph1, line_graph2, line_graph3,)
+        scene.add(number_plane, line_graph1, line_graph2, line_graph3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def tv2_graph_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        number_plane = M.NumberPlane(
+            x_range = (0, 12, 1),
+            y_range = (0, 10, 1),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = mc,
+            axis_config = {
+                "stroke_width": 0,
+                "color": mc},
+            background_line_style = {
+                "stroke_width": 0},
+            tips = False)
+        line_graph1 = number_plane.plot_line_graph(
+            x_values = [1, 2],
+            y_values = [1, 1],
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 2, fill_color = "#f30c2c",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph2 = number_plane.plot_line_graph(
+            x_values = [1, 2],
+            y_values = [2, 2],
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 2, fill_color = "#0c2cf3",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph3 = number_plane.plot_line_graph(
+            x_values = [1, 2],
+            y_values = [3, 3],
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 2, fill_color = "#2cf30c",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph4 = number_plane.plot_line_graph(
+            x_values = [0.5, 0.5, 4, 4, 0.5],
+            y_values = [0, 4, 4, 0, 0],
+            line_color = mc,
+            vertex_dot_radius = 0.0,
+            vertex_dot_style = dict(stroke_width = 0),
+            stroke_width = 4)
+        txt1 = M.Text("4 ФМ", font_size = tts, color = mc).next_to(
+            number_plane.c2p(2.0, 1.0, 0.0))
+        txt2 = M.Text("16 КАМ", font_size = tts, color = mc).next_to(
+            number_plane.c2p(2.0, 2.0, 0.0))
+        txt3 = M.Text("64 КАМ", font_size = tts, color = mc).next_to(
+            number_plane.c2p(2.0, 3.0, 0.0))
+        scene.add(number_plane, line_graph1, line_graph2, line_graph3, line_graph4,
+                  txt1, txt2, txt3)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
