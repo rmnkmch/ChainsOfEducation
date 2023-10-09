@@ -289,6 +289,7 @@ class SSCTV(object):
         SSCTV.tv2_graphs_1(scene)
         SSCTV.tv2_graphs_2(scene)
         # SSCTV.tv2_graph_3(scene)
+        # SSCTV.tv2_formula_3(scene)
 
     @staticmethod
     def tv2_diagram(scene: M.Scene):
@@ -575,6 +576,22 @@ class SSCTV(object):
             number_plane.c2p(2.0, 3.0, 0.0))
         scene.add(number_plane, line_graph1, line_graph2, line_graph3, line_graph4,
                   txt1, txt2, txt3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def tv2_formula_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"MER = 10 \lg \left[ \frac {\sum_{i=1}^N (I_i^2 + Q_i^2)}"
+        tx += r"{\sum_{i=1}^N ({\delta I_i}^2 + {\delta Q_i}^2)} \right]"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        txt = M.Text("дБ", font_size = tts, color = mc)
+        tex.shift(M.LEFT * 0.5 * txt.width)
+        txt.next_to(tex)
+        scene.add(tex, txt)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod

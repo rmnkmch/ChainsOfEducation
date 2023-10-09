@@ -49,6 +49,8 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
+    sipk4_last = 7
+
     @staticmethod
     def get_all_ps_by_str(text: str):
         ret = []
@@ -165,7 +167,8 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        SIPK.make_sipk3(scene)
+        # SIPK.make_sipk3(scene)
+        SIPK.make_sipk4(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1344,8 +1347,8 @@ class SIPK(object):
         SIPK.sipk3_hemming_example(scene)
         SIPK.sipk3_graph(scene)
         SIPK.sipk3_graph_scaled(scene)
-        SIPK.sipk3_formula_1(scene)
-        SIPK.sipk3_formula_2(scene)
+        # SIPK.sipk3_formula_1(scene)
+        # SIPK.sipk3_formula_2(scene)
         check = [127, 126]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
@@ -1550,6 +1553,67 @@ class SIPK(object):
         tx3 += SSf.SIPK_SSCTV_functions.int_to_exp10((2 ** n) * (k + 1))
         tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
         scene.add(tex, tex2, tex3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_sipk4(scene: M.Scene):
+        SIPK.sipk4_table_1(scene)
+        SIPK.sipk4_table_1(scene, [0, 1, 1, 0, 0, 0, 1])
+        SIPK.sipk4_table_1(scene, [0, 0, 1, 0, 0, 0, 1])
+        SIPK.sipk4_table_1(scene, [0, 0, 0, 0, 0, 0, 1])
+
+    @staticmethod
+    def sipk4_table_1(scene: M.Scene, compare_row: list = None):
+        var_dict = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 3, 9: 5, 0: 7}
+        fvh = [[0, 0, 0, 0, 0, 0, 0],
+               [0, 0, 1, 1, 1, 0, 1],
+               [0, 1, 0, 1, 0, 1, 1],
+               [0, 1, 1, 0, 1, 1, 0],
+               [1, 0, 0, 0, 1, 1, 1],
+               [1, 0, 1, 1, 0, 1, 0],
+               [1, 1, 0, 1, 1, 0, 0],
+               [1, 1, 1, 0, 0, 0, 1]]
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        fs = 32.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        if compare_row is None: compare_row = fvh[var_dict[SIPK.sipk4_last]]
+        table_data = []
+        highlighted = []
+        for i in range(len(fvh)):
+            err = 0
+            table_data.append([])
+            for j in range(len(fvh[0])):
+                if compare_row[j] != fvh[i][j]:
+                    highlighted.append((i + 2, j + 2))
+                    err += 1
+                table_data[-1].append(str(fvh[i][j]))
+            table_data[-1].append(str(err))
+        table = SSf.Table(
+            table_data,
+            row_labels = [M.MathTex(str(i), font_size = fs, color = mc)
+                          for i in range(8)],
+            col_labels = [
+                M.MathTex("F", font_size = fs, color = mc),
+                M.MathTex("V", font_size = fs, color = mc),
+                M.MathTex("H", font_size = fs, color = mc),
+                M.MathTex("P3", font_size = fs, color = mc),
+                M.MathTex("P2", font_size = fs, color = mc),
+                M.MathTex("P1", font_size = fs, color = mc),
+                M.MathTex("P0", font_size = fs, color = mc),
+                M.MathTex("d_n", font_size = fs, color = mc)],
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.8,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        for cell in highlighted:
+            table.add_highlighted_cell(cell, color = "#BBBBBB")
+        str_code = "Кодовое слово: "
+        for i in range(len(compare_row)):
+            str_code += str(compare_row[i])
+        txt = M.Text(str_code, font_size = 30.0, color = mc).next_to(table, M.DOWN)
+        scene.add(table, txt)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 
