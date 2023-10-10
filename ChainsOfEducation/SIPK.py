@@ -46,8 +46,8 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [3, 12, 24]
 
-    sipk3_R = 0.85
-    sipk3_t = 3
+    sipk3_R = 0.55
+    sipk3_t = 4
 
     sipk4_last = 7
 
@@ -167,8 +167,8 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
-        SIPK.make_sipk4(scene)
+        SIPK.make_sipk3(scene)
+        # SIPK.make_sipk4(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1345,14 +1345,14 @@ class SIPK(object):
     @staticmethod
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
-        SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene)
+        # SIPK.sipk3_graph(scene)
+        SIPK.sipk3_graph_scaled(scene, 30)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [127, 126]
+        check = [37]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 127, 108)
+        SIPK.sipk3_count_2(scene, 38, 21)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
@@ -1425,14 +1425,14 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
-    def sipk3_graph_scaled(scene: M.Scene):
+    def sipk3_graph_scaled(scene: M.Scene, left: int):
         from math import log2, ceil
         SSf.SIPK_SSCTV_functions.make_background(scene)
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         R_found = 0.0
-        n = 120
+        n = left
         points = []
-        while n <= 130:
+        while n <= left + 10:
             attraction_area = 0
             for i in range(SIPK.sipk3_t + 1):
                 attraction_area += SSf.SIPK_SSCTV_functions.c_n_k(n, i)
@@ -1442,13 +1442,13 @@ class SIPK(object):
             points.append((n, R_found))
             n += 1
         number_plane = M.NumberPlane(
-            x_range = (119, 131, 1),
-            y_range = (0.84, 0.86, 0.005),
+            x_range = (left - 1, left + 11, 1),
+            y_range = (SIPK.sipk3_R - 0.1, SIPK.sipk3_R + 0.1, 0.05),
             x_length = 13.0,
             y_length = 7.0,
             color = mc,
             axis_config = {
-                "numbers_to_include": M.np.arange(119, 131, 1),
+                "numbers_to_include": M.np.arange(left - 1, left + 11, 1),
                 "font_size": 18.0,
                 "stroke_width": 3,
                 "include_ticks": False,
@@ -1457,7 +1457,8 @@ class SIPK(object):
                 "label_direction": M.DR,
                 "color": mc},
             y_axis_config = {
-                "numbers_to_include": M.np.arange(0.84, 0.86, 0.005),
+                "numbers_to_include": M.np.arange(
+                    SIPK.sipk3_R - 0.1, SIPK.sipk3_R + 0.1, 0.05),
                 "label_direction": M.LEFT},
             background_line_style = {
                 "stroke_color": mc,
