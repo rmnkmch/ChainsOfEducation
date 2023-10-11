@@ -44,10 +44,10 @@ class SIPK(object):
     sipk2_a1 = 0.0
     sipk2_a21 = 0.0
     sipk2_a22 = 0.0
-    sipk2_decode_n = [3, 12, 24]
+    sipk2_decode_n = [3, 11, 22]
 
-    sipk3_R = 0.55
-    sipk3_t = 4
+    sipk3_R = 0.83
+    sipk3_t = 3
 
     sipk4_last = 7
 
@@ -1346,13 +1346,13 @@ class SIPK(object):
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
         # SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene, 30)
+        SIPK.sipk3_graph_scaled(scene, 100)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [37]
+        check = [83, 103, 123, 110, 106, 105]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 38, 21)
+        SIPK.sipk3_count_2(scene, 106, 88)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
