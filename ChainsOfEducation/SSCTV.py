@@ -5,14 +5,14 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 17 - 15
+    variant = 4
 
     tv1_in_0_1_str = ""
 
-    tv2_F_s = 22.5#30.0
+    tv2_F_s = 30.0#22.5
     tv2_R2 = 2.0 / 3.0
     tv2_R2_str = r"\frac {2}{3}"
-    tv2_V_p = 22.44
+    tv2_V_p = 44.88
     tv2_b_s = 7
     tv2_data1 = [9.0, 7.0, 5.0, 3.0, 1.0]
     tv2_data2 = [10.0, 8.0, 6.0, 4.0, 2.0]
@@ -24,11 +24,40 @@ class SSCTV(object):
     tv2_data222 = [0.0028125, 0.01133, 0.03289, 0.0636325, 0.096845]
     tv2_data333 = [0.000260425, 0.00444, 0.0280025, 0.06069, 0.0979025]
 
+    old_tv1_colors = {"Чёрный": [0, 0, 0],
+                      "Синий": [0, 0, 1],
+                      "Красный": [1, 0, 0],
+                      "Пурпурный": [1, 0, 1],
+                      "Зелёный": [0, 1, 0],
+                      "Голубой": [0, 1, 1],
+                      "Жёлтый": [1, 1, 0],
+                      "Белый": [1, 1, 1]}
+
+    old_tv1_variants = {1: ["Пурпурный", "Чёрный", "Красный", "Голубой", "Синий"],
+                        2: ["Синий", "Белый", "Пурпурный", "Жёлтый", "Зелёный"],
+                        3: ["Голубой", "Красный", "Жёлтый", "Зелёный", "Чёрный"],
+                        4: ["Синий", "Чёрный", "Жёлтый", "Красный", "Пурпурный"],
+                        5: ["Зелёный", "Синий", "Белый", "Красный", "Голубой"],
+                        6: ["Красный", "Жёлтый", "Голубой", "Чёрный", "Пурпурный"],
+                        7: ["Зелёный", "Красный", "Жёлтый", "Пурпурный", "Белый"],
+                        8: ["Жёлтый", "Синий", "Белый", "Красный", "Голубой"],
+                        9: ["Синий", "Пурпурный", "Чёрный", "Жёлтый", "Белый"],
+                        10: ["Красный", "Зелёный", "Белый", "Голубой", "Синий"],
+                        11: ["Пурпурный", "Жёлтый", "Синий", "Белый", "Красный"],
+                        12: ["Голубой", "Чёрный", "Зелёный", "Красный", "Жёлтый"],
+                        13: ["Зелёный", "Жёлтый", "Пурпурный", "Синий", "Чёрный"],
+                        14: ["Жёлтый", "Красный", "Голубой", "Чёрный", "Белый"],
+                        15: ["Синий", "Зелёный", "Белый", "Голубой", "Пурпурный"]}
+
+    old_tv_variant = 7
+    old_tv1_YRB = []
+
     @staticmethod
     def make_tv(scene: M.Scene):
         # SSCTV.make_tv1(scene)
-        SSCTV.make_tv2(scene)
+        # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
+        SSCTV.make_old_tv1(scene)
 
     @staticmethod
     def make_tv1(scene: M.Scene):
@@ -268,6 +297,7 @@ class SSCTV(object):
         SSCTV.tv2_diagram(scene)
         SSCTV.tv2_formula_1(scene)
         SSCTV.tv2_formula_2(scene)
+        SSCTV.tv2_count()
         SSCTV.tv2_graphs_1(scene)
         SSCTV.tv2_graphs_2(scene)
         SSCTV.tv2_graph_3(scene)
@@ -409,9 +439,9 @@ class SSCTV(object):
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         number_plane = M.NumberPlane(
             x_range = (0, 17, 1),
-            y_range = (5, 31, 1),
-            x_length = 13.0,
-            y_length = 7.0,
+            y_range = (6, 32, 2),
+            x_length = 12.5,
+            y_length = 6.5,
             color = mc,
             axis_config = {
                 "include_numbers": True,
@@ -434,24 +464,35 @@ class SSCTV(object):
             x_values = SSCTV.tv2_data1,
             y_values = SSCTV.tv2_data11,
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#B40097",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph2 = number_plane.plot_line_graph(
             x_values = SSCTV.tv2_data2,
             y_values = SSCTV.tv2_data22,
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#00AA72",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#00AA72",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph3 = number_plane.plot_line_graph(
             x_values = SSCTV.tv2_data3,
             y_values = SSCTV.tv2_data33,
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#FFC500",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#FFC500",
                                     stroke_color = mc),
             stroke_width = 4)
-        scene.add(number_plane, line_graph1, line_graph2, line_graph3)
+        y_label = M.MathTex("MER,", font_size = 24.0, color = mc
+                            ).next_to(number_plane, M.UL)
+        y_label.shift(M.RIGHT * 0.6 + M.DOWN * 0.1)
+        x_label = M.MathTex(r"\frac {E_b}{N_0},", font_size = 24.0, color = mc
+                            ).next_to(number_plane, M.DR)
+        x_label.shift(M.LEFT * 0.35 + M.UP * 0.4)
+        y_label2 = M.Text("дБ", font_size = 18.0, color = mc
+                          ).next_to(y_label, M.DOWN, 0.1)
+        x_label2 = M.Text("дБ", font_size = 18.0, color = mc
+                          ).next_to(x_label, buff = 0.1)
+        scene.add(number_plane, line_graph1, line_graph2, line_graph3,
+                  y_label, x_label, y_label2, x_label2)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
@@ -460,9 +501,9 @@ class SSCTV(object):
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         number_plane = M.NumberPlane(
             x_range = (0, 17, 1),
-            y_range = (-5, 0, 1),
-            x_length = 13.0,
-            y_length = 7.0,
+            y_range = (-4, 0, 1),
+            x_length = 12.5,
+            y_length = 6.5,
             color = mc,
             axis_config = {
                 "include_numbers": True,
@@ -486,24 +527,33 @@ class SSCTV(object):
             x_values = SSCTV.tv2_data1,
             y_values = SSCTV.tv2_data111,
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#B40097",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph2 = number_plane.plot_line_graph(
             x_values = SSCTV.tv2_data2,
             y_values = SSCTV.tv2_data222,
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#00AA72",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#00AA72",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph3 = number_plane.plot_line_graph(
             x_values = SSCTV.tv2_data3,
             y_values = SSCTV.tv2_data333,
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#FFC500",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#FFC500",
                                     stroke_color = mc),
             stroke_width = 4)
-        scene.add(number_plane, line_graph1, line_graph2, line_graph3)
+        y_label = M.MathTex("BER", font_size = 24.0, color = mc
+                            ).next_to(number_plane, M.UL)
+        y_label.shift(M.RIGHT * 0.7 + M.DOWN * 0.1)
+        x_label = M.MathTex(r"\frac {E_b}{N_0},", font_size = 24.0, color = mc
+                            ).next_to(number_plane, M.DR)
+        x_label.shift(M.LEFT * 0.35 + M.UP * 0.4)
+        x_label2 = M.Text("дБ", font_size = 18.0, color = mc
+                          ).next_to(x_label, buff = 0.1)
+        scene.add(number_plane, line_graph1, line_graph2, line_graph3,
+                  y_label, x_label, x_label2)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
@@ -527,21 +577,21 @@ class SSCTV(object):
             x_values = [1, 2],
             y_values = [1, 1],
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#B40097",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph2 = number_plane.plot_line_graph(
             x_values = [1, 2],
             y_values = [2, 2],
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#00AA72",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#00AA72",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph3 = number_plane.plot_line_graph(
             x_values = [1, 2],
             y_values = [3, 3],
             line_color = mc,
-            vertex_dot_style = dict(stroke_width = 2, fill_color = "#FFC500",
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#FFC500",
                                     stroke_color = mc),
             stroke_width = 4)
         line_graph4 = number_plane.plot_line_graph(
@@ -576,6 +626,164 @@ class SSCTV(object):
         txt.next_to(tex)
         scene.add(tex, txt)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def tv2_count():
+        data = r"""17.8
+0.00125
+17.5
+0
+17.0
+0.00125
+17.3
+0
+15.4
+0.00375
+15.7
+0.0025
+15.5
+0.005
+15.7
+0.00125
+13.1
+0.015
+13.2
+0.01625
+13.8
+0.015
+13.4
+0.02125
+11.4
+0.04875
+11.3
+0.04875
+11.8
+0.04
+11.4
+0.05125
+9.5
+0.0925
+9.3
+0.095
+9.5
+0.09
+9.5
+0.0925
+21.7
+0.002656
+21.6
+0.0025
+21.7
+0.003594
+21.8
+0.002344
+19.7
+0.01063
+19.8
+0.01109
+19.8
+0.01125
+19.7
+0.01344
+17.9
+0.03141
+17.8
+0.03203
+17.6
+0.03609
+17.6
+0.03469
+15.7
+0.06234
+15.8
+0.06188
+15.7
+0.06359
+15.5
+0.06422
+13.6
+0.1019
+13.6
+0.1031
+13.7
+0.09281
+13.9
+0.09516
+29.6
+0.0003125
+29.5
+0.0003646
+29.6
+0.0002640
+29.7
+0.0001042
+26.9
+0.004896
+26.9
+0.00474
+26.9
+0.004375
+27.0
+0.004297
+23.8
+0.02562
+23.6
+0.02755
+23.7
+0.02737
+23.6
+0.02706
+20.9
+0.06112
+20.9
+0.05971
+21.0
+0.05966
+20.9
+0.06029
+17.6
+0.09961
+17.7
+0.09687
+17.6
+0.09701
+17.7
+0.0975"""
+        mer = 0.0
+        ber = 0.0
+        dat = []
+        dat2 = []
+        i = 0
+        j = 0
+        for line in data.split():
+            if i % 8 == 0:
+                if mer != 0.0:
+                    print(round(mer * 0.25, 9))
+                    print(round(ber * 0.25, 9))
+                    dat.append(round(mer * 0.25, 9))
+                    dat2.append(round(ber * 0.25, 9))
+                    if j == 4:
+                        SSCTV.tv2_data11 = dat
+                        SSCTV.tv2_data111 = dat2
+                        dat = []
+                        dat2 = []
+                    if j == 9:
+                        SSCTV.tv2_data22 = dat
+                        SSCTV.tv2_data222 = dat2
+                        dat = []
+                        dat2 = []
+                    j += 1
+                mer = 0.0
+                ber = 0.0
+            if i % 2 == 0: mer += float(line)
+            else: ber += float(line)
+            i += 1
+        print(round(mer * 0.25, 9))
+        print(round(ber * 0.25, 9))
+        dat.append(round(mer * 0.25, 9))
+        dat2.append(round(ber * 0.25, 9))
+        SSCTV.tv2_data33 = dat
+        SSCTV.tv2_data333 = dat2
 
     @staticmethod
     def tv3_func_part_by_2_bits(bits: str, part: int):
@@ -721,5 +929,87 @@ class SSCTV(object):
                 offset_inner += 3.0
             if i % 2 == 1 and i != 0: offset += 1.0
         scene.add(number_plane, graphs)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_old_tv1(scene: M.Scene):
+        SSCTV.old_tv1_formula_1(scene)
+        SSCTV.old_tv1_graph_1(scene)
+
+    @staticmethod
+    def old_tv1_formula_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        i = 0
+        for text_color in SSCTV.old_tv1_variants[SSCTV.old_tv_variant]:
+            r, g, b = SSCTV.old_tv1_colors[text_color]
+            Y = round(0.299 * r + 0.587 * g + 0.114 * b, 3)
+            R = round(r - Y, 3)
+            B = round(b - Y, 3)
+            txt = M.Text(text_color + ": ", font_size = tts, color = mc).next_to(
+                M.UP * 3.5 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            tx = r"E_Y^{'} = 0.299 \cdot " + str(r) + r" + 0.587 \cdot "
+            tx += str(g) + r" + 0.114 \cdot " + str(b) + r" = "
+            tx += str(Y) + r";"
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(txt)
+            tx2 = r"E_{R-Y}^{'} = " + str(r) + r" - " + str(Y) + r" = "
+            tx2 += str(R) + r";"
+            tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(
+                M.UP * 2.85 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            tx3 = r"E_{B-Y}^{'} = " + str(b) + r" - " + str(Y) + r" = "
+            tx3 += str(B) + r";"
+            tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(
+                tex2, buff = 0.5)
+            scene.add(txt, tex, tex2, tex3)
+            i += 1
+            SSCTV.old_tv1_YRB.append((Y, R, B))
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_graph_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tts = 24.0
+        number_plane = M.NumberPlane(
+            x_range = (0, 13, 1),
+            y_range = (0, 1.2, 0.2),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = mc,
+            axis_config = {
+                "include_numbers": False,
+                "font_size": 24.0,
+                "stroke_width": 4,
+                "include_ticks": False,
+                "include_tip": False,
+                "line_to_number_buff": 0.13,
+                "label_direction": M.DOWN,
+                "color": mc},
+            y_axis_config = {
+                "label_direction": M.LEFT,
+                "include_numbers": False},
+            background_line_style = {
+                "stroke_color": mc,
+                "stroke_width": 1,
+                "stroke_opacity": 0.5},
+            tips = True)
+        number_plane.get_axes().set_color(mc)
+        for YRB in range(len(SSCTV.old_tv1_YRB)):
+            line_graph = number_plane.plot_line_graph(
+                x_values = [1 + YRB * 2, 1 + YRB * 2, 3 + YRB * 2,
+                            3 + YRB * 2, 1 + YRB * 2],
+                y_values = [0.0, SSCTV.old_tv1_YRB[YRB][0],
+                            SSCTV.old_tv1_YRB[YRB][0], 0.0, 0.0],
+                line_color = mc,
+                vertex_dot_radius = 0.0,
+                vertex_dot_style = dict(stroke_width = 0),
+                stroke_width = 4)
+            txt = M.Text(
+                SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB],
+                font_size = tts, color = mc).next_to(
+                number_plane.c2p(2 + YRB * 2, SSCTV.old_tv1_YRB[YRB][0], 0.0), M.UP)
+            scene.add(number_plane, line_graph, txt)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         
