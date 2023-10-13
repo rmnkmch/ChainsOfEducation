@@ -27,7 +27,7 @@ class SIPK(object):
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
     sipk2_Nhor = 24
-    sipk2_Nver = 24
+    sipk2_Nver = 22
     sipk2_x_n = []
     sipk2_cffs = []
     sipk2_e1 = []
@@ -46,7 +46,7 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [3, 11, 22]
 
-    sipk3_R = 0.83
+    sipk3_R = 0.9
     sipk3_t = 3
 
     sipk4_in_group_list = 7
@@ -1351,10 +1351,10 @@ class SIPK(object):
         SIPK.sipk3_graph_scaled(scene, 100)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [83, 103, 123, 110, 106, 105]
+        check = [60]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 106, 88)
+        SIPK.sipk3_count_2(scene, 210, 189)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
@@ -1445,7 +1445,7 @@ class SIPK(object):
             n += 1
         number_plane = M.NumberPlane(
             x_range = (left - 1, left + 11, 1),
-            y_range = (SIPK.sipk3_R - 0.1, SIPK.sipk3_R + 0.1, 0.05),
+            y_range = (SIPK.sipk3_R - 0.05, SIPK.sipk3_R + 0.05, 0.05),
             x_length = 13.0,
             y_length = 7.0,
             color = mc,
@@ -1460,7 +1460,7 @@ class SIPK(object):
                 "color": mc},
             y_axis_config = {
                 "numbers_to_include": M.np.arange(
-                    SIPK.sipk3_R - 0.1, SIPK.sipk3_R + 0.1, 0.05),
+                    SIPK.sipk3_R - 0.05, SIPK.sipk3_R + 0.05, 0.05),
                 "label_direction": M.LEFT},
             background_line_style = {
                 "stroke_color": mc,
