@@ -24,14 +24,14 @@ class SSCTV(object):
     tv2_data222 = [0.0028125, 0.01133, 0.03289, 0.0636325, 0.096845]
     tv2_data333 = [0.000260425, 0.00444, 0.0280025, 0.06069, 0.0979025]
 
-    old_tv1_colors = {"Чёрный": [0, 0, 0],
-                      "Синий": [0, 0, 1],
-                      "Красный": [1, 0, 0],
-                      "Пурпурный": [1, 0, 1],
-                      "Зелёный": [0, 1, 0],
-                      "Голубой": [0, 1, 1],
-                      "Жёлтый": [1, 1, 0],
-                      "Белый": [1, 1, 1]}
+    old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
+                      "Синий": [0, 0, 1, "#0000FF"],
+                      "Красный": [1, 0, 0, "#FF0000"],
+                      "Пурпурный": [1, 0, 1, "#FF00FF"],
+                      "Зелёный": [0, 1, 0, "#00FF00"],
+                      "Голубой": [0, 1, 1, "#00FFFF"],
+                      "Жёлтый": [1, 1, 0, "#FFFF00"],
+                      "Белый": [1, 1, 1, "#FFFFFF"]}
 
     old_tv1_variants = {1: ["Пурпурный", "Чёрный", "Красный", "Голубой", "Синий"],
                         2: ["Синий", "Белый", "Пурпурный", "Жёлтый", "Зелёный"],
@@ -49,8 +49,11 @@ class SSCTV(object):
                         14: ["Жёлтый", "Красный", "Голубой", "Чёрный", "Белый"],
                         15: ["Синий", "Зелёный", "Белый", "Голубой", "Пурпурный"]}
 
-    old_tv_variant = 7
+    old_tv_variant = 4
     old_tv1_YRB = []
+    old_tv1_YRBUVCMP = []
+    old_tv1_YRBDFKRB = []
+    old_tv1_tex_size = 30.0
 
     @staticmethod
     def make_tv(scene: M.Scene):
@@ -935,16 +938,26 @@ class SSCTV(object):
     def make_old_tv1(scene: M.Scene):
         SSCTV.old_tv1_formula_1(scene)
         SSCTV.old_tv1_graph_1(scene)
+        SSCTV.old_tv1_graph_2(scene, [SSCTV.old_tv1_YRB[i][1] for i in range(5)])
+        SSCTV.old_tv1_graph_2(scene, [SSCTV.old_tv1_YRB[i][2] for i in range(5)])
+        SSCTV.old_tv1_formula_2(scene)
+        # SSCTV.old_tv1_formula_3(scene)
+        SSCTV.old_tv1_formula_4(scene)
+        SSCTV.old_tv1_formula_5(scene)
+        # SSCTV.old_tv1_formula_6(scene)
+        SSCTV.old_tv1_graph_3(scene)
+        SSCTV.old_tv1_table_1(scene)
+        SSCTV.old_tv1_table_2(scene)
 
     @staticmethod
     def old_tv1_formula_1(scene: M.Scene):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         tts = SSf.SIPK_SSCTV_functions.formula_text_size
-        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        txs = SSCTV.old_tv1_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         i = 0
         for text_color in SSCTV.old_tv1_variants[SSCTV.old_tv_variant]:
-            r, g, b = SSCTV.old_tv1_colors[text_color]
+            r, g, b, color = SSCTV.old_tv1_colors[text_color]
             Y = round(0.299 * r + 0.587 * g + 0.114 * b, 3)
             R = round(r - Y, 3)
             B = round(b - Y, 3)
@@ -971,31 +984,38 @@ class SSCTV(object):
     def old_tv1_graph_1(scene: M.Scene):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        tts = 24.0
         number_plane = M.NumberPlane(
-            x_range = (0, 13, 1),
-            y_range = (0, 1.2, 0.2),
+            x_range = (0, 12, 1),
+            y_range = (0.0, 1.01, 0.2),
             x_length = 13.0,
             y_length = 7.0,
             color = mc,
             axis_config = {
                 "include_numbers": False,
                 "font_size": 24.0,
-                "stroke_width": 4,
+                "stroke_width": 6,
                 "include_ticks": False,
                 "include_tip": False,
                 "line_to_number_buff": 0.13,
-                "label_direction": M.DOWN,
                 "color": mc},
             y_axis_config = {
                 "label_direction": M.LEFT,
-                "include_numbers": False},
-            background_line_style = {
-                "stroke_color": mc,
-                "stroke_width": 1,
-                "stroke_opacity": 0.5},
-            tips = True)
+                "include_numbers": True},
+            background_line_style = {"stroke_opacity": 0.0},
+            tips = False)
         number_plane.get_axes().set_color(mc)
+        background_line_style = {"stroke_color": mc,
+                "stroke_width": 2,
+                "stroke_opacity": 0.5}
+        background_line_style2 = {"stroke_opacity": 0.0}
+        background_lines, faded_lines = number_plane._get_lines()
+        for i in range(1, 7, 1):
+            background_lines[i].set_style(**background_line_style)
+        number_plane.add_to_back(background_lines)
+        for i in range(7, 18, 1):
+            background_lines[i].set_style(**background_line_style2)
+            number_plane.add_to_back(background_lines[i])
+        scene.add(number_plane)
         for YRB in range(len(SSCTV.old_tv1_YRB)):
             line_graph = number_plane.plot_line_graph(
                 x_values = [1 + YRB * 2, 1 + YRB * 2, 3 + YRB * 2,
@@ -1005,11 +1025,424 @@ class SSCTV(object):
                 line_color = mc,
                 vertex_dot_radius = 0.0,
                 vertex_dot_style = dict(stroke_width = 0),
-                stroke_width = 4)
+                stroke_width = 6)
+            colr = SSCTV.old_tv1_colors[
+                SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB]][3]
+            rect = M.Polygon(number_plane.c2p(1 + YRB * 2, 0.0, 0.0),
+                             number_plane.c2p(
+                                 1 + YRB * 2, SSCTV.old_tv1_YRB[YRB][0], 0.0),
+                             number_plane.c2p(
+                                 3 + YRB * 2, SSCTV.old_tv1_YRB[YRB][0], 0.0),
+                             number_plane.c2p(3 + YRB * 2, 0.0, 0.0),
+                             color = colr,
+                             fill_color = colr,
+                             fill_opacity = 1.0)
             txt = M.Text(
                 SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB],
-                font_size = tts, color = mc).next_to(
+                font_size = 22.0, color = mc).next_to(
                 number_plane.c2p(2 + YRB * 2, SSCTV.old_tv1_YRB[YRB][0], 0.0), M.UP)
-            scene.add(number_plane, line_graph, txt)
+            scene.add(rect, line_graph, txt)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_graph_2(scene: M.Scene, columns: list):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        number_plane = M.NumberPlane(
+            x_range = (0, 12, 1),
+            y_range = (-1.01, 1.01, 0.2),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = mc,
+            axis_config = {
+                "include_numbers": False,
+                "font_size": 24.0,
+                "stroke_width": 6,
+                "include_ticks": False,
+                "include_tip": False,
+                "line_to_number_buff": 0.13,
+                "color": mc},
+            y_axis_config = {
+                "label_direction": M.LEFT,
+                "include_numbers": True},
+            background_line_style = {"stroke_opacity": 0.0},
+            tips = False)
+        number_plane.get_axes().set_color(mc)
+        background_line_style = {"stroke_color": mc,
+                "stroke_width": 2,
+                "stroke_opacity": 0.5}
+        background_line_style2 = {"stroke_opacity": 0.0}
+        background_lines, faded_lines = number_plane._get_lines()
+        for i in range(0, 11, 1):
+            background_lines[i].set_style(**background_line_style)
+        number_plane.add_to_back(background_lines)
+        for i in range(11, 23, 1):
+            background_lines[i].set_style(**background_line_style2)
+            number_plane.add_to_back(background_lines[i])
+        scene.add(number_plane)
+        for YRB in range(len(columns)):
+            line_graph = number_plane.plot_line_graph(
+                x_values = [1 + YRB * 2, 1 + YRB * 2, 3 + YRB * 2,
+                            3 + YRB * 2, 1 + YRB * 2],
+                y_values = [0.0, columns[YRB], columns[YRB], 0.0, 0.0],
+                line_color = mc,
+                vertex_dot_radius = 0.0,
+                vertex_dot_style = dict(stroke_width = 0),
+                stroke_width = 6)
+            colr = SSCTV.old_tv1_colors[
+                SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB]][3]
+            rect = M.Polygon(number_plane.c2p(1 + YRB * 2, 0.0, 0.0),
+                             number_plane.c2p(1 + YRB * 2, columns[YRB], 0.0),
+                             number_plane.c2p(3 + YRB * 2, columns[YRB], 0.0),
+                             number_plane.c2p(3 + YRB * 2, 0.0, 0.0),
+                             color = colr,
+                             fill_color = colr,
+                             fill_opacity = 1.0)
+            to_text_y = columns[YRB]
+            if to_text_y < 0.0: to_text_y = 0.0
+            txt = M.Text(
+                SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB],
+                font_size = 22.0, color = mc).next_to(
+                number_plane.c2p(2 + YRB * 2, to_text_y, 0.0), M.UP)
+            scene.add(rect, line_graph, txt)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_formula_2(scene: M.Scene):
+        from math import sqrt, pi
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSCTV.old_tv1_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        fs = 22.0
+        i = 0
+        for text_color in SSCTV.old_tv1_variants[SSCTV.old_tv_variant]:
+            r, g, b, color = SSCTV.old_tv1_colors[text_color]
+            Y = round(0.299 * r + 0.587 * g + 0.114 * b, 3)
+            R = round(r - Y, 3)
+            B = round(b - Y, 3)
+            U = round(B * 0.493, 3)
+            V = round(R * 0.877, 3)
+            U_CM = round(sqrt(U * U + V * V), 3)
+            txt = M.Text(text_color + ": ", font_size = tts, color = mc).next_to(
+                M.UP * 3.5 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            tx = r"U = 0.493 \cdot " + str(B) + r" = " + str(U) + r";"
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(txt)
+            tx2 = r"V = 0.877 \cdot " + str(R) + r" = " + str(V) + r";"
+            tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+            tx3 = r"U_{CM} = \sqrt{"
+            if U < 0.0: tx3 += r"(" + str(U) + r")"
+            else: tx3 += str(U)
+            tx3 += r"^2 + "
+            if V < 0.0: tx3 += r"(" + str(V) + r")"
+            else: tx3 += str(V)
+            tx3 += r"^2} = "
+            tx3 += str(U_CM) + r";"
+            tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(
+                M.UP * 2.85 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            scene.add(txt, tex, tex2, tex3)
+            SSCTV.old_tv1_YRBUVCMP.append([Y, R, B, U, V, U_CM, 0.0, 0.0])
+            if U != 0.0:
+                P_rad = round(SSf.SIPK_SSCTV_functions.get_angle_by_dx_dy(U, V), 3)
+                P_grad = round(P_rad * 180.0 / pi, 1)
+                tx4 = r"{\varphi}_C = \arctan \frac {"
+                tx4 += str(V) + r"}{" + str(U) + r"} = "
+                tx4 += str(P_rad)
+                tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3)
+                txt4 = M.Text("рад", font_size = fs, color = mc).next_to(
+                    tex4, buff = 0.18)
+                tx5 = r" = " + str(P_grad)
+                tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(txt4)
+                txt5 = M.Text("град", font_size = fs, color = mc).next_to(
+                    tex5, buff = 0.18)
+                scene.add(tex4, txt4, tex5, txt5)
+                SSCTV.old_tv1_YRBUVCMP[-1][6] = P_rad
+                SSCTV.old_tv1_YRBUVCMP[-1][7] = P_grad
+            i += 1
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_formula_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSCTV.old_tv1_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"U = 0.493 \cdot E_{B-Y}^{'};\ V = 0.877 \cdot E_{R-Y}^{'}"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"U_{CM} = \sqrt{U^2 + V^2};\ "
+        tx2 += r"{\varphi}_C = \arctan \frac {V}{U}"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        scene.add(tex, tex2)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_formula_4(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSCTV.old_tv1_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        i = 0
+        for text_color in SSCTV.old_tv1_variants[SSCTV.old_tv_variant]:
+            r, g, b, color = SSCTV.old_tv1_colors[text_color]
+            Y = round(0.299 * r + 0.587 * g + 0.114 * b, 3)
+            R = round(r - Y, 3)
+            B = round(b - Y, 3)
+            D_R = round(-1.9 * R, 3)
+            if R == 0.0: D_R = 0.0
+            D_B = round(1.5 * B, 3)
+            f_R = round(4.406 + 0.280 * D_R, 3)
+            f_B = round(4.250 + 0.230 * D_B, 3)
+            txt = M.Text(text_color + ": ", font_size = tts, color = mc).next_to(
+                M.UP * 3.5 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            tx = r"D_R = -1.9 \cdot " + str(R) + r" = " + str(D_R) + r";"
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(txt)
+            tx2 = r"D_B = 1.5 \cdot " + str(B) + r" = " + str(D_B) + r";"
+            tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+            tx3 = r"f_R = 4.406 + 0.280 \cdot " + str(D_R)
+            tx3 += r" = " + str(f_R) + r";"
+            tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(
+                M.UP * 2.85 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            tx4 = r"f_B = 4.250 + 0.230 \cdot " + str(D_B)
+            tx4 += r" = " + str(f_B) + r";"
+            tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3)
+            scene.add(txt, tex, tex2, tex3, tex4)
+            i += 1
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_formula_5(scene: M.Scene):
+        from math import log10
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = 24.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        i = 0
+        for text_color in SSCTV.old_tv1_variants[SSCTV.old_tv_variant]:
+            r, g, b, color = SSCTV.old_tv1_colors[text_color]
+            Y = round(0.299 * r + 0.587 * g + 0.114 * b, 3)
+            R = round(r - Y, 3)
+            B = round(b - Y, 3)
+            D_R = round(-1.9 * R, 3)
+            if R == 0.0: D_R = 0.0
+            D_B = round(1.5 * B, 3)
+            f_R = round(4.406 + 0.280 * D_R, 3)
+            f_B = round(4.250 + 0.230 * D_B, 3)
+            f_0 = 4.286
+            K_1 = 16
+            K_2 = 1.26
+            F = round(f_R / f_0 - f_0 / f_R, 3)
+            K = round(10.0 * log10((1 + (K_1 * F) ** 2) / (1 + (K_2 * F) ** 2)), 3)
+            txt = M.Text(text_color[0] + ": ", font_size = tts, color = mc).next_to(
+                M.UP * 3.5 + M.LEFT * 6.5 + i * M.DOWN * 1.5, M.LEFT, 0.0)
+            tx = r"f = f_R = " + str(f_R) + r";"
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(txt)
+            tx2 = r"F = \frac {" + str(f_R) + r"}{" + str(f_0) + r"} - "
+            tx2 += r"\frac {" + str(f_0) + r"}{" + str(f_R) + r"} = "
+            tx2 += str(F) + r";"
+            tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+            tx3 = r"K = 10 \cdot \lg \frac {1 + (" + str(K_1) + r" \cdot "
+            tx3 += str(F) + r")^2}{1 + (" + str(K_2) + r" \cdot "
+            tx3 += str(F) + r")^2} = " + str(K) + r";"
+            tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2)
+            scene.add(txt, tex, tex2, tex3)
+            SSCTV.old_tv1_YRBDFKRB.append([Y, R, B, D_R, D_B, f_R, f_B, K])
+            F = round(f_B / f_0 - f_0 / f_B, 4)
+            K = round(10.0 * log10((1 + (K_1 * F) ** 2) / (1 + (K_2 * F) ** 2)), 3)
+            tx = r"f = f_B = " + str(f_B) + r";"
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+                M.UP * 2.79 + M.LEFT * 6.5 + i * M.DOWN * 1.5)
+            tx2 = r"F = \frac {" + str(f_B) + r"}{" + str(f_0) + r"} - "
+            tx2 += r"\frac {" + str(f_0) + r"}{" + str(f_B) + r"} = "
+            tx2 += str(F) + r";"
+            tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+            tx3 = r"K = 10 \cdot \lg \frac {1 + (" + str(K_1) + r" \cdot "
+            tx3 += str(F) + r")^2}{1 + (" + str(K_2) + r" \cdot "
+            tx3 += str(F) + r")^2} = " + str(K) + r";"
+            tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2)
+            scene.add(tex, tex2, tex3)
+            SSCTV.old_tv1_YRBDFKRB[-1].append(K)
+            i += 1
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_formula_6(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSCTV.old_tv1_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"E_Y^{'} = 0.299 \cdot E_R^{'}"
+        tx += r" + 0.587 \cdot E_G^{'} + 0.114 \cdot E_B^{'}"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"E_{R-Y}^{'} = E_{R}^{'} - E_{Y}^{'};\ "
+        tx2 += r"E_{B-Y}^{'} = E_{B}^{'} - E_{Y}^{'}"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"E_p = U \cos \omega_C t \pm V \sin \omega_C t"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        tx4 = r"D_R = -1.9 \cdot E_{R-Y}^{'}"
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
+        tx5 = r"D_B = 1.5 \cdot E_{B-Y}^{'}"
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex4, M.DOWN)
+        tx6 = r"f_R = 4.406 + 0.280 \cdot D_R"
+        tex6 = M.MathTex(tx6, font_size = txs, color = mc).next_to(tex5, M.DOWN)
+        tx7 = r"f_B = 4.250 + 0.230 \cdot D_B"
+        tex7 = M.MathTex(tx7, font_size = txs, color = mc).next_to(tex6, M.DOWN)
+        tx8 = r"K = 10 \cdot \lg \frac {1 + (K_1 \cdot F)^2}{1 + (K_2 \cdot F)^2}"
+        tex8 = M.MathTex(tx8, font_size = txs, color = mc).next_to(tex7, M.DOWN)
+        tx9 = r"K_1 = 16;\ K_2 = 1.26;\ F = \frac {f}{f_0} - \frac{f_0}{f};\ "
+        tx9 += r"f_0 = 4.286;\ f = f_R,\ f = f_B"
+        tex9 = M.MathTex(tx9, font_size = txs, color = mc).next_to(tex8, M.DOWN)
+        scene.add(tex, tex2, tex3, tex4, tex5, tex6, tex7, tex8, tex9)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_graph_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        number_plane = M.NumberPlane(
+            x_range = (-0.7, 0.7, 0.1),
+            y_range = (-0.7, 0.7, 0.1),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = mc,
+            axis_config = {
+                "include_numbers": True,
+                "font_size": 18.0,
+                "stroke_width": 4,
+                "include_ticks": True,
+                "include_tip": False,
+                "line_to_number_buff": 0.1,
+                "label_direction": M.DR,
+                "color": mc},
+            y_axis_config = {"label_direction": M.DR},
+            background_line_style = {
+                "stroke_color": mc,
+                "stroke_width": 1,
+                "stroke_opacity": 0.5},
+            tips = False)
+        number_plane.get_axes().set_color(mc)
+        scene.add(number_plane)
+        for YRB in range(len(SSCTV.old_tv1_YRBUVCMP)):
+            colr = SSCTV.old_tv1_colors[
+                SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB]][3]
+            if SSCTV.old_tv1_YRBUVCMP[YRB][4] != 0.0:
+                d = M.Dot(number_plane.c2p(
+                    SSCTV.old_tv1_YRBUVCMP[YRB][3],
+                    SSCTV.old_tv1_YRBUVCMP[YRB][4], 0.0),
+                          0.1, stroke_width = 3, color = colr, stroke_color = mc)
+                txt = M.Text(
+                    "+ " + SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB],
+                    font_size = 20.0, color = mc).next_to(
+                        number_plane.c2p(
+                            SSCTV.old_tv1_YRBUVCMP[YRB][3],
+                            SSCTV.old_tv1_YRBUVCMP[YRB][4], 0.0), M.UR, 0.15)
+                d2 = M.Dot(number_plane.c2p(
+                    SSCTV.old_tv1_YRBUVCMP[YRB][3],
+                    - SSCTV.old_tv1_YRBUVCMP[YRB][4], 0.0),
+                           0.1, stroke_width = 3, color = colr, stroke_color = mc)
+                txt2 = M.Text(
+                    "- " + SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB],
+                    font_size = 20.0, color = mc).next_to(
+                        number_plane.c2p(
+                            SSCTV.old_tv1_YRBUVCMP[YRB][3],
+                            - SSCTV.old_tv1_YRBUVCMP[YRB][4], 0.0), M.UR, 0.15)
+                scene.add(d, txt, d2, txt2)
+            else:
+                d = M.Dot(number_plane.c2p(
+                    SSCTV.old_tv1_YRBUVCMP[YRB][3],
+                    SSCTV.old_tv1_YRBUVCMP[YRB][4], 0.0),
+                          0.1, stroke_width = 3, color = colr, stroke_color = mc)
+                txt = M.Text(
+                    SSCTV.old_tv1_variants[SSCTV.old_tv_variant][YRB],
+                    font_size = 20.0, color = mc).next_to(
+                        number_plane.c2p(
+                            SSCTV.old_tv1_YRBUVCMP[YRB][3],
+                            SSCTV.old_tv1_YRBUVCMP[YRB][4], 0.0), M.UR, 0.15)
+                scene.add(d, txt)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_table_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        table_data = [["В", "В", "В", "В", "В", "В", "рад", "град"],]
+        for i in range(5):
+            col6 = "-"
+            col7 = "-"
+            if SSCTV.old_tv1_YRBUVCMP[i][6] != 0.0:
+                col6 = str(SSCTV.old_tv1_YRBUVCMP[i][6])
+                col7 = str(SSCTV.old_tv1_YRBUVCMP[i][7])
+            table_data.append([str(SSCTV.old_tv1_YRBUVCMP[i][0]),
+                               str(SSCTV.old_tv1_YRBUVCMP[i][1]),
+                               str(SSCTV.old_tv1_YRBUVCMP[i][2]),
+                               str(SSCTV.old_tv1_YRBUVCMP[i][3]),
+                               str(SSCTV.old_tv1_YRBUVCMP[i][4]),
+                               str(SSCTV.old_tv1_YRBUVCMP[i][5]),
+                               col6, col7])
+        fs = 22.0
+        ls = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            row_labels = [M.Text(""), *[
+                M.Text(SSCTV.old_tv1_variants[
+                    SSCTV.old_tv_variant][j],
+                    color = mc, font_size = fs) for j in range(5)]],
+            col_labels = [
+                M.MathTex(r"E_Y^{'}", font_size = ls, color = mc),
+                M.MathTex(r"E_{R-Y}^{'}", font_size = ls, color = mc),
+                M.MathTex(r"E_{B-Y}^{'}", font_size = ls, color = mc),
+                M.MathTex(r"U", font_size = ls, color = mc),
+                M.MathTex(r"V", font_size = ls, color = mc),
+                M.MathTex(r"U_{CM}", font_size = ls, color = mc),
+                M.MathTex(r"{\varphi}_C", font_size = ls, color = mc),
+                M.MathTex(r"{\varphi}_C", font_size = ls, color = mc)],
+            include_outer_lines = True,
+            v_buff = 0.5,
+            h_buff = 0.4,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv1_table_2(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        table_data = [["В", "В", "В", "В", "В", "МГц", "МГц", "дБ", "дБ"],]
+        for i in range(5):
+            table_data.append([str(SSCTV.old_tv1_YRBDFKRB[i][0]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][1]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][2]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][3]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][4]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][5]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][6]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][7]),
+                               str(SSCTV.old_tv1_YRBDFKRB[i][8])])
+        fs = 22.0
+        ls = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            row_labels = [M.Text(""), *[
+                M.Text(SSCTV.old_tv1_variants[
+                    SSCTV.old_tv_variant][j],
+                    color = mc, font_size = fs) for j in range(5)]],
+            col_labels = [
+                M.MathTex(r"E_Y^{'}", font_size = ls, color = mc),
+                M.MathTex(r"E_{R-Y}^{'}", font_size = ls, color = mc),
+                M.MathTex(r"E_{B-Y}^{'}", font_size = ls, color = mc),
+                M.MathTex(r"D_R", font_size = ls, color = mc),
+                M.MathTex(r"D_B", font_size = ls, color = mc),
+                M.MathTex(r"f_R", font_size = ls, color = mc),
+                M.MathTex(r"f_B", font_size = ls, color = mc),
+                M.MathTex(r"K_R", font_size = ls, color = mc),
+                M.MathTex(r"K_B", font_size = ls, color = mc)],
+            include_outer_lines = True,
+            v_buff = 0.5,
+            h_buff = 0.4,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         

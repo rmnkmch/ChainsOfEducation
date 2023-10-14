@@ -128,6 +128,22 @@ class SIPK_SSCTV_functions(object):
         else:
             return func_value
 
+    @staticmethod
+    def get_angle_by_dx_dy(dx: float, dy: float):
+        from math import atan, pi
+        if dx > 0.0:
+            if dy > 0.0: return atan(abs(dy / dx))
+            elif dy < 0.0: return - atan(abs(dy / dx))
+            else: return 0.0
+        elif dx < 0.0:
+            if dy > 0.0: return pi - atan(abs(dy / dx))
+            elif dy < 0.0: return - pi + atan(abs(dy / dx))
+            else: return pi
+        else:
+            if dy > 0.0: return 0.5 * pi
+            elif dy < 0.0: return -0.5 * pi
+            else: return 0.0
+
 
 class PromoCode(object):
     promo_codes = [("o27739521", 90, True),
