@@ -75,6 +75,25 @@ class SIPK_SSCTV_functions(object):
             return "1"
 
     @staticmethod
+    def multiplication(bit1: str, bit2: str):
+        if bit1 == "1" and bit2 == "1":
+            return "1"
+        else:
+            return "0"
+
+    @staticmethod
+    def diag_ones_matrix(n: int):
+        ret_matrix = []
+        for i in range(n):
+            ret_matrix.append([])
+            for j in range(n):
+                if i == j:
+                    ret_matrix[-1].append("1")
+                else:
+                    ret_matrix[-1].append("0")
+        return ret_matrix
+
+    @staticmethod
     def get_random_0_1_str(n: int = 8):
         ret = []
         for _ in range(n):
@@ -150,8 +169,8 @@ class PromoCode(object):
                    ("o63116012", 50, True),
                    ("o86636403", 25, True),
                    ("o15260943", 10, False),
-                   ("t72539756", 20, False),
-                   ("s05050505", 50, False)]
+                   ("t72539756", 20, True),
+                   ("s05050505", 50, True)]
 
     class PromoCodeType(enum.Enum):
         O = "One-time",

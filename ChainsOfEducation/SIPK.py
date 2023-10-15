@@ -52,6 +52,9 @@ class SIPK(object):
     sipk4_in_group_list = 7
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
+    sipk4_matrix_fs = 30.0
+    sipk4_matrix_G = []
+    sipk4_matrix_H = []
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -1590,6 +1593,54 @@ class SIPK(object):
         return ret_word
 
     @staticmethod
+    def sipk4_str_to_list(word: str):
+        ret_list = []
+        for i in range(len(word)):
+            ret_list.append(word[i])
+        return ret_list
+
+    @staticmethod
+    def sipk4_list_to_str(word: list):
+        ret_list = []
+        for i in range(len(word)):
+            ret_list.append(word[i])
+        return "".join(ret_list)
+
+    @staticmethod
+    def sipk4_matrix_multiplication(word: str, matrix: list):
+        ret_list = []
+        if len(word) != len(matrix):
+            print("Err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            return ""
+        for i in range(len(matrix[0])):
+            result = "0"
+            for j in range(len(matrix)):
+                mult = SSf.SIPK_SSCTV_functions.multiplication(
+                    word[j], matrix[j][i])
+                result = SSf.SIPK_SSCTV_functions.sum_mod_2(result, mult)
+            ret_list.append(result)
+        return "".join(ret_list)
+
+    @staticmethod
+    def sipk4_matrix_concatenate(matrix1: list, matrix2: list,
+                                 vertically: bool = False):
+        ret_matrix = []
+        if vertically:
+            for i in range(len(matrix1)):
+                ret_matrix.append(matrix1[i])
+            for i in range(len(matrix2)):
+                ret_matrix.append(matrix2[i])
+        else:
+            matrix1 = SSf.SIPK_SSCTV_functions.transpose_list(matrix1)
+            matrix2 = SSf.SIPK_SSCTV_functions.transpose_list(matrix2)
+            for i in range(len(matrix1)):
+                ret_matrix.append(matrix1[i])
+            for i in range(len(matrix2)):
+                ret_matrix.append(matrix2[i])
+            ret_matrix = SSf.SIPK_SSCTV_functions.transpose_list(ret_matrix)
+        return ret_matrix
+
+    @staticmethod
     def make_sipk4(scene: M.Scene):
         var_dict = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 3, 9: 5, 0: 7}
         compare_row = SIPK.sipk4_fvh[var_dict[SIPK.sipk4_in_group_list % 10]]
@@ -1598,6 +1649,13 @@ class SIPK(object):
         SIPK.sipk4_table_1(scene, SIPK.sipk4_make_mistake(compare_row, 2))
         SIPK.sipk4_table_1(scene, SIPK.sipk4_make_mistake(compare_row, 3))
         SIPK.sipk4_table_2(scene)
+        SIPK.sipk4_check_linear(scene)
+        SIPK.sipk4_formula_1(scene)
+        SIPK.sipk4_formula_2(scene)
+        SIPK.sipk4_formula_3(scene)
+        SIPK.sipk4_check_orthogonal(scene)
+        SIPK.sipk4_formula_4(scene)
+        SIPK.sipk4_formula_5(scene)
 
     @staticmethod
     def sipk4_table_1(scene: M.Scene, compare_row: str):
@@ -1703,6 +1761,202 @@ class SIPK(object):
         scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
+    @staticmethod
+    def sipk4_check_linear(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        num1_2 = []
+        for j in range(6):
+            num1 = random.randint(1, 7)
+            num2 = random.randint(1, 7)
+            while (num1, num2) in num1_2 or (num2, num1) in num1_2:
+                num1 = random.randint(1, 7)
+                num2 = random.randint(1, 7)
+            while num1 == num2:
+                num2 = random.randint(1, 7)
+            num1_2.append((num1, num2))
+            eq_text = ""
+            for i in range(7):
+                eq_text += SSf.SIPK_SSCTV_functions.sum_mod_2(
+                    SIPK.sipk4_fvh[num1][i], SIPK.sipk4_fvh[num2][i])
+            b1 = M.Text(SIPK.sipk4_fvh[num1], font_size = tts, color = mc).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side + j % 3 * M.DOWN * 2.0
+                + M.LEFT * 3.0 + M.RIGHT * 6.0 * (j // 3), M.DOWN)
+            b2 = M.Text(SIPK.sipk4_fvh[num2], font_size = tts, color = mc
+                        ).next_to(b1, M.DOWN)
+            eq = M.Text(eq_text, font_size = tts, color = mc).next_to(b2, M.DOWN)
+            crc = M.Text("⊕", font_size = tts, color = mc).next_to(b1, M.DL, 0.03)
+            ravn = M.Text("=", font_size = tts, color = mc).next_to(b2, M.DL, 0.08)
+            scene.add(b1, b2, eq, crc, ravn)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_formula_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SIPK.sipk4_matrix_fs
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"G = "
+        tex = M.MathTex(tx, font_size = txs, color = mc)
+        mx = [SIPK.sipk4_str_to_list(SIPK.sipk4_fvh[i]) for i in [4, 2, 1]]
+        SIPK.sipk4_matrix_G = mx
+        m = Matrix(mx, element_to_mobject_config = {"font_size": txs, "color": mc},
+                   bracket_config = {"color": mc}).next_to(tex)
+        g = M.VGroup(tex, m).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"v = u \cdot G"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(g, M.DOWN)
+        tx3 = r"s = e \cdot H^T"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        scene.add(g, tex2, tex3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_formula_2(scene: M.Scene):
+        txs = SIPK.sipk4_matrix_fs
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        mx = SIPK.sipk4_matrix_G
+        m = Matrix(mx, element_to_mobject_config = {"font_size": txs, "color": mc},
+                   bracket_config = {"color": mc})
+        for j in range(2):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            prev = SSf.SIPK_SSCTV_functions.upper_side
+            for i in range(4):
+                tex = M.MathTex(r"v_" + str(i + j * 4) + r" = ",
+                                font_size = txs, color = mc)
+                tx2 = r"\left( \ "
+                code_v = SSf.SIPK_SSCTV_functions.fill_zeros(bin(i + j * 4)[2:], 3)
+                for ch in code_v:
+                    tx2 += ch + r"\ "
+                tx2 += r"\right) \ \cdot "
+                tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+                m_copy = m.copy()
+                m_copy.next_to(tex2)
+                tx3 = r" = \ \left( \ "
+                for ch in SIPK.sipk4_matrix_multiplication(code_v, mx):
+                    tx3 += ch + r"\ "
+                tx3 += r"\right)"
+                tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(m_copy)
+                g = M.VGroup(tex, tex2, m_copy, tex3).next_to(prev, M.DOWN, 0.4)
+                scene.add(g)
+                prev = g
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_formula_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SIPK.sipk4_matrix_fs
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"H = "
+        tex = M.MathTex(tx, font_size = txs, color = mc)
+        mx = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_G)[3:]
+        dm = SSf.SIPK_SSCTV_functions.diag_ones_matrix(4)
+        mx = SIPK.sipk4_matrix_concatenate(mx, dm)
+        SIPK.sipk4_matrix_H = mx
+        m = Matrix(mx, element_to_mobject_config = {"font_size": txs, "color": mc},
+                   bracket_config = {"color": mc}).next_to(tex)
+        g = M.VGroup(tex, m).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(g)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_check_orthogonal(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        for i in range(len(SIPK.sipk4_matrix_G)):
+            for j in range(len(SIPK.sipk4_matrix_H)):
+                eq_text = ""
+                for k in range(7):
+                    eq_text += SSf.SIPK_SSCTV_functions.multiplication(
+                        SIPK.sipk4_matrix_G[i][k], SIPK.sipk4_matrix_H[j][k])
+                b1 = M.Text(
+                    "".join(SIPK.sipk4_matrix_G[i]),
+                    font_size = tts, color = mc).next_to(
+                    SSf.SIPK_SSCTV_functions.upper_side + j * M.DOWN * 2.0
+                    + M.LEFT * 3.6 + M.RIGHT * 3.6 * i, M.DOWN)
+                b2 = M.Text(
+                    "".join(SIPK.sipk4_matrix_H[j]),
+                    font_size = tts, color = mc).next_to(b1, M.DOWN)
+                eq = M.Text(eq_text, font_size = tts, color = mc
+                            ).next_to(b2, M.DOWN)
+                crc = M.Text("×", font_size = tts, color = mc
+                             ).next_to(b1, M.DL, 0.03)
+                ravn = M.Text("=", font_size = tts, color = mc
+                              ).next_to(b2, M.DL, 0.08)
+                scene.add(b1, b2, eq, crc, ravn)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_formula_4(scene: M.Scene):
+        txs = SIPK.sipk4_matrix_fs
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        mht = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_H)
+        m = Matrix(mht, element_to_mobject_config = {"font_size": txs, "color": mc},
+                   bracket_config = {"color": mc})
+        dm = SSf.SIPK_SSCTV_functions.diag_ones_matrix(7)
+        for j in range(4):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            prev = SSf.SIPK_SSCTV_functions.upper_side
+            for i in range(2):
+                if j == 3 and i == 1: continue
+                tex = M.MathTex(r"s_" + str(1 + i + j * 2) + r" = ",
+                                font_size = txs, color = mc)
+                tx2 = r"\left( \ "
+                code_e = SIPK.sipk4_list_to_str(dm[6 - i - j * 2])
+                for ch in code_e:
+                    tx2 += ch + r"\ "
+                tx2 += r"\right) \ \cdot "
+                tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+                m_copy = m.copy()
+                m_copy.next_to(tex2)
+                tx3 = r" = \ \left( \ "
+                for ch in SIPK.sipk4_matrix_multiplication(code_e, mht):
+                    tx3 += ch + r"\ "
+                tx3 += r"\right)"
+                tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(m_copy)
+                g = M.VGroup(tex, tex2, m_copy, tex3).next_to(prev, M.DOWN, 0.4)
+                scene.add(g)
+                prev = g
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_formula_5(scene: M.Scene):
+        txs = SIPK.sipk4_matrix_fs
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        mht = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_H)
+        m = Matrix(mht, element_to_mobject_config = {"font_size": txs, "color": mc},
+                   bracket_config = {"color": mc})
+        start_word = SIPK.sipk4_in_group_list * 7
+        if start_word > 127: start_word -= 127
+        SSf.SIPK_SSCTV_functions.fill_zeros(bin(start_word)[2:], 7)
+        dm = [
+            SIPK.sipk4_str_to_list(
+                SSf.SIPK_SSCTV_functions.fill_zeros(bin(start_word + i)[2:], 7))
+            for i in range(12)]
+        for j in range(6):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            prev = SSf.SIPK_SSCTV_functions.upper_side
+            for i in range(2):
+                tex = M.MathTex(r"s_{" + str(start_word + i + j * 2) + r"} = ",
+                                font_size = txs, color = mc)
+                tx2 = r"\left( \ "
+                code_e = SIPK.sipk4_list_to_str(dm[i + j * 2])
+                for ch in code_e:
+                    tx2 += ch + r"\ "
+                tx2 += r"\right) \ \cdot "
+                tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex)
+                m_copy = m.copy()
+                m_copy.next_to(tex2)
+                tx3 = r" = \ \left( \ "
+                for ch in SIPK.sipk4_matrix_multiplication(code_e, mht):
+                    tx3 += ch + r"\ "
+                tx3 += r"\right)"
+                tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(m_copy)
+                g = M.VGroup(tex, tex2, m_copy, tex3).next_to(prev, M.DOWN, 0.4)
+                scene.add(g)
+                prev = g
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
 
 class ProbabilitySymbol(object):
     def __init__(self, symbol: str, probability: str, merged: bool, code: str = ""):
@@ -1749,4 +2003,24 @@ class ZLine(M.TipableVMobject):
 
         self.set_points_as_corners(points)
         self.add_tip(self.create_tip(tip_length = size, tip_width = size))
+
+
+class Matrix(M.Matrix):
+    """Matrix"""
+
+    def __init__(self, matrix, v_buff: float = 0.45, h_buff: float = 0.6,
+                 bracket_h_buff: float = 0.15, bracket_v_buff: float = 0.15,
+                 add_background_rectangles_to_entries: bool = False,
+                 include_background_rectangle: bool = False,
+                 element_to_mobject_config: dict = {},
+                 left_bracket: str = "(", right_bracket: str = ")",
+                 stretch_brackets: bool = True,
+                 bracket_config: dict = {}, **kwargs):
+        super().__init__(matrix, v_buff, h_buff, bracket_h_buff, bracket_v_buff,
+                         add_background_rectangles_to_entries,
+                         include_background_rectangle,
+                         element_to_mobject_config = element_to_mobject_config,
+                         left_bracket = left_bracket, right_bracket = right_bracket,
+                         stretch_brackets = stretch_brackets,
+                         bracket_config =bracket_config, **kwargs)
         
