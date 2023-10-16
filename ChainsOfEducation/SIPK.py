@@ -55,6 +55,7 @@ class SIPK(object):
     sipk4_matrix_fs = 30.0
     sipk4_matrix_G = []
     sipk4_matrix_H = []
+    sipk4_sindromes = []
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -1611,7 +1612,7 @@ class SIPK(object):
         ret_list = []
         if len(word) != len(matrix):
             print("Err!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            return ""
+            return ret_list
         for i in range(len(matrix[0])):
             result = "0"
             for j in range(len(matrix)):
@@ -1619,7 +1620,7 @@ class SIPK(object):
                     word[j], matrix[j][i])
                 result = SSf.SIPK_SSCTV_functions.sum_mod_2(result, mult)
             ret_list.append(result)
-        return "".join(ret_list)
+        return ret_list
 
     @staticmethod
     def sipk4_matrix_concatenate(matrix1: list, matrix2: list,
@@ -1656,11 +1657,13 @@ class SIPK(object):
         SIPK.sipk4_check_orthogonal(scene)
         SIPK.sipk4_formula_4(scene)
         SIPK.sipk4_formula_5(scene)
+        SIPK.sipk4_table_3(scene)
+        SIPK.sipk4_table_4(scene)
 
     @staticmethod
     def sipk4_table_1(scene: M.Scene, compare_row: str):
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        fs = 32.0
+        fs = 36.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         table_data = []
         highlighted = []
@@ -1686,6 +1689,7 @@ class SIPK(object):
                 M.MathTex("P1", font_size = fs, color = mc),
                 M.MathTex("P0", font_size = fs, color = mc),
                 M.MathTex("d_n", font_size = fs, color = mc)],
+            top_left_entry = M.MathTex("No", font_size = fs, color = mc),
             include_outer_lines = True,
             v_buff = 0.4,
             h_buff = 0.8,
@@ -1702,10 +1706,9 @@ class SIPK(object):
     @staticmethod
     def sipk4_table_2(scene: M.Scene):
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        fs = 32.0
+        fs = 36.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         table_data = []
-        highlighted = []
         start_word = SIPK.sipk4_in_group_list * 7
         if start_word > 127: start_word -= 127
         print(start_word)
@@ -1748,16 +1751,14 @@ class SIPK(object):
                 M.MathTex("Error", font_size = fs, color = mc),
                 M.MathTex("F_{dec}", font_size = fs, color = mc),
                 M.MathTex("V_{dec}", font_size = fs, color = mc),
-                M.MathTex("H_{dec}", font_size = fs, color = mc),
-                ],
+                M.MathTex("H_{dec}", font_size = fs, color = mc)],
+            top_left_entry = M.MathTex("No", font_size = fs, color = mc),
             include_outer_lines = True,
             v_buff = 0.3,
             h_buff = 0.6,
             element_to_mobject_config = {"font_size": 20.0, "color": mc},
             line_config = {"color": mc}
             ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
-        for cell in highlighted:
-            table.add_highlighted_cell(cell, color = "#BBBBBB")
         scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
@@ -1781,7 +1782,7 @@ class SIPK(object):
                 eq_text += SSf.SIPK_SSCTV_functions.sum_mod_2(
                     SIPK.sipk4_fvh[num1][i], SIPK.sipk4_fvh[num2][i])
             b1 = M.Text(SIPK.sipk4_fvh[num1], font_size = tts, color = mc).next_to(
-                SSf.SIPK_SSCTV_functions.upper_side + j % 3 * M.DOWN * 2.0
+                SSf.SIPK_SSCTV_functions.upper_side + j % 3 * M.DOWN * 2.2
                 + M.LEFT * 3.0 + M.RIGHT * 6.0 * (j // 3), M.DOWN)
             b2 = M.Text(SIPK.sipk4_fvh[num2], font_size = tts, color = mc
                         ).next_to(b1, M.DOWN)
@@ -1807,7 +1808,18 @@ class SIPK(object):
         tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(g, M.DOWN)
         tx3 = r"s = e \cdot H^T"
         tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
-        scene.add(g, tex2, tex3)
+        tx4 = r"G_{k \times n} = \left( P_{k \times (n-k)}\ I_{k} \right)"
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
+        tx5 = r"H_{(n-k) \times k} = \left( I_{n-k}\ P_{k \times (n-k)}^T \right)"
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex4, M.DOWN)
+        tx6 = r"s = v \cdot H^T"
+        tex6 = M.MathTex(tx6, font_size = txs, color = mc).next_to(tex5, M.DOWN)
+        tx7 = r"s = v^{'} \cdot H^T = (v + e) \cdot H^T = "
+        tx7 += r"v \cdot H^T + e \cdot H^T = e \cdot H^T"
+        tex7 = M.MathTex(tx7, font_size = txs, color = mc).next_to(tex6, M.DOWN)
+        tx8 = r"v = v^{'} + e"
+        tex8 = M.MathTex(tx8, font_size = txs, color = mc).next_to(tex7, M.DOWN)
+        scene.add(g, tex2, tex3, tex4, tex5, tex6, tex7, tex8)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
@@ -1948,7 +1960,9 @@ class SIPK(object):
                 m_copy = m.copy()
                 m_copy.next_to(tex2)
                 tx3 = r" = \ \left( \ "
-                for ch in SIPK.sipk4_matrix_multiplication(code_e, mht):
+                mm = SIPK.sipk4_matrix_multiplication(code_e, mht)
+                SIPK.sipk4_sindromes.append(mm)
+                for ch in mm:
                     tx3 += ch + r"\ "
                 tx3 += r"\right)"
                 tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(m_copy)
@@ -1956,6 +1970,77 @@ class SIPK(object):
                 scene.add(g)
                 prev = g
             SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_table_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        fs = 36.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table_data = []
+        start_word = SIPK.sipk4_in_group_list * 7
+        if start_word > 127: start_word -= 127
+        mht = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_H)
+        for i in range(12):
+            table_data.append([])
+            code_word = SSf.SIPK_SSCTV_functions.fill_zeros(
+                bin(start_word + i)[2:], 7)
+            table_data[-1].append(code_word)
+            sindrom = SIPK.sipk4_sindromes[i]
+            table_data[-1].append(SIPK.sipk4_list_to_str(sindrom))
+            if sindrom in mht:
+                table_data[-1].append("0")
+                index = mht.index(sindrom)
+                code_word = SIPK.sipk4_inverse_bit(code_word, index)
+                table_data[-1].append(code_word)
+            elif sindrom == ["0", "0", "0", "0"]:
+                table_data[-1].append("0")
+                table_data[-1].append(code_word)
+            else:
+                table_data[-1].append("1")
+                table_data[-1].append("-")
+        table = SSf.Table(
+            table_data,
+            row_labels = [M.MathTex(str(i), font_size = fs, color = mc)
+                          for i in range(1, 13, 1)],
+            col_labels = [
+                M.MathTex("v^{'}", font_size = fs, color = mc),
+                M.MathTex("s", font_size = fs, color = mc),
+                M.MathTex("Error", font_size = fs, color = mc),
+                M.MathTex("v", font_size = fs, color = mc)],
+            top_left_entry = M.MathTex("No", font_size = fs, color = mc),
+            include_outer_lines = True,
+            v_buff = 0.3,
+            h_buff = 0.7,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk4_table_4(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        fs = 36.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table_data = []
+        mht = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_H)
+        dm = SSf.SIPK_SSCTV_functions.diag_ones_matrix(7)
+        for i in range(7):
+            table_data.append(
+                [SIPK.sipk4_list_to_str(dm[6 - i]),
+                 SIPK.sipk4_list_to_str(mht[6 - i])])
+        table = SSf.Table(
+            table_data,
+            col_labels = [M.MathTex("e", font_size = fs, color = mc),
+                          M.MathTex("s", font_size = fs, color = mc)],
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.7,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 
 class ProbabilitySymbol(object):
