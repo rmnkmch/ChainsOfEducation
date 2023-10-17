@@ -44,7 +44,7 @@ class SIPK(object):
     sipk2_a1 = 0.0
     sipk2_a21 = 0.0
     sipk2_a22 = 0.0
-    sipk2_decode_n = [3, 11, 22]
+    sipk2_decode_n = [3, 10, 22]
 
     sipk3_R = 0.9
     sipk3_t = 3
