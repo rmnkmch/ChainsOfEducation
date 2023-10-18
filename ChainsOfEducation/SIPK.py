@@ -27,9 +27,10 @@ class SIPK(object):
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
     sipk2_Nhor = 24
-    sipk2_Nver = 22
+    sipk2_Nver = 25
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[-4.58, -0.167, 2.755], [-0.317, 0.361, 3.772],
+                  [-1.648, 1.084, 5.252], [-0.462, 1.961, 4.746]]
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -44,7 +45,7 @@ class SIPK(object):
     sipk2_a1 = 0.0
     sipk2_a21 = 0.0
     sipk2_a22 = 0.0
-    sipk2_decode_n = [3, 10, 22]
+    sipk2_decode_n = [4, 11, 21]
 
     sipk3_R = 0.9
     sipk3_t = 3
@@ -172,9 +173,9 @@ class SIPK(object):
     def make_sipk(scene: M.Scene):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
-        # SIPK.make_sipk2(scene)
+        SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
-        SIPK.make_sipk4(scene)
+        # SIPK.make_sipk4(scene)
 
     @staticmethod
     def random_sipk1():
@@ -989,7 +990,7 @@ class SIPK(object):
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         fs_title = 24.0
-        h_buff = 0.3
+        h_buff = 0.28
         if X == "x": h_buff = 0.24
         table_data = []
         data_dict = {}
