@@ -15,12 +15,12 @@ FAST_RUN_TIME: float = 0.1
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
         # self.chapter_1_2()
-        # from TitleBlock import TitleBlock
-        # TitleBlock.Jpn_Geo()
+        from TitleBlock import TitleBlock
+        TitleBlock.Jpn_Geo(self)
         # from SSCTV import SSCTV
         # SSCTV.make_tv(self)
-        from SIPK import SIPK
-        SIPK.make_sipk(self)
+        # from SIPK import SIPK
+        # SIPK.make_sipk(self)
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -190,6 +190,7 @@ cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
+manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png -r 800,800
 manim -pqh --disable_caching -s ChainsOfEducation.py ChainsOfEducation
 manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
     """

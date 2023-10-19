@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 151
+        num = 181
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -171,7 +171,52 @@ class TitleBlock(manim.RoundedRectangle):
         return st
 
     @staticmethod
-    def Jpn_Geo():
+    def print_symbols(scene: manim.Scene, symbol: str):
+        fonts = ['Sans', 'Malgun Gothic', 'Malgun Gothic Semilight',
+                 'Microsoft JhengHei Light', 'Microsoft YaHei Light',
+                 'UD Digi Kyokasho N-R', 'Yu Mincho Demibold', 'MS Mincho', 'Serif']
+        rect = manim.Rectangle("#2a2a2a", 16.0, 16.0, fill_opacity = 1.0)
+        size = 3.8
+        line_color = "#4a4a4a"
+        line1 = manim.Line(manim.UP * 1.5 * size + manim.RIGHT * - 0.5 * size,
+                           manim.UP * - 1.5 * size + manim.RIGHT * - 0.5 * size,
+                           stroke_color = line_color)
+        line2 = manim.Line(manim.UP * 1.5 * size + manim.RIGHT * 0.5 * size,
+                           manim.UP * - 1.5 * size + manim.RIGHT * 0.5 * size,
+                           stroke_color = line_color)
+        line3 = manim.Line(manim.UP * 0.5 * size + manim.RIGHT * - 1.5 * size,
+                           manim.UP * 0.5 * size + manim.RIGHT * 1.5 * size,
+                           stroke_color = line_color)
+        line4 = manim.Line(manim.UP * - 0.5 * size + manim.RIGHT * - 1.5 * size,
+                           manim.UP * - 0.5 * size + manim.RIGHT * 1.5 * size,
+                           stroke_color = line_color)
+        scene.add(rect, line1, line2, line3, line4)
+        for i in range(len(fonts)):
+            sym = manim.Text(
+                symbol, font_size = 210.0, color = "#eaeaea", font = fonts[i]
+                ).move_to(manim.UP * size * (1 - i // 3)
+                          + manim.RIGHT * size * (1 - i % 3))
+            scene.add(sym)
+        scene.wait(0.1/6.0)
+        scene.clear()
+
+    @staticmethod
+    def print_symbol(scene: manim.Scene, symbol: str):
+        font = 'Microsoft YaHei Light'
+        rect = manim.Rectangle("#2a2a2a", 16.0, 16.0, fill_opacity = 1.0)
+        sym = manim.Text(symbol, font_size = 700.0, color = "#eaeaea", font = font)
+        scene.add(rect, sym)
+        scene.wait(0.1/6.0)
+        scene.clear()
+
+    @staticmethod
+    def Jpn_Geo(scene: manim.Scene):
+        kanji = "図 工 教 晴 思 考 知 才 理 算 作 元 食 肉\
+        馬 牛 魚 鳥 羽 鳴 麦 米 茶 色 黄 黒 来 行 帰 歩"
+        for kj in kanji.split():
+            TitleBlock.print_symbols(scene, kj)
+        for kj in kanji.split():
+            TitleBlock.print_symbol(scene, kj)
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -351,6 +396,464 @@ class TitleBlock(manim.RoundedRectangle):
 7
  綿糸 	 めんし 
 хлопчатобумажная пряжа"""
+        native_kun_on_781_810 = """"""
+        native_kun_on_751_780 = """"""
+        native_kun_on_721_750 = """"""
+        native_kun_on_691_720 = """"""
+        native_kun_on_661_690 = """"""
+        native_kun_on_631_660 = """"""
+        native_kun_on_601_630 = """"""
+        native_kun_on_571_600 = """"""
+        native_kun_on_541_570 = """"""
+        native_kun_on_511_540 = """"""
+        native_kun_on_481_510 = """"""
+        native_kun_on_451_480 = """"""
+        native_kun_on_421_450 = """"""
+        native_kun_on_391_420 = """"""
+        native_kun_on_361_390 = """"""
+        native_kun_on_331_360 = """"""
+        native_kun_on_301_330 = """"""
+        native_kun_on_271_300 = """"""
+        native_kun_on_241_270 = """"""
+        native_kun_on_211_240 = """走
+7 strokes
+Radical: run 走 (赱)
+Parts: 土 走
+Variants: 赱
+бежать
+Kun: はし.る
+On: ソウ
+止
+4 strokes
+Radical: stop 止
+Parts: 止
+останавливать, останавливаться, остановка
+Kun: と.まる、 -ど.まり、 と.める、 -と.める、 -ど.め、 とど.める、 とど.め、 とど.まる、 や.める、 や.む、 -や.む、 よ.す、 -さ.す、 -さ.し
+On: シ
+活
+9 strokes
+Radical: water 水 (氵, 氺)
+Parts: ノ 十 口 汁 舌
+живой, жить, быть живым
+Kun: い.きる、 い.かす、 い.ける
+On: カツ
+店
+8 strokes
+Radical: house on cliff 广
+Parts: 卜 口 广
+магазин
+Kun: みせ、 たな
+On: テン
+買
+12 strokes
+Radical: shell 貝
+Parts: ハ 目 買 貝
+покупать
+Kun: か.う
+On: バイ
+売
+7 strokes
+Radical: scholar, bachelor 士
+Parts: 儿 冖 士
+Variants: 賣
+продавать
+Kun: う.る、 う.れる
+On: バイ
+午
+4 strokes
+Radical: ten, complete 十
+Parts: ノ 十 干 乞
+полдень, лошадь (знак гороскопа)
+Kun: うま
+On: ゴ
+汽
+7 strokes
+Radical: water 水 (氵, 氺)
+Parts: 汁 气 乞
+пар
+On: キ
+弓
+3 strokes
+Radical: bow 弓
+Parts: 弓
+лук, смычок (стрельба из лука, скрипка)
+Kun: ゆみ
+On: キュウ
+回
+6 strokes
+Radical: enclosure 囗
+Parts: 口 囗
+Variants: 囘
+время, раунд, игра, вращение, счетчик вхождений
+Kun: まわ.る、 -まわ.る、 -まわ.り、 まわ.す、 -まわ.す、 まわ.し-、 -まわ.し、 もとお.る、 か.える
+On: カイ、 エ
+会
+6 strokes
+Radical: man, human 人 (亻)
+Parts: 二 个 厶
+Variants: 會
+встреча, знакомиться, вечеринка, ассоциация, собеседование, присоединяться
+Kun: あ.う、 あ.わせる、 あつ.まる
+On: カイ、 エ
+組
+11 strokes
+Radical: silk 糸 (糹)
+Parts: 一 小 幺 目 糸
+объединение, заплетать, заплетать косичку, конструировать, собирать, объединять, сотрудничать, схватываться
+Kun: く.む、 くみ、 -ぐみ
+On: ソ
+船
+11 strokes
+Radical: boat 舟
+Parts: ハ 口 舟
+Variants: 舩
+корабль, лодка
+Kun: ふね、 ふな-
+On: セン
+明
+8 strokes
+Radical: sun, day 日
+Parts: 日 月
+Variants: 朙
+яркий, светлый
+Kun: あ.かり、 あか.るい、 あか.るむ、 あか.らむ、 あき.らか、 あ.ける、 -あ.け、 あ.く、 あ.くる、 あ.かす
+On: メイ、 ミョウ、 ミン
+社
+7 strokes
+Radical: sign 示 (礻)
+Parts: 土 礼
+компания, фирма, офис, ассоциация, святилище
+Kun: やしろ
+On: シャ
+切
+4 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 刀 匕
+резать, отсекать, быть острым
+Kun: き.る、 -き.る、 き.り、 -き.り、 -ぎ.り、 き.れる、 -き.れる、 き.れ、 -き.れ、 -ぎ.れ
+On: セツ、 サイ
+電
+13 strokes
+Radical: rain 雨
+Parts: 乙 田 雨
+электричество, вспышка
+On: デン
+毎
+6 strokes
+Radical: mother, do not 毋 (母, ⺟)
+Parts: 毋 母 乞
+каждый
+Kun: ごと、 -ごと.に
+On: マイ
+合
+6 strokes
+Radical: mouth, opening 口
+Parts: 一 个 口
+подгонка, костюм, соединяться, подходить
+Kun: あ.う、 -あ.う、 あ.い、 あい-、 -あ.い、 -あい、 あ.わす、 あ.わせる、 -あ.わせる
+On: ゴウ、 ガッ、 カッ
+当
+6 strokes
+Radical: pig snout 彐 (彑)
+Parts: 尚 ヨ
+Variants: 當
+попадать, данный, ударить, удаваться
+Kun: あ.たる、 あ.たり、 あ.てる、 あ.て、 まさ.に、 まさ.にべし
+On: トウ
+台
+5 strokes
+Radical: mouth, opening 口
+Parts: 厶 口
+Variants: 臺 坮
+тумба, подставка, прилавок для станков и транспортных средств
+Kun: うてな、 われ、 つかさ
+On: ダイ、 タイ
+楽
+13 strokes
+Radical: tree 木
+Parts: 冫 木 白
+Variants: 樂
+музыка, комфорт, непринужденность
+Kun: たの.しい、 たの.しむ、 この.む
+On: ガク、 ラク、 ゴウ
+公
+4 strokes
+Radical: eight 八
+Parts: ハ 厶
+общественность, принц, чиновник, правительство
+Kun: おおやけ
+On: コウ、 ク
+引
+4 strokes
+Radical: bow 弓
+Parts: ｜ 弓
+тянуть, перетягивать, дергать рывком, признавать, устанавливать, цитировать, ссылаться на
+Kun: ひ.く、 ひ.ける
+On: イン
+科
+9 strokes
+Radical: grain 禾
+Parts: 斗 禾
+отрасль, кафедра, курс, секция
+On: カ
+歌
+14 strokes
+Radical: lack, yawn 欠
+Parts: 一 亅 口 欠
+песня, петь
+Kun: うた、 うた.う
+On: カ
+刀
+2 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 刀
+Variants: 釖 刂
+меч, сабля, нож
+Kun: かたな、 そり
+On: トウ
+番
+12 strokes
+Radical: field 田
+Parts: 田 米 釆
+очередь, номер в серии
+Kun: つが.い
+On: バン
+用
+5 strokes
+Radical: use 用 (甩)
+Parts: 用
+использовать, бизнес, услуга, нанимать
+Kun: もち.いる
+On: ヨウ
+何
+7 strokes
+Radical: man, human 人 (亻)
+Parts: 一 亅 化 口
+что
+Kun: なに、 なん、 なに-、 なん-
+On: カ
+
+
+
+
+
+
+
+
+"""
+        native_kun_on_181_210 = """図
+7 strokes
+Radical: enclosure 囗
+Parts: 囗 斗
+Variants: 圖
+карта, чертёж, план
+Kun: え、 はか.る
+On: ズ、 ト
+工
+3 strokes
+Radical: work 工
+Parts: 工
+ремесло, строительство, техника
+On: コウ、 ク、 グ
+教
+11 strokes
+Radical: rap 攴 (攵)
+Parts: 子 老 乞 攵
+учить
+Kun: おし.える、 おそ.わる
+On: キョウ
+晴
+12 strokes
+Radical: sun, day 日
+Parts: 二 亠 土 日 月 青
+Variants: 暒
+прояснять, ясная погода
+Kun: は.れる、 は.れ、 は.れ-、 -ば.れ、 は.らす
+On: セイ
+思
+9 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 心 田
+Variants: 恖
+думать
+Kun: おも.う、 おもえら.く、 おぼ.す
+On: シ
+考
+6 strokes
+Radical: old 老 (耂)
+Parts: 勹 老
+размышлять, мысль, идея
+Kun: かんが.える、 かんが.え
+On: コウ
+知
+8 strokes
+Radical: arrow 矢
+Parts: 口 矢 乞
+знание, мудрость
+Kun: し.る、 し.らせる
+On: チ
+才
+3 strokes
+Radical: hand 手 (扌龵)
+Parts: 一 ノ 亅
+талант, дарование
+On: サイ
+理
+11 strokes
+Radical: jade (king) 玉 (王)
+Parts: 王 里
+принцип, довод, аргумент
+Kun: ことわり
+On: リ
+算
+14 strokes
+Radical: bamboo 竹 (⺮)
+Parts: 廾 目 竹 乞
+вычислять, считать
+Kun: そろ
+On: サン
+作
+7 strokes
+Radical: man, human 人 (亻)
+Parts: 一 ｜ ノ 化 乞
+делать, создавать
+Kun: つく.る、 つく.り、 -づく.り
+On: サク、 サ
+元
+4 strokes
+Radical: legs 儿
+Parts: 二 儿 元
+начало, основание
+Kun: もと
+On: ゲン、 ガン
+食
+9 strokes
+Radical: eat, food 食 (飠)
+Parts: 食
+еда, кушать
+Kun: く.う、 く.らう、 た.べる、 は.む
+On: ショク、 ジキ
+肉
+6 strokes
+Radical: meat 肉 (⺼)
+Parts: 人 冂 肉
+мясо
+Kun: しし
+On: ニク
+馬
+10 strokes
+Radical: horse 馬
+Parts: 杰 馬
+лошадь
+Kun: うま、 うま-、 ま
+On: バ
+牛
+4 strokes
+Radical: cow 牛 (牜)
+Parts: 牛
+корова
+Kun: うし
+On: ギュウ
+魚
+11 strokes
+Radical: fish 魚
+Parts: 杰 田 魚
+рыба
+Kun: うお、 さかな、 -ざかな
+On: ギョ
+鳥
+11 strokes
+Radical: bird 鳥
+Parts: 杰 鳥
+птица
+Kun: とり
+On: チョウ
+羽
+6 strokes
+Radical: feather 羽
+Parts: 冫 羽
+перо
+Kun: は、 わ、 はね
+On: ウ
+鳴
+14 strokes
+Radical: bird 鳥
+Parts: 口 杰 鳥
+чирикать, плакать,
+Kun: な.く、 な.る、 な.らす
+On: メイ
+麦
+7 strokes
+Radical: wheat 麥
+Parts: 二 亠 土 夂 麦
+Variants: 麥
+хлебные злаки
+Kun: むぎ
+On: バク
+米
+6 strokes
+Radical: rice 米
+Parts: 米
+рис
+Kun: こめ、 よね
+On: ベイ、 マイ、 メエトル
+茶
+9 strokes
+Radical: grass 艸 (艹)
+Parts: 个 艾 木
+чай
+On: チャ、 サ
+色
+6 strokes
+Radical: colour, prettiness 色
+Parts: 勹 巴 色
+цвет
+Kun: いろ
+On: ショク、 シキ
+黄
+11 strokes
+Radical: yellow 黃
+Parts: ハ 田 黄
+жёлтый
+Kun: き、 こ-
+On: コウ、 オウ
+黒
+11 strokes
+Radical: black 黑
+Parts: 杰 里 黒
+чёрный
+Kun: くろ、 くろ.ずむ、 くろ.い
+On: コク
+来
+7 strokes
+Radical: tree 木
+Parts: ｜ 二 亠 木 米
+Variants: 來
+приходить, прибывать
+Kun: く.る、 きた.る、 きた.す、 き.たす、 き.たる、 き、 こ
+On: ライ、 タイ
+行
+6 strokes
+Radical: go, do 行
+Parts: 彳 行
+идти, ходить, совершать
+Kun: い.く、 ゆ.く、 -ゆ.き、 -ゆき、 -い.き、 -いき、 おこな.う、 おこ.なう
+On: コウ、 ギョウ、 アン
+帰
+10 strokes
+Radical: turban, scarf 巾
+Parts: 冖 刈 巾 ヨ
+Variants: 歸 皈
+возвращаться
+Kun: かえ.る、 かえ.す、 おく.る、 とつ.ぐ
+On: キ
+歩
+8 strokes
+Radical: stop 止
+Parts: ノ 小 止
+ходить, идти
+Kun: ある.く、 あゆ.む
+On: ホ、 ブ、 フ"""
         native_kun_on_151_180 = """原
 10 strokes
 Radical: cliff 厂
@@ -1437,8 +1940,8 @@ EUR, Евро; Euro"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        # TitleBlock.resplit_to_post_kanji(native_kun_on_151_180)
-        # TitleBlock.resplit_to_menu_kanji(native_kun_on_151_180)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_181_210)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_181_210)
         # TitleBlock.resplit_to_post_examples(native_examples)
-        TitleBlock.resplit_to_post_geo(geo)
-        TitleBlock.resplit_to_z_name_geo(geo)
+        # TitleBlock.resplit_to_post_geo(geo)
+        # TitleBlock.resplit_to_z_name_geo(geo)
