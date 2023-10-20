@@ -210,13 +210,17 @@ class TitleBlock(manim.RoundedRectangle):
         scene.clear()
 
     @staticmethod
-    def Jpn_Geo(scene: manim.Scene):
-        kanji = "図 工 教 晴 思 考 知 才 理 算 作 元 食 肉\
-        馬 牛 魚 鳥 羽 鳴 麦 米 茶 色 黄 黒 来 行 帰 歩"
+    def make_symbols(scene: manim.Scene):
+        kanji = "図 工 教 晴 思 考 知 才 理 算 作 元 食\
+        肉 馬 牛 魚 鳥 羽 鳴 麦 米 茶 色 黄 黒 来 行 帰 歩"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
             TitleBlock.print_symbol(scene, kj)
+
+    @staticmethod
+    def Jpn_Geo(scene: manim.Scene):
+        # TitleBlock.make_symbols(scene)
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -413,8 +417,439 @@ class TitleBlock(manim.RoundedRectangle):
         native_kun_on_361_390 = """"""
         native_kun_on_331_360 = """"""
         native_kun_on_301_330 = """"""
-        native_kun_on_271_300 = """"""
-        native_kun_on_241_270 = """"""
+        native_kun_on_271_300 = """向
+6 strokes
+Radical: mouth, opening 口
+Parts: 冂 口
+лицом к лицу, за пределами, противостоять, бросать вызов, стремиться к, приближаться
+Kun: む.く、 む.い、 -む.き、 む.ける、 -む.け、 む.かう、 む.かい、 む.こう、 む.こう-、 むこ、 むか.い
+On: コウ
+君
+7 strokes
+Radical: mouth, opening 口
+Parts: 一 ノ 口 ヨ
+господин, правитель, суффикс мужского имени
+Kun: きみ、 -ぎみ
+On: クン
+味
+8 strokes
+Radical: mouth, opening 口
+Parts: ｜ 二 亠 ハ 口 木
+аромат, вкус
+Kun: あじ、 あじ.わう
+On: ミ
+命
+8 strokes
+Radical: mouth, opening 口
+Parts: 一 个 卩 口
+судьба, приказ, декрет, предназначение, жизнь, назначать
+Kun: いのち
+On: メイ、 ミョウ
+和
+8 strokes
+Radical: mouth, opening 口
+Parts: 口 禾
+Variants: 龢
+гармония, японский стиль, умиротворение, смягчение, Япония
+Kun: やわ.らぐ、 やわ.らげる、 なご.む、 なご.やか、 あ.える
+On: ワ、 オ、 カ
+品
+9 strokes
+Radical: mouth, opening 口
+Parts: 口 品
+товары, изысканность, достоинство, изделие, стойка для подачи блюд
+Kun: しな
+On: ヒン、 ホン
+員
+10 strokes
+Radical: mouth, opening 口
+Parts: ハ 口 目 貝
+сотрудник, участник, номер, ответственный
+On: イン
+商
+11 strokes
+Radical: mouth, opening 口
+Parts: 亠 儿 并 冂 口 立
+заключать сделку, продавать, заниматься торговлей, коммерсант
+Kun: あきな.う
+On: ショウ
+問
+11 strokes
+Radical: mouth, opening 口
+Parts: 口 門
+Variants:
+вопрос, проси, проблема
+Kun: と.う、 と.い、 とん
+On: モン
+坂
+7 strokes
+Radical: earth 土
+Parts: 厂 又 土
+Variants: 阪
+склон, уклон, возвышенность
+Kun: さか
+On: ハン
+央
+5 strokes
+Radical: big, very 大
+Parts: 一 ノ 冖 大
+центр, середина
+On: オウ
+始
+8 strokes
+Radical: women, female 女
+Parts: 厶 口 女
+Variants: 乨 兘
+начинать
+Kun: はじ.める、 -はじ.める、 はじ.まる
+On: シ
+委
+8 strokes
+Radical: woman, female 女
+Parts: 女 禾
+комитировать, поручать, оставлять, посвящать, отбрасывать
+Kun: ゆだ.ねる
+On: イ
+守
+6 strokes
+Radical: roof 宀
+Parts: 宀 寸
+Variants: 垨
+охранять, оберегать, обороняться, подчиняться
+Kun: まも.る、 まも.り、 もり、 -もり、 かみ
+On: シュ、 ス
+安
+6 strokes
+Radical: roof 宀
+Parts: 女 宀
+расслабленный, дешевый, низкопробный, тихий, отдохнувший, довольный, умиротворенный
+Kun: やす.い、 やす.まる、 やす、 やす.らか
+On: アン
+定
+8 strokes
+Radical: roof 宀
+Parts: 宀 疋
+определять, фиксировать, устанавливать, решать
+Kun: さだ.める、 さだ.まる、 さだ.か
+On: テイ、 ジョウ
+実
+8 strokes
+Radical: roof 宀
+Parts: 士 大 宀
+Variants: 實
+реальность, истина, семя, фрукт, орех
+Kun: み、 みの.る、 まこと、 みの、 みち.る
+On: ジツ、 シツ
+客
+9 strokes
+Radical: roof 宀
+Parts: 口 夂 宀
+гость, посетительница, заказчик, клиентка
+On: キャク、 カク
+宮
+10 strokesRadical: roof 宀
+Parts: ノ 口 宀
+Синтоистский храм, созвездия, дворец, принцесса
+Kun: みや
+On: キュウ、 グウ、 ク、 クウ
+宿
+11 strokes
+Radical: roof 宀
+Parts: 化 宀 白
+гостиница, ночлег, ретрансляционная станция, обитать, сторожка, быть беременной, дом, жилище
+Kun: やど、 やど.る、 やど.す
+On: シュク
+寒
+12 strokes
+Radical: roof 宀
+Parts: 一 丶 ハ 宀 井
+холод
+Kun: さむ.い
+On: カン
+対
+7 strokes
+Radical: thumb, inch 寸
+Parts: 寸 文
+Variants: 對
+противоположный, четный, равный, по сравнению, сравнивать
+Kun: あいて、 こた.える、 そろ.い、 つれあ.い、 なら.ぶ、 むか.う
+On: タイ、 ツイ
+局
+7 strokes
+Radical: corpse 尸
+Parts: 口 尸
+бюро, правление, контора, дело, заключение, придворная дама, фрейлина, ее квартира
+Kun: つぼね
+On: キョク
+屋
+9 strokes
+Radical: corpse 尸
+Parts: 厶 土 尸 至
+крыша, дом, магазин, дилер, продавец
+Kun: や
+On: オク
+岸
+8 strokes
+Radical: mountain 山
+Parts: 厂 山 干
+пляж, берег
+Kun: きし
+On: ガン
+島
+10 strokes
+Radical: mountain 山
+Parts: 山 白 鳥
+Variants: 嶋 嶌 嶹
+остров
+Kun: しま
+On: トウ
+州
+6 strokes
+Radical: river 巛 (川, 巜)
+Parts: ｜ 丶 川
+Variants:
+провинция, область
+Kun: す
+On: シュウ、 ス
+帳
+11 strokes
+Radical: turban, scarf 巾
+Parts: 巾 長
+Variants: 賬
+блокнот, учетная книга, альбом, занавеска, вуаль, сетка, палатка
+Kun: とばり
+On: チョウ
+平
+5 strokes
+Radical: pestle 干
+Parts: 并 干
+плоский, ровный, плоский, умиротворенный
+Kun: たい.ら、 たい.らげる、 ひら
+On: ヘイ、 ビョウ、 ヒョウ
+幸
+8 strokes
+Radical: pestle 干
+Parts: 亠 十 立 辛
+счастье, благословение, удача
+Kun: さいわ.い、 さち、 しあわ.せ
+On: コウ"""
+        native_kun_on_241_270 = """丁
+2 strokes
+Radical: one 一
+Parts: 一 亅
+улица, район, город, прилавок, чётный
+Kun: ひのと
+On: チョウ、 テイ、 チン、 トウ、 チ
+世
+5 strokes
+Radical: one 一
+Parts: 一 ｜ 世
+Variants: 丗 卋
+поколение, мир, эпоха, общество, общественность
+Kun: よ
+On: セイ、 セ、 ソウ
+両
+6 strokes
+Radical: one 一
+Parts: 一 ｜ 冂 山
+Variants: 兩 两
+и то, и другое, старинная японская монета, оба
+Kun: てる、 ふたつ
+On: リョウ
+主
+5 strokes
+Radical: dot 丶
+Parts: 丶 王
+господин, вождь, повелитель, главный, хозяин, принципиальный
+Kun: ぬし、 おも、 あるじ
+On: シュ、 ス、 シュウ
+乗
+9 strokes
+Radical: slash 丿
+Parts: 一 ｜ ノ ハ 禾
+Variants: 乘 椉
+ехать, поездка, мощность, умножение, запись, счетчик транспортных средств, доска, крепление, соединение
+Kun: の.る、 -の.り、 の.せる
+On: ジョウ、 ショウ
+予
+4 strokes
+Radical: hook 亅
+Parts: 一 亅 マ
+Variants: 豫
+заранее, предыдущий, я сам, я
+Kun: あらかじ.め
+On: ヨ、 シャ
+事
+8 strokes
+Radical: hook 亅
+Parts: 一 亅 口 ヨ
+Variants: 亊 叓
+случай, материя, вещь, факт, бизнес, причина, возможно
+Kun: こと、 つか.う、 つか.える
+On: ジ、 ズ
+仕
+5 strokes
+Radical: man, human 人 (亻)
+Parts: 化 士
+присутствовать, делать, официально, служить
+Kun: つか.える
+On: シ、 ジ
+他
+5 strokes
+Radical: man, human 人 (亻)
+Parts: 化 也
+другой, еще один, остальные
+Kun: ほか
+On: タ
+代
+5 strokes
+Radical: man, human 人 (亻)
+Parts: 化 弋
+заменять, изменять, конвертировать, заменять, период, возраст, счетчик
+Kun: か.わる、 かわ.る、 かわ.り、 か.わり、 -がわ.り、 -が.わり、 か.える、 よ、 しろ
+On: ダイ、 タイ
+住
+7 strokes
+Radical: man, human 人 (亻)
+Parts: 丶 化 王
+обитать, пребывать, жить, населять
+Kun: す.む、 す.まう、 -ず.まい
+On: ジュウ、 ヂュウ、 チュウ
+使
+8 strokes
+Radical: man, human 人 (亻)
+Parts: 一 ノ 化 口
+использовать, отправлять на задание, приказывать
+Kun: つか.う、 つか.い、 -つか.い、 -づか.い
+On: シ
+係
+9 strokes
+Radical: man, human 人 (亻)
+Parts: ノ 化 小 幺 糸
+ответственность, ответственный человек, связь, долг, забота о себе
+Kun: かか.る、 かかり、 -がかり、 かか.わる
+On: ケイ
+倍
+10 strokes
+Radical: man, human 人 (亻)
+Parts: 化 口 立
+удваивать, дважды, раз, складывать
+On: バイ
+全
+6 strokes
+Radical: enter 入
+Parts: 个 ハ 王
+целый, цельный, все, завершающий, исполняющий, полностью, абсолютно
+Kun: まった.く、 すべ.て
+On: ゼン
+具
+8 strokes
+Radical: eight 八
+Parts: 一 ハ 目
+инструмент, посуда, средства, имущество, ингредиенты, прилавок, оборудовать, орудие
+Kun: そな.える、 つぶさ.に
+On: グ
+写
+5 strokes
+Radical: cover 冖
+Parts: 一 冖 勹
+Variants: 冩 寫
+копировать, фотографироваться, описывать
+Kun: うつ.す、 うつ.る、 うつ-、 うつ.し
+On: シャ、 ジャ
+列
+6 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 刈 歹
+ряд, файл, строка, ранг, уровень, столбец
+On: レツ、 レ
+助
+7 strokes
+Radical: power, force 力
+Parts: 力 目
+помогите, спасите, ассистируйте
+Kun: たす.ける、 たす.かる、 す.ける、 すけ
+On: ジョ
+勉
+10 strokes
+Radical: power, force 力
+Parts: 儿 力 勹 免
+напрягаться, прилагать усилия, поощрять, стремиться, прилагать усилия, прилежный
+Kun: つと.める
+On: ベン
+動
+11 strokes
+Radical: power, force 力
+Parts: 一 ｜ ノ 力 日 里
+движение, подвижность, изменение, путаница, сдвиг, встряска
+Kun: うご.く、 うご.かす
+On: ドウ
+勝
+12 strokes
+Radical: power, force 力
+Parts: 二 人 并 力 大 月
+победа, побеждать, превозмогать, преуспевать
+Kun: か.つ、 -が.ち、 まさ.る、 すぐ.れる、 かつ
+On: ショウ
+化
+4 strokes
+Radical: spoon 匕
+Parts: 化 匕
+изменять, принимать форму, влиять, очаровывать, вводить в заблуждение
+Kun: ば.ける、 ば.かす、 ふ.ける、 け.する
+On: カ、 ケ
+区
+4 strokes
+Radical: hiding enclosure 匸
+Parts: 丶 ノ 匚
+Variants: 區
+район города, приход, округ
+On: ク、 オウ、 コウ
+医
+7 strokes
+Radical: hiding enclosure 匸
+Parts: 匚 矢 乞
+Variants: 醫
+врач, медицина
+Kun: い.やす、 い.する、 くすし
+On: イ
+去
+5 strokes
+Radical: private 厶
+Parts: 厶 土
+Variants: 厺
+уходить, покидать, ушедший, прошедший, уволившийся, оставляющий, истекающий, устраняющий, разводящийся
+Kun: さ.る、 -さ.る
+On: キョ、 コ
+反
+4 strokes
+Radical: right hand 又
+Parts: 厂 又
+против, изгибаться
+Kun: そ.る、 そ.らす、 かえ.す、 かえ.る、 -かえ.る
+On: ハン、 ホン、 タン、 ホ
+取
+8 strokes
+Radical: right hand 又
+Parts: 又 耳
+брать, получать, приноси, поднимай
+Kun: と.る、 と.り、 と.り-、 とり、 -ど.り
+On: シュ
+受
+8 strokes
+Radical: right hand 又
+Parts: 冖 又 爪
+принимать, претерпевать, отвечать (по телефону), брать, доставать, улавливать, получать
+Kun: う.ける、 -う.け、 う.かる
+On: ジュ
+号
+5 strokes
+Radical: mouth, opening 口
+Parts: 一 勹 口
+Variants: 號
+псевдоним, номер, предмет, должность, псевдоним, имя, вызов
+Kun: さけ.ぶ、 よびな
+On: ゴウ"""
         native_kun_on_211_240 = """走
 7 strokes
 Radical: run 走 (赱)
@@ -427,14 +862,14 @@ On: ソウ
 4 strokes
 Radical: stop 止
 Parts: 止
-останавливать, останавливаться, остановка
+останавливаться, остановка
 Kun: と.まる、 -ど.まり、 と.める、 -と.める、 -ど.め、 とど.める、 とど.め、 とど.まる、 や.める、 や.む、 -や.む、 よ.す、 -さ.す、 -さ.し
 On: シ
 活
 9 strokes
 Radical: water 水 (氵, 氺)
 Parts: ノ 十 口 汁 舌
-живой, жить, быть живым
+живой, жить
 Kun: い.きる、 い.かす、 い.ける
 On: カツ
 店
@@ -631,16 +1066,7 @@ Radical: man, human 人 (亻)
 Parts: 一 亅 化 口
 что
 Kun: なに、 なん、 なに-、 なん-
-On: カ
-
-
-
-
-
-
-
-
-"""
+On: カ"""
         native_kun_on_181_210 = """図
 7 strokes
 Radical: enclosure 囗
@@ -1940,8 +2366,8 @@ EUR, Евро; Euro"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_181_210)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_181_210)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo)
         # TitleBlock.resplit_to_z_name_geo(geo)
