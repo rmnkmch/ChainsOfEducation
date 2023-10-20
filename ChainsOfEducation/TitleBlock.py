@@ -415,8 +415,424 @@ class TitleBlock(manim.RoundedRectangle):
         native_kun_on_421_450 = """"""
         native_kun_on_391_420 = """"""
         native_kun_on_361_390 = """"""
-        native_kun_on_331_360 = """"""
-        native_kun_on_301_330 = """"""
+        native_kun_on_331_360 = """期
+12 strokes
+Radical: moon, month 月
+Parts: ハ 月 甘
+Variants: 朞
+период, время, дата, срок
+On: キ、 ゴ
+板
+8 strokes
+Radical: tree 木
+Parts: 厂 又 木
+планка, дощечка, плита, сцена
+Kun: いた
+On: ハン、 バン
+柱
+9 strokes
+Radical: tree 木
+Parts: 丶 木 王
+стойка, столбик, цилиндр, опора
+Kun: はしら
+On: チュウ
+根
+10 strokes
+Radical: tree 木
+Parts: 木 艮
+корень, прикорневая часть
+Kun: ね、 -ね
+On: コン
+植
+12 strokes
+Radical: tree 木
+Parts: 十 木 目
+сажать растения
+Kun: う.える、 う.わる
+On: ショク
+業
+13 strokes
+Radical: tree 木
+Parts: 一 ｜ 并 木 王 羊 耒
+бизнес, призвание, искусство, перформанс
+Kun: わざ
+On: ギョウ、 ゴウ
+様
+14 strokes
+Radical: tree 木
+Parts: 并 木 水 王 羊
+Variants: 樣
+способ, манера поведения, ситуация, вежливый суффикс, вид, положение
+Kun: さま、 さん
+On: ヨウ、 ショウ
+横
+15 strokes
+Radical: tree 木
+Parts: ｜ 二 ハ 廾 日 木 田 黄
+горизонтальный, ширина
+Kun: よこ
+On: オウ
+橋
+16 strokes
+Radical: tree 木
+Parts: ノ 冂 口 木
+Variants: 槗
+мост
+Kun: はし
+On: キョウ
+次
+6 strokes
+Radical: lack, yawn 欠
+Parts: 冫 欠
+следующий, далее, порядок, последовательность
+Kun: つ.ぐ、 つぎ
+On: ジ、 シ
+歯
+12 strokes
+Radical: stop 止
+Parts: 凵 止 米 歯
+Variants: 齒
+зуб
+Kun: よわい、 は、 よわ.い、 よわい.する
+On: シ
+死
+6 strokes
+Radical: death, decay 歹 (歺)
+Parts: 一 匕 夕 歹
+смерть, умирать
+Kun: し.ぬ、 し.に-
+On: シ
+氷
+5 strokes
+Radical: water 水 (氵, 氺)
+Parts: 丶 水
+Variants: 冰
+сосулька, лед, град, замерзание, застывание
+Kun: こおり、 ひ、 こお.る
+On: ヒョウ
+決
+7 strokes
+Radical: water 水 (氵, 氺)
+Parts: 二 人 ユ 大 汁
+Variants: 决
+решать, фиксировать, согласовывать, назначать
+Kun: き.める、 -ぎ.め、 き.まる、 さ.く
+On: ケツ
+油
+8 strokes
+Radical: water 水 (氵, 氺)
+Parts: ｜ 汁 日 田
+масло
+Kun: あぶら
+On: ユ、 ユウ
+波
+8 strokes
+Radical: water 水 (氵, 氺)
+Parts: 又 汁 皮
+волна
+Kun: なみ
+On: ハ
+注
+8 strokes
+Radical: water 水 (氵, 氺)
+Parts: 丶 汁 王
+лить, примечание, изливать, орошать, проливать (слезы), вливаться, концентрироваться, отмечать, комментировать, аннотировать
+泳
+8 strokes
+Radical: water 水 (氵, 氺)
+Parts: 丶 汁 水
+плавать
+Kun: およ.ぐ
+On: エイ
+洋
+9 strokes
+Radical: water 水 (氵, 氺)
+Parts: 并 汁 王 羊
+океан, море
+On: ヨウ
+流
+10 strokes
+Radical: water 水 (氵, 氺)
+Parts: 亠 厶 川 汁
+течь, течение, сток, поток, неустойка
+Kun: なが.れる、 なが.れ、 なが.す、 -なが.す
+On: リュウ、 ル
+消
+10 strokes
+Radical: water 水 (氵, 氺)
+Parts: 尚 汁 月
+гаснуть, задуть, погасить, задуть, выключить, нейтрализовать, отменить
+Kun: き.える、 け.す
+On: ショウ
+深
+11 strokes
+Radical: water 水 (氵, 氺)
+Parts: 儿 冖 汁 木
+глубокий, углублять, усиливать, интенсифицировать, укреплять
+Kun: ふか.い、 -ぶか.い、 ふか.まる、 ふか.める、 み-
+On: シン
+温
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: 汁 日 皿
+Variants: 溫
+тёплый
+Kun: あたた.か、 あたた.かい、 あたた.まる、 あたた.める、 ぬく
+On: オン
+港
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: ハ 已 汁 井
+порт
+Kun: みなと
+On: コウ
+湖
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: 十 口 汁 月
+озеро
+Kun: みずうみ
+On: コ
+湯
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: 一 ｜ 汁 日 勿
+горячая вода, ванна, горячий источник
+Kun: ゆ
+On: トウ
+漢
+13 strokes
+Radical: water 水 (氵, 氺)
+Parts: 一 二 口 大 汁 艾
+китайский
+On: カン
+炭
+9 strokes
+Radical: fire 火 (灬)
+Parts: 厂 山 火
+древесный уголь, каменный уголь
+Kun: すみ
+On: タン
+物
+8 strokes
+Radical: cow 牛 (牜)
+Parts: ノ 勹 牛 勿
+вещь, предмет
+Kun: もの、 もの-
+On: ブツ、 モツ
+球
+11 strokes
+Radical: jade (king) 玉 (王)
+Parts: 丶 水 王
+мяч, шар
+Kun: たま
+On: キュウ"""
+        native_kun_on_301_330 = """度
+9 strokes
+Radical: house on cliff 广
+Parts: 一 又 广 凵
+степени, вхождение, время, счетчик вхождений, рассмотрение, отношение
+Kun: たび、 -た.い
+On: ド、 ト、 タク
+庫
+10 strokes
+Radical: house on cliff 广
+Parts: 广 車
+склад, кладовая
+Kun: くら
+On: コ、 ク
+庭
+10 strokes
+Radical: house on cliff 广
+Parts: 广 廴 王
+внутренний двор, сад, дворик
+Kun: にわ
+On: テイ
+式
+6 strokes
+Radical: shoot, arrow 弋
+Parts: 工 弋
+стиль, церемония, обряд, функция, метод, система, форма, выражение
+On: シキ
+役
+7 strokes
+Radical: step 彳
+Parts: 几 又 彳 殳
+долг, война, кампания, призывной труд, должность, служба, роль
+On: ヤク、 エキ
+待
+9 strokes
+Radical: step 彳
+Parts: 土 寸 彳
+ждать
+Kun: ま.つ、 -ま.ち
+On: タイ
+急
+9 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 勹 ヨ 心
+спешить, чрезвычайная ситуация, внезапный
+Kun: いそ.ぐ、 いそ.ぎ、 せ.く
+On: キュウ
+息
+10 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 心 目 自
+дыхание, одышка
+Kun: いき
+On: ソク
+悪
+11 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 一 ｜ 口 心
+Variants: 惡
+плохой, порочный, негодяй, лживый, злой, неправильный
+Kun: わる.い、 わる-、 あ.し、 にく.い、 -にく.い、 ああ、 いずくに、 いずくんぞ、 にく.む
+On: アク、 オ
+悲
+12 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 心 非
+печальный, грустный
+Kun: かな.しい、 かな.しむ
+On: ヒ
+想
+13 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 心 木 目
+концепция, мышление, идея, размышление
+Kun: おも.う
+On: ソウ、 ソ
+意
+13 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 心 日 立 音
+идея, разум, сердце, вкус, мысль, желание, забота, симпатия
+On: イ
+感
+13 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: ノ 口 心 戈
+эмоция, чувство, сенсация
+On: カン
+所
+8 strokes
+Radical: door, house 戶 (户, 戸)
+Parts: 一 尸 戸 斤
+место
+Kun: ところ、 -ところ、 どころ、 とこ
+On: ショ
+打
+5 strokes
+Radical: hand 手 (扌龵)
+Parts: 亅 扎
+ударять, бить
+Kun: う.つ、 う.ち-、 ぶ.つ
+On: ダ、 ダース
+投
+7 strokes
+Radical: hand 手 (扌龵)
+Parts: 几 又 扎 殳
+бросать, отбрасывать, отрекаться, пускаться в дело
+Kun: な.げる、 -な.げ
+On: トウ
+拾
+9 strokes
+Radical: hand 手 (扌龵)
+Parts: 一 个 口 扎
+подбирать, собирать, находить, идти пешком, десять
+Kun: ひろ.う
+On: シュウ、 ジュウ
+持
+9 strokes
+Radical: hand 手 (扌龵)
+Parts: 土 寸 扎
+держать, иметь
+Kun: も.つ、 -も.ち、 も.てる
+On: ジ
+指
+9 strokes
+Radical: hand 手 (扌龵)
+Parts: 匕 扎 日
+палец, указывать
+Kun: ゆび、 さ.す、 -さ.し
+On: シ
+放
+8 strokes
+Radical: rap 攴 (攵)
+Parts: 方 乞 攵
+отпускать, бросать
+Kun: はな.す、 -っぱな.し、 はな.つ、 はな.れる、 こ.く、 ほう.る
+On: ホウ
+整
+16 strokes
+Radical: rap 攴 (攵)
+Parts: 一 ｜ 口 木 止 乞 攵
+Variants:
+организовать, аранжировка, настройка, тон, метр
+Kun: ととの.える、 ととの.う
+On: セイ
+旅
+10 strokes
+Radical: square 方
+Parts: ノ 方 乞
+путешествие
+Kun: たび
+On: リョ
+族
+11 strokes
+Radical: square 方
+Parts: 方 矢 乞
+племя, семья
+On: ゾク
+昔
+8 strokes
+Radical: sun, day 日
+Parts: 一 ｜ 二 日
+прошлое, давным-давно, древность, старые времена
+Kun: むかし
+On: セキ、 シャク
+昭
+9 strokes
+Radical: sun, day 日
+Parts: 刀 口 日
+сияющий, яркий
+On: ショウ
+暑
+12 strokes
+Radical: sun, day 日
+Parts: 老 日
+Variants:
+жаркий
+Kun: あつ.い
+On: ショ
+暗
+13 strokes
+Radical: sun, day 日
+Parts: 日 立 音
+темный, темнота, исчезновение, тень, неформальность, темнеть, быть ослепленным
+Kun: くら.い、 くら.む、 くれ.る
+On: アン
+曲
+6 strokes
+Radical: say 曰
+Parts: ｜ 日
+изгиб, музыка, мелодия, композиция, удовольствие, несправедливость, вина, изгиб, кривобокий, извращенный, худой
+Kun: ま.がる、 ま.げる、 くま
+On: キョク
+有
+6 strokes
+Radical: moon, month 月
+Parts: 一 ノ 月
+обладать, иметь, существовать, случаться, протекать
+Kun: あ.る
+On: ユウ、 ウ
+服
+8 strokes
+Radical: moon, month 月
+Parts: 卩 又 月
+одежда, одеваться, впускать, подчиняться, увольнять
+On: フク"""
         native_kun_on_271_300 = """向
 6 strokes
 Radical: mouth, opening 口
