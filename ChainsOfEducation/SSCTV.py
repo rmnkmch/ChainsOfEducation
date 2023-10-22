@@ -58,13 +58,40 @@ class SSCTV(object):
     old_tv2_YRB_DEC_BIN_HEX = []
     old_tv2_rec_for_f_kvt = []
 
+    old_tv3_F_m_n = [[1249, 19, 3, 1, 1, 1, 0, 1],
+                     [-381, 14, 3, 2, 2, 0, 0, 1],
+                     [-318, -14, 3, 1, -1, 0, 1, -2],
+                     [31, -45, -4, -3, -5, 0, 2, 4],
+                     [154, -7, -8, -2, -2, 0, -1, 0],
+                     [38, 20, -3, 2, 2, 0, -2, 2],
+                     [-39, 11, 8, 3, 0, 1, 1, 0],
+                     [-42, 3, 10, 1, -1, 1, 1, -1]]
+    old_tv3_Q_m_n = [[8, 16, 19, 22, 26, 27, 29, 34],
+                     [16, 16, 22, 24, 27, 29, 34, 37],
+                     [19, 22, 26, 27, 29, 34, 34, 38],
+                     [22, 22, 26, 27, 29, 34, 37, 40],
+                     [22, 26, 27, 29, 32, 35, 40, 48],
+                     [26, 27, 29, 32, 35, 40, 48, 58],
+                     [26, 27, 29, 34, 38, 46, 56, 69],
+                     [27, 29, 35, 38, 46, 56, 69, 83]]
+    old_tv3_variants = {1: [16, 104], 2: [14, 96], 3: [12, 88],
+                        4: [10, 80], 5: [8, 72], 6: [7, 64],
+                        7: [6, 56], 8: [5, 52], 9: [4, 48],
+                        10: [3, 44], 11: [2, 40], 12: [9, 75],
+                        13: [11, 85], 14: [13, 91], 15: [15, 99]}
+    old_tv3_Fq_values = []
+    old_tv3_Fq_values_str = []
+    old_tv3_N = 0
+    old_tv3_Fdq = []
+
     @staticmethod
     def make_tv(scene: M.Scene):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
         # SSCTV.make_old_tv1(scene)
-        SSCTV.make_old_tv2(scene)
+        # SSCTV.make_old_tv2(scene)
+        SSCTV.make_old_tv3(scene)
 
     @staticmethod
     def make_tv1(scene: M.Scene):
@@ -1479,14 +1506,16 @@ class SSCTV(object):
 
     @staticmethod
     def make_old_tv2(scene: M.Scene):
-        # SSCTV.old_tv2_formula_1(scene)
-        # SSCTV.old_tv2_formula_2(scene)
-        # SSCTV.old_tv2_table_1(scene)
-        # SSCTV.old_tv2_diagram_1(scene)
-        # SSCTV.old_tv2_diagram_2(scene)
-        # SSCTV.old_tv2_table_2(scene)
+        SSCTV.old_tv2_formula_1(scene)
+        SSCTV.old_tv2_formula_2(scene)
+        SSCTV.old_tv2_table_1(scene)
+        SSCTV.old_tv2_diagram_1(scene)
+        SSCTV.old_tv2_diagram_2(scene)
+        SSCTV.old_tv2_table_2(scene)
         SSCTV.old_tv2_table_3(scene)
         SSCTV.old_tv2_formula_3(scene)
+        SSCTV.old_tv2_table_4(scene)
+        SSCTV.old_tv2_formula_4(scene)
 
     @staticmethod
     def old_tv2_formula_1(scene: M.Scene):
@@ -1784,7 +1813,7 @@ class SSCTV(object):
         txt = M.Text("Мбит", font_size = tts, color = mc)
         tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
-        tx2 = r"V_1 = V_Y + V_C + V_R = V_Y \cdot (1 + "
+        tx2 = r"V_1 = V_Y + V_{CB} + V_{CR} = V_Y \cdot (1 + "
         tx2 += str(format_descr_int[format_descr]) + " + "
         tx2 += str(format_descr_int[format_descr]) + ") = "
         tx2 += str(V_1)
@@ -1801,5 +1830,309 @@ class SSCTV(object):
         txt2.next_to(tex2)
         txt3.next_to(tex3)
         scene.add(tex, txt, tex2, txt2, tex3, txt3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv2_table_4(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        table_data = [
+            [str(i + 1) for i in range(5)],
+            [SSCTV.old_tv1_variants[SSCTV.old_tv_variant][i] for i in range(5)]]
+        fs = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            row_labels = [
+                M.Text("Вар.", font_size = fs, color = mc),
+                M.Text(str(SSCTV.old_tv_variant), font_size = fs, color = mc)],
+            include_outer_lines = True,
+            v_buff = 0.6,
+            h_buff = 0.3,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv2_formula_4(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"Y = Round((219 \cdot E_Y^{'} + 16) \cdot 2^{b-8})"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"CR = Round((224 \cdot E_{CR}^{'} + 128) \cdot 2^{b-8})"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"CB = Round((224 \cdot E_{CB}^{'} + 128) \cdot 2^{b-8})"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        tx4 = r"E_{CR}^{'} = 0.713 \cdot E_{R-Y}^{'},\ "
+        tx4 += r"E_{CB}^{'} = 0.564 \cdot E_{B-Y}^{'}"
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
+        scene.add(tex, tex2, tex3, tex4)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_old_tv3(scene: M.Scene):
+        SSCTV.old_tv3_picture(scene)
+        SSCTV.old_tv3_table_1(
+            scene, SSCTV.old_tv3_variants[SSCTV.old_tv_variant][0])
+        SSCTV.old_tv3_number_row(scene)
+        SSCTV.old_tv3_formula_1(scene)
+        SSCTV.old_tv3_table_1(
+            scene, SSCTV.old_tv3_variants[SSCTV.old_tv_variant][1])
+        SSCTV.old_tv3_number_row(scene)
+        SSCTV.old_tv3_formula_1(scene)
+        SSCTV.old_tv3_table_4(
+            scene, SSCTV.old_tv3_variants[SSCTV.old_tv_variant][1])
+        SSCTV.old_tv3_table_2(scene)
+        SSCTV.old_tv3_table_3(scene)
+        SSCTV.old_tv3_formula_2(scene)
+
+    @staticmethod
+    def old_tv3_picture(scene: M.Scene):
+        picture_Y_int = [[59, 59, 59, 60, 60, 65, 64, 64],
+                         [63, 62, 62, 62, 61, 61, 61, 62],
+                         [137, 123, 111, 101, 96, 89, 88, 86],
+                         [237, 236, 235, 233, 231, 216, 213, 208],
+                         [225, 229, 232, 232, 231, 237, 238, 239],
+                         [193, 195, 197, 198, 199, 204, 204, 205],
+                         [182, 182, 181, 181, 181, 180, 180, 180],
+                         [183, 182, 181, 180, 179, 178, 178, 177]]
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        graphs = M.VGroup()
+        x_len = len(picture_Y_int[0])
+        y_len = len(picture_Y_int)
+        number_plane = M.NumberPlane(
+            x_range = (0, x_len, 1),
+            y_range = (0, y_len, 1),
+            x_length = 13.0,
+            y_length = 7.2,
+            axis_config = {
+                "stroke_width": 0,
+                "include_ticks": False,
+                "include_tip": False},
+            background_line_style = {"stroke_width": 0},
+            tips = False)
+        for i in range(y_len):
+            for j in range(x_len):
+                colr = SSf.SIPK_SSCTV_functions.fill_zeros(
+                    hex(picture_Y_int[i][j])[2:], 2)
+                colr *= 3
+                colr = "#" + colr
+                graphs += M.Polygon(
+                    number_plane.c2p(j, y_len - i - 1, 0),
+                    number_plane.c2p(j, y_len - i, 0),
+                    number_plane.c2p(j + 1, y_len - i, 0),
+                    number_plane.c2p(j + 1, y_len - i - 1, 0),
+                    color = colr,
+                    fill_color = colr,
+                    fill_opacity = 1.0)
+        scene.add(graphs)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_table_1(scene: M.Scene, f: int):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        kff = 16
+        table_data = []
+        SSCTV.old_tv3_Fq_values = []
+        for i in range(len(SSCTV.old_tv3_F_m_n)):
+            table_data.append([])
+            SSCTV.old_tv3_Fq_values.append([])
+            for j in range(len(SSCTV.old_tv3_F_m_n[0])):
+                value = round(
+                    kff * SSCTV.old_tv3_F_m_n[i][j] / f / SSCTV.old_tv3_Q_m_n[i][j])
+                table_data[-1].append(str(value))
+                SSCTV.old_tv3_Fq_values[-1].append(value)
+        SSCTV.old_tv3_Fq_values_str = table_data
+        fs = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.8,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_table_2(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        table_data = [["f1", "f2"],
+                      [str(SSCTV.old_tv3_variants[SSCTV.old_tv_variant][0]),
+                       str(SSCTV.old_tv3_variants[SSCTV.old_tv_variant][1])]]
+        fs = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            row_labels = [
+                M.Text("Вариант", font_size = fs, color = mc),
+                M.Text(str(SSCTV.old_tv_variant), font_size = fs, color = mc)],
+            include_outer_lines = True,
+            v_buff = 0.5,
+            h_buff = 3.0,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_number_row(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        len_x = len(SSCTV.old_tv3_Fq_values_str[0])
+        len_y = len(SSCTV.old_tv3_Fq_values_str)
+        full_len = len_y * len_x
+        i = 0
+        gp = []
+        gp_RLC = []
+        current_row = 0
+        current_col = 0
+        direction = 0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        zeros = 0
+        while i < full_len:
+            gp.append(M.Text(
+                SSCTV.old_tv3_Fq_values_str[current_row][current_col], color = mc))
+            if SSCTV.old_tv3_Fq_values_str[current_row][current_col] != "0":
+                if i != 0: gp_RLC.append(M.Text(
+                    str(zeros), font_size = 42.0, color = mc))
+                gp_RLC.append(M.Text(
+                    SSCTV.old_tv3_Fq_values_str[current_row][current_col], color = mc))
+                zeros = 0
+            else:
+                zeros += 1
+            if direction == 0:
+                if current_col == len_x - 1:
+                    direction = 1
+                    current_row += 1
+                elif current_row == 0:
+                    direction = 1
+                    current_col += 1
+                else:
+                    current_col += 1
+                    current_row -= 1
+            else:
+                if current_row == len_y - 1:
+                    direction = 0
+                    current_col += 1
+                elif current_col == 0:
+                    direction = 0
+                    current_row += 1
+                else:
+                    current_col -= 1
+                    current_row += 1
+            i += 1
+        gp_RLC.append(M.Text("EOB", color = mc))
+        SSCTV.old_tv3_N = len(gp_RLC)
+        grp = M.VGroup(*gp).arrange(buff = 0.3)
+        grp_RLC = M.VGroup(*gp_RLC).arrange(buff = 0.3).scale(14.0 / grp.width)
+        grp.scale(13.5 / grp.width).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        grp_RLC.next_to(grp, M.DOWN)
+        scene.add(grp, grp_RLC)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_formula_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"K \approx \frac {64}{N}"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"f_1 = " + str(SSCTV.old_tv3_variants[SSCTV.old_tv_variant][0])
+        tx2 += r":\ K \approx \frac {64}{" + str(SSCTV.old_tv3_N) + r"} = "
+        tx2 += str(round(64.0 / SSCTV.old_tv3_N, 3))
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"f_2 = " + str(SSCTV.old_tv3_variants[SSCTV.old_tv_variant][1])
+        tx3 += r":\ K \approx \frac {64}{" + str(SSCTV.old_tv3_N) + r"} = "
+        tx3 += str(round(64.0 / SSCTV.old_tv3_N, 3))
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_table_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        table_data = []
+        for i in range(len(SSCTV.old_tv3_Q_m_n)):
+            table_data.append([])
+            for j in range(len(SSCTV.old_tv3_Q_m_n[0])):
+                table_data[-1].append(str(SSCTV.old_tv3_Q_m_n[i][j]))
+        fs = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.8,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_table_4(scene: M.Scene, f: int):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        kff = 16
+        table_data = []
+        for i in range(len(SSCTV.old_tv3_Fq_values)):
+            table_data.append([])
+            SSCTV.old_tv3_Fdq.append([])
+            for j in range(len(SSCTV.old_tv3_Fq_values[0])):
+                value = round(
+                    SSCTV.old_tv3_Fq_values[i][j]
+                    * f * SSCTV.old_tv3_Q_m_n[i][j] / kff)
+                table_data[-1].append(str(value))
+                SSCTV.old_tv3_Fdq[-1].append(value)
+        fs = 30.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.8,
+            element_to_mobject_config = {"font_size": fs, "color": mc},
+            line_config = {"color": mc}
+            ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv3_formula_2(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = 24.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        i = 0
+        showed = 0
+        prev = SSf.SIPK_SSCTV_functions.upper_side
+        while i < 60 and showed < 6:
+            if SSCTV.old_tv3_Fdq[i % 8][i // 8] != 0:
+                tx = r"F(" + str(i % 8) + r", " + str(i // 8)
+                tx += r") = " + str(SSCTV.old_tv3_F_m_n[i % 8][i // 8])
+                tx += r",\ F_{dq}(" + str(i % 8) + r", " + str(i // 8)
+                tx += r") = " + str(SSCTV.old_tv3_Fdq[i % 8][i // 8])
+                tex = M.MathTex(tx, font_size = txs, color = mc
+                                ).next_to(prev, M.DOWN, 0.5)
+                more_less = " меньше"
+                if (SSCTV.old_tv3_F_m_n[i % 8][i // 8]
+                    - SSCTV.old_tv3_Fdq[i % 8][i // 8] < 0.0):
+                    more_less = " больше"
+                tx2 = "на " + str(round(abs(100.0 * (
+                    1.0 - SSCTV.old_tv3_Fdq[i % 8][i // 8]
+                    / SSCTV.old_tv3_F_m_n[i % 8][i // 8])), 1))
+                tx2 += "%" + more_less
+                txt = M.Text(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+                scene.add(tex, txt)
+                prev = txt
+                showed += 1
+            i += 1
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         
