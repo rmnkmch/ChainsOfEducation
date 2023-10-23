@@ -26,10 +26,11 @@ class SIPK(object):
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
-    sipk2_Nhor = 29
-    sipk2_Nver = 22
+    sipk2_Nhor = 28
+    sipk2_Nver = 23
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[3.778, -0.123, 1.825], [2.533, -0.249, 5.965],
+                  [-2.328, -0.26, 5.272], [-0.751, -0.418, 0.424]]
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -44,10 +45,10 @@ class SIPK(object):
     sipk2_a1 = 0.0
     sipk2_a21 = 0.0
     sipk2_a22 = 0.0
-    sipk2_decode_n = [4, 14, 28]
+    sipk2_decode_n = [3, 15, 28]
 
-    sipk3_R = 0.9
-    sipk3_t = 3
+    sipk3_R = 0.72
+    sipk3_t = 4
 
     sipk4_in_group_list = 7
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
@@ -172,8 +173,8 @@ class SIPK(object):
     def make_sipk(scene: M.Scene):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
-        SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
+        # SIPK.make_sipk2(scene)
+        SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
 
     @staticmethod
@@ -815,7 +816,7 @@ class SIPK(object):
     @staticmethod
     def make_sipk2(scene: M.Scene):
         if len(SIPK.sipk2_cffs) == 0:
-            for _ in range(5):
+            for _ in range(10):
                 SIPK.sipk2_num_plane(scene)
             return
         SIPK.sipk2_num_plane(scene)
@@ -972,7 +973,7 @@ class SIPK(object):
                 M.MathTex("e_{2opt}(n)", font_size = fs, color = mc)],
             include_outer_lines = True,
             v_buff = 0.3,
-            h_buff = 0.3,
+            h_buff = 0.25,
             element_to_mobject_config = {"font_size": 14.0, "color": mc},
             line_config = {"color": mc}
             ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
@@ -1352,13 +1353,13 @@ class SIPK(object):
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
         # SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene, 100)
+        SIPK.sipk3_graph_scaled(scene, 70)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [60]
+        check = [15, 30, 45, 60, 75, 74]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 210, 189)
+        SIPK.sipk3_count_2(scene, 75, 54)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):

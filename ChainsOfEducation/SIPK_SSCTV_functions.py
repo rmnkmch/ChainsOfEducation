@@ -8,34 +8,12 @@ class SIPK_SSCTV_functions(object):
 
     data_saved = r'''
     my_sipk1
-    A0.2 B0.06 C0.14 D0.1 E0.47 F0.03
-    EEEDCAEEEAEACDAECEAE
-    ECAEEEEEAEAEEAECEEEE
-    FDFFFBFBFFFFFFFFFFBD
     my_sipk2
-    [[2.624, -0.475, 6.535], [-3.482, 0.422, 6.106],
-    [-0.156, 0.49, 1.542], [-0.763, 1.139, 3.568]]
-    А М - 17
-    А Г - 4
-    Д Л - 14
-    Taxo - 27
-    А Р - 10
-    М З - 9
-    С И - 6
-    А Ф - 29
-    К К - 9
-    [[4.019, -0.175, 0.902], [3.909, 0.421, 3.406],
-    [0.274, -1.295, 4.544], [0.044, -0.842, 3.156]]
     никто
     u0.17 w0.04 x0.18 f0.03 p0.11 r0.14 t0.28 q0.05
     rrrxrwtrtftqxxxpxturr
     turuuuxxttxuutxxutrru
     ppfpqfwfqfrwwqqpwrffw
-    Н М
-    а0.42 р0.22 д0.22 о0.04 з0.04 н0.06
-    арадаааоднаарздаарда
-    дааарраадраааадаррда
-    нзоннозонзнзоознооно
     pkg load communications
     '''
 
