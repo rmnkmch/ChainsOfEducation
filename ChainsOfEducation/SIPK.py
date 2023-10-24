@@ -50,7 +50,7 @@ class SIPK(object):
     sipk3_R = 0.72
     sipk3_t = 4
 
-    sipk4_in_group_list = 7
+    sipk4_in_group_list = 11
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -174,8 +174,8 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        SIPK.make_sipk3(scene)
-        # SIPK.make_sipk4(scene)
+        # SIPK.make_sipk3(scene)
+        SIPK.make_sipk4(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1645,6 +1645,7 @@ class SIPK(object):
     @staticmethod
     def make_sipk4(scene: M.Scene):
         var_dict = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 3, 9: 5, 0: 7}
+        SIPK.sipk3_hemming_example(scene)
         compare_row = SIPK.sipk4_fvh[var_dict[SIPK.sipk4_in_group_list % 10]]
         SIPK.sipk4_table_1(scene, compare_row)
         SIPK.sipk4_table_1(scene, SIPK.sipk4_make_mistake(compare_row, 1))
@@ -1717,7 +1718,7 @@ class SIPK(object):
         for i in range(12):
             table_data.append([])
             code_word = SSf.SIPK_SSCTV_functions.fill_zeros(
-                bin(start_word + i)[2:], 7)
+                bin((start_word + i) % 128)[2:], 7)
             err = 7
             err_index = 0
             for j in range(len(SIPK.sipk4_fvh)):
@@ -1942,15 +1943,15 @@ class SIPK(object):
         start_word = SIPK.sipk4_in_group_list * 7
         if start_word > 127: start_word -= 127
         SSf.SIPK_SSCTV_functions.fill_zeros(bin(start_word)[2:], 7)
-        dm = [
-            SIPK.sipk4_str_to_list(
-                SSf.SIPK_SSCTV_functions.fill_zeros(bin(start_word + i)[2:], 7))
+        dm = [SIPK.sipk4_str_to_list(
+            SSf.SIPK_SSCTV_functions.fill_zeros(bin((start_word + i) % 128)[2:], 7))
             for i in range(12)]
         for j in range(6):
             SSf.SIPK_SSCTV_functions.make_background(scene)
             prev = SSf.SIPK_SSCTV_functions.upper_side
             for i in range(2):
-                tex = M.MathTex(r"s_{" + str(start_word + i + j * 2) + r"} = ",
+                code_word = (start_word + i + j * 2) % 128
+                tex = M.MathTex(r"s_{" + str(code_word) + r"} = ",
                                 font_size = txs, color = mc)
                 tx2 = r"\left( \ "
                 code_e = SIPK.sipk4_list_to_str(dm[i + j * 2])
@@ -1984,7 +1985,7 @@ class SIPK(object):
         for i in range(12):
             table_data.append([])
             code_word = SSf.SIPK_SSCTV_functions.fill_zeros(
-                bin(start_word + i)[2:], 7)
+                bin((start_word + i) % 128)[2:], 7)
             table_data[-1].append(code_word)
             sindrom = SIPK.sipk4_sindromes[i]
             table_data[-1].append(SIPK.sipk4_list_to_str(sindrom))
