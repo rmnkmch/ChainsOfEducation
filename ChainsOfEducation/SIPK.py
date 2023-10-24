@@ -2043,6 +2043,10 @@ class SIPK(object):
         scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
+    @staticmethod
+    def make_sipk5(scene: M.Scene):
+        SIPK.sipk4_check_linear(scene)
+
 
 class ProbabilitySymbol(object):
     def __init__(self, symbol: str, probability: str, merged: bool, code: str = ""):
