@@ -29,8 +29,7 @@ class SIPK(object):
     sipk2_Nhor = 28
     sipk2_Nver = 23
     sipk2_x_n = []
-    sipk2_cffs = [[3.778, -0.123, 1.825], [2.533, -0.249, 5.965],
-                  [-2.328, -0.26, 5.272], [-0.751, -0.418, 0.424]]
+    sipk2_cffs = []
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -48,9 +47,9 @@ class SIPK(object):
     sipk2_decode_n = [3, 15, 28]
 
     sipk3_R = 0.72
-    sipk3_t = 4
+    sipk3_t = 3
 
-    sipk4_in_group_list = 11
+    sipk4_5_in_group_list = 7
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -174,8 +173,9 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
-        SIPK.make_sipk4(scene)
+        SIPK.make_sipk3(scene)
+        # SIPK.make_sipk4(scene)
+        # SIPK.make_sipk5(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1353,13 +1353,13 @@ class SIPK(object):
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
         # SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene, 70)
+        SIPK.sipk3_graph_scaled(scene, 50)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [15, 30, 45, 60, 75, 74]
+        check = [11, 30, 50, 55, 54, 53]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 75, 54)
+        SIPK.sipk3_count_2(scene, 54, 39)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
@@ -2045,8 +2045,125 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
+    def sipk5_bin_str_to_polinom(bin_str: str):
+        return " + ".join(SIPK.sipk5_bin_str_to_polinom_list(bin_str))
+
+    @staticmethod
+    def sipk5_bin_str_to_polinom_list(bin_str: str):
+        ret_list = []
+        lb = len(bin_str)
+        for i in range(lb):
+            if bin_str[i] == "1":
+                if i == lb - 1: ret_list.append(r"1")
+                elif i == lb - 2: ret_list.append(r"x")
+                else: ret_list.append(r"x^{" + str(lb - i - 1) + r"}")
+            else:
+                if i == lb - 1 and len(ret_list) == 0: ret_list.append(r"0")
+        return ret_list
+
+    @staticmethod
+    def sipk5_bin_str_multiplication(bin_str_1: str, bin_str_2: str):
+        ret_str = ""
+        lb_1 = len(bin_str_1)
+        for i in range(lb_1):
+            if bin_str_1[i] == "1":
+                code = SSf.SIPK_SSCTV_functions.add_zeros(bin_str_2, lb_1 - i - 1)
+                if ret_str == "": ret_str = code
+                else:
+                    ret_str = SSf.SIPK_SSCTV_functions.sum_mod_2_full(ret_str, code)
+        return ret_str
+
+    @staticmethod
+    def sipk5_senior_bit(bin_str: str):
+        for i in range(len(bin_str)):
+            if bin_str[i] == "1":
+                return len(bin_str) - i - 1
+        return -1
+
+    @staticmethod
+    def sipk5_is_zero(bin_str: str):
+        for i in range(len(bin_str)):
+            if bin_str[i] == "1": return False
+        return True
+
+    @staticmethod
     def make_sipk5(scene: M.Scene):
-        SIPK.sipk4_check_linear(scene)
+        SIPK.sipk5_formula_1(scene)
+
+    @staticmethod
+    def sipk5_formula_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        variant = SIPK.sipk4_5_in_group_list
+        if variant >= 31: variant -= 30
+        if variant >= 15: variant -= 14
+        if variant >= 15: variant -= 14
+        # variant = 15
+        variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 4)
+        variant_polinom = SIPK.sipk5_bin_str_to_polinom(variant_bin)
+        g_x = 11
+        g_x_bin = bin(g_x)[2:]
+        g_x_polinom = SIPK.sipk5_bin_str_to_polinom(g_x_bin)
+        V_x_bin = SIPK.sipk5_bin_str_multiplication(variant_bin, g_x_bin)
+        V_x_polinom = SIPK.sipk5_bin_str_to_polinom(V_x_bin)
+        tx = str(variant) + r"_{10} = " + variant_bin + r"_{2},\ U(x) = "
+        tx += variant_polinom
+        tex = M.MathTex(tx, font_size = txs, color = mc
+                        ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"V(x) = U(x) \cdot g(x) = (" + variant_polinom
+        tx2 += r") \cdot (" + g_x_polinom + r") = "
+        tx2 += V_x_polinom
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        table_data = []
+        prepare_data = []
+        divisible = SIPK.sipk4_make_mistake(V_x_bin, 1)
+        divisor = g_x_bin
+        data = [[divisible, 0]]
+        sb_divisible = SIPK.sipk5_senior_bit(divisible)
+        sb_divisor = SIPK.sipk5_senior_bit(divisor)
+        sb_max = sb_divisible
+        max_len = 0
+        while sb_divisible >= sb_divisor:
+            integer_part = SSf.SIPK_SSCTV_functions.add_zeros(
+                divisor, (sb_divisible - sb_divisor))
+            divisible = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+                divisible, integer_part)
+            data.append([integer_part, sb_max - sb_divisible])
+            sb_divisible = SIPK.sipk5_senior_bit(divisible)
+            sb_divisor = SIPK.sipk5_senior_bit(divisor)
+            if not SIPK.sipk5_is_zero(divisible):
+                data.append([divisible, sb_max - sb_divisible])
+            else:
+                data.append([divisible, max_len - 1])
+            polinom_list_len = len(SIPK.sipk5_bin_str_to_polinom_list(divisible))
+            if (polinom_list_len == 1 and SIPK.sipk5_is_zero(divisible)):
+                pass
+            else:
+                max_len = max(max_len, polinom_list_len + sb_max - sb_divisible)
+        for i in range(len(data)):
+            row = []
+            polinom_list = SIPK.sipk5_bin_str_to_polinom_list(data[i][0])
+            for j in range(data[i][1]):
+                row.append(r"")
+            for j in range(len(polinom_list)):
+                if j == 0: row.append(polinom_list[j])
+                else: row.append(r"+ " + polinom_list[j])
+            for j in range(max_len - data[i][1] - len(polinom_list)):
+                row.append(r"")
+            prepare_data.append(row)
+        table_data = prepare_data
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.2,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1}
+            ).next_to(tex2, M.DOWN, 1.0)
+        scene.add(tex, tex2, table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 
 class ProbabilitySymbol(object):

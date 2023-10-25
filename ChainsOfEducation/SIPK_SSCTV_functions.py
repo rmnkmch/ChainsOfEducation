@@ -46,11 +46,26 @@ class SIPK_SSCTV_functions(object):
         return "0" * (n - len(str_to_fill)) + str_to_fill
 
     @staticmethod
+    def add_zeros(str_to_add: str, n: int, left: bool = False):
+        if left: return "0" * n + str_to_add
+        else: return str_to_add + "0" * n
+
+    @staticmethod
     def sum_mod_2(bit1: str, bit2: str):
         if (bit1 == "0" and bit2 == "0") or (bit1 == "1" and bit2 == "1"):
             return "0"
         else:
             return "1"
+
+    @staticmethod
+    def sum_mod_2_full(bin_str_1: str, bin_str_2: str):
+        len_max = max(len(bin_str_1), len(bin_str_2))
+        bin_str_1 = SIPK_SSCTV_functions.fill_zeros(bin_str_1, len_max)
+        bin_str_2 = SIPK_SSCTV_functions.fill_zeros(bin_str_2, len_max)
+        sm2_full = ""
+        for i in range(len_max):
+            sm2_full += SIPK_SSCTV_functions.sum_mod_2(bin_str_1[i], bin_str_2[i])
+        return sm2_full
 
     @staticmethod
     def multiplication(bit1: str, bit2: str):
