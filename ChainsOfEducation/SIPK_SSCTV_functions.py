@@ -120,7 +120,7 @@ class SIPK_SSCTV_functions(object):
     @staticmethod
     def int_to_exp10(n: int):
         s = "{:e}".format(n)
-        if n > 1073741823: s = s[:4] + r" \cdot 10^{" + s[-2:] + r"}"
+        if n >= 10000000000: s = s[:4] + r" \cdot 10^{" + s[-2:] + r"}"
         else: s = s[:4] + r" \cdot 10^{" + s[-1:] + r"}"
         return s
 

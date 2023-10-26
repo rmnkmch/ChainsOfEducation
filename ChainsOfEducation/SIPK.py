@@ -46,7 +46,7 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [3, 15, 28]
 
-    sipk3_R = 0.72
+    sipk3_R = 0.85
     sipk3_t = 3
 
     sipk4_5_in_group_list = 7
@@ -56,6 +56,8 @@ class SIPK(object):
     sipk4_matrix_G = []
     sipk4_matrix_H = []
     sipk4_sindromes = []
+
+    sipk5_V_s_x_bin = ""
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -173,9 +175,9 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
+        SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        SIPK.make_sipk5(scene)
+        # SIPK.make_sipk5(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1353,13 +1355,13 @@ class SIPK(object):
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
         # SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene, 50)
+        SIPK.sipk3_graph_scaled(scene, 120)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [11, 30, 50, 55, 54, 53]
+        check = [30, 100, 150, 130, 129, 128, 127, 126]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 54, 39)
+        SIPK.sipk3_count_2(scene, 127, 108)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
@@ -2062,6 +2064,27 @@ class SIPK(object):
         return ret_list
 
     @staticmethod
+    def sipk5_polinom_to_bin_str(polinom: str):
+        ret_list = []
+        splited = polinom.split(r" + ")
+        for i in range(len(splited)):
+            lch = len(splited[i])
+            if lch == 1:
+                if splited[i] == "1":
+                    ret_list.append(0)
+                elif splited[i] == "x":
+                    ret_list.append(1)
+            elif lch == 5:
+                ret_list.append(int(splited[i][3]))
+        ret_bin = ""
+        for i in range(ret_list[0] + 1):
+            if i in ret_list:
+                ret_bin += "1"
+            else:
+                ret_bin += "0"
+        return ret_bin[::-1]
+
+    @staticmethod
     def sipk5_bin_str_multiplication(bin_str_1: str, bin_str_2: str):
         ret_str = ""
         lb_1 = len(bin_str_1)
@@ -2119,7 +2142,7 @@ class SIPK(object):
                 row.append(r"")
             for j in range(len(polinom_list)):
                 if j == 0: row.append(polinom_list[j])
-                else: row.append(r"+ " + polinom_list[j])
+                else: row.append(r" + " + polinom_list[j])
             for j in range(max_len - polinom_list_full[i][1] - len(polinom_list)):
                 if j == max_len - polinom_list_full[i][1] - len(polinom_list) - 1:
                     row.append(r"|")
@@ -2161,6 +2184,8 @@ class SIPK(object):
         SIPK.sipk5_formula_1(scene)
         SIPK.sipk5_formula_2(scene)
         SIPK.sipk5_table_1(scene)
+        SIPK.sipk5_formula_3(scene)
+        SIPK.sipk5_table_2(scene)
 
     @staticmethod
     def sipk5_formula_1(scene: M.Scene):
@@ -2197,7 +2222,7 @@ class SIPK(object):
             v_buff = 0.2,
             h_buff = 0.25,
             element_to_mobject = M.MathTex,
-            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
             line_config = {"color": mc, "stroke_width": 1})
         divisible = SIPK.sipk4_make_mistake(V_x_bin, 1)
         txt2 = M.Text("Число: " + divisible, font_size = 20.0, color = mc)
@@ -2208,7 +2233,7 @@ class SIPK(object):
             v_buff = 0.2,
             h_buff = 0.25,
             element_to_mobject = M.MathTex,
-            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
             line_config = {"color": mc, "stroke_width": 1})
         grp = M.VGroup(table, table2).arrange(buff = 1.5).shift(M.DOWN)
         txt.next_to(table, M.UP)
@@ -2242,23 +2267,38 @@ class SIPK(object):
             v_buff = 0.2,
             h_buff = 0.25,
             element_to_mobject = M.MathTex,
-            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
             line_config = {"color": mc, "stroke_width": 1})
         remainder_list = []
         for char in table_data[-1]:
             if char != r"" and char != r"|":
                 remainder_list.append(char)
-        remainder_polinom = " + ".join(remainder_list)
-        tx2 = r"V_{s}(x) = " + variant_polinom + " + " + remainder_polinom
+        remainder_polinom = "".join(remainder_list)
+        V_s_x_polinom = variant_polinom + " + " + remainder_polinom
+        tx2 = r"V_{s}(x) = " + V_s_x_polinom
         tex2 = M.MathTex(tx2, font_size = txs, color = mc
                          ).next_to(table, M.DOWN, 1.0)
         scene.add(tex, tex2, table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        V_s_x_bin = SIPK.sipk5_polinom_to_bin_str(V_s_x_polinom)
+        SIPK.sipk5_V_s_x_bin = SSf.SIPK_SSCTV_functions.fill_zeros(V_s_x_bin, 7)
+        table_data = SIPK.sipk5_bin_str_division(V_s_x_bin, g_x_bin)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def sipk5_table_1(scene: M.Scene):
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        fs = 20.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         variant = SIPK.sipk4_5_in_group_list
         if variant >= 31: variant -= 30
@@ -2266,13 +2306,106 @@ class SIPK(object):
         if variant >= 15: variant -= 14
         variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 4)
         table_data = []
+        e = "0"
+        d = "0"
+        v = "0"
+        a = "0"
+        b = "0"
+        g = "0"
+        for i in range(5):
+            e = d
+            d = g
+            v = b
+            if i == 4:
+                a = b = g = "-"
+            else:
+                a = variant_bin[i]
+                b = SSf.SIPK_SSCTV_functions.sum_mod_2(a, e)
+                g = SSf.SIPK_SSCTV_functions.sum_mod_2(b, v)
+            table_data.append([a, b, v, g, d, e])
         table = SSf.Table(
             table_data,
+            col_labels = [
+                M.Text("а", font_size = fs, color = mc),
+                M.Text("б", font_size = fs, color = mc),
+                M.Text("в", font_size = fs, color = mc),
+                M.Text("г", font_size = fs, color = mc),
+                M.Text("д", font_size = fs, color = mc),
+                M.Text("е", font_size = fs, color = mc)],
+            row_labels = [
+                M.Text(str(i), font_size = fs, color = mc) for i in range(5)],
             include_outer_lines = True,
-            v_buff = 0.2,
-            h_buff = 0.25,
+            v_buff = 0.3,
+            h_buff = 0.3,
             element_to_mobject = M.MathTex,
-            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_formula_3(scene: M.Scene):
+        g_x = 11
+        g_x_bin = bin(g_x)[2:]
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        for i in range(7):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            divisible = SSf.SIPK_SSCTV_functions.add_zeros("1", i)
+            tx = r"e_{" + str(i) + r"} = "
+            tx += SIPK.sipk5_bin_str_to_polinom(divisible)
+            table_data = SIPK.sipk5_bin_str_division(divisible, g_x_bin)
+            table = SSf.Table(
+                table_data,
+                include_outer_lines = True,
+                v_buff = 0.2,
+                h_buff = 0.25,
+                element_to_mobject = M.MathTex,
+                element_to_mobject_config = {"font_size": 24.0, "color": mc},
+                line_config = {"color": mc, "stroke_width": 1})
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(table, M.UP)
+            scene.add(table, tex)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_table_2(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        fs = 20.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table_data = []
+        e = SIPK.sipk5_V_s_x_bin[0]
+        d = SIPK.sipk5_V_s_x_bin[1]
+        v = SIPK.sipk5_V_s_x_bin[2]
+        a = SIPK.sipk5_V_s_x_bin[3]
+        b = SSf.SIPK_SSCTV_functions.sum_mod_2(a, e)
+        g = SSf.SIPK_SSCTV_functions.sum_mod_2(v, e)
+        for i in range(5):
+            table_data.append([a, b, v, g, d, e])
+            e = d
+            d = g
+            v = b
+            if i >= 3:
+                a = b = g = "-"
+            else:
+                a = SIPK.sipk5_V_s_x_bin[4 + i]
+                b = SSf.SIPK_SSCTV_functions.sum_mod_2(a, e)
+                g = SSf.SIPK_SSCTV_functions.sum_mod_2(v, e)
+        table = SSf.Table(
+            table_data,
+            col_labels = [
+                M.Text("а", font_size = fs, color = mc),
+                M.Text("б", font_size = fs, color = mc),
+                M.Text("в", font_size = fs, color = mc),
+                M.Text("г", font_size = fs, color = mc),
+                M.Text("д", font_size = fs, color = mc),
+                M.Text("е", font_size = fs, color = mc)],
+            row_labels = [
+                M.Text(str(i), font_size = fs, color = mc) for i in range(5)],
+            include_outer_lines = True,
+            v_buff = 0.3,
+            h_buff = 0.3,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
             line_config = {"color": mc, "stroke_width": 1})
         scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
