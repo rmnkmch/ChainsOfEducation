@@ -91,8 +91,8 @@ class SSCTV(object):
         # SSCTV.make_tv3(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
-        SSCTV.make_old_tv3(scene)
-        # SSCTV.make_old_tv5(scene)
+        # SSCTV.make_old_tv3(scene)
+        SSCTV.make_old_tv5(scene)
 
     @staticmethod
     def make_tv1(scene: M.Scene):

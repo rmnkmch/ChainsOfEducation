@@ -173,9 +173,9 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        SIPK.make_sipk3(scene)
+        # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        # SIPK.make_sipk5(scene)
+        SIPK.make_sipk5(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2074,6 +2074,76 @@ class SIPK(object):
         return ret_str
 
     @staticmethod
+    def sipk5_bin_str_division(divisible: str, divisor: str):
+        polinom_list_full = []
+        result_list = []
+        divisor_list = SIPK.sipk5_bin_str_to_polinom_list(divisor)
+        sb_divisible = SIPK.sipk5_senior_bit(divisible)
+        sb_divisor = SIPK.sipk5_senior_bit(divisor)
+        max_len = len(SIPK.sipk5_bin_str_to_polinom_list(divisible))
+        offset = 0
+        while sb_divisible >= sb_divisor:
+            polinom_list_full.append([divisible, offset])
+            integer_pow = sb_divisible - sb_divisor
+            result_bin = SSf.SIPK_SSCTV_functions.add_zeros("1", integer_pow)
+            result_list.append(SIPK.sipk5_bin_str_to_polinom_list(result_bin)[0])
+            integer_part = SSf.SIPK_SSCTV_functions.add_zeros(divisor, integer_pow)
+            polinom_list_full.append([integer_part, offset])
+            polinom_list_len = len(SIPK.sipk5_bin_str_to_polinom_list(divisible))
+            polinom_list_len2 = len(
+                SIPK.sipk5_bin_str_to_polinom_list(integer_part))
+            max_len = max(max_len, polinom_list_len + offset,
+                          polinom_list_len2 + offset)
+            divisible = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+                divisible, integer_part)
+            sb_divisible = SIPK.sipk5_senior_bit(divisible)
+            offset += 1
+        polinom_list_len = len(SIPK.sipk5_bin_str_to_polinom_list(divisible))
+        max_len = max(max_len, polinom_list_len + offset) + 1
+        polinom_list_full.append([divisible, max_len - polinom_list_len - 1])
+        max_len_full = max_len
+        if len(result_list) >= len(divisor_list):
+            max_len_full += len(result_list)
+            for j in range(len(result_list) - len(divisor_list)):
+                divisor_list.append(r"")
+        else:
+            max_len_full += len(divisor_list)
+            for j in range(len(divisor_list) - len(result_list)):
+                result_list.append(r"")
+        ret_list = []
+        for i in range(len(polinom_list_full)):
+            row = []
+            polinom_list = SIPK.sipk5_bin_str_to_polinom_list(
+                polinom_list_full[i][0])
+            for j in range(polinom_list_full[i][1]):
+                row.append(r"")
+            for j in range(len(polinom_list)):
+                if j == 0: row.append(polinom_list[j])
+                else: row.append(r"+ " + polinom_list[j])
+            for j in range(max_len - polinom_list_full[i][1] - len(polinom_list)):
+                if j == max_len - polinom_list_full[i][1] - len(polinom_list) - 1:
+                    row.append(r"|")
+                else:
+                    row.append(r"")
+            for j in range(max_len_full - max_len):
+                if j == 0:
+                    if i == 0:
+                        row.append(divisor_list[j])
+                    elif i == 1:
+                        row.append(result_list[j])
+                    else:
+                        row.append(r"")
+                else:
+                    if i == 0 and divisor_list[j] != r"":
+                        row.append(r"+ " + divisor_list[j])
+                    elif i == 1 and result_list[j] != r"":
+                        row.append(r"+ " + result_list[j])
+                    else:
+                        row.append(r"")
+            ret_list.append(row)
+        return ret_list
+
+    @staticmethod
     def sipk5_senior_bit(bin_str: str):
         for i in range(len(bin_str)):
             if bin_str[i] == "1":
@@ -2089,6 +2159,8 @@ class SIPK(object):
     @staticmethod
     def make_sipk5(scene: M.Scene):
         SIPK.sipk5_formula_1(scene)
+        SIPK.sipk5_formula_2(scene)
+        SIPK.sipk5_table_1(scene)
 
     @staticmethod
     def sipk5_formula_1(scene: M.Scene):
@@ -2099,13 +2171,13 @@ class SIPK(object):
         if variant >= 31: variant -= 30
         if variant >= 15: variant -= 14
         if variant >= 15: variant -= 14
-        # variant = 15
         variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 4)
         variant_polinom = SIPK.sipk5_bin_str_to_polinom(variant_bin)
         g_x = 11
         g_x_bin = bin(g_x)[2:]
         g_x_polinom = SIPK.sipk5_bin_str_to_polinom(g_x_bin)
         V_x_bin = SIPK.sipk5_bin_str_multiplication(variant_bin, g_x_bin)
+        V_x_bin = SSf.SIPK_SSCTV_functions.fill_zeros(V_x_bin, 7)
         V_x_polinom = SIPK.sipk5_bin_str_to_polinom(V_x_bin)
         tx = str(variant) + r"_{10} = " + variant_bin + r"_{2},\ U(x) = "
         tx += variant_polinom
@@ -2115,54 +2187,94 @@ class SIPK(object):
         tx2 += r") \cdot (" + g_x_polinom + r") = "
         tx2 += V_x_polinom
         tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
-        table_data = []
-        prepare_data = []
-        divisible = SIPK.sipk4_make_mistake(V_x_bin, 1)
+        divisible = V_x_bin
         divisor = g_x_bin
-        data = [[divisible, 0]]
-        sb_divisible = SIPK.sipk5_senior_bit(divisible)
-        sb_divisor = SIPK.sipk5_senior_bit(divisor)
-        sb_max = sb_divisible
-        max_len = 0
-        while sb_divisible >= sb_divisor:
-            integer_part = SSf.SIPK_SSCTV_functions.add_zeros(
-                divisor, (sb_divisible - sb_divisor))
-            divisible = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
-                divisible, integer_part)
-            data.append([integer_part, sb_max - sb_divisible])
-            sb_divisible = SIPK.sipk5_senior_bit(divisible)
-            sb_divisor = SIPK.sipk5_senior_bit(divisor)
-            if not SIPK.sipk5_is_zero(divisible):
-                data.append([divisible, sb_max - sb_divisible])
-            else:
-                data.append([divisible, max_len - 1])
-            polinom_list_len = len(SIPK.sipk5_bin_str_to_polinom_list(divisible))
-            if (polinom_list_len == 1 and SIPK.sipk5_is_zero(divisible)):
-                pass
-            else:
-                max_len = max(max_len, polinom_list_len + sb_max - sb_divisible)
-        for i in range(len(data)):
-            row = []
-            polinom_list = SIPK.sipk5_bin_str_to_polinom_list(data[i][0])
-            for j in range(data[i][1]):
-                row.append(r"")
-            for j in range(len(polinom_list)):
-                if j == 0: row.append(polinom_list[j])
-                else: row.append(r"+ " + polinom_list[j])
-            for j in range(max_len - data[i][1] - len(polinom_list)):
-                row.append(r"")
-            prepare_data.append(row)
-        table_data = prepare_data
+        txt = M.Text("Число: " + divisible, font_size = 20.0, color = mc)
+        table_data = SIPK.sipk5_bin_str_division(divisible, divisor)
         table = SSf.Table(
             table_data,
             include_outer_lines = True,
             v_buff = 0.2,
-            h_buff = 0.2,
+            h_buff = 0.25,
             element_to_mobject = M.MathTex,
             element_to_mobject_config = {"font_size": 20.0, "color": mc},
-            line_config = {"color": mc, "stroke_width": 1}
-            ).next_to(tex2, M.DOWN, 1.0)
+            line_config = {"color": mc, "stroke_width": 1})
+        divisible = SIPK.sipk4_make_mistake(V_x_bin, 1)
+        txt2 = M.Text("Число: " + divisible, font_size = 20.0, color = mc)
+        table_data2 = SIPK.sipk5_bin_str_division(divisible, divisor)
+        table2 = SSf.Table(
+            table_data2,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        grp = M.VGroup(table, table2).arrange(buff = 1.5).shift(M.DOWN)
+        txt.next_to(table, M.UP)
+        txt2.next_to(table2, M.UP)
+        scene.add(tex, tex2, grp, txt, txt2)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_formula_2(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        variant = SIPK.sipk4_5_in_group_list
+        if variant >= 31: variant -= 30
+        if variant >= 15: variant -= 14
+        if variant >= 15: variant -= 14
+        variant_bin = bin(variant)[2:]
+        variant_bin = SSf.SIPK_SSCTV_functions.add_zeros(variant_bin, 3)
+        variant_polinom = SIPK.sipk5_bin_str_to_polinom(variant_bin)
+        g_x = 11
+        g_x_bin = bin(g_x)[2:]
+        tx = r"x^3 \cdot V(x) = " + variant_polinom
+        tex = M.MathTex(tx, font_size = txs, color = mc
+                        ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        divisible = variant_bin
+        divisor = g_x_bin
+        table_data = SIPK.sipk5_bin_str_division(divisible, divisor)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        remainder_list = []
+        for char in table_data[-1]:
+            if char != r"" and char != r"|":
+                remainder_list.append(char)
+        remainder_polinom = " + ".join(remainder_list)
+        tx2 = r"V_{s}(x) = " + variant_polinom + " + " + remainder_polinom
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc
+                         ).next_to(table, M.DOWN, 1.0)
         scene.add(tex, tex2, table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_table_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        variant = SIPK.sipk4_5_in_group_list
+        if variant >= 31: variant -= 30
+        if variant >= 15: variant -= 14
+        if variant >= 15: variant -= 14
+        variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 4)
+        table_data = []
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 20.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 
