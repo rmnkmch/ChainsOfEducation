@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 10
+    variant = 7
 
     tv1_in_0_1_str = ""
 
@@ -89,10 +89,11 @@ class SSCTV(object):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
+        SSCTV.make_tv4(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
-        SSCTV.make_old_tv5(scene)
+        # SSCTV.make_old_tv5(scene)
 
     @staticmethod
     def make_tv1(scene: M.Scene):
@@ -965,6 +966,66 @@ class SSCTV(object):
             if i % 2 == 1 and i != 0: offset += 1.0
         scene.add(number_plane, graphs)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_tv4(scene: M.Scene):
+        SSCTV.tv4_formula_1(scene)
+
+    @staticmethod
+    def tv4_formula_1(scene: M.Scene):
+        data_N_by_k = {1: 853, 2: 1705, 4: 3409, 8: 6817, 16: 13633, 32: 27265}
+        data_T_C_by_k = {1: 112, 2: 224, 4: 448, 8: 896, 16: 1792, 32: 3584}
+        data_b_C1_by_mod = {4: 2, 16: 4, 64: 6, 256: 8}
+        data = {1: [4, 8, 8, 16, 8, 8, 16],
+                2: [16, 8, 8, 16, 8, 8, 16],
+                3: [64, 8, 8, 16, 8, 8, 16],
+                4: [256, 8, 8, 16, 8, 8, 16],
+                5: [4, 2, 16, 4, 16, 2, 32],
+                6: [16, 2, 16, 4, 16, 2, 32],
+                7: [64, 2, 16, 4, 16, 2, 32],
+                8: [256, 2, 16, 4, 16, 2, 32],
+                9: [4, 32, 32, 16, 32, 32, 16],
+                10: [16, 32, 32, 16, 32, 32, 16],
+                11: [64, 32, 32, 16, 32, 32, 16],
+                12: [256, 32, 32, 16, 32, 32, 16],
+                13: [16, 4, 8, 8, 8, 4, 16],
+                14: [64, 4, 8, 8, 8, 4, 16],
+                15: [256, 4, 8, 8, 8, 4, 16]}
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        variant_data = data[SSCTV.variant]
+        for i in range(3):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            T_C = data_T_C_by_k[variant_data[1 + i * 2]]
+            dT = 1.0 / variant_data[2 + i * 2]
+            dT_str = r"\frac {1}{" + str(variant_data[2 + i * 2]) + r"}"
+            N = data_N_by_k[variant_data[1 + i * 2]]
+            b_C1 = data_b_C1_by_mod[variant_data[0]]
+            b_C = b_C1 * N
+            T_C3 = int(T_C * (1.0 + dT))
+            V = round(b_C / T_C3, 2)
+            tx = r"T_{C3} = T_C \cdot \left(1 + \Delta T_3 \right) = " + str(T_C)
+            tx += r" \cdot \left(1 + " + dT_str + r"\right) = " + str(T_C3)
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+            txt = M.Text("мкс", font_size = tts, color = mc)
+            tx2 = r"b_C = b_{C1} \cdot N = " + str(b_C1) + r" \cdot "
+            tx2 += str(N) + r" = " + str(b_C)
+            tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+            txt2 = M.Text("бит", font_size = tts, color = mc)
+            tx3 = r"V = \frac {b_C}{T_{C3}} = \frac {" + str(b_C) + r"}{"
+            tx3 += str(T_C3) + r"} = " + str(V)
+            tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+            txt3 = M.Text("Мбит/с", font_size = tts, color = mc)
+            tex.shift(M.LEFT * 0.5 * txt.width)
+            txt.next_to(tex)
+            tex2.shift(M.LEFT * 0.5 * txt2.width)
+            txt2.next_to(tex2)
+            tex3.shift(M.LEFT * 0.5 * txt3.width)
+            txt3.next_to(tex3)
+            scene.add(tex, txt, tex2, txt2, tex3, txt3)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def make_old_tv1(scene: M.Scene):
