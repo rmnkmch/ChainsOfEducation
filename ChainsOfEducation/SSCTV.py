@@ -49,7 +49,7 @@ class SSCTV(object):
                         14: ["Жёлтый", "Красный", "Голубой", "Чёрный", "Белый"],
                         15: ["Синий", "Зелёный", "Белый", "Голубой", "Пурпурный"]}
 
-    old_tv_variant = 4
+    old_tv_variant = 3
     old_tv1_YRB = []
     old_tv1_YRBUVCMP = []
     old_tv1_YRBDFKRB = []
@@ -89,11 +89,12 @@ class SSCTV(object):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
-        SSCTV.make_tv4(scene)
+        # SSCTV.make_tv4(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
         # SSCTV.make_old_tv5(scene)
+        SSCTV.make_old_tv6(scene)
 
     @staticmethod
     def make_tv1(scene: M.Scene):
@@ -2215,6 +2216,7 @@ class SSCTV(object):
     @staticmethod
     def make_old_tv5(scene: M.Scene):
         SSCTV.old_tv5_table_1_2_3(scene)
+        SSCTV.old_tv5_formula_1(scene)
 
     @staticmethod
     def old_tv5_table_1_2_3(scene: M.Scene):
@@ -2274,14 +2276,92 @@ class SSCTV(object):
             v_buff = 0.33,
             h_buff = 0.33,
             element_to_mobject_config = {"font_size": fs, "color": mc},
-            line_config = {"color": mc}).next_to(table, M.DOWN, 1.0)
+            line_config = {"color": mc}).next_to(table, M.DOWN, 0.5)
         table3 = SSf.Table(
             table_data3,
             include_outer_lines = True,
             v_buff = 0.4,
             h_buff = 0.2,
             element_to_mobject_config = {"font_size": fs - 2.0, "color": mc},
-            line_config = {"color": mc}).next_to(table2, M.DOWN, 1.0)
-        scene.add(table, table2, table3)
+            line_config = {"color": mc}).next_to(table2, M.DOWN, 0.5)
+        table4 = SSf.Table(
+            [["Вариант", "Кадров в 1-ой группе",
+              "Кадров во 2-ой группе", "В-кадров подряд"],
+             [str(SSCTV.old_tv_variant), str(dat[0]), str(dat[1]), str(dat[2])]],
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.6,
+            element_to_mobject_config = {"font_size": fs + 6.0, "color": mc},
+            line_config = {"color": mc}).next_to(table3, M.DOWN, 0.5)
+        scene.add(table, table2, table3, table4)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def old_tv5_formula_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        mb = 16
+        b = 4
+        res_x = 128
+        res_y = 96
+        mb_num = int(res_x * res_y / mb / mb)
+        b_in_mb = int(mb * mb / b / b)
+        Y_num = b_in_mb * mb_num
+        tx = r"B_M = \frac {" + str(res_x) + r"}{" + str(mb) + r"} \cdot "
+        tx += r"\frac {" + str(res_y) + r"}{" + str(mb) + r"} = "
+        tx += str(mb_num)
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"Y = " + str(mb_num) + r" \cdot " + str(b_in_mb) + r" = "
+        tx2 += str(Y_num)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"C_R = C_B = \frac{" + str(Y_num) + r"}{4} = "
+        tx3 += str(int(Y_num / 4))
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_old_tv6(scene: M.Scene):
+        SSCTV.old_tv6_formula_1(scene)
+
+    @staticmethod
+    def old_tv6_formula_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        data = {1: [32, -3, -6], 2: [24, -12, -16], 3: [22, -22, -28],
+                4: [25, -30, -38], 5: [28, -36, -43], 6: [18, -54, -67],
+                7: [19, -45, -52], 8: [21, -39, -45], 9: [23, -31, -39],
+                10: [26, -17, -23], 11: [15, -24, -33], 12: [16, -25, -29],
+                13: [17, -26, -32], 14: [27, -27, -36], 15: [33, -5, -10]}
+        dat = data[SSCTV.old_tv_variant]
+        tx = r"N_U = 20 \cdot \lg \frac {U}{U_n}"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"K_r = \frac {\sqrt {U_2^2 + U_3^2}}{U_1} \cdot 100 \%"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"N_U = 20 \cdot \lg \frac {U}{U_n} \Rightarrow "
+        tx3 += r"\frac {N_U}{20} = \lg \frac {U}{U_n} \Rightarrow "
+        tx3 += r"10^{\frac {N_U}{20}} = \frac {U}{U_n} \Rightarrow "
+        tx3 += r"U = U_n \cdot 10^{\frac {N_U}{20}}"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        scene.add(tex, tex2, tex3)
+        prev = tex3
+        U_is = []
+        for i in range(3):
+            U_i = round(0.775 * 10 ** (dat[i] / 20.0), 4)
+            U_is.append(U_i)
+            tx = r"U_" + str(i + 1) + r" = 0.775 \cdot 10^{\frac {"
+            tx += str(dat[i]) + r"}{20}} = " + str(U_i)
+            tex = M.MathTex(tx, font_size = txs, color = mc).next_to(prev, M.DOWN)
+            scene.add(tex)
+            prev = tex
+        from math import sqrt
+        K_r = round(sqrt(U_is[1] ** 2 + U_is[2] ** 2) / U_is[0] * 100.0, 4)
+        tx = r"K_r = " + str(K_r)
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(prev, M.DOWN)
+        scene.add(tex)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         

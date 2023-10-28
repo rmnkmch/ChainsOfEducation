@@ -4060,7 +4060,7 @@ Parts: 丶 王
 драгоценность, шарик, бусинка
 Kun: たま、 たま-、 -だま
 On: ギョク"""
-        geo = """Нигерия; Федеративная Республика Нигерия
+        geo1 = """Нигерия; Федеративная Республика Нигерия
 государство в Западной Африке.
 Nigeria; Federal Republic of Nigeria
 Абуджа; Abuja
@@ -4270,6 +4270,7 @@ Croatia; Republic of Croatia
 Загреб; Zagreb
 Хорватский; Croatian
 EUR, Евро; Euro"""
+        geo2 = """"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
