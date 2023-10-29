@@ -211,8 +211,8 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "図 工 教 晴 思 考 知 才 理 算 作 元 食\
-        肉 馬 牛 魚 鳥 羽 鳴 麦 米 茶 色 黄 黒 来 行 帰 歩"
+        kanji = "走 止 活 店 買 売 午 汽 弓 回 会 組 船 明\
+        社 切 電 毎 合 当 台 楽 公 引 科 歌 刀 番 用 何"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -4277,5 +4277,5 @@ EUR, Евро; Euro"""
         TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
         TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
         # TitleBlock.resplit_to_post_examples(native_examples)
-        # TitleBlock.resplit_to_post_geo(geo)
-        # TitleBlock.resplit_to_z_name_geo(geo)
+        # TitleBlock.resplit_to_post_geo(geo1)
+        # TitleBlock.resplit_to_z_name_geo(geo1)
