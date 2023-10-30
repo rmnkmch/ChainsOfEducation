@@ -58,6 +58,9 @@ class SIPK(object):
     sipk4_sindromes = []
 
     sipk5_V_s_x_bin = ""
+    sipk5_mistake_1 = 8
+    sipk5_mistake_2 = 8
+    sipk5_vde = ""
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -2186,6 +2189,9 @@ class SIPK(object):
         SIPK.sipk5_table_1(scene)
         SIPK.sipk5_formula_3(scene)
         SIPK.sipk5_table_2(scene)
+        SIPK.sipk5_formula_4(scene)
+        SIPK.sipk5_table_3(scene)
+        SIPK.sipk5_formula_5(scene)
 
     @staticmethod
     def sipk5_formula_1(scene: M.Scene):
@@ -2336,7 +2342,7 @@ class SIPK(object):
                 M.Text(str(i), font_size = fs, color = mc) for i in range(5)],
             include_outer_lines = True,
             v_buff = 0.3,
-            h_buff = 0.3,
+            h_buff = 0.6,
             element_to_mobject = M.MathTex,
             element_to_mobject_config = {"font_size": 24.0, "color": mc},
             line_config = {"color": mc, "stroke_width": 1})
@@ -2385,6 +2391,7 @@ class SIPK(object):
             d = g
             v = b
             if i >= 3:
+                if i == 3: SIPK.sipk5_vde = v + d + e
                 a = b = g = "-"
             else:
                 a = SIPK.sipk5_V_s_x_bin[4 + i]
@@ -2403,13 +2410,157 @@ class SIPK(object):
                 M.Text(str(i), font_size = fs, color = mc) for i in range(5)],
             include_outer_lines = True,
             v_buff = 0.3,
-            h_buff = 0.3,
+            h_buff = 0.6,
             element_to_mobject = M.MathTex,
             element_to_mobject_config = {"font_size": 24.0, "color": mc},
             line_config = {"color": mc, "stroke_width": 1})
         scene.add(table)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
+    @staticmethod
+    def sipk5_formula_4(scene: M.Scene):
+        g_x = 11
+        g_x_bin = bin(g_x)[2:]
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mistake_1 = random.randint(0, 3)
+        SIPK.sipk5_mistake_1 = mistake_1
+        divisible = SIPK.sipk4_inverse_bit(SIPK.sipk5_V_s_x_bin, mistake_1)
+        table_data = SIPK.sipk5_bin_str_division(divisible, g_x_bin)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        txt = M.Text(divisible, font_size = 20.0, color = mc).next_to(table, M.UP)
+        scene.add(table, txt)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        sipk5_V_s_x_bin = SIPK.sipk5_V_s_x_bin
+        SIPK.sipk5_V_s_x_bin = divisible
+        SIPK.sipk5_table_2(scene)
+        SIPK.sipk5_V_s_x_bin = sipk5_V_s_x_bin
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mistake_2 = random.randint(0, 6)
+        while mistake_2 == mistake_1:
+            mistake_2 = random.randint(0, 6)
+        SIPK.sipk5_mistake_2 = mistake_2
+        divisible = SIPK.sipk4_inverse_bit(SIPK.sipk5_V_s_x_bin, mistake_2)
+        table_data = SIPK.sipk5_bin_str_division(divisible, g_x_bin)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        txt = M.Text(divisible, font_size = 20.0, color = mc).next_to(table, M.UP)
+        scene.add(table, txt)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        divisible = SIPK.sipk4_inverse_bit(SIPK.sipk5_V_s_x_bin, mistake_1)
+        divisible = SIPK.sipk4_inverse_bit(divisible, mistake_2)
+        table_data = SIPK.sipk5_bin_str_division(divisible, g_x_bin)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        txt = M.Text(divisible, font_size = 20.0, color = mc).next_to(table, M.UP)
+        scene.add(table, txt)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_table_3(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        fs = 20.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        V_s_x_bin_1 = SIPK.sipk4_inverse_bit(
+            SIPK.sipk5_V_s_x_bin, SIPK.sipk5_mistake_1)
+        table_data = []
+        e = SIPK.sipk5_vde[2]
+        d = SIPK.sipk5_vde[1]
+        v = SIPK.sipk5_vde[0]
+        j = "0"
+        if e == "1" and d == "0" and v == "1": j = "1"
+        a = j
+        g = SSf.SIPK_SSCTV_functions.sum_mod_2(v, e)
+        b = SSf.SIPK_SSCTV_functions.sum_mod_2(a, e)
+        z = V_s_x_bin_1[0]
+        i = SSf.SIPK_SSCTV_functions.sum_mod_2(j, z)
+        for i_for in range(8):
+            table_data.append([a, b, v, g, d, e, j, z, i])
+            e = d
+            d = g
+            v = b
+            j = "0"
+            if e == "1" and d == "0" and v == "1": j = "1"
+            a = j
+            g = SSf.SIPK_SSCTV_functions.sum_mod_2(v, e)
+            b = SSf.SIPK_SSCTV_functions.sum_mod_2(a, e)
+            if i_for >= 6:
+                z = i = "-"
+            else:
+                z = V_s_x_bin_1[i_for + 1]
+                i = SSf.SIPK_SSCTV_functions.sum_mod_2(j, z)
+        table = SSf.Table(
+            table_data,
+            col_labels = [
+                M.Text("а", font_size = fs, color = mc),
+                M.Text("б", font_size = fs, color = mc),
+                M.Text("в", font_size = fs, color = mc),
+                M.Text("г", font_size = fs, color = mc),
+                M.Text("д", font_size = fs, color = mc),
+                M.Text("е", font_size = fs, color = mc),
+                M.Text("ж", font_size = fs, color = mc),
+                M.Text("з", font_size = fs, color = mc),
+                M.Text("и", font_size = fs, color = mc)],
+            row_labels = [
+                M.Text(str(i), font_size = fs, color = mc) for i in range(8)],
+            include_outer_lines = True,
+            v_buff = 0.3,
+            h_buff = 0.6,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1})
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_formula_5(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SIPK.sipk4_matrix_fs
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = r"G = "
+        tex = M.MathTex(tx, font_size = txs, color = mc)
+        mx = [SIPK.sipk4_str_to_list(SIPK.sipk4_fvh[i]) for i in [4, 2, 1]]
+        SIPK.sipk4_matrix_G = mx
+        m = Matrix(mx, element_to_mobject_config = {"font_size": txs, "color": mc},
+                   bracket_config = {"color": mc}).next_to(tex)
+        g = M.VGroup(tex, m).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"v = u \cdot G"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(g, M.DOWN)
+        tx3 = r"s = e \cdot H^T"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        tx4 = r"G_{k \times n} = \left( P_{k \times (n-k)}\ I_{k} \right)"
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
+        tx5 = r"H_{(n-k) \times k} = \left( I_{n-k}\ P_{k \times (n-k)}^T \right)"
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex4, M.DOWN)
+        tx6 = r"s = v \cdot H^T"
+        tex6 = M.MathTex(tx6, font_size = txs, color = mc).next_to(tex5, M.DOWN)
+        tx7 = r"s = v^{'} \cdot H^T = (v + e) \cdot H^T = "
+        tx7 += r"v \cdot H^T + e \cdot H^T = e \cdot H^T"
+        tex7 = M.MathTex(tx7, font_size = txs, color = mc).next_to(tex6, M.DOWN)
+        tx8 = r"v = v^{'} + e"
+        tex8 = M.MathTex(tx8, font_size = txs, color = mc).next_to(tex7, M.DOWN)
+        scene.add(g, tex2, tex3, tex4, tex5, tex6, tex7, tex8)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 class ProbabilitySymbol(object):
     def __init__(self, symbol: str, probability: str, merged: bool, code: str = ""):

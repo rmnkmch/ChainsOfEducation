@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 181
+        num = 211
         mod3 = 0
         for line in lines:
             if len(line) == 1:
