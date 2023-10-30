@@ -130,7 +130,7 @@ class ChainsOfEducation(M.MovingCameraScene):
         else:
             b.scale_outside(my_scl)
 
-    def wait(self, duration: float = 0.1, **kwargs):
+    def wait(self, duration: float = 0.02, **kwargs):
         super().wait(duration, **kwargs)
 
     def add(self, *mobjects: M.Mobject):
