@@ -2181,6 +2181,80 @@ class SIPK(object):
         return ret_list
 
     @staticmethod
+    def sipk5_bin_1_0_str_division(divisible: str, divisor: str):
+        list_1_0_full = []
+        result_list = []
+        divisor_list = SIPK.sipk4_str_to_list(divisor)
+        sb_divisible = SIPK.sipk5_senior_bit(divisible)
+        sb_divisible_prev = sb_divisible
+        sb_divisor = SIPK.sipk5_senior_bit(divisor)
+        max_len = len(divisible) + 1
+        offset = len(divisible) - sb_divisible - 1
+        while sb_divisible >= sb_divisor:
+            list_1_0_full.append([divisible, 0])
+            integer_pow = sb_divisible - sb_divisor
+            integer_part = SSf.SIPK_SSCTV_functions.add_zeros(divisor, integer_pow)
+            list_1_0_full.append([integer_part, offset])
+            divisible = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+                divisible, integer_part)
+            sb_divisible = SIPK.sipk5_senior_bit(divisible)
+            offset += sb_divisible_prev - sb_divisible
+            result_list.append("1")
+            if sb_divisible >= sb_divisor:
+                for i in range(sb_divisible_prev - sb_divisible - 1):
+                    result_list.append("0")
+            else:
+                for i in range(sb_divisible_prev - 4):
+                    result_list.append("0")
+            sb_divisible_prev = sb_divisible
+        list_1_0_full.append([divisible, 0])
+        max_len_full = max_len
+        max_len_full += len(result_list)
+        for j in range(len(result_list) - len(divisor_list)):
+            divisor_list.append(r"")
+        ret_list = []
+        for i in range(len(list_1_0_full)):
+            row = []
+            bin_list = SIPK.sipk4_str_to_list(list_1_0_full[i][0])
+            for j in range(list_1_0_full[i][1]):
+                row.append(r"")
+            yet_1_wasnt = True
+            curr_j = 0
+            for j in range(len(bin_list)):
+                if bin_list[j] == "0" and yet_1_wasnt:
+                    if i == len(list_1_0_full) - 1 and j >= len(bin_list) - 4:
+                        row.append(r"0")
+                    elif i == 0:
+                        row.append(r"0")
+                    else:
+                        row.append(r"")
+                elif bin_list[j] == "1" and yet_1_wasnt:
+                    yet_1_wasnt = False
+                    row.append(bin_list[j])
+                else:
+                    if i == 0:
+                        row.append(bin_list[j])
+                    elif curr_j <= 3:
+                        curr_j += 1
+                        row.append(bin_list[j])
+                    else:
+                        row.append(r"")
+            for j in range(max_len - list_1_0_full[i][1] - len(bin_list)):
+                if j == max_len - list_1_0_full[i][1] - len(bin_list) - 1:
+                    row.append(r"|")
+                else:
+                    row.append(r"")
+            for j in range(max_len_full - max_len):
+                if i == 0:
+                    row.append(divisor_list[j])
+                elif i == 1:
+                    row.append(result_list[j])
+                else:
+                    row.append(r"")
+            ret_list.append(row)
+        return ret_list
+
+    @staticmethod
     def sipk5_senior_bit(bin_str: str):
         for i in range(len(bin_str)):
             if bin_str[i] == "1":
@@ -2195,15 +2269,16 @@ class SIPK(object):
 
     @staticmethod
     def make_sipk5(scene: M.Scene):
-        SIPK.sipk5_formula_1(scene)
-        SIPK.sipk5_formula_2(scene)
-        SIPK.sipk5_table_1(scene)
-        SIPK.sipk5_formula_3(scene)
-        SIPK.sipk5_table_2(scene)
-        SIPK.sipk5_formula_4(scene)
-        SIPK.sipk5_table_3(scene)
-        SIPK.sipk5_formula_5(scene)
-        SIPK.sipk5_formula_6(scene)
+        # SIPK.sipk5_formula_1(scene)
+        # SIPK.sipk5_formula_2(scene)
+        # SIPK.sipk5_table_1(scene)
+        # SIPK.sipk5_formula_3(scene)
+        # SIPK.sipk5_table_2(scene)
+        # SIPK.sipk5_formula_4(scene)
+        # SIPK.sipk5_table_3(scene)
+        # SIPK.sipk5_formula_5(scene)
+        # SIPK.sipk5_formula_6(scene)
+        SIPK.sipk5_formula_7(scene)
 
     @staticmethod
     def sipk5_formula_1(scene: M.Scene):
@@ -2598,8 +2673,7 @@ class SIPK(object):
                    element_to_mobject_config = {"font_size": txs, "color": mc},
                    bracket_config = {"color": mc})
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        # tex = M.MathTex(tx1, font_size = txs, color = mc)
-        tex = M.Text(tx1, font_size = txs, color = mc)
+        tex = M.MathTex(tx1, font_size = txs, color = mc)
         tx2 = r"\left( \ "
         for ch in word:
             tx2 += ch + r"\ "
@@ -2616,6 +2690,40 @@ class SIPK(object):
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
         scene.add(g)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk5_formula_7(scene: M.Scene):
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        g_x_bin = "10011"
+        phone = random.randint(1, 9) * 1000 + random.randint(1, 9) * 100
+        phone += random.randint(1, 9) * 10 + random.randint(1, 9)
+        phone = 8693
+        print(phone)
+        crc_16_bit = ""
+        for _ in range(4):
+            num = phone % 10
+            crc_16_bit = SSf.SIPK_SSCTV_functions.fill_zeros(
+                bin(num)[2:], 4) + crc_16_bit
+            phone = phone // 10
+        divisor = g_x_bin
+        for i in range(5):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            divisible = SIPK.sipk4_make_mistake(crc_16_bit, i)
+            tex = M.MathTex(divisible, font_size = txs, color = mc
+                        ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+            table_data = SIPK.sipk5_bin_1_0_str_division(divisible, divisor)
+            table = SSf.Table(
+                table_data,
+                include_outer_lines = True,
+                v_buff = 0.16,
+                h_buff = 0.32,
+                element_to_mobject = M.MathTex,
+                element_to_mobject_config = {"font_size": 24.0, "color": mc},
+                line_config = {"color": mc, "stroke_width": 1}
+                ).next_to(tex, M.DOWN)
+            scene.add(tex, table)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 
 class ProbabilitySymbol(object):
