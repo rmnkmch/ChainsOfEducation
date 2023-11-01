@@ -64,7 +64,7 @@ class TitleBlock(manim.RoundedRectangle):
     def resplit_to_z_name_geo(text: str):
         lines = text.split("\n")
         num_line = 0
-        num = 90
+        num = 125
         for line in lines:
             if num_line == 2:
                 num_line = 3
@@ -4270,12 +4270,185 @@ Croatia; Republic of Croatia
 Загреб; Zagreb
 Хорватский; Croatian
 EUR, Евро; Euro"""
-        geo2 = """"""
+        geo2 = """Босния и Герцеговина
+государство в Юго-Восточной Европе, в западной части Балканского полуострова.
+Bosnia and Herzegovina
+Сараево; Sarajevo
+боснийский, сербский, хорватский; Bosnian, Serbian, Croatian
+BAM, Конвертируемая марка; Bosnia and Herzegovina convertible mark
+Коста-Рика; Республика Коста-Рика
+государство в Центральной Америке.
+Costa Rica; Republic of Costa Rica
+Сан-Хосе; San José
+Испанский; Spanish
+CRC, Коста-риканский колон; Costa Rican colón
+Словакия; Словацкая Республика
+государство в Центральной Европе.
+Slovakia; Slovak Republic
+Братислава; Bratislava
+Словацкий; Slovak
+EUR, Евро; Euro
+Доминиканская Республика
+государство в восточной части острова Гаити (Карибское море) и на прибрежных островах.
+Dominican Republic
+Санто-Доминго; Santo Domingo
+Испанский; Spanish
+DOP, Доминиканское песо; Dominican peso
+Эстония; Эстонская Республика
+государство, расположенное в Северной Европе на восточном побережье Балтийского моря.
+Estonia; Republic of Estonia
+Таллин; Tallinn
+Эстонский; Estonian
+EUR, Евро; Euro
+Дания; Королевство Дания
+государство в Северной Европе.
+Denmark; Kingdom of Denmark
+Копенгаген; Copenhagen
+Датский; Danish
+DKK, Датская крона; Danish krone
+Нидерланды, Голландия; Королевство Нидерландов
+государство, состоящее из основной территории в Западной Европе и островов в Карибском море.
+Netherlands, Holland; Kingdom of the Netherlands
+Амстердам; Amsterdam
+Нидерландский (голландский); Dutch
+EUR, Евро; Euro
+Швейцария; Швейцарская Конфедерация
+государство в Западной Европе.
+Switzerland; Swiss Confederation
+Берн; Bern
+Немецкий, Итальянский, Французский; German, Italian, French
+CHF, Швейцарский франк; Swiss franc
+Бутан; Королевство Бутан
+государство в Южной Азии.
+Bhutan; Kingdom of Bhutan
+Тхимпху; Thimphu
+Дзонг-кэ; Dzongkha
+BTN, Нгултрум; Bhutanese ngultrum
+Гвинея-Бисау; Республика Гвинея-Бисау
+государство в Западной Африке.
+Guinea-Bissau; Republic of Guinea-Bissau
+Бисау; Bissau
+Португальский; Portuguese
+XOF, Западноафриканский франк КФА; West African CFA franc
+Молдавия; Республика Молдова
+государство в Юго-Восточной Европе.
+Moldova; Republic of Moldova
+Кишинёв; Kishinev
+Румынский; Romanian
+MDL, Молдавский лей; Moldovan leu
+Бельгия; Королевство Бельгия
+государство, находящееся на северо-западе Европы.
+Belgium; Kingdom of Belgium
+Брюссель; City of Brussels
+Нидерландский (голландский), Немецкий, Французский; Dutch, German, French
+EUR, Евро; Euro
+Лесото; Королевство Лесото
+государство-анклав в Южной Африке.
+Lesotho; Kingdom of Lesotho
+Масеру; Maseru
+Сесото, английский; Sotho, English
+ZAR, LSL, Южноафриканский рэнд, Лоти Лесото; South African rand, Lesotho loti
+Армения; Республика Армения
+государство в Закавказье, расположено на севере Передней Азии.
+Armenia; Republic of Armenia
+Ереван; Yerevan
+Армянский; Armenian
+AMD, Армянский драм; Armenian dram
+Албания; Республика Албания
+государство в западной части Балканского полуострова.
+Albania; Republic of Albania
+Тирана; Tirana
+Албанский; Albanian
+ALL, Албанский лек; Albanian lek
+Соломоновы Острова
+государство в юго-западной части Тихого океана.
+Solomon Islands
+Хониара; Honiara
+Английский; English
+SBD, Доллар Соломоновых Островов; Solomon Islands dollar
+Экваториальная Гвинея; Республика Экваториальная Гвинея
+государство в Центральной Африке.
+Equatorial Guinea; Republic of Equatorial Guinea
+Малабо; Malabo
+Испанский, Португальский, Французский; Spanish, Portuguese, French
+XAF, Центральноафриканский франк КФА; Central African CFA franc
+Бурунди; Республика Бурунди
+государство в Восточной Африке.
+Burundi; Republic of Burundi
+Гитега; Gitega
+Рунди, Французский, Английский; Kirundi, French, English
+BIF, Бурундийский франк; Burundian franc
+Гаити; Республика Гаити
+государство в западной части одноимённого острова и на ряде прибрежных островов.
+Haiti; Republic of Haiti
+Порт-о-Пренс; Port-au-Prince
+Гаитянский креольский, Французский; Haitian Creole, French
+HTG, Гаитянский гурд; Haitian gourde
+Руанда; Республика Руанда
+государство в Восточной Африке.
+Rwanda; Republic of Rwanda
+Кигали; Kigali
+Руанда, Английский, Французский, Суахили; Kinyarwanda, English, French, Swahili
+RWF, Франк Руанды; Rwandan franc
+Северная Македония; Республика Северная Македония
+государство на юго-востоке Европы, на Балканском полуострове.
+North Macedonia; Republic of North Macedonia
+Скопье; Skopje
+Македонский, Албанский; Macedonian, Albanian
+MKD, Македонский денар; Macedonian denar
+Джибути; Республика Джибути
+государство в Восточной Африке.
+Djibouti; Republic of Djibouti
+Джибути; Djibouti City
+арабский, Французский; Arabic, French
+DJF, Франк Джибути; Djiboutian franc
+Белиз
+государство в Центральной Америке.
+Belize
+Бельмопан; Belmopan
+Английский; English
+BZD, Белизский доллар; Belize dollar
+Израиль; Государство Израиль
+государство на Ближнем Востоке.
+Israel; State of Israel
+Иерусалим; Jerusalem
+Иврит; Hebrew
+ILS, Новый израильский шекель; Israeli new shekel
+Сальвадор; Республика Эль-Сальвадор
+государство в Центральной Америке.
+El Salvador; Republic of El Salvador
+Сан-Сальвадор; San Salvador
+Испанский; Spanish
+USD, BTC, Доллар США, Биткойн; United States dollar, Bitcoin
+Словения; Республика Словения
+государство в Южной Европе.
+Slovenia; Republic of Slovenia
+Любляна; Ljubljana
+Словенский; Slovenian
+EUR, Евро; Euro
+Фиджи; Республика Фиджи
+государство в Океании на востоке Меланезии.
+Fiji; Republic of Fiji
+Сува; Suva
+Английский, Хиндустани; English, Hindustani
+FJD, Доллар Фиджи; Fijian dollar
+Кувейт; Государство Кувейт
+государство в юго-западной Азии.
+Kuwait; State of Kuwait
+Эль-Кувейт; Kuwait City
+арабский; Arabic
+KWD, Кувейтский динар; Kuwaiti dinar
+Эсватини; Королевство Эсватини
+государство в Южной Африке.
+Eswatini; Kingdom of Eswatini
+Мбабане; Mbabane
+Английский; English
+SZL, Лилангени; Swazi lilangeni"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
+        # TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
+        # TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
         # TitleBlock.resplit_to_post_examples(native_examples)
-        # TitleBlock.resplit_to_post_geo(geo1)
-        # TitleBlock.resplit_to_z_name_geo(geo1)
+        TitleBlock.resplit_to_post_geo(geo2)
+        TitleBlock.resplit_to_z_name_geo(geo2)
