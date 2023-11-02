@@ -182,7 +182,6 @@ class SIPK(object):
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         SIPK.make_sipk5(scene)
-        SIPK.make_sipk6(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2725,44 +2724,6 @@ class SIPK(object):
                 ).next_to(tex, M.DOWN)
             scene.add(tex, table)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
-
-    @staticmethod
-    def make_sipk6(scene: M.Scene):
-        SIPK.sipk6_formula_1(scene)
-
-    @staticmethod
-    def sipk6_formula_1(scene: M.Scene):
-        data_mod_by_var = {1: 256, 2: 256, 3: 256, 4: 256,
-                           5: 64, 6: 64, 7: 64, 8: 64,
-                           9: 16, 10: 16, 11: 16, 12: 16,
-                           13: 4, 14: 4, 15: 4}
-        data_R_num_by_var = {1: 5, 2: 4, 3: 3, 4: 2, 5: 6, 6: 1, 7: 5, 8: 4,
-                             9: 3, 10: 2, 11: 6, 12: 1, 13: 3, 14: 2, 15: 6}
-        data_R_float_by_R_num = {1: 1.0/2.0, 2: 2.0/3.0, 3: 3.0/4.0,
-                                 4: 4.0/5.0, 5: 5.0/6.0, 6: 3.0/5.0}
-        data_R_str_by_R_num = {1: r"\frac{1}{2}", 2: r"\frac{2}{3}",
-                               3: r"\frac{3}{4}", 4: r"\frac{4}{5}",
-                               5: r"\frac{5}{6}", 6: r"\frac{3}{5}"}
-        data_PP_by_var = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8,
-                          9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 6, 15: 7}
-        data_chanel_by_var = {1: 33, 2: 24, 3: 34, 4: 44, 5: 54, 6: 64,
-                              7: 25, 8: 35, 9: 45, 10: 55, 11: 65,
-                              12: 26, 13: 36, 14: 46, 15: 56}
-        data_N_kff_by_var = {1: 3, 2: 4, 3: 3, 4: 2, 5: 4, 6: 3, 7: 2, 8: 4,
-                             9: 3, 10: 2, 11: 4, 12: 3, 13: 2, 14: 4, 15: 3}
-        data_b_s_by_mod = {4: 2, 16: 4, 64: 6, 256: 8}
-        tts = SSf.SIPK_SSCTV_functions.formula_text_size
-        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
-        mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant_data = data[SSCTV.variant]
-        SSf.SIPK_SSCTV_functions.make_background(scene)
-        variant = SIPK.sipk4_5_6_in_group_list
-        if variant >= 31: variant -= 30
-        if variant >= 16: variant -= 15
-        tx = r"H = "
-        tex = M.MathTex(tx, font_size = txs, color = mc)
-        scene.add(tex)
-        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 
 class ProbabilitySymbol(object):

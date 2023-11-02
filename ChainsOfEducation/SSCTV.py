@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 14
+    variant = 7
 
     tv1_in_0_1_str = ""
 
@@ -89,7 +89,8 @@ class SSCTV(object):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
-        SSCTV.make_tv4(scene)
+        # SSCTV.make_tv4(scene)
+        SSCTV.make_tv5(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -1027,6 +1028,90 @@ class SSCTV(object):
             txt3.next_to(tex3)
             scene.add(tex, txt, tex2, txt2, tex3, txt3)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_tv5(scene: M.Scene):
+        SSCTV.tv5_formula_1(scene)
+
+    @staticmethod
+    def tv5_formula_1(scene: M.Scene):
+        data_mod_by_var = {1: 256, 2: 256, 3: 256, 4: 256,
+                           5: 64, 6: 64, 7: 64, 8: 64,
+                           9: 16, 10: 16, 11: 16, 12: 16,
+                           13: 4, 14: 4, 15: 4}
+        data_R_num_by_var = {1: 5, 2: 4, 3: 3, 4: 2, 5: 6, 6: 1, 7: 5, 8: 4,
+                             9: 3, 10: 2, 11: 6, 12: 1, 13: 3, 14: 2, 15: 6}
+        data_R_float_by_R_num = {1: 1.0/2.0, 2: 2.0/3.0, 3: 3.0/4.0,
+                                 4: 4.0/5.0, 5: 5.0/6.0, 6: 3.0/5.0}
+        data_R_str_by_R_num = {1: r"\frac{1}{2}", 2: r"\frac{2}{3}",
+                               3: r"\frac{3}{4}", 4: r"\frac{4}{5}",
+                               5: r"\frac{5}{6}", 6: r"\frac{3}{5}"}
+        data_PP_by_var = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8,
+                          9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 6, 15: 7}
+        data_chanel_by_var = {1: 33, 2: 24, 3: 34, 4: 44, 5: 54, 6: 64,
+                              7: 25, 8: 35, 9: 45, 10: 55, 11: 65,
+                              12: 26, 13: 36, 14: 46, 15: 56}
+        data_N_kff_by_var = {1: 3, 2: 4, 3: 3, 4: 2, 5: 4, 6: 3, 7: 2, 8: 4,
+                             9: 3, 10: 2, 11: 4, 12: 3, 13: 2, 14: 4, 15: 3}
+        data_C_N_Gauss_by_mod_R_num  = {
+            4: {1: 1.0, 6: 2.2, 2: 3.1, 3: 4.1, 4: 4.7, 5: 5.2},
+            16: {1: 6.2, 6: 7.6, 2: 8.9, 3: 10.0, 4: 10.8, 5: 11.3},
+            64: {1: 10.5, 6: 12.3, 2: 13.6, 3: 15.1, 4: 16.1, 5: 16.7},
+            256: {1: 14.4, 6: 16.7, 2: 18.1, 3: 20.0, 4: 21.3, 5: 22.0}}
+        data_DELTA_Rice_by_mod_R_num = {
+            4: {1: 0.2, 6: 0.2, 2: 0.3, 3: 0.3, 4: 0.3, 5: 0.4},
+            16: {1: 0.2, 6:  0.2, 2:  0.2, 3: 0.4, 4: 0.4, 5: 0.4},
+            64: {1: 0.3, 6: 0.3, 2: 0.3, 3: 0.3, 4: 0.5, 5: 0.4},
+            256: {1: 0.4, 6: 0.2, 2: 0.3, 3: 0.3, 4: 0.4, 5: 0.4}}
+        data_ABC_by_PP = {1: [0.1, 0.4, 2.0],
+                          2: [0.1, 0.4, 2.0],
+                          3: [0.1, 0.5, 1.5],
+                          4: [0.1, 0.5, 1.5],
+                          5: [0.1, 0.5, 1.0],
+                          6: [0.1, 0.5, 1.0],
+                          7: [0.1, 0.3, 1.0],
+                          8: [0.1, 0.4, 1.0]}
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        mod = data_mod_by_var[SSCTV.variant]
+        R_num = data_R_num_by_var[SSCTV.variant]
+        R_float = data_R_float_by_R_num[R_num]
+        R_str = data_R_str_by_R_num[R_num]
+        PP = data_PP_by_var[SSCTV.variant]
+        chanel = data_chanel_by_var[SSCTV.variant]
+        N_kff = data_N_kff_by_var[SSCTV.variant]
+        f_c = 474 + (chanel - 21) * 8
+        C_N_Gauss = data_C_N_Gauss_by_mod_R_num[mod][R_num]
+        DELTA_Rice = data_DELTA_Rice_by_mod_R_num[mod][R_num]
+        ABC = data_ABC_by_PP[PP]
+        C_N_Rice_no_D = C_N_Gauss + DELTA_Rice + ABC[0] + ABC[1] + ABC[2]
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txt = M.Text("дБ", font_size = tts, color = mc)
+        tx = r"f_c = 474 + (N_c - 21) \cdot 8 = 474 + (" + str(chanel)
+        tx += r" - 21) \cdot 8 = " + str(f_c)
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"{\frac {C}{N}}_{Rice} = {\frac {C}{N}}_{Gauss} + DELTA_{Rice}"
+        tx2 += r" + A + B + C + D"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"{\frac {C}{N}}_{Gauss} = " + str(C_N_Gauss)
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc)
+        tx4 = r",\ DELTA_{Rice} = " + str(DELTA_Rice)
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc)
+        tx5 = r"A = " + str(ABC[0])
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc)
+        tx6 = r"B = " + str(ABC[1])
+        tex6 = M.MathTex(tx6, font_size = txs, color = mc)
+        tx7 = r"C = " + str(ABC[2])
+        tex7 = M.MathTex(tx7, font_size = txs, color = mc)
+        tx8 = r"{\frac {C}{N}}_{'Rice} = {\frac {C}{N}}_{Gauss} + DELTA_{Rice}"
+        tx8 += r" + A + B + C = " + str(C_N_Gauss) + r" + " + str(DELTA_Rice)
+        tx8 += r" + " + str(ABC[0]) + r" + " + str(ABC[1]) + r" + " + str(ABC[2])
+        tx8 += r" = " + str(C_N_Rice_no_D)
+        tex8 = M.MathTex(tx8, font_size = txs, color = mc)
+        scene.add(tex, tex2, tex3, tex4, tex5, tex6, tex7, tex8)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def make_old_tv1(scene: M.Scene):
