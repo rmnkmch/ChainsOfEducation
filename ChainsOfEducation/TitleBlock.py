@@ -4447,8 +4447,8 @@ SZL, Лилангени; Swazi lilangeni"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        # TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
-        # TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
         # TitleBlock.resplit_to_post_examples(native_examples)
-        TitleBlock.resplit_to_post_geo(geo2)
-        TitleBlock.resplit_to_z_name_geo(geo2)
+        # TitleBlock.resplit_to_post_geo(geo2)
+        # TitleBlock.resplit_to_z_name_geo(geo2)

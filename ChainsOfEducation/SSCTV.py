@@ -24,6 +24,9 @@ class SSCTV(object):
     tv2_data222 = [0.0028125, 0.01133, 0.03289, 0.0636325, 0.096845]
     tv2_data333 = [0.000260425, 0.00444, 0.0280025, 0.06069, 0.0979025]
 
+    tv5_C_N_Rice = 0.0
+    tv5_f_c = 0
+
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
                       "Синий": [0, 0, 1, "#0000FF"],
                       "Красный": [1, 0, 0, "#FF0000"],
@@ -1032,9 +1035,11 @@ class SSCTV(object):
     @staticmethod
     def make_tv5(scene: M.Scene):
         SSCTV.tv5_formula_1(scene)
+        SSCTV.tv5_formula_2(scene)
 
     @staticmethod
     def tv5_formula_1(scene: M.Scene):
+        from math import floor
         data_mod_by_var = {1: 256, 2: 256, 3: 256, 4: 256,
                            5: 64, 6: 64, 7: 64, 8: 64,
                            9: 16, 10: 16, 11: 16, 12: 16,
@@ -1051,8 +1056,6 @@ class SSCTV(object):
         data_chanel_by_var = {1: 33, 2: 24, 3: 34, 4: 44, 5: 54, 6: 64,
                               7: 25, 8: 35, 9: 45, 10: 55, 11: 65,
                               12: 26, 13: 36, 14: 46, 15: 56}
-        data_N_kff_by_var = {1: 3, 2: 4, 3: 3, 4: 2, 5: 4, 6: 3, 7: 2, 8: 4,
-                             9: 3, 10: 2, 11: 4, 12: 3, 13: 2, 14: 4, 15: 3}
         data_C_N_Gauss_by_mod_R_num  = {
             4: {1: 1.0, 6: 2.2, 2: 3.1, 3: 4.1, 4: 4.7, 5: 5.2},
             16: {1: 6.2, 6: 7.6, 2: 8.9, 3: 10.0, 4: 10.8, 5: 11.3},
@@ -1071,46 +1074,105 @@ class SSCTV(object):
                           6: [0.1, 0.5, 1.0],
                           7: [0.1, 0.3, 1.0],
                           8: [0.1, 0.4, 1.0]}
+        data_D_by_C_N_Rice_no_D = {
+            15: 0.07, 16: 0.09, 17: 0.11, 18: 0.14, 19: 0.18,
+            20: 0.22, 21: 0.28, 22: 0.36, 23: 0.46, 24: 0.58,
+            25: 0.75, 26: 0.97, 27: 1.26, 28: 1.65, 29: 2.20,
+            30: 3.02, 31: 4.33, 32: 6.87}
         tts = SSf.SIPK_SSCTV_functions.formula_text_size
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         mod = data_mod_by_var[SSCTV.variant]
         R_num = data_R_num_by_var[SSCTV.variant]
-        R_float = data_R_float_by_R_num[R_num]
-        R_str = data_R_str_by_R_num[R_num]
         PP = data_PP_by_var[SSCTV.variant]
         chanel = data_chanel_by_var[SSCTV.variant]
-        N_kff = data_N_kff_by_var[SSCTV.variant]
         f_c = 474 + (chanel - 21) * 8
+        SSCTV.tv5_f_c = f_c
         C_N_Gauss = data_C_N_Gauss_by_mod_R_num[mod][R_num]
         DELTA_Rice = data_DELTA_Rice_by_mod_R_num[mod][R_num]
         ABC = data_ABC_by_PP[PP]
-        C_N_Rice_no_D = C_N_Gauss + DELTA_Rice + ABC[0] + ABC[1] + ABC[2]
+        C_N_Rice_no_D = round(C_N_Gauss + DELTA_Rice + ABC[0] + ABC[1] + ABC[2], 5)
+        D = 0.0
+        if C_N_Rice_no_D >= 15.0:
+            if C_N_Rice_no_D >= 32.0:
+                D = data_D_by_C_N_Rice_no_D[32]
+            else:
+                D = data_D_by_C_N_Rice_no_D[floor(C_N_Rice_no_D)]
+                C_N_more = C_N_Rice_no_D - floor(C_N_Rice_no_D)
+                D_prop = data_D_by_C_N_Rice_no_D[floor(C_N_Rice_no_D) + 1]
+                D_prop -= data_D_by_C_N_Rice_no_D[floor(C_N_Rice_no_D)]
+                D += D_prop * C_N_more
+                D = round(D, 5)
+        C_N_Rice = round(C_N_Rice_no_D + D, 5)
+        SSCTV.tv5_C_N_Rice = C_N_Rice
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        txt = M.Text("дБ", font_size = tts, color = mc)
+        txt0 = M.Text("дБ", font_size = tts, color = mc)
         tx = r"f_c = 474 + (N_c - 21) \cdot 8 = 474 + (" + str(chanel)
         tx += r" - 21) \cdot 8 = " + str(f_c)
-        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+        tex = M.MathTex(tx, font_size = txs, color = mc)
+        txt = M.Text("МГц", font_size = tts, color = mc)
+        gr = M.VGroup(tex, txt).arrange().next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
         tx2 = r"{\frac {C}{N}}_{Rice} = {\frac {C}{N}}_{Gauss} + DELTA_{Rice}"
         tx2 += r" + A + B + C + D"
-        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc)
+        gr2 = M.VGroup(tex2, txt0.copy()).arrange().next_to(gr, M.DOWN)
         tx3 = r"{\frac {C}{N}}_{Gauss} = " + str(C_N_Gauss)
         tex3 = M.MathTex(tx3, font_size = txs, color = mc)
-        tx4 = r",\ DELTA_{Rice} = " + str(DELTA_Rice)
+        gr3 = M.VGroup(tex3, txt0.copy()).arrange().next_to(gr2, M.DOWN)
+        tx4 = r"DELTA_{Rice} = " + str(DELTA_Rice)
         tex4 = M.MathTex(tx4, font_size = txs, color = mc)
+        gr4 = M.VGroup(tex4, txt0.copy()).arrange().next_to(gr3, M.DOWN)
         tx5 = r"A = " + str(ABC[0])
         tex5 = M.MathTex(tx5, font_size = txs, color = mc)
-        tx6 = r"B = " + str(ABC[1])
+        tx6 = r",\ B = " + str(ABC[1])
         tex6 = M.MathTex(tx6, font_size = txs, color = mc)
-        tx7 = r"C = " + str(ABC[2])
+        tx7 = r",\ C = " + str(ABC[2])
         tex7 = M.MathTex(tx7, font_size = txs, color = mc)
+        gr5 = M.VGroup(M.VGroup(tex5, txt0.copy()).arrange(),
+                       M.VGroup(tex6, txt0.copy()).arrange(),
+                       M.VGroup(tex7, txt0.copy()).arrange()
+                       ).arrange(buff = 0.1).next_to(gr4, M.DOWN)
         tx8 = r"{\frac {C}{N}}_{'Rice} = {\frac {C}{N}}_{Gauss} + DELTA_{Rice}"
-        tx8 += r" + A + B + C = " + str(C_N_Gauss) + r" + " + str(DELTA_Rice)
-        tx8 += r" + " + str(ABC[0]) + r" + " + str(ABC[1]) + r" + " + str(ABC[2])
-        tx8 += r" = " + str(C_N_Rice_no_D)
-        tex8 = M.MathTex(tx8, font_size = txs, color = mc)
-        scene.add(tex, tex2, tex3, tex4, tex5, tex6, tex7, tex8)
+        tx8 += r" + A + B + C = "
+        tex8 = M.MathTex(tx8, font_size = txs, color = mc).next_to(gr5, M.DOWN)
+        tx9 = r" = " + str(C_N_Gauss) + r" + " + str(DELTA_Rice)
+        tx9 += r" + " + str(ABC[0]) + r" + " + str(ABC[1]) + r" + " + str(ABC[2])
+        tx9 += r" = " + str(C_N_Rice_no_D)
+        tex9 = M.MathTex(tx9, font_size = txs, color = mc)
+        gr6 = M.VGroup(tex9, txt0.copy()).arrange().next_to(tex8, M.DOWN)
+        tx10 = r"D = " + str(D)
+        tex10 = M.MathTex(tx10, font_size = txs, color = mc)
+        gr7 = M.VGroup(tex10, txt0.copy()).arrange().next_to(gr6, M.DOWN)
+        tx11 = r"{\frac {C}{N}}_{Rice} = " + str(C_N_Rice_no_D) + r" + "
+        tx11 += str(D) + r" = " + str(C_N_Rice)
+        tex11 = M.MathTex(tx11, font_size = txs, color = mc)
+        gr8 = M.VGroup(tex11, txt0.copy()).arrange().next_to(gr7, M.DOWN)
+        scene.add(gr, gr2, gr3, gr4, gr5, tex8, gr6, gr7, gr8)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def tv5_formula_2(scene: M.Scene):
+        from math import log10
+        data_N_kff_by_var = {
+            1: 3, 2: 4, 3: 3, 4: 2, 5: 4, 6: 3, 7: 2, 8: 4,
+            9: 3, 10: 2, 11: 4, 12: 3, 13: 2, 14: 4, 15: 3}
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        F = data_N_kff_by_var[SSCTV.variant]
+        k = 1.38 * 10 ** (-23)
+        T_0 = 290.0
+        B = 7.61 * 10 ** 6
+        P_n = F + 10.0 * log10(k * T_0 * B)
+        P_smin = SSCTV.tv5_C_N_Rice + P_n
+        # SSCTV.tv5_f_c
+        # SSf.SIPK_SSCTV_functions.make_background(scene)
+        # txt0 = M.Text("дБ", font_size = tts, color = mc)
+        # tx = r"f_c = 474 + (N_c - 21) \cdot 8 = 474 + (" + str(chanel)
+        # tx += r" - 21) \cdot 8 = " + str(f_c)
+        # tex = M.MathTex(tx, font_size = txs, color = mc)
+        # scene.add(gr, gr2, gr3, gr4, gr5, tex8, gr6, gr7, gr8)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
