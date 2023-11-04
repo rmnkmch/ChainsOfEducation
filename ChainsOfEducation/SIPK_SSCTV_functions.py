@@ -125,6 +125,19 @@ class SIPK_SSCTV_functions(object):
         return s
 
     @staticmethod
+    def float_to_exp10(n: float):
+        s = "{:e}".format(n)
+        power = ""
+        ch = s[-1]
+        i = -1
+        while ch != "e" and i > -20:
+            power = ch + power
+            i -= 1
+            ch = s[i]
+        s = s[:4] + r" \cdot 10^{" + power + r"}"
+        return s
+
+    @staticmethod
     def sigmoid(x: float):
         from math import exp
         return 1.0 / (1.0 + exp(- x))
