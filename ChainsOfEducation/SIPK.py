@@ -2269,20 +2269,22 @@ class SIPK(object):
 
     @staticmethod
     def make_sipk5(scene: M.Scene):
-        SIPK.sipk5_formula_1(scene)
-        SIPK.sipk5_formula_2(scene)
-        SIPK.sipk5_table_1(scene)
-        SIPK.sipk5_formula_3(scene)
-        SIPK.sipk5_table_2(scene)
-        SIPK.sipk5_formula_4(scene)
-        SIPK.sipk5_table_3(scene)
-        SIPK.sipk5_formula_5(scene)
-        SIPK.sipk5_formula_6(scene)
-        SIPK.sipk5_formula_7(scene)
+        # SIPK.sipk5_formula_1(scene)
+        # SIPK.sipk5_formula_2(scene)
+        # SIPK.sipk5_table_1(scene)
+        # SIPK.sipk5_formula_3(scene)
+        # SIPK.sipk5_table_2(scene)
+        # SIPK.sipk5_formula_4(scene)
+        # SIPK.sipk5_table_3(scene)
+        # SIPK.sipk5_formula_5(scene)
+        # SIPK.sipk5_formula_6(scene)
+        # SIPK.sipk5_formula_7(scene)
         # SIPK.sipk_lr3_formula_1(scene)
         # SIPK.sipk_lr3_table_1(scene)
         # SIPK.sipk_lr3_graphs_1(scene)
         # SIPK.sipk_lr3_legend(scene)
+        SIPK.sipk_lr4_graphs_1(scene)
+        SIPK.sipk_lr4_legend(scene)
 
     @staticmethod
     def sipk5_formula_1(scene: M.Scene):
@@ -3073,6 +3075,185 @@ class SIPK(object):
                   txt1, txt2, txt3)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
+    @staticmethod
+    def sipk_lr4_graphs_1(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        number_plane = M.NumberPlane(
+            x_range = (0, 10, 1),
+            y_range = (-7, 0, 1),
+            x_length = 12.5,
+            y_length = 6.5,
+            color = mc,
+            axis_config = {
+                "include_numbers": True,
+                "font_size": 24.0,
+                "stroke_width": 4,
+                "include_ticks": False,
+                "include_tip": True,
+                "line_to_number_buff": 0.13,
+                "label_direction": M.DOWN,
+                "color": mc},
+            y_axis_config = {
+                "label_direction": M.LEFT,
+                "scaling": M.LogBase(custom_labels = True)},
+            background_line_style = {
+                "stroke_color": mc,
+                "stroke_width": 1,
+                "stroke_opacity": 0.5},
+            tips = True)
+        number_plane.get_axes().set_color(mc)
+        data1 = """1
+2
+3
+4
+5
+6
+7
+8
+9"""
+        data2 = """5.63e-2
+3.75e-2
+2.28e-2
+1.25e-2
+5.95e-3
+2.39e-3
+7.74e-4
+1.92e-4
+3.42e-5"""
+        data3 = """2.77e-1
+1.9e-1
+1.01e-1
+3.69e-2
+7.9e-3
+8.39e-4
+5.01e-5"""
+        data4 = """1e-4"""
+        data5 = """3.8e-2
+8.8e-3
+9.7e-4
+4.3e-5
+5.8e-7"""
+        x_range = []
+        ber2 = []
+        ber3 = []
+        ber4 = []
+        ber5 = []
+        for i in data1.split():
+            x_range.append(float(i))
+        for i in data2.split():
+            ber2.append(float(i))
+        for i in data3.split():
+            ber3.append(float(i))
+        for i in data4.split():
+            ber4.append(float(i))
+        for i in data5.split():
+            ber5.append(float(i))
+        line_graph1 = number_plane.plot_line_graph(
+            x_values = x_range,
+            y_values = ber2,
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph2 = number_plane.plot_line_graph(
+            x_values = x_range[:-2],
+            y_values = ber3,
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#00AA72",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph3 = number_plane.plot_line_graph(
+            x_values = x_range[3:6],
+            y_values = ber4,
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#FFC500",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph4 = number_plane.plot_line_graph(
+            x_values = x_range[3:8],
+            y_values = ber5,
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#1F55E0",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        y_label = M.MathTex("BER", font_size = 24.0, color = mc
+                            ).next_to(number_plane, M.UL)
+        y_label.shift(M.RIGHT * 0.7 + M.DOWN * 0.1)
+        x_label = M.MathTex(r"\frac {E_b}{N_0},", font_size = 24.0, color = mc
+                            ).next_to(number_plane, M.DR)
+        x_label.shift(M.LEFT * 0.35 + M.UP * 0.4)
+        x_label2 = M.Text("дБ", font_size = 18.0, color = mc
+                          ).next_to(x_label, buff = 0.1)
+        scene.add(number_plane, line_graph1, line_graph2,# line_graph3,
+                  line_graph4, y_label, x_label, x_label2)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk_lr4_legend(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tts = 22.0
+        number_plane = M.NumberPlane(
+            x_range = (0, 12, 1),
+            y_range = (0, 10, 1),
+            x_length = 13.0,
+            y_length = 7.0,
+            color = mc,
+            axis_config = {
+                "stroke_width": 0,
+                "color": mc},
+            background_line_style = {
+                "stroke_width": 0},
+            tips = False)
+        line_graph1 = number_plane.plot_line_graph(
+            x_values = [1, 2],
+            y_values = [1, 1],
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph2 = number_plane.plot_line_graph(
+            x_values = [1, 2],
+            y_values = [2, 2],
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#00AA72",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        # line_graph3 = number_plane.plot_line_graph(
+        #     x_values = [1, 2],
+        #     y_values = [3, 3],
+        #     line_color = mc,
+        #     vertex_dot_style = dict(stroke_width = 4, fill_color = "#FFC500",
+        #                             stroke_color = mc),
+        #     stroke_width = 4)
+        line_graph4 = number_plane.plot_line_graph(
+            x_values = [1, 2],
+            y_values = [3, 3],
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#1F55E0",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        line_graph0 = number_plane.plot_line_graph(
+            x_values = [0.5, 0.5, 5.0, 5.0, 0.5],
+            y_values = [0, 4, 4, 0, 0],
+            line_color = mc,
+            vertex_dot_radius = 0.0,
+            vertex_dot_style = dict(stroke_width = 0),
+            stroke_width = 4)
+        txt1 = M.Text("BERкан.ср.", font_size = tts, color = mc).next_to(
+            number_plane.c2p(2.0, 1.0, 0.0))
+        txt2 = M.Text("BERдекод.ср.", font_size = tts, color = mc).next_to(
+            number_plane.c2p(2.0, 2.0, 0.0))
+        # txt3 = M.Text("BERдекод.спр.", font_size = tts, color = mc).next_to(
+        #     number_plane.c2p(2.0, 3.0, 0.0))
+        txt4 = M.Text("BERдекод.макс.", font_size = tts, color = mc).next_to(
+            number_plane.c2p(2.0, 3.0, 0.0))
+        scene.add(number_plane, line_graph1, line_graph2,# line_graph3,
+                  line_graph4, line_graph0, txt1, txt2,
+                  #txt3,
+                  txt4)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
 class ProbabilitySymbol(object):
     def __init__(self, symbol: str, probability: str, merged: bool, code: str = ""):
