@@ -6,16 +6,7 @@ import enum
 class SIPK_SSCTV_functions(object):
     """SIPK_SSCTV_functions"""
 
-    data_saved = r'''
-    my_sipk1
-    my_sipk2
-    никто
-    u0.17 w0.04 x0.18 f0.03 p0.11 r0.14 t0.28 q0.05
-    rrrxrwtrtftqxxxpxturr
-    turuuuxxttxuutxxutrru
-    ppfpqfwfqfrwwqqpwrffw
-    pkg load communications
-    '''
+    data_saved = r"""pkg load communications"""
 
     table_font_size = 24.0
     formula_tex_size = 40.0

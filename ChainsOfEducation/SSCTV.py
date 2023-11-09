@@ -94,11 +94,11 @@ class SSCTV(object):
 
     @staticmethod
     def make_tv(scene: M.Scene):
-        # SSCTV.make_tv1(scene)
+        SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
         # SSCTV.make_tv4(scene)
-        SSCTV.make_tv5(scene)
+        # SSCTV.make_tv5(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -1014,7 +1014,7 @@ class SSCTV(object):
             b_C1 = data_b_C1_by_mod[variant_data[0]]
             b_C = b_C1 * N
             T_C3 = int(T_C * (1.0 + dT))
-            V = round(b_C / T_C3, 2)
+            V = round(b_C / T_C3, 3)
             tx = r"T_{C3} = T_C \cdot \left(1 + \Delta T_3 \right) = " + str(T_C)
             tx += r" \cdot \left(1 + " + dT_str + r"\right) = " + str(T_C3)
             tex = M.MathTex(tx, font_size = txs, color = mc).next_to(

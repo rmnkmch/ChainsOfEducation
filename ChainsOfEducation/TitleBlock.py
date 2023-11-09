@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 211
+        num = 241
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -211,8 +211,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "走 止 活 店 買 売 午 汽 弓 回 会 組 船 明\
-        社 切 電 毎 合 当 台 楽 公 引 科 歌 刀 番 用 何"
+        kanji = "丁 世 両 主 乗 予 事 仕 他 代 住 使 係 倍 全 具 写 列 助 勉 動 勝 化 区 医 去 反 取 受 号"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -400,10 +399,276 @@ class TitleBlock(manim.RoundedRectangle):
 7
  綿糸 	 めんし 
 хлопчатобумажная пряжа"""
+        native_kun_on_2191_2220 = """"""
+        native_kun_on_2161_2190 = """"""
+        native_kun_on_2131_2160 = """"""
+        native_kun_on_2101_2130 = """"""
+        native_kun_on_2071_2100 = """"""
+        native_kun_on_2041_2070 = """"""
+        native_kun_on_2011_2040 = """"""
+        native_kun_on_1981_2010 = """"""
+        native_kun_on_1951_1980 = """"""
+        native_kun_on_1921_1950 = """"""
+        native_kun_on_1891_1920 = """"""
+        native_kun_on_1861_1890 = """"""
+        native_kun_on_1831_1860 = """"""
+        native_kun_on_1801_1830 = """"""
+        native_kun_on_1771_1800 = """"""
+        native_kun_on_1741_1770 = """"""
+        native_kun_on_1711_1740 = """"""
+        native_kun_on_1681_1710 = """"""
+        native_kun_on_1651_1680 = """"""
+        native_kun_on_1621_1650 = """"""
+        native_kun_on_1591_1620 = """"""
+        native_kun_on_1561_1590 = """"""
+        native_kun_on_1531_1560 = """"""
+        native_kun_on_1501_1530 = """"""
+        native_kun_on_1471_1500 = """"""
+        native_kun_on_1441_1470 = """"""
+        native_kun_on_1411_1440 = """"""
+        native_kun_on_1381_1410 = """"""
+        native_kun_on_1351_1380 = """"""
+        native_kun_on_1321_1350 = """"""
+        native_kun_on_1291_1320 = """"""
+        native_kun_on_1261_1290 = """"""
+        native_kun_on_1231_1260 = """"""
+        native_kun_on_1201_1230 = """"""
+        native_kun_on_1171_1200 = """"""
+        native_kun_on_1141_1170 = """"""
+        native_kun_on_1111_1140 = """"""
+        native_kun_on_1081_1110 = """"""
+        native_kun_on_1051_1080 = """"""
+        native_kun_on_1021_1050 = """"""
+        native_kun_on_991_1020 = """"""
+        native_kun_on_961_990 = """"""
+        native_kun_on_931_960 = """"""
+        native_kun_on_901_930 = """"""
+        native_kun_on_871_900 = """"""
+        native_kun_on_841_870 = """"""
+        native_kun_on_811_840 = """"""
         native_kun_on_781_810 = """"""
         native_kun_on_751_780 = """"""
         native_kun_on_721_750 = """"""
-        native_kun_on_691_720 = """"""
+        native_kun_on_691_720 = """序
+7 strokes
+Radical: house on cliff 广
+Parts: 一 亅 マ 子 广
+предисловие, начало, порядок, приоритет, случай, случайность, кстати
+Kun: つい.で、 ついで
+On: ジョ
+弁
+5 strokes
+Radical: two hands, twenty 廾
+Parts: 厶 廾
+Variants: 辨 辧 瓣 辯 辮
+клапан, лепесток, коса, речь, диалект, дискриминация, утилизация, различать
+Kun: かんむり、 わきま.える、 わ.ける、 はなびら、 あらそ.う
+On: ベン、 ヘン
+張
+11 strokes
+Radical: bow 弓
+Parts: 弓 長
+счетчик для луков и струнных инструментов, растяжка, раскладывание, поставленная (палатка)
+Kun: は.る、 -は.り、 -ば.り
+On: チョウ
+往
+8 strokes
+Radical: step 彳
+Parts: 丶 彳 王
+Variants: 徃
+путешествие, путешествовать, прогонять, отпустить, идти, раньше, раньше
+Kun: い.く、 いにしえ、 さき.に、 ゆ.く
+On: オウ
+復
+12 strokes
+Radical: step 彳
+Parts: 一 ノ 人 夂 彳 日 乞
+восстановить, вернуться, возобновить
+Kun: また
+On: フク
+徳
+14 strokes
+Radical: step 彳
+Parts: 十 彳 心 買
+Variants: 悳 德
+этика, нравственность, добродетель
+On: トク
+志
+7 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 士 心
+намерение, план, разрешать, стремиться, мотив, надежды, шиллинг
+Kun: シリング、 こころざ.す、 こころざし
+On: シ
+応
+7 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 广 心
+Variants: 應
+отвчать, да, реагирование
+Kun: あた.る、 まさに、 こた.える
+On: オウ、 ヨウ、 -ノウ
+快
+7 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 二 人 ユ 大 忙
+веселый, приятный, приятный, удобный
+Kun: こころよ.い
+On: カイ
+性
+8 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 忙 生
+пол, природа
+Kun: さが
+On: セイ、 ショウ
+恩
+10 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 囗 大 心
+Variants:
+благодать, доброта, благосклонность, милосердие, благословение, выгода
+On: オン
+情
+11 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 二 亠 土 忙 月 青
+чувства, эмоции, страсть, симпатия, обстоятельства, факты
+Kun: なさ.け
+On: ジョウ、 セイ
+態
+14 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 匕 厶 心 月
+отношение, состояние, фигура, внешний вид
+Kun: わざ.と
+On: タイ
+慣
+14 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: ハ 忙 毋 目 母 貝
+Variants:
+привык, привыкай, становись опытным
+Kun: な.れる、 な.らす
+On: カン
+承
+8 strokes
+Radical: hand 手 (扌龵)
+Parts: ノ 亅 二 手
+Variants:
+уступать, слышать, слушать, быть в курсе, получать
+Kun: うけたまわ.る、 う.ける
+On: ショウ、 ジョウ
+技
+7 strokes
+Radical: hand 手 (扌龵)
+Parts: 十 又 扎 支
+Variants:
+умение, искусство, ремесло, способности, подвиг, перформанс, призвание
+Kun: わざ
+On: ギ
+招
+8 strokes
+Radical: hand 手 (扌龵)
+Parts: 刀 口 扎
+манить, приглашать, вызывать, заниматься
+Kun: まね.く
+On: ショウ
+授
+11 strokes
+Radical: hand 手 (扌龵)
+Parts: 冖 又 扎 爪
+давать
+Kun: さず.ける、 さず.かる
+On: ジュ
+採
+11 strokes
+Radical: hand 手 (扌龵)
+Parts: 扎 木 爪
+Variants:
+брать
+Kun: と.る
+On: サイ
+接
+11 strokes
+Radical: hand 手 (扌龵)
+Parts: 女 扎 立
+Variants: 擑
+прикосновение, контакт, примыкание, кусок воедино
+Kun: つ.ぐ
+On: セツ、 ショウ
+提
+12 strokes
+Radical: hand 手 (扌龵)
+Parts: 扎 日 疋
+предлагать, брать с собой, носить с собой в руки
+Kun: さ.げる
+On: テイ、 チョウ、 ダイ
+損
+13 strokes
+Radical: hand 手 (扌龵)
+Parts: ハ 口 扎 目 貝
+повреждение, потеря, невыгодность, ранить, повредить
+Kun: そこ.なう、 そこな.う、 -そこ.なう、 そこ.ねる、 -そこ.ねる
+On: ソン
+支
+4 strokes
+Radical: branch 支
+Parts: 十 又 支
+ветвь, поддержка, сустейн
+Kun: ささ.える、 つか.える、 か.う
+On: シ
+政
+9 strokes
+Radical: rap 攴 (攵)
+Parts: 一 止 乞 攵
+политика, правительство
+Kun: まつりごと、 まん
+On: セイ、 ショウ
+故
+9 strokes
+Radical: rap 攴 (攵)
+Parts: 十 口 乞 攵
+случайность, особенно намеренно, разум, причина, обстоятельства, поздняя, поэтому, следовательно
+Kun: ゆえ、 ふる.い、 もと
+On: コ
+敵
+15 strokes
+Radical: rap 攴 (攵)
+Parts: 亠 并 冂 十 口 立 滴 乞 攵
+враг, противник
+Kun: かたき、 あだ、 かな.う
+On: テキ
+断
+11 strokes
+Radical: axe 斤
+Parts: 一 ｜ 斤 米
+Variants: 斷
+выходное пособие, отказываться, отказывать, извиняться, предостерегать, увольнять, запрещать, решение, судебное решение, сокращение
+Kun: た.つ、 ことわ.る、 さだ.める
+On: ダン
+旧
+5 strokes
+Radical: sun, day 日
+Parts: ｜ 日
+Variants: 舊
+старые времена, старые вещи, старый друг, бывший
+Kun: ふる.い、 もと
+On: キュウ
+易
+8 strokes
+Radical: sun, day 日
+Parts: ノ 勹 日 勿
+Легко, готово, просто, гадания
+Kun: やさ.しい、 やす.い
+On: エキ、 イ
+暴
+15 strokes
+Radical: sun, day 日
+Parts: 一 ｜ 二 ハ 日 水 井
+вспышка, рейв, лад, сила, насилие, жестокость, возмущение
+Kun: あば.く、 あば.れる
+On: ボウ、 バク"""
         native_kun_on_661_690 = """効
 8 strokes
 Radical: power, force 力
@@ -5304,8 +5569,8 @@ SZL, Лилангени; Swazi lilangeni"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_211_240)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_211_240)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_241_270)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_241_270)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
