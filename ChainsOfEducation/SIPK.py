@@ -181,7 +181,8 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        SIPK.make_sipk5(scene)
+        # SIPK.make_sipk5(scene)
+        SIPK.make_sipk6(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2269,20 +2270,20 @@ class SIPK(object):
 
     @staticmethod
     def make_sipk5(scene: M.Scene):
-        # SIPK.sipk5_formula_1(scene)
-        # SIPK.sipk5_formula_2(scene)
-        # SIPK.sipk5_table_1(scene)
-        # SIPK.sipk5_formula_3(scene)
-        # SIPK.sipk5_table_2(scene)
-        # SIPK.sipk5_formula_4(scene)
-        # SIPK.sipk5_table_3(scene)
-        # SIPK.sipk5_formula_5(scene)
-        # SIPK.sipk5_formula_6(scene)
-        # SIPK.sipk5_formula_7(scene)
-        SIPK.sipk_lr3_formula_1(scene)
-        SIPK.sipk_lr3_table_1(scene)
-        SIPK.sipk_lr3_graphs_1(scene)
-        SIPK.sipk_lr3_legend(scene)
+        SIPK.sipk5_formula_1(scene)
+        SIPK.sipk5_formula_2(scene)
+        SIPK.sipk5_table_1(scene)
+        SIPK.sipk5_formula_3(scene)
+        SIPK.sipk5_table_2(scene)
+        SIPK.sipk5_formula_4(scene)
+        SIPK.sipk5_table_3(scene)
+        SIPK.sipk5_formula_5(scene)
+        SIPK.sipk5_formula_6(scene)
+        SIPK.sipk5_formula_7(scene)
+        # SIPK.sipk_lr3_formula_1(scene)
+        # SIPK.sipk_lr3_table_1(scene)
+        # SIPK.sipk_lr3_graphs_1(scene)
+        # SIPK.sipk_lr3_legend(scene)
         # SIPK.sipk_lr4_graphs_1(scene)
         # SIPK.sipk_lr4_legend(scene)
 
@@ -2743,6 +2744,92 @@ class SIPK(object):
                 ).next_to(tex, M.DOWN)
             scene.add(tex, table)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_sipk6(scene: M.Scene):
+        SIPK.sipk6_formula_1(scene)
+        SIPK.sipk6_formula_2(scene)
+
+    @staticmethod
+    def sipk6_formula_1(scene: M.Scene):
+        data_abc_by_var = {
+            1: [1, 3, 6], 2: [2, 2, 5], 3: [3, 5, 4],
+            4: [4, 6, 3], 5: [5, 4, 2], 6: [6, 5, 2],
+            7: [5, 2, 3], 8: [4, 3, 4], 9: [3, 4, 5],
+            10: [2, 6, 6], 11: [6, 6, 4], 12: [5, 2, 3],
+            13: [4, 3, 2], 14: [3, 4, 5], 15: [2, 5, 3],
+            16: [2, 6, 6], 17: [3, 5, 2], 18: [4, 4, 4],
+            19: [5, 3, 5], 20: [6, 2, 6], 21: [5, 5, 3],
+            22: [4, 4, 5], 23: [3, 2, 2], 24: [2, 3, 6],
+            25: [6, 6, 4], 26: [5, 2, 5], 27: [4, 5, 2],
+            28: [3, 3, 4], 29: [2, 6, 6], 30: [1, 4, 3]}
+        data_ab_by_var = {
+            1: [10, 9], 2: [11, 8], 3: [12, 7],
+            4: [13, 6], 5: [14, 5], 6: [5, 14],
+            7: [6, 13], 8: [7, 12], 9: [8, 11],
+            10: [9, 10], 11: [5, 13], 12: [6, 13],
+            13: [7, 11], 14: [8, 10], 15: [9, 9],
+            16: [10, 8], 17: [11, 7], 18: [12, 6],
+            19: [13, 5], 20: [14, 14], 21: [14, 7],
+            22: [13, 8], 23: [12, 9], 24: [11, 10],
+            25: [10, 6], 26: [9, 7], 27: [8, 14],
+            28: [7, 11], 29: [6, 12], 30: [5, 13]}
+        data_mistake_by_var = {
+            1: [13, 2], 2: [12, 3], 3: [11, 4],
+            4: [10, 5], 5: [9, 6], 6: [8, 7],
+            7: [7, 9], 8: [6, 10], 9: [5, 11],
+            10: [4, 12], 11: [13, 6], 12: [12, 7],
+            13: [11, 8], 14: [10, 9], 15: [9, 11],
+            16: [8, 12], 17: [7, 13], 18: [6, 14],
+            19: [5, 12], 20: [4, 13], 21: [13, 8],
+            22: [12, 6], 23: [11, 4], 24: [10, 2],
+            25: [9, 3], 26: [8, 5], 27: [7, 9],
+            28: [6, 11], 29: [5, 13], 30: [4, 7]}
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        variant = SIPK.sipk4_5_6_in_group_list
+        if variant > 30: variant -= 30
+        for i in range(2, 7, 1):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            prev = SSf.SIPK_SSCTV_functions.upper_side
+            for j in range(7):
+                number = i ** j
+                tx = str(i) + r"^{" + str(j) + r"} = " + str(number)
+                tx += r",\ " + str(number) + r" \bmod 7 = " + str(number % 7)
+                tex = M.MathTex(tx, font_size = txs, color = mc
+                                ).next_to(prev, M.DOWN)
+                scene.add(tex)
+                prev = tex
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_formula_2(scene: M.Scene):
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tx = r"g(x) = x^8 + x^7 + x^6 + x^4 + 1"
+        tex = M.MathTex(tx, font_size = txs, color = mc
+                        ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"NVar = NSp + (NGr - 1) \cdot 30"
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = r"1 + {\sigma}_1 x + {\sigma}_2 x^2 = 0"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        mx = Matrix(
+            [["S_1", "S_2"], ["S_2", "S_3"]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc})
+        mx2 = Matrix(
+            [[r"{\sigma}_2"], [r"{\sigma}_1"]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc})
+        mx3 = Matrix(
+            [[r"S_3"], [r"S_4"]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc})
+        tex4 = M.MathTex(r" = ", font_size = txs, color = mc)
+        gr = M.VGroup(mx, mx2, tex4, mx3).arrange().next_to(tex3, M.DOWN)
+        scene.add(tex, tex2, tex3, gr)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def sipk_lr3_formula_1(scene: M.Scene):
