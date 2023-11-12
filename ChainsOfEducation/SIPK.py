@@ -64,6 +64,10 @@ class SIPK(object):
     sipk5_Hr = []
 
     sipk6_log_p_16 = []
+    sipk6_V_s_x_bin = ""
+    sipk6_sindroms = []
+    sipk6_sindroms_int_p1 = []
+    sipk6_sigmas = []
 
 
     @staticmethod
@@ -2094,6 +2098,8 @@ class SIPK(object):
                     ret_list.append(1)
             elif lch == 5:
                 ret_list.append(int(splited[i][3]))
+            elif lch == 6:
+                ret_list.append(int(splited[i][3:5]))
         ret_bin = ""
         for i in range(ret_list[0] + 1):
             if i in ret_list:
@@ -2763,6 +2769,30 @@ class SIPK(object):
         return -1
 
     @staticmethod
+    def sipk6_get_p1_by_p(p: int, data_log_p: list):
+        for i in range(len(data_log_p)):
+            if data_log_p[i][1] == p:
+                return data_log_p[i][2]
+        return -1
+
+    @staticmethod
+    def sipk6_polinom_to_log(polinom: str):
+        ret_list = []
+        splited = polinom.split(r" + ")
+        for i in range(len(splited)):
+            lch = len(splited[i])
+            if lch == 1:
+                if splited[i] == "1":
+                    ret_list.append(0)
+                elif splited[i] == "x":
+                    ret_list.append(1)
+            elif lch == 5:
+                ret_list.append(int(splited[i][3]))
+            elif lch == 6:
+                ret_list.append(int(splited[i][3:5]))
+        return ret_list
+
+    @staticmethod
     def make_sipk6(scene: M.Scene):
         SIPK.sipk6_formula_1(scene)
         SIPK.sipk6_formula_2(scene)
@@ -2771,20 +2801,11 @@ class SIPK(object):
         SIPK.sipk6_table_3(scene)
         SIPK.sipk6_formula_3(scene)
         SIPK.sipk6_formula_4(scene)
+        SIPK.sipk6_formula_5(scene)
+        SIPK.sipk6_formulas_9(scene)
 
     @staticmethod
     def sipk6_formula_1(scene: M.Scene):
-        data_mistake_by_var = {
-            1: [13, 2], 2: [12, 3], 3: [11, 4],
-            4: [10, 5], 5: [9, 6], 6: [8, 7],
-            7: [7, 9], 8: [6, 10], 9: [5, 11],
-            10: [4, 12], 11: [13, 6], 12: [12, 7],
-            13: [11, 8], 14: [10, 9], 15: [9, 11],
-            16: [8, 12], 17: [7, 13], 18: [6, 14],
-            19: [5, 12], 20: [4, 13], 21: [13, 8],
-            22: [12, 6], 23: [11, 4], 24: [10, 2],
-            25: [9, 3], 26: [8, 5], 27: [7, 9],
-            28: [6, 11], 29: [5, 13], 30: [4, 7]}
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         variant = SIPK.sipk4_5_6_in_group_list
@@ -2969,6 +2990,7 @@ class SIPK(object):
                 bin_V = SIPK.sipk4_inverse_bit(bin_V, 3)
         for i in range(14):
             table_data[2 + i].append(table_data[15 - i][3])
+            SIPK.sipk6_log_p_16[1 + i].append(int(table_data[15 - i][3]))
         table = SSf.Table(
             table_data,
             col_labels = [M.MathTex(str(i), font_size = txs_label, color = mc)
@@ -2977,6 +2999,22 @@ class SIPK(object):
             include_outer_lines = True,
             v_buff = 0.2,
             h_buff = 0.6,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1}).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        table_data2 = []
+        for i in range(15):
+            table_data2.append([table_data[1 + i][0], table_data[1 + i][2]])
+        table_data2 = SSf.SIPK_SSCTV_functions.transpose_list(table_data2)
+        table = SSf.Table(
+            table_data2,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
             element_to_mobject = M.MathTex,
             element_to_mobject_config = {"font_size": txs, "color": mc},
             line_config = {"color": mc, "stroke_width": 1}).next_to(
@@ -3059,10 +3097,11 @@ class SIPK(object):
                 matrx.append(p_bin)
                 eql = SSf.SIPK_SSCTV_functions.sum_mod_2_full(eql, p_bin)
                 matrx.append(eql)
-                for j in pows:
-                    tx += r"{\alpha}^{" + str(((i + i_0 * 2 + 1) * j) % 15)
-                    tx += r"} + "
-                tx += r" 1 = "
+                if not (i == 0 and i_0 == 0):
+                    for j in pows:
+                        tx += r"{\alpha}^{" + str(((i + i_0 * 2 + 1) * j) % 15)
+                        tx += r"} + "
+                    tx += r" 1 = "
                 tex = M.MathTex(tx, font_size = txs, color = mc)
                 m = Matrix(matrx,
                            element_to_mobject_config = {
@@ -3078,6 +3117,364 @@ class SIPK(object):
                 prev = gr
                 scene.add(gr, tex_eq, tex_op)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_formula_5(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        variant = SIPK.sipk4_5_6_in_group_list + 30 * 0
+        if variant > 127: variant -= 127
+        variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 7)
+        tx = str(variant) + r"_{10} = " + variant_bin + r"_2,\ u(x) = "
+        tx += SIPK.sipk5_bin_str_to_polinom(variant_bin)
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        variant_bin = SSf.SIPK_SSCTV_functions.add_zeros(variant_bin, 8)
+        variant_polinom = SIPK.sipk5_bin_str_to_polinom(variant_bin)
+        g_x_bin = r"111010001"
+        tx2 = r"x^8 \cdot u(x) = " + variant_polinom
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        divisible = variant_bin
+        divisor = g_x_bin
+        table_data = SIPK.sipk5_bin_str_division(divisible, divisor)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1}
+            ).next_to(tex2, M.DOWN, 0.4)
+        remainder_list = []
+        for char in table_data[-1]:
+            if char != r"" and char != r"|":
+                remainder_list.append(char)
+        remainder_polinom = "".join(remainder_list)
+        V_s_x_polinom = variant_polinom + " + " + remainder_polinom
+        tx3 = r"v(x) = " + V_s_x_polinom
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc
+                         ).next_to(table, M.DOWN, 0.4)
+        scene.add(tex, tex2, table, tex3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        V_s_x_bin = SIPK.sipk5_polinom_to_bin_str(V_s_x_polinom)
+        SIPK.sipk6_V_s_x_bin = SSf.SIPK_SSCTV_functions.fill_zeros(V_s_x_bin, 14)
+        table_data = SIPK.sipk5_bin_str_division(V_s_x_bin, divisor)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.25,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": 24.0, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1}).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_formula_6(scene: M.Scene, V_s_x_bin: str):
+        txs = 36.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        pows = SIPK.sipk6_polinom_to_log(
+            SIPK.sipk5_bin_str_to_polinom(V_s_x_bin))
+        SIPK.sipk6_sindroms = []
+        for i_0 in range(2):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            prev = SSf.SIPK_SSCTV_functions.upper_side + M.UP * 0.3
+            for i in range(2):
+                matrx = []
+                eql = r"0000"
+                str_i = str(i + i_0 * 2 + 1)
+                tx = r"S_" + str_i + r" = r({\alpha}^" + str_i + r") = "
+                for j in pows:
+                    tx += r"{\alpha}^{" + str((i + i_0 * 2 + 1) * j) + r"}"
+                    if j != pows[-1]:
+                        tx += r" + "
+                    else:
+                        tx += r" = "
+                    p = SIPK.sipk6_get_p_by_log(
+                        ((i + i_0 * 2 + 1) * j) % 15, SIPK.sipk6_log_p_16)
+                    p_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(p)[2:], 4)
+                    matrx.append(p_bin)
+                    eql = SSf.SIPK_SSCTV_functions.sum_mod_2_full(eql, p_bin)
+                if not (i == 0 and i_0 == 0):
+                    tx += r"\\ = "
+                    for j in pows:
+                        tx += r"{\alpha}^{" + str(((i + i_0 * 2 + 1) * j) % 15)
+                        tx += r"}"
+                        if j != pows[-1]:
+                            tx += r" + "
+                        else:
+                            tx += r" = "
+                matrx.append(eql)
+                SIPK.sipk6_sindroms.append(eql)
+                tex = M.MathTex(tx, font_size = txs, color = mc)
+                m = Matrix(matrx,
+                           element_to_mobject_config = {
+                               "font_size": txs, "color": mc},
+                           v_buff = 0.4, h_buff = 0.3)
+                gr = M.VGroup(tex, m).arrange(buff = 0.8).next_to(prev, M.DOWN, 0.3)
+                tex_eq = M.MathTex(r"=", font_size = txs, color = mc
+                                   ).next_to(m, M.DL, - 0.3)
+                tex_eq.shift(M.UP * 0.22)
+                tex_op = M.MathTex(r"\bigoplus", font_size = 20.0, color = mc
+                                   ).next_to(m, M.LEFT, - 0.3)
+                tex_op.shift(M.UP * 0.2)
+                prev = gr
+                scene.add(gr, tex_eq, tex_op)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_formula_7(scene: M.Scene, text: str):
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tex = M.MathTex(text, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(tex)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_formula_8(scene: M.Scene):
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        int_sindroms = []
+        tx = r""
+        for i in range(len(SIPK.sipk6_sindroms)):
+            int_sindrom = int(SIPK.sipk6_sindroms[i], base = 2)
+            int_sindroms.append(int_sindrom)
+            tx += r"S_" + str(1 + i) + r" = " + str(int_sindrom)
+            if i != len(SIPK.sipk6_sindroms) - 1:
+                tx += r",\ "
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        mx = Matrix(
+            [[str(int_sindroms[0]), str(int_sindroms[1])],
+             [str(int_sindroms[1]), str(int_sindroms[2])]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc})
+        mx2 = Matrix(
+            [[r"{\sigma}_2"], [r"{\sigma}_1"]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc})
+        mx3 = Matrix(
+            [[str(int_sindroms[2])], [str(int_sindroms[3])]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc})
+        tex2 = M.MathTex(r" = ", font_size = txs, color = mc)
+        gr = M.VGroup(mx, mx2, tex2, mx3).arrange().next_to(tex, M.DOWN)
+        tex3 = M.MathTex(r"\Delta = ", font_size = txs, color = mc)
+        mx4 = Matrix(
+            [[str(int_sindroms[0]), str(int_sindroms[1])],
+             [str(int_sindroms[1]), str(int_sindroms[2])]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc},
+            left_bracket = r"|", right_bracket = r"|")
+        tx4 = r" = " + str(int_sindroms[0]) + r" \cdot " + str(int_sindroms[2])
+        tx4 += r" + " + str(int_sindroms[1]) + r" \cdot " + str(int_sindroms[1])
+        log_1 = SIPK.sipk6_get_log_by_p(int_sindroms[0], SIPK.sipk6_log_p_16)
+        log_2 = SIPK.sipk6_get_log_by_p(int_sindroms[1], SIPK.sipk6_log_p_16)
+        log_3 = SIPK.sipk6_get_log_by_p(int_sindroms[2], SIPK.sipk6_log_p_16)
+        mult_1 = SIPK.sipk6_get_p_by_log((log_1 + log_3) % 15, SIPK.sipk6_log_p_16)
+        mult_2 = SIPK.sipk6_get_p_by_log((log_2 + log_2) % 15, SIPK.sipk6_log_p_16)
+        summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+            bin(mult_1)[2:], bin(mult_2)[2:])
+        p = int(summ, base = 2)
+        p1 = SIPK.sipk6_get_p1_by_p(p, SIPK.sipk6_log_p_16)
+        tx4 += r" = " + str(mult_1) + r" + " + str(mult_2) + r" = "
+        tx4 += str(p)
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc)
+        gr2 = M.VGroup(tex3, mx4, tex4).arrange().next_to(gr, M.DOWN)
+        scene.add(tex, gr, gr2)
+        if p != 0:
+            tx5 = r"{\Delta}^{-1} = " + str(p1)
+            tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(gr2, M.DOWN)
+            scene.add(tex5)
+            SIPK.sipk6_sindroms_int_p1 = [*int_sindroms, p1]
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_formulas_9(scene: M.Scene):
+        data_mistake_by_var = {
+            1: [13, 2], 2: [12, 3], 3: [11, 4],
+            4: [10, 5], 5: [9, 6], 6: [8, 7],
+            7: [7, 9], 8: [6, 10], 9: [5, 11],
+            10: [4, 12], 11: [13, 6], 12: [12, 7],
+            13: [11, 8], 14: [10, 9], 15: [9, 11],
+            16: [8, 12], 17: [7, 13], 18: [6, 14],
+            19: [5, 12], 20: [4, 13], 21: [13, 8],
+            22: [12, 6], 23: [11, 4], 24: [10, 2],
+            25: [9, 3], 26: [8, 5], 27: [7, 9],
+            28: [6, 11], 29: [5, 13], 30: [4, 7]}
+        SIPK.sipk6_formula_6(scene, SIPK.sipk6_V_s_x_bin)
+        mistake_num = 1
+        if mistake_num == -1:
+            mistake_num = random.randint(0, 11)
+        mistake = SIPK.sipk4_inverse_bit("0" * 15, mistake_num)
+        V_s_x_bin_mistake = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+            SIPK.sipk6_V_s_x_bin, mistake)
+        t1 = r"e(x) = " + SIPK.sipk5_bin_str_to_polinom(mistake)
+        SIPK.sipk6_formula_7(scene, t1)
+        t2 = r"r(x) = " + SIPK.sipk5_bin_str_to_polinom(V_s_x_bin_mistake)
+        SIPK.sipk6_formula_7(scene, t2)
+        SIPK.sipk6_formula_6(scene, V_s_x_bin_mistake)
+        SIPK.sipk6_formula_8(scene)
+        variant = SIPK.sipk4_5_6_in_group_list
+        if variant > 30: variant -= 30
+        mistake2_nums = data_mistake_by_var[variant]
+        mistake2_nums = [14 - mistake2_nums[0], 14 - mistake2_nums[1]]
+        mistake2 = SIPK.sipk4_inverse_bit("0" * 15, mistake2_nums[0])
+        mistake2 = SIPK.sipk4_inverse_bit(mistake2, mistake2_nums[1])
+        V_s_x_bin_mistake2 = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+            SIPK.sipk6_V_s_x_bin, mistake2)
+        t3 = r"e(x) = " + SIPK.sipk5_bin_str_to_polinom(mistake2)
+        SIPK.sipk6_formula_7(scene, t3)
+        t4 = r"r(x) = " + SIPK.sipk5_bin_str_to_polinom(V_s_x_bin_mistake2)
+        SIPK.sipk6_formula_7(scene, t4)
+        SIPK.sipk6_formula_6(scene, V_s_x_bin_mistake2)
+        SIPK.sipk6_formula_8(scene)
+        SIPK.sipk6_formula_10(scene)
+        SIPK.sipk6_table_4(scene)
+        mistake3_nums = data_mistake_by_var[variant]
+        mistake3rd = 6
+        if mistake3rd == -1:
+            mistake3rd = random.randint(0, 14)
+            while mistake3rd == mistake3_nums[0] or mistake3rd == mistake3_nums[1]:
+                mistake3rd = random.randint(0, 14)
+        mistake3_nums = [14 - mistake3_nums[0],
+                         14 - mistake3_nums[1],
+                         14 - mistake3rd]
+        mistake3 = SIPK.sipk4_inverse_bit("0" * 15, mistake3_nums[0])
+        mistake3 = SIPK.sipk4_inverse_bit(mistake3, mistake3_nums[1])
+        mistake3 = SIPK.sipk4_inverse_bit(mistake3, mistake3_nums[2])
+        V_s_x_bin_mistake3 = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+            SIPK.sipk6_V_s_x_bin, mistake3)
+        t3 = r"e(x) = " + SIPK.sipk5_bin_str_to_polinom(mistake3)
+        SIPK.sipk6_formula_7(scene, t3)
+        t4 = r"r(x) = " + SIPK.sipk5_bin_str_to_polinom(V_s_x_bin_mistake3)
+        SIPK.sipk6_formula_7(scene, t4)
+        SIPK.sipk6_formula_6(scene, V_s_x_bin_mistake3)
+        SIPK.sipk6_formula_8(scene)
+        SIPK.sipk6_formula_10(scene)
+        SIPK.sipk6_table_4(scene)
+
+    @staticmethod
+    def sipk6_formula_10(scene: M.Scene):
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        sip1 = SIPK.sipk6_sindroms_int_p1
+        log_1 = SIPK.sipk6_get_log_by_p(sip1[0], SIPK.sipk6_log_p_16)
+        log_2 = SIPK.sipk6_get_log_by_p(sip1[1], SIPK.sipk6_log_p_16)
+        log_3 = SIPK.sipk6_get_log_by_p(sip1[2], SIPK.sipk6_log_p_16)
+        log_4 = SIPK.sipk6_get_log_by_p(sip1[3], SIPK.sipk6_log_p_16)
+        log_5 = SIPK.sipk6_get_log_by_p(sip1[4], SIPK.sipk6_log_p_16)
+        mult_1 = SIPK.sipk6_get_p_by_log((log_3 + log_3) % 15, SIPK.sipk6_log_p_16)
+        mult_2 = SIPK.sipk6_get_p_by_log((log_4 + log_2) % 15, SIPK.sipk6_log_p_16)
+        summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+            bin(mult_1)[2:], bin(mult_2)[2:])
+        int_summ = int(summ, base = 2)
+        log_summ = SIPK.sipk6_get_log_by_p(int_summ, SIPK.sipk6_log_p_16)
+        mult_3 = SIPK.sipk6_get_p_by_log(
+            (log_summ + log_5) % 15, SIPK.sipk6_log_p_16)
+        sigma_2 = mult_3
+        tex1 = M.MathTex(r"{\sigma}_2 = ", font_size = txs, color = mc)
+        mx1 = Matrix(
+            [[str(sip1[2]), str(sip1[1])], [str(sip1[3]), str(sip1[2])]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc},
+            left_bracket = r"|", right_bracket = r"|")
+        tx2 = r"\cdot \ " + str(sip1[4]) + r" = ("
+        tx2 += str(sip1[2]) + r" \cdot " + str(sip1[2])
+        tx2 += r" + " + str(sip1[3]) + r" \cdot " + str(sip1[1]) + r") \cdot "
+        tx2 += str(sip1[4])
+        tx2 += r" = (" + str(mult_1) + r" + " + str(mult_2) + r") \cdot "
+        tx2 += str(sip1[4]) + r" = " + str(int_summ) + r" \cdot " + str(sip1[4])
+        tx2 += r" = " + str(mult_3)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc)
+        gr = M.VGroup(tex1, mx1, tex2).arrange().next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(gr)
+        mult_1 = SIPK.sipk6_get_p_by_log((log_1 + log_4) % 15, SIPK.sipk6_log_p_16)
+        mult_2 = SIPK.sipk6_get_p_by_log((log_2 + log_3) % 15, SIPK.sipk6_log_p_16)
+        summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+            bin(mult_1)[2:], bin(mult_2)[2:])
+        int_summ = int(summ, base = 2)
+        log_summ = SIPK.sipk6_get_log_by_p(int_summ, SIPK.sipk6_log_p_16)
+        mult_3 = SIPK.sipk6_get_p_by_log(
+            (log_summ + log_5) % 15, SIPK.sipk6_log_p_16)
+        sigma_1 = mult_3
+        SIPK.sipk6_sigmas = [sigma_1, sigma_2]
+        tex1 = M.MathTex(r"{\sigma}_1 = ", font_size = txs, color = mc)
+        mx1 = Matrix(
+            [[str(sip1[0]), str(sip1[2])], [str(sip1[1]), str(sip1[3])]],
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            bracket_config = {"color": mc},
+            left_bracket = r"|", right_bracket = r"|")
+        tx2 = r"\cdot \ " + str(sip1[4]) + r" = ("
+        tx2 += str(sip1[0]) + r" \cdot " + str(sip1[3])
+        tx2 += r" + " + str(sip1[1]) + r" \cdot " + str(sip1[2]) + r") \cdot "
+        tx2 += str(sip1[4])
+        tx2 += r" = (" + str(mult_1) + r" + " + str(mult_2) + r") \cdot "
+        tx2 += str(sip1[4]) + r" = " + str(int_summ) + r" \cdot " + str(sip1[4])
+        tx2 += r" = " + str(mult_3)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc)
+        gr2 = M.VGroup(tex1, mx1, tex2).arrange().next_to(gr, M.DOWN)
+        tx3 = r"1 + " + str(sigma_1) + r" \cdot x + " + str(sigma_2)
+        tx3 += r" \cdot x^2 = 0"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(gr2, M.DOWN)
+        scene.add(gr2, tex3)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk6_table_4(scene: M.Scene):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        txs = 26.0
+        txs_label = 30.0
+        sgs = SIPK.sipk6_sigmas
+        table_data = []
+        eqt = r"1 + " + str(sgs[0]) + r" \cdot x + " + str(sgs[1])
+        eqt += r" \cdot x^2"
+        for i in range(14):
+            x = SIPK.sipk6_log_p_16[1 + i][1]
+            log = SIPK.sipk6_get_log_by_p(
+                x, SIPK.sipk6_log_p_16)
+            log2 = (log * 2) % 15
+            log_s_1 = SIPK.sipk6_get_log_by_p(sgs[0], SIPK.sipk6_log_p_16)
+            log_s_2 = SIPK.sipk6_get_log_by_p(sgs[1], SIPK.sipk6_log_p_16)
+            x2 = SIPK.sipk6_get_p_by_log(log2, SIPK.sipk6_log_p_16)
+            mult_1 = SIPK.sipk6_get_p_by_log(
+                (log_s_1 + log) % 15, SIPK.sipk6_log_p_16)
+            mult_2 = SIPK.sipk6_get_p_by_log(
+                (log_s_2 + log2) % 15, SIPK.sipk6_log_p_16)
+            summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
+                bin(mult_1)[2:], bin(mult_2)[2:])
+            summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(summ, r"0001")
+            int_summ = int(summ, base = 2)
+            equation = r"1 + " + str(sgs[0]) + r" \cdot " + str(x) + r" + "
+            equation += str(sgs[1]) + r" \cdot " + str(x2) + r" = 1 + "
+            equation += str(mult_1) + r" + " + str(mult_2) + r" = "
+            equation += str(int_summ)
+            table_data.append(
+                [r"{\alpha}^{" + str(1 + i) + "}", str(x), str(x2), equation])
+        table = SSf.Table(
+            table_data,
+            col_labels = [M.MathTex(i, font_size = txs_label, color = mc)
+                          for i in [r"", r"x", r"x^2", eqt]],
+            include_outer_lines = True,
+            v_buff = 0.2,
+            h_buff = 0.6,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1}).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def sipk_lr3_formula_1(scene: M.Scene):
