@@ -3310,8 +3310,29 @@ class SIPK(object):
             22: [12, 6], 23: [11, 4], 24: [10, 2],
             25: [9, 3], 26: [8, 5], 27: [7, 9],
             28: [6, 11], 29: [5, 13], 30: [4, 7]}
+        variant = SIPK.sipk4_5_6_in_group_list
+        if variant > 30: variant -= 30
+        mistake2_nums = data_mistake_by_var[variant]
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = 36.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        table_data = [[r"NSp", r"Err1", r"Err2"],
+                      [str(variant),
+                       r"x^{" + str(mistake2_nums[0]) + r"}",
+                       r"x^{" + str(mistake2_nums[1]) + r"}"]]
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.4,
+            h_buff = 0.8,
+            element_to_mobject = M.MathTex,
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            line_config = {"color": mc, "stroke_width": 1}).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
         SIPK.sipk6_formula_6(scene, SIPK.sipk6_V_s_x_bin)
-        mistake_num = 1
+        mistake_num = -1
         if mistake_num == -1:
             mistake_num = random.randint(0, 11)
         mistake = SIPK.sipk4_inverse_bit("0" * 15, mistake_num)
@@ -3323,9 +3344,6 @@ class SIPK(object):
         SIPK.sipk6_formula_7(scene, t2)
         SIPK.sipk6_formula_6(scene, V_s_x_bin_mistake)
         SIPK.sipk6_formula_8(scene)
-        variant = SIPK.sipk4_5_6_in_group_list
-        if variant > 30: variant -= 30
-        mistake2_nums = data_mistake_by_var[variant]
         mistake2_nums = [14 - mistake2_nums[0], 14 - mistake2_nums[1]]
         mistake2 = SIPK.sipk4_inverse_bit("0" * 15, mistake2_nums[0])
         mistake2 = SIPK.sipk4_inverse_bit(mistake2, mistake2_nums[1])
@@ -3340,7 +3358,7 @@ class SIPK(object):
         SIPK.sipk6_formula_10(scene)
         SIPK.sipk6_table_4(scene)
         mistake3_nums = data_mistake_by_var[variant]
-        mistake3rd = 6
+        mistake3rd = -1
         if mistake3rd == -1:
             mistake3rd = random.randint(0, 14)
             while mistake3rd == mistake3_nums[0] or mistake3rd == mistake3_nums[1]:
