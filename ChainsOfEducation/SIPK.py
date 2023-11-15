@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 7
+    sipk4_5_6_in_group_list = 4
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -188,8 +188,8 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        # SIPK.make_sipk5(scene)
-        SIPK.make_sipk6(scene)
+        SIPK.make_sipk5(scene)
+        # SIPK.make_sipk6(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2279,15 +2279,15 @@ class SIPK(object):
 
     @staticmethod
     def make_sipk5(scene: M.Scene):
-        SIPK.sipk5_formula_1(scene)
-        SIPK.sipk5_formula_2(scene)
-        SIPK.sipk5_table_1(scene)
-        SIPK.sipk5_formula_3(scene)
-        SIPK.sipk5_table_2(scene)
-        SIPK.sipk5_formula_4(scene)
-        SIPK.sipk5_table_3(scene)
-        SIPK.sipk5_formula_5(scene)
-        SIPK.sipk5_formula_6(scene)
+        # SIPK.sipk5_formula_1(scene)
+        # SIPK.sipk5_formula_2(scene)
+        # SIPK.sipk5_table_1(scene)
+        # SIPK.sipk5_formula_3(scene)
+        # SIPK.sipk5_table_2(scene)
+        # SIPK.sipk5_formula_4(scene)
+        # SIPK.sipk5_table_3(scene)
+        # SIPK.sipk5_formula_5(scene)
+        # SIPK.sipk5_formula_6(scene)
         SIPK.sipk5_formula_7(scene)
         # SIPK.sipk_lr3_formula_1(scene)
         # SIPK.sipk_lr3_table_1(scene)
@@ -2726,7 +2726,7 @@ class SIPK(object):
         g_x_bin = "10011"
         phone = random.randint(1, 9) * 1000 + random.randint(1, 9) * 100
         phone += random.randint(1, 9) * 10 + random.randint(1, 9)
-        phone = 8693
+        phone = 6834
         print(phone)
         crc_16_bit = ""
         for _ in range(4):
@@ -2739,7 +2739,12 @@ class SIPK(object):
         for i in range(5):
             SSf.SIPK_SSCTV_functions.make_background(scene)
             divisible = SIPK.sipk4_make_mistake(crc_16_bit, i)
-            tex = M.MathTex(divisible, font_size = txs, color = mc
+            divisible_crc = r""
+            for j in range(len(divisible)):
+                divisible_crc += divisible[j]
+                if j % 4 == 3:
+                    divisible_crc += r"\ "
+            tex = M.MathTex(divisible_crc, font_size = txs, color = mc
                         ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
             table_data = SIPK.sipk5_bin_1_0_str_division(divisible, divisor)
             table = SSf.Table(
