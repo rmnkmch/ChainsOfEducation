@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 6
+    variant = 14
 
     tv1_in_0_1_str = ""
 
@@ -97,8 +97,8 @@ class SSCTV(object):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
-        SSCTV.make_tv4(scene)
-        # SSCTV.make_tv5(scene)
+        # SSCTV.make_tv4(scene)
+        SSCTV.make_tv5(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -1191,7 +1191,7 @@ class SSCTV(object):
         B = 7.61 * 10.0 ** 6
         P_n = round(F + 10.0 * log10(k * T_0 * B), 2)
         SSCTV.tv5_P_n = P_n
-        P_smin = SSCTV.tv5_C_N_Rice + P_n
+        P_smin = round(SSCTV.tv5_C_N_Rice + P_n, 3)
         SSCTV.tv5_P_smin = P_smin
         f_obr = data_f_obr_by_chanel(SSCTV.tv5_chanel)
         G_D0 = data_G_D0_by_chanel(SSCTV.tv5_chanel)
@@ -1201,7 +1201,7 @@ class SSCTV(object):
         lambd = round(c / SSCTV.tv5_f_c, 3)
         A_a = round(G_D + 10.0 * log10(1.64 * lambd ** 2 / 4.0 / pi), 3)
         L_f = data_L_f_by_chanel(SSCTV.tv5_chanel)
-        phi_min = P_smin - A_a + L_f
+        phi_min = round(P_smin - A_a + L_f, 3)
         E_min = round(phi_min + 120.0 + 10.0 * log10(120.0 * pi), 3)
         SSCTV.tv5_E_min = E_min
         R = 75.0
