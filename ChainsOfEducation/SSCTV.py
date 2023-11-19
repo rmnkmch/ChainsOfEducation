@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 14
+    variant = 11
 
     tv1_in_0_1_str = ""
 

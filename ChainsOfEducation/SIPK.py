@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 4
+    sipk4_5_6_in_group_list = 22
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -188,8 +188,8 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        SIPK.make_sipk5(scene)
-        # SIPK.make_sipk6(scene)
+        # SIPK.make_sipk5(scene)
+        SIPK.make_sipk6(scene)
 
     @staticmethod
     def random_sipk1():
@@ -3181,55 +3181,53 @@ class SIPK(object):
 
     @staticmethod
     def sipk6_formula_6(scene: M.Scene, V_s_x_bin: str):
-        txs = 36.0
+        txs = 32.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         pows = SIPK.sipk6_polinom_to_log(
             SIPK.sipk5_bin_str_to_polinom(V_s_x_bin))
         SIPK.sipk6_sindroms = []
-        for i_0 in range(2):
+        for i in range(4):
             SSf.SIPK_SSCTV_functions.make_background(scene)
-            prev = SSf.SIPK_SSCTV_functions.upper_side + M.UP * 0.3
-            for i in range(2):
-                matrx = []
-                eql = r"0000"
-                str_i = str(i + i_0 * 2 + 1)
-                tx = r"S_" + str_i + r" = r({\alpha}^" + str_i + r") = "
+            matrx = []
+            eql = r"0000"
+            str_i = str(i + 1)
+            tx = r"S_" + str_i + r" = r({\alpha}^" + str_i + r") = "
+            for j in pows:
+                tx += r"{\alpha}^{" + str((i + 1) * j) + r"}"
+                if j != pows[-1]:
+                    tx += r" + "
+                else:
+                    tx += r" = "
+                p = SIPK.sipk6_get_p_by_log(
+                    ((i + 1) * j) % 15, SIPK.sipk6_log_p_16)
+                p_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(p)[2:], 4)
+                matrx.append(p_bin)
+                eql = SSf.SIPK_SSCTV_functions.sum_mod_2_full(eql, p_bin)
+            if not (i == 0):
+                tx += r"\\ = "
                 for j in pows:
-                    tx += r"{\alpha}^{" + str((i + i_0 * 2 + 1) * j) + r"}"
+                    tx += r"{\alpha}^{" + str(((i  + 1) * j) % 15)
+                    tx += r"}"
                     if j != pows[-1]:
                         tx += r" + "
                     else:
                         tx += r" = "
-                    p = SIPK.sipk6_get_p_by_log(
-                        ((i + i_0 * 2 + 1) * j) % 15, SIPK.sipk6_log_p_16)
-                    p_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(p)[2:], 4)
-                    matrx.append(p_bin)
-                    eql = SSf.SIPK_SSCTV_functions.sum_mod_2_full(eql, p_bin)
-                if not (i == 0 and i_0 == 0):
-                    tx += r"\\ = "
-                    for j in pows:
-                        tx += r"{\alpha}^{" + str(((i + i_0 * 2 + 1) * j) % 15)
-                        tx += r"}"
-                        if j != pows[-1]:
-                            tx += r" + "
-                        else:
-                            tx += r" = "
-                matrx.append(eql)
-                SIPK.sipk6_sindroms.append(eql)
-                tex = M.MathTex(tx, font_size = txs, color = mc)
-                m = Matrix(matrx,
-                           element_to_mobject_config = {
-                               "font_size": txs, "color": mc},
-                           v_buff = 0.4, h_buff = 0.3)
-                gr = M.VGroup(tex, m).arrange(buff = 0.8).next_to(prev, M.DOWN, 0.3)
-                tex_eq = M.MathTex(r"=", font_size = txs, color = mc
-                                   ).next_to(m, M.DL, - 0.3)
-                tex_eq.shift(M.UP * 0.22)
-                tex_op = M.MathTex(r"\bigoplus", font_size = 20.0, color = mc
-                                   ).next_to(m, M.LEFT, - 0.3)
-                tex_op.shift(M.UP * 0.2)
-                prev = gr
-                scene.add(gr, tex_eq, tex_op)
+            matrx.append(eql)
+            SIPK.sipk6_sindroms.append(eql)
+            tex = M.MathTex(tx, font_size = txs, color = mc)
+            m = Matrix(matrx,
+                        element_to_mobject_config = {
+                            "font_size": txs, "color": mc},
+                        v_buff = 0.4, h_buff = 0.3)
+            gr = M.VGroup(tex, m).arrange(buff = 0.7).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side + M.UP * 0.3, M.DOWN, 0.3)
+            tex_eq = M.MathTex(r"=", font_size = txs, color = mc
+                                ).next_to(m, M.DL, - 0.3)
+            tex_eq.shift(M.UP * 0.21)
+            tex_op = M.MathTex(r"\bigoplus", font_size = 20.0, color = mc
+                                ).next_to(m, M.LEFT, - 0.3)
+            tex_op.shift(M.UP * 0.19)
+            scene.add(gr, tex_eq, tex_op)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
