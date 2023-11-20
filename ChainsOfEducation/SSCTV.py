@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 11
+    variant = 7
 
     tv1_in_0_1_str = ""
 
@@ -98,7 +98,8 @@ class SSCTV(object):
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
         # SSCTV.make_tv4(scene)
-        SSCTV.make_tv5(scene)
+        # SSCTV.make_tv5(scene)
+        SSCTV.make_tv6(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -1353,6 +1354,38 @@ class SSCTV(object):
         gr10 = M.VGroup(tex10, txt10).arrange().next_to(gr9, M.DOWN)
         scene.add(gr, tex3, gr2, tex6, gr7, gr8, gr9, gr10)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_tv6(scene: M.Scene):
+        SSCTV.tv6_table_1(scene)
+
+    @staticmethod
+    def tv6_table_1(scene: M.Scene):
+        def reccurent_count(data: dict, floor: int, db_in: float):
+            ret_list = []
+            inner_list = []
+            for i in data:
+                db_next = round(db_in - data[i], 2)
+                db_flat = round(db_in - i, 2)
+                if floor >= 2:
+                    inner_list = reccurent_count(data, floor - 1, db_next)
+                    for j in range(len(inner_list)):
+                        ret_list.append([db_in, db_flat, *inner_list[j]])
+                else:
+                    ret_list.append([db_in, db_flat])
+            return ret_list
+
+        data_4 = {26: 1.2, 24: 1.2, 22: 1.2, 20: 1.5, 18: 1.8,
+                  16: 2.5, 14: 3.0, 12: 4.0, 10: 4.5}
+        data_6 = {20: 1.5, 16: 2.5, 12: 4.5}
+        data_8 = {20: 2.2, 16: 4.2, 12: 4.5}
+        floors = 5
+        data = data_8
+        db_in = 106.0 - 4.0
+        lis = reccurent_count(data, floors, db_in)
+        for i in range(len(lis)):
+            if lis[i][-1] >= 70.0 and lis[i][-3] >= 70.0 and lis[i][-5] >= 70.0:
+                print(lis[i])
 
     @staticmethod
     def make_old_tv1(scene: M.Scene):

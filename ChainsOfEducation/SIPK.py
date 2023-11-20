@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 22
+    sipk4_5_6_in_group_list = 3
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -188,8 +188,8 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        # SIPK.make_sipk5(scene)
-        SIPK.make_sipk6(scene)
+        SIPK.make_sipk5(scene)
+        # SIPK.make_sipk6(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2279,15 +2279,15 @@ class SIPK(object):
 
     @staticmethod
     def make_sipk5(scene: M.Scene):
-        # SIPK.sipk5_formula_1(scene)
-        # SIPK.sipk5_formula_2(scene)
-        # SIPK.sipk5_table_1(scene)
-        # SIPK.sipk5_formula_3(scene)
-        # SIPK.sipk5_table_2(scene)
-        # SIPK.sipk5_formula_4(scene)
-        # SIPK.sipk5_table_3(scene)
-        # SIPK.sipk5_formula_5(scene)
-        # SIPK.sipk5_formula_6(scene)
+        SIPK.sipk5_formula_1(scene)
+        SIPK.sipk5_formula_2(scene)
+        SIPK.sipk5_table_1(scene)
+        SIPK.sipk5_formula_3(scene)
+        SIPK.sipk5_table_2(scene)
+        SIPK.sipk5_formula_4(scene)
+        SIPK.sipk5_table_3(scene)
+        SIPK.sipk5_formula_5(scene)
+        SIPK.sipk5_formula_6(scene)
         SIPK.sipk5_formula_7(scene)
         # SIPK.sipk_lr3_formula_1(scene)
         # SIPK.sipk_lr3_table_1(scene)
