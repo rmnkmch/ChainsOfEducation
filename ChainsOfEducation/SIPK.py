@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 3
+    sipk4_5_6_in_group_list = 4
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -188,8 +188,8 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        SIPK.make_sipk5(scene)
-        # SIPK.make_sipk6(scene)
+        # SIPK.make_sipk5(scene)
+        SIPK.make_sipk6(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2726,7 +2726,7 @@ class SIPK(object):
         g_x_bin = "10011"
         phone = random.randint(1, 9) * 1000 + random.randint(1, 9) * 100
         phone += random.randint(1, 9) * 10 + random.randint(1, 9)
-        phone = 6834
+        phone = 5592
         print(phone)
         crc_16_bit = ""
         for _ in range(4):

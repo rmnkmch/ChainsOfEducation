@@ -219,7 +219,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
-        TitleBlock.make_symbols(scene)
+        # TitleBlock.make_symbols(scene)
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -5569,8 +5569,8 @@ SZL, Лилангени; Swazi lilangeni"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_271_300)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_271_300)
+        # TitleBlock.resplit_to_post_kanji(native_kun_on_271_300)
+        # TitleBlock.resplit_to_menu_kanji(native_kun_on_271_300)
         # TitleBlock.resplit_to_post_examples(native_examples)
-        # TitleBlock.resplit_to_post_geo(geo2)
+        TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
