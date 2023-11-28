@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 4
+    sipk4_5_6_in_group_list = 17
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -2993,6 +2993,7 @@ class SIPK(object):
                 bin_V = bin_V[1:]
                 bin_V = SIPK.sipk4_inverse_bit(bin_V, 2)
                 bin_V = SIPK.sipk4_inverse_bit(bin_V, 3)
+        SIPK.sipk6_log_p_16[0].append(int(table_data[1][3]))
         for i in range(14):
             table_data[2 + i].append(table_data[15 - i][3])
             SIPK.sipk6_log_p_16[1 + i].append(int(table_data[15 - i][3]))
@@ -3361,7 +3362,7 @@ class SIPK(object):
         SIPK.sipk6_formula_10(scene)
         SIPK.sipk6_table_4(scene)
         mistake3_nums = data_mistake_by_var[variant]
-        mistake3rd = -1
+        mistake3rd = 14 - 5
         if mistake3rd == -1:
             mistake3rd = random.randint(0, 14)
             while mistake3rd == mistake3_nums[0] or mistake3rd == mistake3_nums[1]:

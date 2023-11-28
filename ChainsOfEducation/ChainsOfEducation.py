@@ -17,10 +17,10 @@ class ChainsOfEducation(M.MovingCameraScene):
         # self.chapter_1_2()
         # from TitleBlock import TitleBlock
         # TitleBlock.Jpn_Geo(self)
-        from SSCTV import SSCTV
-        SSCTV.make_tv(self)
-        # from SIPK import SIPK
-        # SIPK.make_sipk(self)
+        # from SSCTV import SSCTV
+        # SSCTV.make_tv(self)
+        from SIPK import SIPK
+        SIPK.make_sipk(self)
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -187,6 +187,7 @@ class ChainsOfEducation(M.MovingCameraScene):
 
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
+cd D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
