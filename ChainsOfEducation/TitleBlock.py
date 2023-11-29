@@ -5565,12 +5565,18 @@ KWD, Кувейтский динар; Kuwaiti dinar
 Eswatini; Kingdom of Eswatini
 Мбабане; Mbabane
 Английский; English
-SZL, Лилангени; Swazi lilangeni"""
+SZL, Лилангени; Swazi lilangeni
+Восточный Тимор; Демократическая Республика Тимор-Лешти
+государство в Юго-Восточной Азии, занимающее восточную часть острова Тимор.
+East Timor; Democratic Republic of Timor-Leste
+Дили; Dili
+Тетум, Португальский; Tetum, Portuguese
+USD, Доллар США, Восточно-тиморское сентаво; United States dollar, East Timor centavo coins"""
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        # TitleBlock.resplit_to_post_kanji(native_kun_on_271_300)
-        # TitleBlock.resplit_to_menu_kanji(native_kun_on_271_300)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_271_300)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_271_300)
         # TitleBlock.resplit_to_post_examples(native_examples)
-        TitleBlock.resplit_to_post_geo(geo2)
+        # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
