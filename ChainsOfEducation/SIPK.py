@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 17
+    sipk4_5_6_in_group_list = 27
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -3220,7 +3220,7 @@ class SIPK(object):
                         element_to_mobject_config = {
                             "font_size": txs, "color": mc},
                         v_buff = 0.4, h_buff = 0.3)
-            gr = M.VGroup(tex, m).arrange(buff = 0.7).next_to(
+            gr = M.VGroup(tex, m).arrange(buff = 0.6).next_to(
                 SSf.SIPK_SSCTV_functions.upper_side + M.UP * 0.3, M.DOWN, 0.3)
             tex_eq = M.MathTex(r"=", font_size = txs, color = mc
                                 ).next_to(m, M.DL, - 0.3)
@@ -3283,8 +3283,14 @@ class SIPK(object):
         log_1 = SIPK.sipk6_get_log_by_p(int_sindroms[0], SIPK.sipk6_log_p_16)
         log_2 = SIPK.sipk6_get_log_by_p(int_sindroms[1], SIPK.sipk6_log_p_16)
         log_3 = SIPK.sipk6_get_log_by_p(int_sindroms[2], SIPK.sipk6_log_p_16)
-        mult_1 = SIPK.sipk6_get_p_by_log((log_1 + log_3) % 15, SIPK.sipk6_log_p_16)
-        mult_2 = SIPK.sipk6_get_p_by_log((log_2 + log_2) % 15, SIPK.sipk6_log_p_16)
+        mult_1 = 0
+        mult_2 = 0
+        if log_1 != -1 and log_3 != -1:
+            mult_1 = SIPK.sipk6_get_p_by_log(
+                (log_1 + log_3) % 15, SIPK.sipk6_log_p_16)
+        if log_2 != -1:
+            mult_2 = SIPK.sipk6_get_p_by_log(
+                (log_2 + log_2) % 15, SIPK.sipk6_log_p_16)
         summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
             bin(mult_1)[2:], bin(mult_2)[2:])
         p = int(summ, base = 2)
@@ -3362,7 +3368,7 @@ class SIPK(object):
         SIPK.sipk6_formula_10(scene)
         SIPK.sipk6_table_4(scene)
         mistake3_nums = data_mistake_by_var[variant]
-        mistake3rd = 14 - 5
+        mistake3rd = -1
         if mistake3rd == -1:
             mistake3rd = random.randint(0, 14)
             while mistake3rd == mistake3_nums[0] or mistake3rd == mistake3_nums[1]:
@@ -3395,14 +3401,22 @@ class SIPK(object):
         log_3 = SIPK.sipk6_get_log_by_p(sip1[2], SIPK.sipk6_log_p_16)
         log_4 = SIPK.sipk6_get_log_by_p(sip1[3], SIPK.sipk6_log_p_16)
         log_5 = SIPK.sipk6_get_log_by_p(sip1[4], SIPK.sipk6_log_p_16)
-        mult_1 = SIPK.sipk6_get_p_by_log((log_3 + log_3) % 15, SIPK.sipk6_log_p_16)
-        mult_2 = SIPK.sipk6_get_p_by_log((log_4 + log_2) % 15, SIPK.sipk6_log_p_16)
+        mult_1 = 0
+        mult_2 = 0
+        mult_3 = 0
+        if log_3 != -1:
+            mult_1 = SIPK.sipk6_get_p_by_log(
+                (log_3 + log_3) % 15, SIPK.sipk6_log_p_16)
+        if log_4 != -1 and log_2 != -1:
+            mult_2 = SIPK.sipk6_get_p_by_log(
+                (log_4 + log_2) % 15, SIPK.sipk6_log_p_16)
         summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
             bin(mult_1)[2:], bin(mult_2)[2:])
         int_summ = int(summ, base = 2)
         log_summ = SIPK.sipk6_get_log_by_p(int_summ, SIPK.sipk6_log_p_16)
-        mult_3 = SIPK.sipk6_get_p_by_log(
-            (log_summ + log_5) % 15, SIPK.sipk6_log_p_16)
+        if log_5 != -1 and log_summ != -1:
+            mult_3 = SIPK.sipk6_get_p_by_log(
+                (log_summ + log_5) % 15, SIPK.sipk6_log_p_16)
         sigma_2 = mult_3
         tex1 = M.MathTex(r"{\sigma}_2 = ", font_size = txs, color = mc)
         mx1 = Matrix(
@@ -3421,14 +3435,19 @@ class SIPK(object):
         gr = M.VGroup(tex1, mx1, tex2).arrange().next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
         scene.add(gr)
-        mult_1 = SIPK.sipk6_get_p_by_log((log_1 + log_4) % 15, SIPK.sipk6_log_p_16)
-        mult_2 = SIPK.sipk6_get_p_by_log((log_2 + log_3) % 15, SIPK.sipk6_log_p_16)
+        mult_1 = 0
+        mult_2 = 0
+        mult_3 = 0
+        if log_1 != -1 and log_4 != -1:
+            mult_1 = SIPK.sipk6_get_p_by_log((log_1 + log_4) % 15, SIPK.sipk6_log_p_16)
+        if log_2 != -1 and log_3 != -1:
+            mult_2 = SIPK.sipk6_get_p_by_log((log_2 + log_3) % 15, SIPK.sipk6_log_p_16)
         summ = SSf.SIPK_SSCTV_functions.sum_mod_2_full(
             bin(mult_1)[2:], bin(mult_2)[2:])
         int_summ = int(summ, base = 2)
         log_summ = SIPK.sipk6_get_log_by_p(int_summ, SIPK.sipk6_log_p_16)
-        mult_3 = SIPK.sipk6_get_p_by_log(
-            (log_summ + log_5) % 15, SIPK.sipk6_log_p_16)
+        if log_5 != -1 and log_summ != -1:
+            mult_3 = SIPK.sipk6_get_p_by_log((log_summ + log_5) % 15, SIPK.sipk6_log_p_16)
         sigma_1 = mult_3
         SIPK.sipk6_sigmas = [sigma_1, sigma_2]
         tex1 = M.MathTex(r"{\sigma}_1 = ", font_size = txs, color = mc)

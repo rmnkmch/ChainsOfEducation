@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 271
+        num = 301
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -211,7 +211,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "向 君 味 命 和 品 員 商 問 坂 央 始 委 守 安 定 実 客 宮 宿 寒 対 局 屋 岸 島 州 帳 平 幸"
+        kanji = "度 庫 庭 式 役 待 急 息 悪 悲 想 意 感 所 打 投 拾 持 指 放 整 旅 族 昔 昭 暑 暗 曲 有 服"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -219,7 +219,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
-        # TitleBlock.make_symbols(scene)
+        TitleBlock.make_symbols(scene)
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -5575,8 +5575,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_271_300)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_271_300)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_301_330)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_301_330)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
