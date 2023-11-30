@@ -15,10 +15,10 @@ FAST_RUN_TIME: float = 0.1
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
         # self.chapter_1_2()
-        from TitleBlock import TitleBlock
-        TitleBlock.Jpn_Geo(self)
-        # from SSCTV import SSCTV
-        # SSCTV.make_tv(self)
+        # from TitleBlock import TitleBlock
+        # TitleBlock.Jpn_Geo(self)
+        from SSCTV import SSCTV
+        SSCTV.make_tv(self)
         # from SIPK import SIPK
         # SIPK.make_sipk(self)
 
@@ -188,6 +188,7 @@ class ChainsOfEducation(M.MovingCameraScene):
     r"""
 cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 cd D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
+cd ChainsOfEducation
 manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png

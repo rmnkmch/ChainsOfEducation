@@ -32,6 +32,9 @@ class SSCTV(object):
     tv5_E_min = 0.0
     tv5_U_smin = 0.0
 
+    tv6_used = []
+    tv6_used_data = []
+
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
                       "Синий": [0, 0, 1, "#0000FF"],
                       "Красный": [1, 0, 0, "#FF0000"],
@@ -1357,10 +1360,12 @@ class SSCTV(object):
 
     @staticmethod
     def make_tv6(scene: M.Scene):
+        SSCTV.tv6_count_1(scene)
         SSCTV.tv6_table_1(scene)
 
     @staticmethod
-    def tv6_table_1(scene: M.Scene):
+    def tv6_count_1(scene: M.Scene):
+        from random import randint
         def reccurent_count(data: dict, floor: int, db_in: float):
             ret_list = []
             inner_list = []
@@ -1375,17 +1380,43 @@ class SSCTV(object):
                     ret_list.append([db_in, db_flat])
             return ret_list
 
-        data_4 = {26: 1.2, 24: 1.2, 22: 1.2, 20: 1.5, 18: 1.8,
-                  16: 2.5, 14: 3.0, 12: 4.0, 10: 4.5}
+        data_4 = {26: 1.2, 22: 1.2, 20: 1.5, 18: 1.8, 16: 2.5, 14: 3.0, 12: 4.0, 10: 4.5}
         data_6 = {20: 1.5, 16: 2.5, 12: 4.5}
         data_8 = {20: 2.2, 16: 4.2, 12: 4.5}
-        floors = 5
+        floors = 8
         data = data_8
         db_in = 106.0 - 4.0
         lis = reccurent_count(data, floors, db_in)
+        useful = []
         for i in range(len(lis)):
-            if lis[i][-1] >= 70.0 and lis[i][-3] >= 70.0 and lis[i][-5] >= 70.0:
-                print(lis[i])
+            show = True
+            for j in range(len(lis[i]) // 2):
+                if lis[i][1 + j * 2] < 70.0 or lis[i][1 + j * 2] > 83.0:
+                    show = False
+            if show:
+                useful.append(lis[i])
+        SSCTV.tv6_used = useful[randint(0, len(useful))]
+        SSCTV.tv6_used_data = data
+
+    @staticmethod
+    def tv6_table_1(scene: M.Scene):
+        print(SSCTV.tv6_used)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        number_plane = M.NumberPlane(
+            x_range = (0, 20, 1),
+            y_range = (0, 10, 1),
+            x_length = 13.0,
+            y_length = 7.0)
+        line_graph1 = number_plane.plot_line_graph(
+            x_values = SSCTV.tv2_data1,
+            y_values = SSCTV.tv2_data111,
+            line_color = mc,
+            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
+                                    stroke_color = mc),
+            stroke_width = 4)
+        scene.add(number_plane, line_graph1)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def make_old_tv1(scene: M.Scene):
