@@ -34,6 +34,8 @@ class SSCTV(object):
 
     tv6_used = []
     tv6_used_data = []
+    tv6_floors = 9 + 1
+    tv6_flats = 7
 
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
                       "Синий": [0, 0, 1, "#0000FF"],
@@ -1380,11 +1382,16 @@ class SSCTV(object):
                     ret_list.append([db_in, db_flat])
             return ret_list
 
-        data_4 = {26: 1.2, 22: 1.2, 20: 1.5, 18: 1.8, 16: 2.5, 14: 3.0, 12: 4.0, 10: 4.5}
+        data_4 = {26: 1.2, 22: 1.2, 20: 1.5, 18: 1.8,
+                  16: 2.5, 14: 3.0, 12: 4.0, 10: 4.5}
         data_6 = {20: 1.5, 16: 2.5, 12: 4.5}
         data_8 = {20: 2.2, 16: 4.2, 12: 4.5}
-        floors = 8
-        data = data_8
+        data = data_4
+        if SSCTV.tv6_flats >= 5:
+            data = data_6
+        if SSCTV.tv6_flats >= 7:
+            data = data_8
+        floors = round(SSCTV.tv6_floors * 0.51)
         db_in = 106.0 - 4.0
         lis = reccurent_count(data, floors, db_in)
         useful = []
@@ -1395,28 +1402,57 @@ class SSCTV(object):
                     show = False
             if show:
                 useful.append(lis[i])
-        SSCTV.tv6_used = useful[randint(0, len(useful))]
+        SSCTV.tv6_used = useful[randint(0, len(useful) - 1)]
         SSCTV.tv6_used_data = data
 
     @staticmethod
     def tv6_table_1(scene: M.Scene):
         print(SSCTV.tv6_used)
-        SSf.SIPK_SSCTV_functions.make_background(scene)
-        mc = SSf.SIPK_SSCTV_functions.get_main_color()
         number_plane = M.NumberPlane(
             x_range = (0, 20, 1),
             y_range = (0, 10, 1),
             x_length = 13.0,
             y_length = 7.0)
-        line_graph1 = number_plane.plot_line_graph(
-            x_values = SSCTV.tv2_data1,
-            y_values = SSCTV.tv2_data111,
-            line_color = mc,
-            vertex_dot_style = dict(stroke_width = 4, fill_color = "#B40097",
-                                    stroke_color = mc),
-            stroke_width = 4)
-        scene.add(number_plane, line_graph1)
-        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        floors_done = 0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        while floors_done < SSCTV.tv6_floors:
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            line_graph1 = number_plane.plot_line_graph(
+                x_values = [1, 19],
+                y_values = [10, 10],
+                line_color = mc,
+                vertex_dot_radius = 0.0,
+                stroke_width = 4)
+            scene.add(line_graph1)
+            floors_now = 5
+            if floors_done + floors_now > SSCTV.tv6_floors:
+                floors_now = SSCTV.tv6_floors - floors_now
+            for j in range(floors_now):
+                line_graph_j = number_plane.plot_line_graph(
+                    x_values = [1, 1, 19, 19],
+                    y_values = [2 * (5 - j), 2 * (4 - j), 2 * (4 - j), 2 * (5 - j)],
+                    line_color = mc,
+                    vertex_dot_radius = 0.0,
+                    stroke_width = 4)
+                if floors_done == 0:
+                    usilit = number_plane.plot_line_graph(
+                        x_values = [3, 3, 7, 7, 3],
+                        y_values = [8.2, 9.8, 9.8, 8.2, 8.2],
+                        line_color = mc,
+                        vertex_dot_radius = 0.0,
+                        stroke_width = 3)
+                    usilit_text = M.Text("Усилитель", font_size = tts, color = mc
+                                         ).move_to(number_plane.c2p(5, 9, 0))
+                    scene.add(usilit, usilit_text)
+                else:
+                    floor_text = M.Text(str(SSCTV.tv6_floors - floors_done),
+                                        font_size = tts, color = mc).move_to(
+                                            number_plane.c2p(2, 1 + 2 * (4 - j), 0))
+                    scene.add(floor_text)
+                floors_done += 1
+                scene.add(line_graph_j)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def make_old_tv1(scene: M.Scene):
