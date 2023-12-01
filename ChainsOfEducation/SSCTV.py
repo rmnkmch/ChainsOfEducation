@@ -34,8 +34,8 @@ class SSCTV(object):
 
     tv6_used = []
     tv6_used_data = []
-    tv6_floors = 9 + 1
-    tv6_flats = 7
+    tv6_floors = 16 + 1
+    tv6_flats = 4
     tv6_usilit_db = 106.0
     tv6_lines = 2
     tv6_floors_by_line = round(tv6_floors / tv6_lines)
@@ -109,6 +109,7 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         SSCTV.make_tv6(scene)
+        # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -1386,8 +1387,13 @@ class SSCTV(object):
                     ret_list.append([db_in, db_flat])
             return ret_list
 
-        data_4 = {26: 1.2, 22: 1.2, 20: 1.5, 18: 1.8,
-                  16: 2.5, 14: 3.0, 12: 4.0, 10: 4.5}
+        data_4 = {26: 1.2,
+                  #20: 1.5,
+                  18: 1.8,
+                  #16: 2.5,
+                  14: 3.0,
+                  #12: 4.0,
+                  10: 4.5}
         data_6 = {20: 1.5, 16: 2.5, 12: 4.5}
         data_8 = {20: 2.2, 16: 4.2, 12: 4.5}
         data = data_4
@@ -1413,6 +1419,20 @@ class SSCTV(object):
     def tv6_table_1(scene: M.Scene):
         print(SSCTV.tv6_used)
         data_razv_text = {2: "SAH\n204F", 3: "SAH\n306F"}
+        data_otv_4_text = {10.0: "TAH\n410F", 12.0: "TAH\n412F",
+                           14.0: "TAH\n414F", 16.0: "TAH\n416F",
+                           18.0: "TAH\n418F", 20.0: "TAH\n420F",
+                           22.0: "TAH\n422F", 26.0: "TAH\n426F"}
+        data_otv_6_text = {20.0: "TAH\n620F", 16.0: "TAH\n616F", 12.0: "TAH\n612F"}
+        data_otv_8_text = {20.0: "TAH\n820F", 16.0: "TAH\n816F", 12.0: "TAH\n812F"}
+        data_otv_text = data_otv_4_text
+        data_otv_wires = 4
+        if SSCTV.tv6_flats >= 5:
+            data_otv_text = data_otv_6_text
+            data_otv_wires = 6
+        if SSCTV.tv6_flats >= 7:
+            data_otv_text = data_otv_8_text
+            data_otv_wires = 8
         number_plane = M.NumberPlane(
             x_range = (0, 20, 1),
             y_range = (0, 10, 1),
@@ -1434,7 +1454,7 @@ class SSCTV(object):
             scene.add(line_graph1)
             floors_now = 5
             if floors_done + floors_now > SSCTV.tv6_floors:
-                floors_now = SSCTV.tv6_floors - floors_now
+                floors_now = SSCTV.tv6_floors - floors_done
             for j in range(floors_now):
                 line_graph_j = number_plane.plot_line_graph(
                     x_values = [1, 1, 19, 19],
@@ -1538,7 +1558,7 @@ class SSCTV(object):
                 else:
                     floor_text = M.Text("Этаж " + str(SSCTV.tv6_floors - floors_done),
                                         font_size = tts, color = mc).move_to(
-                                            number_plane.c2p(2.5, 1 + 2 * (4 - j), 0))
+                                            number_plane.c2p(3, 1 + 2 * (4 - j), 0))
                     otv_db_text = M.Text(
                         str(useful[2 * (floors_done % SSCTV.tv6_floors_by_line) - 1]) + " дБ",
                         font_size = tts, color = mc).move_to(
@@ -1553,9 +1573,21 @@ class SSCTV(object):
                                 line_color = mc,
                                 vertex_dot_radius = 0.0,
                                 stroke_width = 4)
-                            otv_text = M.Text(data_razv_text[SSCTV.tv6_lines],
+                            diff = useful[2 * (floors_done % SSCTV.tv6_floors_by_line) - 2]
+                            diff -= useful[2 * (floors_done % SSCTV.tv6_floors_by_line) - 1]
+                            otv_text = M.Text(data_otv_text[diff],
                                               font_size = tts, color = mc).move_to(
                                                   number_plane.c2p(13, 1.25 + 2 * (4 - j), 0))
+                            dk = 0.9 / data_otv_wires
+                            for k in range(data_otv_wires):
+                                wire = number_plane.plot_line_graph(
+                                    x_values = [11.5, 12],
+                                    y_values = [1.8 + 2 * (4 - j) - dk * (1 + k),
+                                                1.8 + 2 * (4 - j) - dk * (1 + k)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 3)
+                                scene.add(wire)
                             to_otv = number_plane.plot_line_graph(
                                 x_values = [13, 13],
                                 y_values = [1.8 + 2 * (4 - j), 2 * (5 - j)],
@@ -1590,9 +1622,21 @@ class SSCTV(object):
                                 line_color = mc,
                                 vertex_dot_radius = 0.0,
                                 stroke_width = 4)
-                            otv_text = M.Text(data_razv_text[SSCTV.tv6_lines],
+                            diff = useful[2 * (floors_done % SSCTV.tv6_floors_by_line) - 2]
+                            diff -= useful[2 * (floors_done % SSCTV.tv6_floors_by_line) - 1]
+                            otv_text = M.Text(data_otv_text[diff],
                                               font_size = tts, color = mc).move_to(
                                                 number_plane.c2p(17, 1.25 + 2 * (4 - j), 0))
+                            dk = 0.9 / data_otv_wires
+                            for k in range(data_otv_wires):
+                                wire = number_plane.plot_line_graph(
+                                    x_values = [15.5, 16],
+                                    y_values = [1.8 + 2 * (4 - j) - dk * (1 + k),
+                                                1.8 + 2 * (4 - j) - dk * (1 + k)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 3)
+                                scene.add(wire)
                             to_otv = number_plane.plot_line_graph(
                                 x_values = [17, 17],
                                 y_values = [1.8 + 2 * (4 - j), 2 * (5 - j)],
@@ -1617,6 +1661,25 @@ class SSCTV(object):
                 floors_done += 1
                 scene.add(line_graph_j)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_tv7(scene: M.Scene):
+        SSCTV.tv7_formula_1(scene)
+
+    @staticmethod
+    def tv7_formula_1(scene: M.Scene):
+        from math import floor
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tx = r""
+        tex = M.MathTex(tx, font_size = txs, color = mc)
+        txt = M.Text("МГц", font_size = tts, color = mc)
+        gr = M.VGroup(tex, txt).arrange().next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(gr)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def make_old_tv1(scene: M.Scene):

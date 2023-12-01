@@ -14,7 +14,12 @@ FAST_RUN_TIME: float = 0.1
 
 class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
+        # self.chapter_1_0()
+        # self.chapter_1_00()
+        # self.chapter_1_000()
+        # self.chapter_1_1()
         # self.chapter_1_2()
+        # self.chapter_1_3()
         # from TitleBlock import TitleBlock
         # TitleBlock.Jpn_Geo(self)
         from SSCTV import SSCTV
