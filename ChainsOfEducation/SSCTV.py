@@ -36,6 +36,10 @@ class SSCTV(object):
     tv6_used_data = []
     tv6_floors = 9 + 1
     tv6_flats = 7
+    tv6_usilit_db = 106.0
+    tv6_lines = 2
+    tv6_floors_by_line = round(tv6_floors / tv6_lines)
+    tv6_data_razv_db = {1: 0.0, 2: 4.0, 3: 6.0}
 
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
                       "Синий": [0, 0, 1, "#0000FF"],
@@ -1391,9 +1395,8 @@ class SSCTV(object):
             data = data_6
         if SSCTV.tv6_flats >= 7:
             data = data_8
-        floors = round(SSCTV.tv6_floors * 0.51)
-        db_in = 106.0 - 4.0
-        lis = reccurent_count(data, floors, db_in)
+        db_in = SSCTV.tv6_usilit_db - SSCTV.tv6_data_razv_db[SSCTV.tv6_lines]
+        lis = reccurent_count(data, SSCTV.tv6_floors_by_line, db_in)
         useful = []
         for i in range(len(lis)):
             show = True
@@ -1402,12 +1405,14 @@ class SSCTV(object):
                     show = False
             if show:
                 useful.append(lis[i])
+                print(lis[i])
         SSCTV.tv6_used = useful[randint(0, len(useful) - 1)]
         SSCTV.tv6_used_data = data
 
     @staticmethod
     def tv6_table_1(scene: M.Scene):
         print(SSCTV.tv6_used)
+        data_razv_text = {2: "SAH\n204F", 3: "SAH\n306F"}
         number_plane = M.NumberPlane(
             x_range = (0, 20, 1),
             y_range = (0, 10, 1),
@@ -1415,7 +1420,9 @@ class SSCTV(object):
             y_length = 7.0)
         floors_done = 0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        tts = 24.0
+        dbs = 20.0
+        useful = SSCTV.tv6_used
         while floors_done < SSCTV.tv6_floors:
             SSf.SIPK_SSCTV_functions.make_background(scene)
             line_graph1 = number_plane.plot_line_graph(
@@ -1423,7 +1430,7 @@ class SSCTV(object):
                 y_values = [10, 10],
                 line_color = mc,
                 vertex_dot_radius = 0.0,
-                stroke_width = 4)
+                stroke_width = 5)
             scene.add(line_graph1)
             floors_now = 5
             if floors_done + floors_now > SSCTV.tv6_floors:
@@ -1434,22 +1441,179 @@ class SSCTV(object):
                     y_values = [2 * (5 - j), 2 * (4 - j), 2 * (4 - j), 2 * (5 - j)],
                     line_color = mc,
                     vertex_dot_radius = 0.0,
-                    stroke_width = 4)
+                    stroke_width = 5)
                 if floors_done == 0:
-                    usilit = number_plane.plot_line_graph(
-                        x_values = [3, 3, 7, 7, 3],
-                        y_values = [8.2, 9.8, 9.8, 8.2, 8.2],
+                    to_usilit = number_plane.plot_line_graph(
+                        x_values = [2, 4],
+                        y_values = [9, 9],
                         line_color = mc,
                         vertex_dot_radius = 0.0,
                         stroke_width = 3)
+                    to_usilit_text = M.Text("К\nантенне", font_size = tts, color = mc
+                                            ).move_to(number_plane.c2p(2.6, 9, 0))
+                    usilit = number_plane.plot_line_graph(
+                        x_values = [4, 4, 7, 7, 4],
+                        y_values = [8.2, 9.8, 9.8, 8.2, 8.2],
+                        line_color = mc,
+                        vertex_dot_radius = 0.0,
+                        stroke_width = 4)
                     usilit_text = M.Text("Усилитель", font_size = tts, color = mc
-                                         ).move_to(number_plane.c2p(5, 9, 0))
-                    scene.add(usilit, usilit_text)
+                                         ).move_to(number_plane.c2p(5.5, 9, 0))
+                    from_usilit = number_plane.plot_line_graph(
+                        x_values = [7, 9],
+                        y_values = [9, 9],
+                        line_color = mc,
+                        vertex_dot_radius = 0.0,
+                        stroke_width = 3)
+                    from_usilit_text = M.Text(str(SSCTV.tv6_usilit_db), font_size = dbs, color = mc
+                                              ).next_to(number_plane.c2p(8, 9, 0), M.UP, 0.05)
+                    scene.add(to_usilit, to_usilit_text, usilit, usilit_text,
+                              from_usilit, from_usilit_text)
+                    if SSCTV.tv6_lines >= 2:
+                        razv = number_plane.plot_line_graph(
+                            x_values = [9, 9, 11, 11, 9],
+                            y_values = [8.2, 9.8, 9.8, 8.2, 8.2],
+                            line_color = mc,
+                            vertex_dot_radius = 0.0,
+                            stroke_width = 4)
+                        razv_text = M.Text(data_razv_text[SSCTV.tv6_lines],
+                                           font_size = tts, color = mc
+                                           ).move_to(number_plane.c2p(10, 9, 0))
+                        scene.add(razv, razv_text)
+                        if SSCTV.tv6_lines == 2:
+                            from_razv1 = number_plane.plot_line_graph(
+                                x_values = [11, 17, 17],
+                                y_values = [9.33, 9.33, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv2 = number_plane.plot_line_graph(
+                                x_values = [11, 13, 13],
+                                y_values = [8.67, 8.67, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv_text1 = M.Text(
+                                str(SSCTV.tv6_usilit_db - SSCTV.tv6_data_razv_db[SSCTV.tv6_lines]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(17, 8.3, 0), buff = 0.1)
+                            from_razv_text2 = M.Text(
+                                str(SSCTV.tv6_usilit_db - SSCTV.tv6_data_razv_db[SSCTV.tv6_lines]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(13, 8.3, 0), buff = 0.1)
+                            scene.add(from_razv1, from_razv2, from_razv_text1, from_razv_text2)
+                        if SSCTV.tv6_lines == 3:
+                            from_razv1 = number_plane.plot_line_graph(
+                                x_values = [11, 17, 17],
+                                y_values = [9.33, 9.33, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv2 = number_plane.plot_line_graph(
+                                x_values = [11, 15, 15],
+                                y_values = [9, 9, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv3 = number_plane.plot_line_graph(
+                                x_values = [11, 13, 13],
+                                y_values = [8.67, 8.67, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv_text1 = M.Text(
+                                str(SSCTV.tv6_usilit_db - SSCTV.tv6_data_razv_db[SSCTV.tv6_lines]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(17, 8.3, 0), buff = 0.1)
+                            from_razv_text2 = M.Text(
+                                str(SSCTV.tv6_usilit_db - SSCTV.tv6_data_razv_db[SSCTV.tv6_lines]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(15, 8.3, 0), buff = 0.1)
+                            from_razv_text3 = M.Text(
+                                str(SSCTV.tv6_usilit_db - SSCTV.tv6_data_razv_db[SSCTV.tv6_lines]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(13, 8.3, 0), buff = 0.1)
+                            scene.add(from_razv1, from_razv2, from_razv3,
+                                      from_razv_text1, from_razv_text2, from_razv_text3)
                 else:
-                    floor_text = M.Text(str(SSCTV.tv6_floors - floors_done),
+                    floor_text = M.Text("Этаж " + str(SSCTV.tv6_floors - floors_done),
                                         font_size = tts, color = mc).move_to(
-                                            number_plane.c2p(2, 1 + 2 * (4 - j), 0))
-                    scene.add(floor_text)
+                                            number_plane.c2p(2.5, 1 + 2 * (4 - j), 0))
+                    otv_db_text = M.Text(
+                        str(useful[2 * (floors_done % SSCTV.tv6_floors_by_line) - 1]) + " дБ",
+                        font_size = tts, color = mc).move_to(
+                            number_plane.c2p(6, 1 + 2 * (4 - j), 0))
+                    if SSCTV.tv6_lines == 2:
+                        if (floors_done - 1) // SSCTV.tv6_floors_by_line == 0:
+                            otv = number_plane.plot_line_graph(
+                                x_values = [12, 12, 14, 14, 12],
+                                y_values = [0.7 + 2 * (4 - j), 1.8 + 2 * (4 - j),
+                                            1.8 + 2 * (4 - j), 0.7 + 2 * (4 - j),
+                                            0.7 + 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 4)
+                            otv_text = M.Text(data_razv_text[SSCTV.tv6_lines],
+                                              font_size = tts, color = mc).move_to(
+                                                  number_plane.c2p(13, 1.25 + 2 * (4 - j), 0))
+                            to_otv = number_plane.plot_line_graph(
+                                x_values = [13, 13],
+                                y_values = [1.8 + 2 * (4 - j), 2 * (5 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            if floors_done % SSCTV.tv6_floors_by_line != 0:
+                                from_otv = number_plane.plot_line_graph(
+                                    x_values = [13, 13],
+                                    y_values = [0.7 + 2 * (4 - j), 2 * (4 - j)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 3)
+                                from_otv_db_text = M.Text(
+                                    str(useful[2 * (floors_done % SSCTV.tv6_floors_by_line)]),
+                                    font_size = dbs, color = mc).next_to(
+                                        number_plane.c2p(13, 0.3 + 2 * (4 - j), 0), buff = 0.1)
+                                scene.add(from_otv, from_otv_db_text)
+                            line_2 = number_plane.plot_line_graph(
+                                x_values = [17, 17],
+                                y_values = [2 * (4 - j), 2 * (5 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            scene.add(otv, otv_text, to_otv, line_2)
+                        elif (floors_done - 1) // SSCTV.tv6_floors_by_line == 1:
+                            otv = number_plane.plot_line_graph(
+                                x_values = [16, 16, 18, 18, 16],
+                                y_values = [0.7 + 2 * (4 - j), 1.8 + 2 * (4 - j),
+                                            1.8 + 2 * (4 - j), 0.7 + 2 * (4 - j),
+                                            0.7 + 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 4)
+                            otv_text = M.Text(data_razv_text[SSCTV.tv6_lines],
+                                              font_size = tts, color = mc).move_to(
+                                                number_plane.c2p(17, 1.25 + 2 * (4 - j), 0))
+                            to_otv = number_plane.plot_line_graph(
+                                x_values = [17, 17],
+                                y_values = [1.8 + 2 * (4 - j), 2 * (5 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            if (floors_done % SSCTV.tv6_floors_by_line != 0 and
+                                floors_done + 1 != SSCTV.tv6_floors):
+                                from_otv = number_plane.plot_line_graph(
+                                    x_values = [17, 17],
+                                    y_values = [0.7 + 2 * (4 - j), 2 * (4 - j)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 3)
+                                from_otv_db_text = M.Text(
+                                    str(useful[2 * (floors_done % SSCTV.tv6_floors_by_line)]),
+                                    font_size = dbs, color = mc).next_to(
+                                        number_plane.c2p(17, 0.3 + 2 * (4 - j), 0), buff = 0.1)
+                                scene.add(from_otv, from_otv_db_text)
+                            scene.add(otv, otv_text, to_otv)
+                    scene.add(floor_text, otv_db_text)
                 floors_done += 1
                 scene.add(line_graph_j)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
