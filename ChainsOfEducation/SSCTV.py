@@ -34,12 +34,17 @@ class SSCTV(object):
 
     tv6_used = []
     tv6_used_data = []
-    tv6_floors = 16 + 1
-    tv6_flats = 4
+    tv6_floors = -1
+    tv6_flats = -1
     tv6_usilit_db = 106.0
-    tv6_lines = 2
-    tv6_floors_by_line = round(tv6_floors / tv6_lines)
-    tv6_data_razv_db = {1: 0.0, 2: 4.0, 3: 6.0}
+    tv6_lines = -1
+    tv6_floors_by_line = -1
+    tv6_data_razv_db = {1: 0.0, 2: 4.8, 3: 7.5}
+
+    tv7_phi = 55 / 180.0 * 3.14159265
+    tv7_lambda = 3 / 180.0 * 3.14159265
+    tv7_f = 11544
+    tv7_P_EIRP = 48.8
 
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
                       "Синий": [0, 0, 1, "#0000FF"],
@@ -1387,15 +1392,30 @@ class SSCTV(object):
                     ret_list.append([db_in, db_flat])
             return ret_list
 
+        data_var = {1: [14, 7, 2], 2: [16, 8, 2], 3: [12, 4, 2], 4: [12, 8, 2],
+                    5: [8, 6, 2], 6: [9, 8, 2], 7: [9, 7, 2], 8: [10, 6, 2],
+                    9: [20, 4, 2], 10: [18, 6, 2], 11: [22, 4, 2], 12: [20, 8, 2],
+                    13: [16, 4, 2], 14: [20, 6, 2], 15: [17, 4, 2]}
         data_4 = {26: 1.2,
                   #20: 1.5,
-                  18: 1.8,
-                  #16: 2.5,
-                  14: 3.0,
+                  #18: 1.8,
+                  16: 2.5,
+                  #14: 3.0,
                   #12: 4.0,
-                  10: 4.5}
-        data_6 = {20: 1.5, 16: 2.5, 12: 4.5}
-        data_8 = {20: 2.2, 16: 4.2, 12: 4.5}
+                  #10: 4.5
+                  }
+        data_6 = {20: 1.5,
+                  #16: 2.5,
+                  12: 4.5}
+        data_8 = {20: 2.2,
+                  #16: 4.2,
+                  12: 4.5}
+        data_full = data_var[SSCTV.variant]
+        SSCTV.tv6_floors = data_full[0]
+        SSCTV.tv6_flats = data_full[1]
+        SSCTV.tv6_lines = data_full[2]
+        SSCTV.tv6_floors_by_line = round(SSCTV.tv6_floors / SSCTV.tv6_lines)
+        SSCTV.tv6_floors += 1
         data = data_4
         if SSCTV.tv6_flats >= 5:
             data = data_6
@@ -1412,7 +1432,9 @@ class SSCTV(object):
             if show:
                 useful.append(lis[i])
                 print(lis[i])
-        SSCTV.tv6_used = useful[randint(0, len(useful) - 1)]
+        ind = randint(0, len(useful) - 1)
+        # ind = 2
+        SSCTV.tv6_used = useful[ind]
         SSCTV.tv6_used_data = data
 
     @staticmethod
@@ -1668,17 +1690,91 @@ class SSCTV(object):
 
     @staticmethod
     def tv7_formula_1(scene: M.Scene):
-        from math import floor
-        tts = SSf.SIPK_SSCTV_functions.formula_text_size
+        from math import cos, acos, sqrt, log10
+        tts = SSf.SIPK_SSCTV_functions.formula_text_size - 2.0
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        tx = r""
-        tex = M.MathTex(tx, font_size = txs, color = mc)
-        txt = M.Text("МГц", font_size = tts, color = mc)
-        gr = M.VGroup(tex, txt).arrange().next_to(
+        cos_phi = round(cos(SSCTV.tv7_phi), 3)
+        cos_lambda = round(cos(SSCTV.tv7_lambda), 3)
+        psi = acos(cos_phi * cos_lambda)
+        psi_grad = round(psi / 3.14159265 * 180.0)
+        R_3 = 6378
+        R_G = 42253
+        d = round(sqrt(R_3 ** 2 + R_G ** 2 - 2 * R_3 * R_G * cos(psi)))
+        L_0 = round(20.0 * (log10(SSCTV.tv7_f) + log10(d)) + 32.45, 3)
+        P_r = round(SSCTV.tv7_P_EIRP + 40.0 - 6.0 - L_0, 3)
+        K_n = round(10 ** (1/10), 3)
+        T_nr = round((K_n - 1.0) * 290.0, 3)
+        N_n = round(1.38 * (10 ** -9) * (120.0 + T_nr) * 27000000.0, 3)
+        P_r_nolog = 10 ** (P_r / 10.0)
+        SNR = round(P_r_nolog / N_n * (10 ** 14), 1)
+        tx = r"{\psi}_{0} = \arccos(\cos {\varphi}_{C^{'}} \cdot \cos {\Delta \lambda}_{C{'}}) = "
+        tx += r"\arccos(" + str(cos_phi) + r" \cdot "
+        tx += str(cos_lambda) + r") = " + str(psi_grad) + "^{\circ}"
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
-        scene.add(gr)
+        tx2 = r"d = \sqrt {{R_3}^2 + {R_G}^2 - 2 R_3 R_G \cos {\psi}_0} = "
+        tx2 += str(R_G) + r" \sqrt {" + str(round((R_3 / R_G) ** 2, 3)) + r" + 1 - "
+        tx2 += str(round(2.0 * R_3 / R_G * cos(psi), 3)) + r"} = " + str(d)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc)
+        txt2 = M.Text("км", font_size = tts, color = mc)
+        gr2 = M.VGroup(tex2, txt2).arrange().next_to(tex, M.DOWN)
+        tx3 = r"\frac {S}{N} = \frac {P_r}{N_n}"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(gr2, M.DOWN)
+        tx4 = r"P_r = P_{EIRP} + G_r - b_r - 20 \lg \left(\frac {4 \pi d}{\lambda}\right)"
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc)
+        txt4 = M.Text("дБВт", font_size = tts, color = mc)
+        gr4 = M.VGroup(tex4, txt4).arrange().next_to(tex3, M.DOWN)
+        tx5 = r"L_0 = 20 \cdot \left(\lg f + \lg d \right) + 32.45"
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc)
+        txt5 = M.Text("дБ", font_size = tts, color = mc)
+        gr5 = M.VGroup(tex5, txt5).arrange().next_to(gr4, M.DOWN)
+        tx6 = r"N_n = k \cdot \left(T_{na} + T_{nr} \right) \cdot \Delta f"
+        tex6 = M.MathTex(tx6, font_size = txs, color = mc)
+        txt6 = M.Text("Вт", font_size = tts, color = mc)
+        gr6 = M.VGroup(tex6, txt6).arrange().next_to(gr5, M.DOWN)
+        tx7 = r"T_{nr} = \left( K_n - 1 \right) \cdot T_0 "
+        tex7 = M.MathTex(tx7, font_size = txs, color = mc).next_to(gr6, M.DOWN)
+        tx8 = r"L_0 = 20 \cdot \left(\lg " + str(SSCTV.tv7_f) + r" + \lg " + str(d) + r" \right) + 32.45"
+        tx8 += r" = " + str(L_0)
+        tex8 = M.MathTex(tx8, font_size = txs, color = mc)
+        txt8 = M.Text("дБ", font_size = tts, color = mc)
+        gr8 = M.VGroup(tex8, txt8).arrange().next_to(tex7, M.DOWN)
+        tx9 = r"P_r = " + str(SSCTV.tv7_P_EIRP) + r" + 40 - 6 - " + str(L_0)
+        tx9 += r" = " + str(P_r)
+        tex9 = M.MathTex(tx9, font_size = txs, color = mc)
+        txt9 = M.Text("дБВт", font_size = tts, color = mc)
+        gr9 = M.VGroup(tex9, txt9).arrange().next_to(gr8, M.DOWN)
+        scene.add(tex, gr2, tex3, gr4, gr5, gr6, tex7, gr8, gr9)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        tx = r"K_n = 10^{\frac {K_{n \ log}}{10}} = 10^{\frac{1}{10}} = "
+        tx += str(K_n)
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = r"T_{nr} = \left( " + str(K_n) + r" - 1 \right) \cdot 290 = "
+        tx2 += str(T_nr)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc)
+        txt2 = M.Text("К", font_size = tts, color = mc)
+        gr2 = M.VGroup(tex2, txt2).arrange().next_to(tex, M.DOWN)
+        tx3 = r"N_n = 1.38 \cdot 10^{-23} \cdot \left(120 + " + str(T_nr)
+        tx3 += r" \right) \cdot 27000000 = " + str(N_n) + r" \cdot 10^{-14}"
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc)
+        txt3 = M.Text("Вт", font_size = tts, color = mc)
+        gr3 = M.VGroup(tex3, txt3).arrange().next_to(gr2, M.DOWN)
+        tx4 = r"P_r = 10^{\frac {P_{r \ log}}{10}} = 10^{\frac {" + str(P_r) + r"}{10}} = "
+        tx4 += SSf.SIPK_SSCTV_functions.float_to_exp10(P_r_nolog)
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc)
+        txt4 = M.Text("Вт", font_size = tts, color = mc)
+        gr4 = M.VGroup(tex4, txt4).arrange().next_to(gr3, M.DOWN)
+        tx5 = r"\frac {S}{N} = \frac {" + SSf.SIPK_SSCTV_functions.float_to_exp10(P_r_nolog)
+        tx5 += r"}{" + str(N_n) + r" \cdot 10^{-14}" + r"} = " + str(SNR) + r" = "
+        tx5 += str(round(10.0 * log10(SNR), 2))
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(gr4, M.DOWN)
+        txt5 = M.Text("дБ", font_size = tts, color = mc)
+        gr5 = M.VGroup(tex5, txt5).arrange().next_to(gr4, M.DOWN)
+        scene.add(tex, gr2, gr3, gr4, gr5)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
