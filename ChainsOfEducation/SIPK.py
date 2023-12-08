@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_in_group_list = 7
+    sipk4_5_6_7_in_group_list = 7
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -188,8 +188,9 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        SIPK.make_sipk5(scene)
+        # SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
+        SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1670,7 +1671,7 @@ class SIPK(object):
     def make_sipk4(scene: M.Scene):
         var_dict = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 3, 9: 5, 0: 7}
         SIPK.sipk3_hemming_example(scene)
-        compare_row = SIPK.sipk4_fvh[var_dict[SIPK.sipk4_5_6_in_group_list % 10]]
+        compare_row = SIPK.sipk4_fvh[var_dict[SIPK.sipk4_5_6_7_in_group_list % 10]]
         SIPK.sipk4_table_1(scene, compare_row)
         SIPK.sipk4_table_1(scene, SIPK.sipk4_make_mistake(compare_row, 1))
         SIPK.sipk4_table_1(scene, SIPK.sipk4_make_mistake(compare_row, 2))
@@ -1735,7 +1736,7 @@ class SIPK(object):
         fs = 36.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         table_data = []
-        start_word = SIPK.sipk4_5_6_in_group_list * 7
+        start_word = SIPK.sipk4_5_6_7_in_group_list * 7
         if start_word > 127: start_word -= 127
         print(start_word)
         print(SSf.SIPK_SSCTV_functions.fill_zeros(bin(start_word)[2:], 7))
@@ -1964,7 +1965,7 @@ class SIPK(object):
         mht = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_H)
         m = Matrix(mht, element_to_mobject_config = {"font_size": txs, "color": mc},
                    bracket_config = {"color": mc})
-        start_word = SIPK.sipk4_5_6_in_group_list * 7
+        start_word = SIPK.sipk4_5_6_7_in_group_list * 7
         if start_word > 127: start_word -= 127
         SSf.SIPK_SSCTV_functions.fill_zeros(bin(start_word)[2:], 7)
         dm = [SIPK.sipk4_str_to_list(
@@ -2003,7 +2004,7 @@ class SIPK(object):
         fs = 36.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         table_data = []
-        start_word = SIPK.sipk4_5_6_in_group_list * 7
+        start_word = SIPK.sipk4_5_6_7_in_group_list * 7
         if start_word > 127: start_word -= 127
         mht = SSf.SIPK_SSCTV_functions.transpose_list(SIPK.sipk4_matrix_H)
         for i in range(12):
@@ -2301,7 +2302,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant >= 31: variant -= 30
         if variant >= 15: variant -= 14
         if variant >= 15: variant -= 14
@@ -2355,7 +2356,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant >= 31: variant -= 30
         if variant >= 15: variant -= 14
         if variant >= 15: variant -= 14
@@ -2411,7 +2412,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         fs = 20.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant >= 31: variant -= 30
         if variant >= 15: variant -= 14
         if variant >= 15: variant -= 14
@@ -2813,7 +2814,7 @@ class SIPK(object):
     def sipk6_formula_1(scene: M.Scene):
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant > 30: variant -= 30
         for i in range(2, 7, 1):
             SSf.SIPK_SSCTV_functions.make_background(scene)
@@ -2944,7 +2945,7 @@ class SIPK(object):
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         txs_label = 36.0
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant > 30: variant -= 30
         abc = data_abc_by_var[variant]
         table_data = [[r"NVar", r"a", r"b", r"c"],
@@ -3045,7 +3046,7 @@ class SIPK(object):
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         txs_label = 36.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant > 30: variant -= 30
         ab = data_ab_by_var[variant]
         table_data = [[r"NVar", r"a", r"b"],
@@ -3129,7 +3130,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_in_group_list + 30 * 0
+        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * 0
         if variant > 127: variant -= 127
         variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 7)
         tx = str(variant) + r"_{10} = " + variant_bin + r"_2,\ u(x) = "
@@ -3320,7 +3321,7 @@ class SIPK(object):
             22: [12, 6], 23: [11, 4], 24: [10, 2],
             25: [9, 3], 26: [8, 5], 27: [7, 9],
             28: [6, 11], 29: [5, 13], 30: [4, 7]}
-        variant = SIPK.sipk4_5_6_in_group_list
+        variant = SIPK.sipk4_5_6_7_in_group_list
         if variant > 30: variant -= 30
         mistake2_nums = data_mistake_by_var[variant]
         SSf.SIPK_SSCTV_functions.make_background(scene)
@@ -3515,6 +3516,117 @@ class SIPK(object):
             line_config = {"color": mc, "stroke_width": 1}).next_to(
                 SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
         scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_sipk7(scene: M.Scene):
+        SIPK.sipk7_formula_1(scene)
+
+    @staticmethod
+    def sipk7_code_svert(bin_str: str):
+        def get_bits_by_state_and_bit(state: int, bit: str):
+            bits = ""
+            curr_state = 0
+            if state == 0:
+                if bit == "0":
+                    bits = "00"
+                    curr_state = 0
+                elif bit == "1":
+                    bits = "11"
+                    curr_state = 1
+            elif state == 1:
+                if bit == "0":
+                    bits = "01"
+                    curr_state = 2
+                elif bit == "1":
+                    bits = "10"
+                    curr_state = 3
+            elif state == 2:
+                if bit == "0":
+                    bits = "11"
+                    curr_state = 0
+                elif bit == "1":
+                    bits = "00"
+                    curr_state = 1
+            elif state == 3:
+                if bit == "0":
+                    bits = "10"
+                    curr_state = 2
+                elif bit == "1":
+                    bits = "01"
+                    curr_state = 3
+            return (curr_state, bits)
+        
+        state = 0
+        bits = ""
+        for i in range(len(bin_str)):
+            data = get_bits_by_state_and_bit(state, bin_str[i])
+            state = data[0]
+            bits += data[1]
+        return bits
+    
+    @staticmethod
+    def sipk7_formula_1(scene: M.Scene):
+        from random import randint
+        data_01_by_var = {
+            1: "10110110", 2: "10100011", 3: "01110010",
+            4: "10001011", 5: "11010001", 6: "10111001",
+            7: "11010001", 8: "01110101", 9: "11001001",
+            10: "01011011", 11: "01011100", 12: "11000110",
+            13: "11100101", 14: "01011101", 15: "10011001",
+            16: "10011101", 17: "10010111", 18: "01111001",
+            19: "11110101", 20: "01001110", 21: "01101011",
+            22: "11001011", 23: "10110011", 24: "11011101",
+            25: "11101101", 26: "01100101", 27: "10101110",
+            28: "10110101", 29: "10011001", 30: "01100101"}
+        variant = SIPK.sipk4_5_6_7_in_group_list
+        first = "001000"
+        second = data_01_by_var[variant] + "000"
+        first_mistake = 1
+        if first_mistake == -1:
+            first_mistake = randint(0, 3)
+        second_mistake = -1
+        while second_mistake == -1 or second_mistake == first_mistake:
+            second_mistake = randint(0, 3)
+        second_without = SIPK.sipk7_code_svert(second)
+        second_with_mistake = SIPK.sipk4_inverse_bit(second, first_mistake)
+        second_with_mistakes = SIPK.sipk4_inverse_bit(second_with_mistake, second_mistake)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tx = SIPK.sipk7_code_svert(first)
+        tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        tx2 = second_without
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx3 = SIPK.sipk7_code_svert(second_with_mistake)
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        tx4 = SIPK.sipk7_code_svert(second_with_mistakes)
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
+        scene.add(tex, tex2, tex3, tex4)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk7_diagram(scene: M.Scene, bin_str: str):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        
+                   
+                # ln1 = ZLine([
+                #     M.UP * 7.0 * (prb_line_old[g_indx] - 0.5)
+                #     + left_side + M.RIGHT * horz_offset * cycle,
+                #     M.UP * - 3.5
+                #     + left_side + M.RIGHT * horz_offset * (cycle + 1)
+                #     ], 0.1, 2, mc)
+                # ln2 = ZLine([
+                #     M.UP * 7.0 * (prb_line_old[g_indx + 1] - 0.5)
+                #     + left_side + M.RIGHT * horz_offset * cycle,
+                #     M.UP * 3.5
+                #     + left_side + M.RIGHT * horz_offset * (cycle + 1)
+                #     ], 0.1, 2, mc)
+                # scene.add(ln1, ln2)
+            
+                
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
