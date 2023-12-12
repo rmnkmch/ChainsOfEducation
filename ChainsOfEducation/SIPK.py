@@ -3523,44 +3523,45 @@ class SIPK(object):
         SIPK.sipk7_formula_1(scene)
 
     @staticmethod
+    def sipk7_get_bits_by_state_and_bit(state: int, bit: str):
+        bits = ""
+        curr_state = 0
+        if state == 0:
+            if bit == "0":
+                bits = "00"
+                curr_state = 0
+            elif bit == "1":
+                bits = "11"
+                curr_state = 1
+        elif state == 1:
+            if bit == "0":
+                bits = "01"
+                curr_state = 2
+            elif bit == "1":
+                bits = "10"
+                curr_state = 3
+        elif state == 2:
+            if bit == "0":
+                bits = "11"
+                curr_state = 0
+            elif bit == "1":
+                bits = "00"
+                curr_state = 1
+        elif state == 3:
+            if bit == "0":
+                bits = "10"
+                curr_state = 2
+            elif bit == "1":
+                bits = "01"
+                curr_state = 3
+        return (curr_state, bits)
+    
+    @staticmethod
     def sipk7_code_svert(bin_str: str):
-        def get_bits_by_state_and_bit(state: int, bit: str):
-            bits = ""
-            curr_state = 0
-            if state == 0:
-                if bit == "0":
-                    bits = "00"
-                    curr_state = 0
-                elif bit == "1":
-                    bits = "11"
-                    curr_state = 1
-            elif state == 1:
-                if bit == "0":
-                    bits = "01"
-                    curr_state = 2
-                elif bit == "1":
-                    bits = "10"
-                    curr_state = 3
-            elif state == 2:
-                if bit == "0":
-                    bits = "11"
-                    curr_state = 0
-                elif bit == "1":
-                    bits = "00"
-                    curr_state = 1
-            elif state == 3:
-                if bit == "0":
-                    bits = "10"
-                    curr_state = 2
-                elif bit == "1":
-                    bits = "01"
-                    curr_state = 3
-            return (curr_state, bits)
-        
         state = 0
         bits = ""
         for i in range(len(bin_str)):
-            data = get_bits_by_state_and_bit(state, bin_str[i])
+            data = SIPK.sipk7_get_bits_by_state_and_bit(state, bin_str[i])
             state = data[0]
             bits += data[1]
         return bits
@@ -3591,6 +3592,14 @@ class SIPK(object):
         second_without = SIPK.sipk7_code_svert(second)
         second_with_mistake = SIPK.sipk4_inverse_bit(second, first_mistake)
         second_with_mistakes = SIPK.sipk4_inverse_bit(second_with_mistake, second_mistake)
+        err1 = -1
+        err2 = -1
+        if err1 == -1:
+            err1 = randint(0, 8)
+        while err2 == -1 or err1 == err2:
+            err2 = randint(0, 8)
+        second_with_errors = SIPK.sipk4_inverse_bit(second_without, err1)
+        second_with_errors = SIPK.sipk4_inverse_bit(second_with_errors, err2)
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
@@ -3603,30 +3612,67 @@ class SIPK(object):
         tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
         tx4 = SIPK.sipk7_code_svert(second_with_mistakes)
         tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
-        scene.add(tex, tex2, tex3, tex4)
+        tx5 = second_with_errors
+        tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex4, M.DOWN)
+        scene.add(tex, tex2, tex3, tex4, tex5)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SIPK.sipk7_diagram(scene, second_with_errors)
 
     @staticmethod
+    def sipk7_get_points_by_state_and_bit(state: int, bit: str):
+        start_point = M.UP
+        end_point = M.UP
+        point0 = M.UP * 3.0
+        point1 = M.UP * 1.0
+        point2 = M.UP * -1.0
+        point3 = M.UP * -3.0
+        if state == 0:
+            start_point = point0
+            if bit == "0":
+                end_point = point0
+            elif bit == "1":
+                end_point = point1
+        elif state == 1:
+            start_point = point1
+            if bit == "0":
+                end_point = point2
+            elif bit == "1":
+                end_point = point3
+        elif state == 2:
+            start_point = point2
+            if bit == "0":
+                end_point = point0
+            elif bit == "1":
+                end_point = point1
+        elif state == 3:
+            start_point = point3
+            if bit == "0":
+                end_point = point2
+            elif bit == "1":
+                end_point = point3
+        return (start_point, end_point)
+    
+    @staticmethod
     def sipk7_diagram(scene: M.Scene, bin_str: str):
+        from math import ceil
         SSf.SIPK_SSCTV_functions.make_background(scene)
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        
-                   
-                # ln1 = ZLine([
-                #     M.UP * 7.0 * (prb_line_old[g_indx] - 0.5)
-                #     + left_side + M.RIGHT * horz_offset * cycle,
-                #     M.UP * - 3.5
-                #     + left_side + M.RIGHT * horz_offset * (cycle + 1)
-                #     ], 0.1, 2, mc)
-                # ln2 = ZLine([
-                #     M.UP * 7.0 * (prb_line_old[g_indx + 1] - 0.5)
-                #     + left_side + M.RIGHT * horz_offset * cycle,
-                #     M.UP * 3.5
-                #     + left_side + M.RIGHT * horz_offset * (cycle + 1)
-                #     ], 0.1, 2, mc)
-                # scene.add(ln1, ln2)
-            
-                
+        for state in range(4):
+            points0 = SIPK.sipk7_get_points_by_state_and_bit(state, "0")
+            points1 = SIPK.sipk7_get_points_by_state_and_bit(state, "1")
+            zline0 = ZLine([
+                points0[0] + M.RIGHT,
+                points0[1] + M.RIGHT * 2.0],
+                0.2, 2, mc)
+            zline1 = ZLine([
+                points1[0] + M.RIGHT,
+                points1[1] + M.RIGHT * 2.0],
+                0.2, 1, mc)
+            dash_lenght = 0.1
+            dash_ratio = 0.5
+            dash_number1 = int(ceil(zline1.get_length() / dash_lenght * dash_ratio))
+            a = M.DashedVMobject(zline1, dash_number1, dash_ratio).shift(M.UP)
+            scene.add(zline0, zline1, a)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
@@ -4179,7 +4225,7 @@ class ZLine(M.TipableVMobject):
             **kwargs)
 
         self.set_points_as_corners(points)
-        self.add_tip(self.create_tip(tip_length = size, tip_width = size))
+        self.add_tip(self.create_tip(tip_length = size, tip_width = size * 0.5))
 
 
 class Matrix(M.Matrix):
