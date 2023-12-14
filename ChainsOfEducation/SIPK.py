@@ -69,6 +69,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
+    sipk7_errs = []
+
 
     @staticmethod
     def get_all_ps_by_str(text: str):
@@ -3564,7 +3566,7 @@ class SIPK(object):
             data = SIPK.sipk7_get_bits_by_state_and_bit(state, bin_str[i])
             state = data[0]
             bits += data[1]
-        return bits
+        return (bits, state)
     
     @staticmethod
     def sipk7_formula_1(scene: M.Scene):
@@ -3589,28 +3591,29 @@ class SIPK(object):
         second_mistake = -1
         while second_mistake == -1 or second_mistake == first_mistake:
             second_mistake = randint(0, 3)
-        second_without = SIPK.sipk7_code_svert(second)
+        second_without = SIPK.sipk7_code_svert(second)[0]
         second_with_mistake = SIPK.sipk4_inverse_bit(second, first_mistake)
         second_with_mistakes = SIPK.sipk4_inverse_bit(second_with_mistake, second_mistake)
-        err1 = -1
-        err2 = -1
+        err1 = 1
+        err2 = 2
         if err1 == -1:
             err1 = randint(0, 8)
         while err2 == -1 or err1 == err2:
             err2 = randint(0, 8)
+        SIPK.sipk7_errs = [err1, err2]
         second_with_errors = SIPK.sipk4_inverse_bit(second_without, err1)
         second_with_errors = SIPK.sipk4_inverse_bit(second_with_errors, err2)
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        tx = SIPK.sipk7_code_svert(first)
+        tx = SIPK.sipk7_code_svert(first)[0]
         tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
         tx2 = second_without
         tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
-        tx3 = SIPK.sipk7_code_svert(second_with_mistake)
+        tx3 = SIPK.sipk7_code_svert(second_with_mistake)[0]
         tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
-        tx4 = SIPK.sipk7_code_svert(second_with_mistakes)
+        tx4 = SIPK.sipk7_code_svert(second_with_mistakes)[0]
         tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
         tx5 = second_with_errors
         tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex4, M.DOWN)
@@ -3619,13 +3622,14 @@ class SIPK(object):
         SIPK.sipk7_diagram(scene, second_with_errors)
 
     @staticmethod
+    def sipk7_get_points():
+        return [2.0, 1.0, 0.0, -1.0]
+    
+    @staticmethod
     def sipk7_get_points_by_state_and_bit(state: int, bit: str):
-        start_point = M.UP
-        end_point = M.UP
-        point0 = M.UP * 3.0
-        point1 = M.UP * 1.0
-        point2 = M.UP * -1.0
-        point3 = M.UP * -3.0
+        start_point = 0.0
+        end_point = 0.0
+        point0, point1, point2, point3 = SIPK.sipk7_get_points()
         if state == 0:
             start_point = point0
             if bit == "0":
@@ -3653,27 +3657,155 @@ class SIPK(object):
         return (start_point, end_point)
     
     @staticmethod
+    def sipk7_get_text_pos_by_state_and_bit(state: int, bit: str, stage_lenght: float):
+        r = M.RIGHT
+        u = M.UP
+        x_pos = r
+        y_pos = u
+        point0, point1, point2, point3 = SIPK.sipk7_get_points()
+        dy1 = 0.12
+        dy2 = 0.18
+        dy3 = 0.7
+        dy4 = 1.1
+        dx1 = 0.5
+        dx2 = 0.36
+        dx3 = 0.85
+        dx4 = 0.4
+        if state == 0:
+            if bit == "0":
+                x_pos = stage_lenght * dx1 * r
+                y_pos = (point0 + dy1) * u
+            elif bit == "1":
+                x_pos = stage_lenght * dx2 * r
+                y_pos = (point0 - dy2) * u
+        elif state == 1:
+            if bit == "0":
+                x_pos = stage_lenght * dx3 * r
+                y_pos = (point1 - dy3) * u
+            elif bit == "1":
+                x_pos = stage_lenght * dx4 * r
+                y_pos = (point1 - dy4) * u
+        elif state == 2:
+            if bit == "0":
+                x_pos = stage_lenght * dx4 * r
+                y_pos = (point2 + dy4) * u
+            elif bit == "1":
+                x_pos = stage_lenght * dx3 * r
+                y_pos = (point2 + dy3) * u
+        elif state == 3:
+            if bit == "0":
+                x_pos = stage_lenght * dx2 * r
+                y_pos = (point3 + dy2) * u
+            elif bit == "1":
+                x_pos = stage_lenght * dx1 * r
+                y_pos = (point3 - dy1) * u
+        return x_pos + y_pos
+    
+    @staticmethod
     def sipk7_diagram(scene: M.Scene, bin_str: str):
+        def is_another_step(step: int):
+            max_err = max(SIPK.sipk7_errs[0], SIPK.sipk7_errs[1])
+            if step <= max_err + 3:
+                return True
+            return False
+        
+        def make_new_ways(all_ways: list):
+            ret_list = []
+            for way in all_ways:
+                ret_list.append(way + "0")
+                ret_list.append(way + "1")
+            return ret_list
+        
+        def delete_ways(all_ways: list):
+            nonlocal bin_str
+            ret_list = []
+            way_final_state_hemming = []
+            for way in all_ways:
+                data = SIPK.sipk7_code_svert(way)
+                code = data[0]
+                state = data[1]
+                hemming = SIPK.sipk4_hemming_distance(code, bin_str[:len(code)])
+                way_final_state_hemming.append([way, state, hemming])
+            for i in range(len(way_final_state_hemming)):
+                for j in range(len(way_final_state_hemming) - 1 - i):
+                    if way_final_state_hemming[i][1] == way_final_state_hemming[j][1]:
+                        if way_final_state_hemming[i][2] > way_final_state_hemming[j][2]:
+                            ret_list.append(way_final_state_hemming[j][0])
+                        else:
+                            ret_list.append(way_final_state_hemming[i][0])
+            return ret_list
+        
+        def get_all_states(all_ways: list, stage: int):
+            ret_list = []
+            for way in all_ways:
+                state = SIPK.sipk7_code_svert(way[:stage])[1]
+                if state not in ret_list:
+                    ret_list.append(state)
+            return ret_list
+        
         from math import ceil
-        SSf.SIPK_SSCTV_functions.make_background(scene)
+        all_ways = [""]
+        # step - stage - state
+        state_texts = ["00", "10", "01", "11"]
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        for state in range(4):
-            points0 = SIPK.sipk7_get_points_by_state_and_bit(state, "0")
-            points1 = SIPK.sipk7_get_points_by_state_and_bit(state, "1")
-            zline0 = ZLine([
-                points0[0] + M.RIGHT,
-                points0[1] + M.RIGHT * 2.0],
-                0.2, 2, mc)
-            zline1 = ZLine([
-                points1[0] + M.RIGHT,
-                points1[1] + M.RIGHT * 2.0],
-                0.2, 1, mc)
-            dash_lenght = 0.1
-            dash_ratio = 0.5
-            dash_number1 = int(ceil(zline1.get_length() / dash_lenght * dash_ratio))
-            a = M.DashedVMobject(zline1, dash_number1, dash_ratio).shift(M.UP)
-            scene.add(zline0, zline1, a)
-        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        state_font_size = 14.0
+        dots_pos = SIPK.sipk7_get_points()
+        dots_radius = 0.05
+        step = 1
+        while is_another_step(step):
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            all_ways = make_new_ways(all_ways)
+            vg = M.VGroup()
+            vg.add(M.Text("Шаг " + str(step), font_size = 30.0, color = mc
+                          ).next_to(SSf.SIPK_SSCTV_functions.upper_side, M.DOWN))
+            for i in range(len(dots_pos)):
+                vg.add(M.Dot(M.UP * dots_pos[i] + M.RIGHT * -6.5, dots_radius, color = mc))
+                vg.add(M.Text(state_texts[i], font_size = 20.0, color = mc
+                              ).next_to(M.UP * dots_pos[i] + M.RIGHT * -6.5, M.LEFT, 0.1))
+            for stage in range(step):
+                stage_lenght = min(13.0 / step, 2.0)
+                vg.add(M.Text(bin_str[stage * 2:stage * 2 + 2],
+                              font_size = 24.0, color = mc
+                              ).move_to(M.UP * 3.0 + M.RIGHT
+                                        * (-6.5 + (stage + 0.5) * stage_lenght)))
+                for i in range(len(dots_pos)):
+                    vg.add(M.Dot(M.UP * dots_pos[i] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght),
+                                 dots_radius, color = mc))
+                for state in get_all_states(all_ways, stage):
+                    points0 = SIPK.sipk7_get_points_by_state_and_bit(state, "0")
+                    points1 = SIPK.sipk7_get_points_by_state_and_bit(state, "1")
+                    zline0 = ZLine([
+                        M.UP * points0[0] + M.RIGHT * (-6.5 + stage * stage_lenght),
+                        M.UP * points0[1] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght)],
+                        0.2, 2, mc)
+                    zline1 = ZLine([
+                        M.UP * points1[0] + M.RIGHT * (-6.5 + stage * stage_lenght),
+                        M.UP * points1[1] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght)],
+                        0.2, 2, mc)
+                    text0 = M.Text(SIPK.sipk7_get_bits_by_state_and_bit(state, "0")[1],
+                                   font_size = state_font_size, color = mc)
+                    text0.move_to(SIPK.sipk7_get_text_pos_by_state_and_bit(
+                        state, "0", stage_lenght) + M.RIGHT * (-6.5 + stage * stage_lenght))
+                    text0.rotate(SSf.SIPK_SSCTV_functions.get_angle_by_dx_dy(
+                        stage_lenght, points0[1] - points0[0]))
+                    text1 = M.Text(SIPK.sipk7_get_bits_by_state_and_bit(state, "1")[1],
+                                   font_size = state_font_size, color = mc)
+                    text1.move_to(SIPK.sipk7_get_text_pos_by_state_and_bit(
+                        state, "1", stage_lenght) + M.RIGHT * (-6.5 + stage * stage_lenght))
+                    text1.rotate(SSf.SIPK_SSCTV_functions.get_angle_by_dx_dy(
+                        stage_lenght, points1[1] - points1[0]))
+                    dash_lenght = 0.1
+                    dash_ratio = 0.5
+                    dash_number1 = int(ceil(zline1.get_length() / dash_lenght * dash_ratio))
+                    a = M.DashedVMobject(zline1, dash_number1, dash_ratio)
+                    vg.add(zline0, zline1, text0, text1)
+            scene.add(vg)
+            step += 1
+            print(all_ways)
+            if len(all_ways) > 4:
+                all_ways = delete_ways(all_ways)
+            print(all_ways)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def sipk_lr3_formula_1(scene: M.Scene):
