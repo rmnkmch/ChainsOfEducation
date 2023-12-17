@@ -3523,6 +3523,7 @@ class SIPK(object):
     @staticmethod
     def make_sipk7(scene: M.Scene):
         SIPK.sipk7_formula_1(scene)
+        SIPK.sipk7_diagram_2(scene)
 
     @staticmethod
     def sipk7_get_bits_by_state_and_bit(state: int, bit: str):
@@ -3575,7 +3576,7 @@ class SIPK(object):
         for i in range(len(bin_str)):
             ret_str += bin_str[i]
             if row % chars_row == chars_row - 1:
-                ret_str += "\ "
+                ret_str += r"\ "
             row += 1
         return ret_str
     
@@ -3721,6 +3722,8 @@ class SIPK(object):
     
     @staticmethod
     def sipk7_diagram(scene: M.Scene, bin_str: str):
+        from math import ceil
+
         def is_another_step(step: int):
             if step <= 11:
                 return True
@@ -3810,20 +3813,25 @@ class SIPK(object):
                 ret_list = [ways_list, hemming_list, states_list, bits_list]
             return ret_list
         
-        def get_zline_by_style(start, end, style: str):
-            nonlocal mc
+        def get_zline_by_style(start, end, bit_style: str):
+            bit = bit_style[0]
+            colour = "#000000"
+            if bit == "0":
+                colour = "#1111DD"
+            elif bit == "1":
+                colour = "#11DD11"
+            style = bit_style[1]
             if style == "0":
-                return ZLine([start, end], 0.2, 3, mc)
+                return ZLine([start, end], 0.2, 3, colour)
             elif style == "1":
                 dash_lenght = 0.05
                 dash_ratio = 0.5
-                zline = ZLine([start, end], 0.2, 3, mc)
+                zline = ZLine([start, end], 0.2, 3, colour)
                 dash_number = int(ceil(zline.get_length() / dash_lenght * dash_ratio))
                 return M.DashedVMobject(zline, dash_number, dash_ratio)
             elif style == "2":
-                return ZLine([start, end], 0.22, 6, mc)
+                return ZLine([start, end], 0.23, 7, colour)
             
-        from math import ceil
         all_ways = ["0", "1"]
         state_texts = ["00", "10", "01", "11"]
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
@@ -3890,7 +3898,7 @@ class SIPK(object):
                         zline = get_zline_by_style(
                             M.UP * points[0] + M.RIGHT * (-6.5 + stage * stage_lenght),
                             M.UP * points[1] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght),
-                            state_bit[1])
+                            state_bit)
                         text = M.Text(SIPK.sipk7_get_bits_by_state_and_bit(state, state_bit[0])[1],
                                       font_size = state_font_size, color = mc)
                         text.move_to(SIPK.sipk7_get_text_pos_by_state_and_bit(
@@ -3903,6 +3911,54 @@ class SIPK(object):
             step += 1
             all_ways = make_new_ways(all_ways)
             SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk7_diagram_2(scene: M.Scene):
+        def get_zline_by_style(start, end, bit_style: str):
+            bit = bit_style[0]
+            colour = "#000000"
+            if bit == "0":
+                colour = "#1111DD"
+            elif bit == "1":
+                colour = "#11DD11"
+            return ZLine([start, end], 0.2, 3, colour)
+        
+        state_texts = ["00", "10", "01", "11"]
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        state_font_size = 18.0
+        dots_pos = SIPK.sipk7_get_points()
+        dots_radius = 0.05
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        vg = M.VGroup()
+        for i in range(len(dots_pos)):
+            vg.add(M.Dot(M.UP * dots_pos[i] + M.RIGHT * -6.5, dots_radius, color = mc))
+            vg.add(M.Text(state_texts[i], font_size = 20.0, color = mc
+                          ).next_to(M.UP * dots_pos[i] + M.RIGHT * -6.5, M.LEFT, 0.1))
+        for stage in range(3):
+            stage_lenght = 2.0
+            for i in range(len(dots_pos)):
+                vg.add(M.Dot(M.UP * dots_pos[i]
+                             + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght),
+                             dots_radius, color = mc))
+            for state in range(4):
+                if stage == 0 and state >= 1: continue
+                if stage == 1 and state >= 2: continue
+                for state_bit in ["00", "10"]:
+                    points = SIPK.sipk7_get_points_by_state_and_bit(state, state_bit[0])
+                    zline = get_zline_by_style(
+                        M.UP * points[0] + M.RIGHT * (-6.5 + stage * stage_lenght),
+                        M.UP * points[1] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght),
+                        state_bit)
+                    text = M.Text(SIPK.sipk7_get_bits_by_state_and_bit(state, state_bit[0])[1],
+                                      font_size = state_font_size, color = mc)
+                    text.move_to(SIPK.sipk7_get_text_pos_by_state_and_bit(
+                        state, state_bit[0], stage_lenght)
+                        + M.RIGHT * (-6.5 + stage * stage_lenght))
+                    text.rotate(SSf.SIPK_SSCTV_functions.get_angle_by_dx_dy(
+                        stage_lenght, points[1] - points[0]))
+                    vg.add(zline, text)
+        scene.add(vg.move_to(M.ORIGIN))
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
     def sipk_lr3_formula_1(scene: M.Scene):
