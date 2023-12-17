@@ -191,10 +191,7 @@ class ChainsOfEducation(M.MovingCameraScene):
         return (ret_x, ret_y)
 
     r"""
-cd /d D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
-cd D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation
 cd ChainsOfEducation
-manim -pql ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png -r 800,800
