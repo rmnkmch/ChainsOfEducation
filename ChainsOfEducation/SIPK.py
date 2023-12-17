@@ -3569,6 +3569,17 @@ class SIPK(object):
         return (bits, state)
     
     @staticmethod
+    def sipk7_add_spaces(bin_str: str, chars_row: int = 2):
+        ret_str = ""
+        row = 0
+        for i in range(len(bin_str)):
+            ret_str += bin_str[i]
+            if row % chars_row == chars_row - 1:
+                ret_str += "\ "
+            row += 1
+        return ret_str
+    
+    @staticmethod
     def sipk7_formula_1(scene: M.Scene):
         from random import randint
         data_01_by_var = {
@@ -3585,7 +3596,6 @@ class SIPK(object):
         variant = SIPK.sipk4_5_6_7_in_group_list
         first = "001000"
         second = data_01_by_var[variant] + "000"
-        print(second)
         first_mistake = -1
         if first_mistake == -1:
             first_mistake = randint(0, 3)
@@ -3608,18 +3618,24 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        tx = SIPK.sipk7_code_svert(first)[0]
+        tx = SIPK.sipk7_add_spaces(SIPK.sipk7_code_svert(first)[0])
         tex = M.MathTex(tx, font_size = txs, color = mc).next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
-        tx2 = second_without
-        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex, M.DOWN)
-        tx3 = SIPK.sipk7_code_svert(second_with_mistake)[0]
-        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex2, M.DOWN)
-        tx4 = SIPK.sipk7_code_svert(second_with_mistakes)[0]
-        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex3, M.DOWN)
-        tx5 = second_with_errors
+        tx22 = second
+        tex22 = M.MathTex(tx22, font_size = txs, color = mc).next_to(tex, M.DOWN)
+        tx2 = SIPK.sipk7_add_spaces(second_without)
+        tex2 = M.MathTex(tx2, font_size = txs, color = mc).next_to(tex22, M.DOWN)
+        tx33 = second_with_mistake
+        tex33 = M.MathTex(tx33, font_size = txs, color = mc).next_to(tex2, M.DOWN)
+        tx3 = SIPK.sipk7_add_spaces(SIPK.sipk7_code_svert(second_with_mistake)[0])
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(tex33, M.DOWN)
+        tx44 = second_with_mistakes
+        tex44 = M.MathTex(tx44, font_size = txs, color = mc).next_to(tex3, M.DOWN)
+        tx4 = SIPK.sipk7_add_spaces(SIPK.sipk7_code_svert(second_with_mistakes)[0])
+        tex4 = M.MathTex(tx4, font_size = txs, color = mc).next_to(tex44, M.DOWN)
+        tx5 = SIPK.sipk7_add_spaces(second_with_errors)
         tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(tex4, M.DOWN)
-        scene.add(tex, tex2, tex3, tex4, tex5)
+        scene.add(tex, tex2, tex22, tex3, tex33, tex4, tex44, tex5)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         SIPK.sipk7_diagram(scene, second_with_errors)
 
