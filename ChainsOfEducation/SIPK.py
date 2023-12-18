@@ -70,6 +70,8 @@ class SIPK(object):
     sipk6_sigmas = []
 
     sipk7_errs = []
+    sipk7_soft = "-1, -1; 1, 3; 2, 1; 1, 2; 2, -3; -2, -4; 3, 4; -2, -4; 3, -3; -4, -2; 1, 2"
+    sipk7_final_way = ""
 
 
     @staticmethod
@@ -3639,6 +3641,8 @@ class SIPK(object):
         scene.add(tex, tex2, tex22, tex3, tex33, tex4, tex44, tex5)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         SIPK.sipk7_diagram(scene, second_with_errors)
+        SIPK.sipk7_perforator(scene, second_without)
+        SIPK.sipk7_soft_solution(scene, second_without)
 
     @staticmethod
     def sipk7_get_points():
@@ -3792,7 +3796,9 @@ class SIPK(object):
                         state = SIPK.sipk7_code_svert(final_way[:stage])[1]
                         bits_list_in[state].append(final_way[stage:stage + 1] + "2")
                         states_list_in.append(state)
-                        if stage == 0: print(final_way)
+                        if stage == 0:
+                            print(final_way)
+                            SIPK.sipk7_final_way = final_way
                     for way in ways_list:
                         state = SIPK.sipk7_code_svert(way[:stage])[1]
                         if (way[stage:stage + 1] + "0" not in bits_list_in[state] and
@@ -3958,6 +3964,289 @@ class SIPK(object):
                         stage_lenght, points[1] - points[0]))
                     vg.add(zline, text)
         scene.add(vg.move_to(M.ORIGIN))
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk7_perforator(scene: M.Scene, bin_str: str):
+        def perforate(bin_str: str, type: int):
+            ret_str = ""
+            perf_lits = []
+            if type == 2:
+                perf_lits = [2, 6, 10, 14, 18, 22]
+            elif type == 3:
+                perf_lits = [2, 5, 8, 11, 14, 17, 20]
+            elif type == 5:
+                perf_lits = [2, 5, 6, 9, 12, 15, 16, 19]
+            elif type == 7:
+                perf_lits = [2, 4, 6, 9, 10, 13, 16, 18, 20]
+            for i in range(len(bin_str)):
+                if i in perf_lits:
+                    ret_str += "X"
+                else:
+                    ret_str += bin_str[i]
+            return ret_str
+
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = SSf.SIPK_SSCTV_functions.formula_tex_size - 4.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        text = M.Text("Исходная последовательность:", font_size = 24.0, color = mc
+                      ).next_to(M.UP * 3.0 + M.RIGHT * -2.0, M.LEFT, 0.5)
+        perf2 = perforate(bin_str, 2)
+        perf3 = perforate(bin_str, 3)
+        perf5 = perforate(bin_str, 5)
+        perf7 = perforate(bin_str, 7)
+        pfs = [bin_str, perf2, perf3, perf5, perf7]
+        Rs = [r"", r"R = \frac{2}{3}:", r"R = \frac{3}{4}:",
+              r"R = \frac{5}{6}:", r"R = \frac{7}{8}:"]
+        vg = M.VGroup(text)
+        for j in range(5):
+            for i in range(len(bin_str) // 2):
+                tex = M.MathTex(pfs[j][2 * i:2 * i + 2], font_size = txs, color = mc)
+                tex.move_to(M.UP * (3 - j) + M.RIGHT * (-2.0 + i * 0.7))
+                vg.add(tex)
+            tex = M.MathTex(Rs[j], font_size = txs, color = mc)
+            tex.next_to(M.UP * (3 - j) + M.RIGHT * -2.0, M.LEFT, 0.7)
+            vg.add(tex)
+        scene.add(vg)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def sipk7_soft_solution(scene: M.Scene, bin_str: str):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = 24.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        texts = ["Исходная\nпоследовательность",
+                 "Последовательность\nс мягким решением",
+                 "Преобразованная\nпоследовательность"]
+        soft = SIPK.sipk7_soft
+        soft_list = []
+        for numbers in soft.split("; "):
+            nums = numbers.split(", ")
+            soft_list.append([int(nums[0]), int(nums[1])])
+        soft_paired = []
+        transf_to_hard = []
+        for i in range(len(soft_list)):
+            f = "0"
+            s = "0"
+            if soft_list[i][0] < 0:
+                f = "1"
+            if soft_list[i][1] < 0:
+                s = "1"
+            transf_to_hard.append(f)
+            transf_to_hard.append(s)
+            soft_paired.append(str(soft_list[i][0]))
+            soft_paired.append(str(soft_list[i][1]))
+        bins = [[bin_str[i:i + 1] for i in range(len(bin_str))],
+                soft_paired, transf_to_hard]
+        table_data = [[texts[0], *bins[0]],
+                      [texts[1], *bins[1]],
+                      [texts[2], *bins[2]]]
+        highlighted = []
+        for i in range(len(transf_to_hard)):
+            if bins[0][i] != bins[2][i]:
+                highlighted.append((3, i + 2))
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.25,
+            h_buff = 0.25,
+            element_to_mobject = M.Text,
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            line_config = {"color": mc, "stroke_width": 2}).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        for cell in highlighted:
+            table.add_highlighted_cell(cell, color = "#AAAAAA")
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SIPK.sipk7_soft_table(scene, soft_list)
+
+    @staticmethod
+    def sipk7_soft_table(scene: M.Scene, soft_list: list):
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        txs = 28.0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        left_part = [[" ", "C1", "00", "01", "00", "01", "10", "11", "10", "11"],
+                     [" ", r"б\ч", "00", "11", "11", "00", "01", "10", "10", "01"]]
+        right_part = [" ", "C2", "00", "00", "10", "10", "01", "01", "11", "11"]
+        middle_part = []
+        metrics_list = []
+        for i in range(len(soft_list)):
+            b1 = soft_list[i][0]
+            b2 = soft_list[i][1]
+            middle_part.append([str(i + 1), str(b1) + ", " + str(b2),
+                                str( b1 + b2), str(-b1 - b2),
+                                str(-b1 - b2), str( b1 + b2),
+                                str( b1 - b2), str(-b1 + b2),
+                                str(-b1 + b2), str( b1 - b2)])
+            metrics_list.append([ b1 + b2, -b1 - b2,
+                                 -b1 - b2,  b1 + b2,
+                                  b1 - b2, -b1 + b2,
+                                 -b1 + b2,  b1 - b2])
+        left_middle_part = SIPK.sipk4_matrix_concatenate(left_part, middle_part, True)
+        table_data = SIPK.sipk4_matrix_concatenate(left_middle_part, right_part, True)
+        table_data = SSf.SIPK_SSCTV_functions.transpose_list(table_data)
+        table = SSf.Table(
+            table_data,
+            include_outer_lines = True,
+            v_buff = 0.3,
+            h_buff = 0.3,
+            element_to_mobject = M.Text,
+            element_to_mobject_config = {"font_size": txs, "color": mc},
+            line_config = {"color": mc, "stroke_width": 2}).next_to(
+                SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SIPK.sipk7_soft_diagram(scene, metrics_list)
+
+    @staticmethod
+    def sipk7_soft_diagram(scene: M.Scene, metrics_list: list):
+        from math import ceil
+
+        def get_text_by_stage_state_bit(stage: int, state: int, bit: str):
+            nonlocal metrics_list
+            i = 0
+            if state == 0:
+                if bit == "0": i = 0
+                elif bit == "1": i = 2
+            elif state == 1:
+                if bit == "0": i = 4
+                elif bit == "1": i = 6
+            elif state == 2:
+                if bit == "0": i = 1
+                elif bit == "1": i = 3
+            elif state == 3:
+                if bit == "0": i = 5
+                elif bit == "1": i = 7
+            return str(metrics_list[stage][i])
+        
+        def get_all_data():
+            def make_current_metrix_sum(previous_metrix: list, stage: int):
+                nonlocal metrics_list
+                if stage == 0:
+                    metrixs = [metrics_list[stage][0], metrics_list[stage][2],
+                               0, 0, 0, 0, 0, 0]
+                    return metrixs
+                elif stage == 1:
+                    metrixs = [metrics_list[stage][0] + previous_metrix[0],
+                               metrics_list[stage][2] + previous_metrix[0],
+                               metrics_list[stage][4] + previous_metrix[1],
+                               metrics_list[stage][6] + previous_metrix[1],
+                               -10, -10, -10, -10]
+                    return metrixs
+                else:
+                    max_0 = previous_metrix[0]
+                    if previous_metrix[4] > max_0: max_0 = previous_metrix[4]
+                    max_1 = previous_metrix[1]
+                    if previous_metrix[5] > max_1: max_1 = previous_metrix[5]
+                    max_2 = previous_metrix[2]
+                    if previous_metrix[6] > max_2: max_2 = previous_metrix[6]
+                    max_3 = previous_metrix[3]
+                    if previous_metrix[7] > max_3: max_3 = previous_metrix[7]
+                    metrixs = [metrics_list[stage][0] + max_0,
+                               metrics_list[stage][2] + max_0,
+                               metrics_list[stage][4] + max_1,
+                               metrics_list[stage][6] + max_1,
+                               metrics_list[stage][1] + max_2,
+                               metrics_list[stage][3] + max_2,
+                               metrics_list[stage][5] + max_3,
+                               metrics_list[stage][7] + max_3]
+                    return metrixs
+                
+            nonlocal metrics_list
+            ret_list = []
+            states_list = []
+            bit_style_list = []
+            sum_metrix_list = [[0, 0, 0, 0, 0, 0, 0, 0],]
+            for metrix_row_i in range(len(metrics_list)):
+                sum_metrix_list.append(make_current_metrix_sum(
+                    sum_metrix_list[-1], metrix_row_i))
+                if metrix_row_i == 0:
+                    states_list.append([0,])
+                elif metrix_row_i == 1:
+                    states_list.append([0, 1])
+                else:
+                    states_list.append([0, 1, 2, 3])
+                state = SIPK.sipk7_code_svert(SIPK.sipk7_final_way[:metrix_row_i])[1]
+                bit_style_list.append([
+                    state, SIPK.sipk7_final_way[metrix_row_i:metrix_row_i + 1] + "2"])
+            ret_list = [states_list, sum_metrix_list, bit_style_list]
+            return ret_list
+        
+        def get_zline_by_style(start, end, bit_style: str):
+            bit = bit_style[0]
+            colour = "#000000"
+            if bit == "0":
+                colour = "#1111DD"
+            elif bit == "1":
+                colour = "#11DD11"
+            style = bit_style[1]
+            if style == "0":
+                return ZLine([start, end], 0.2, 2, colour)
+            elif style == "1":
+                dash_lenght = 0.05
+                dash_ratio = 0.5
+                zline = ZLine([start, end], 0.2, 2, colour)
+                dash_number = int(ceil(zline.get_length() / dash_lenght * dash_ratio))
+                return M.DashedVMobject(zline, dash_number, dash_ratio)
+            elif style == "2":
+                return ZLine([start, end], 0.23, 6, colour)
+            
+        data_full = get_all_data()
+        state_texts = ["00", "10", "01", "11"]
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        state_font_size = 14.0
+        dots_pos = SIPK.sipk7_get_points()
+        dots_radius = 0.05
+        SSf.SIPK_SSCTV_functions.make_background(scene)
+        vg = M.VGroup()
+        for i in range(len(dots_pos)):
+            vg.add(M.Dot(M.UP * dots_pos[i] + M.RIGHT * -6.5, dots_radius, color = mc))
+            vg.add(M.Text(state_texts[i], font_size = 20.0, color = mc
+                          ).next_to(M.UP * dots_pos[i] + M.RIGHT * -6.5, M.LEFT, 0.12))
+        stage_lenght = 13.0 / 11.0
+        for stage in range(len(metrics_list)):
+            vg.add(M.Text(str(stage + 1), font_size = 24.0, color = mc
+                          ).move_to(M.UP * 3.0 + M.RIGHT * (-6.5 + (stage + 0.5) * stage_lenght)))
+            for i in range(len(dots_pos)):
+                vg.add(M.Dot(M.UP * dots_pos[i] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght),
+                             dots_radius, color = mc))
+            for i in range(8):
+                if stage == 0 and i >= 2: break
+                elif stage == 1 and i >= 4: break
+                dir = M.UP
+                if i // 4 == 1:
+                    dir = M.DOWN
+                vg.add(M.Text(str(data_full[1][stage + 1][i]), font_size = 18.0, color = mc
+                              ).next_to(M.UP * (dots_pos[i % 4]) + M.RIGHT
+                                        * (-6.5 + (stage + 1) * stage_lenght), dir, 0.13))
+            for i in range(4):
+                shift_y = -0.2
+                if stage == 0 or stage == 1: break
+                if int(data_full[1][stage + 1][i]) < int(data_full[1][stage + 1][i + 4]):
+                    shift_y = 0.2
+                vg.add(M.Line(M.UP * (dots_pos[i] + 0.1 + shift_y)
+                              + M.RIGHT * (-6.65 + (stage + 1) * stage_lenght),
+                              M.UP * (dots_pos[i] - 0.1 + shift_y)
+                              + M.RIGHT * (-6.35 + (stage + 1) * stage_lenght),
+                              color = mc, stroke_width = 1))
+            for state in data_full[0][stage]:
+                for state_bit in ["00", "10"]:
+                    if [state, state_bit[0] + "2"] == data_full[2][stage]:
+                        state_bit = state_bit[0] + "2"
+                    points = SIPK.sipk7_get_points_by_state_and_bit(state, state_bit[0])
+                    zline = get_zline_by_style(
+                        M.UP * points[0] + M.RIGHT * (-6.5 + stage * stage_lenght),
+                        M.UP * points[1] + M.RIGHT * (-6.5 + (stage + 1) * stage_lenght),
+                        state_bit)
+                    text = M.Text(get_text_by_stage_state_bit(stage, state, state_bit[0]),
+                                  font_size = state_font_size, color = mc)
+                    text.move_to(SIPK.sipk7_get_text_pos_by_state_and_bit(
+                        state, state_bit[0], stage_lenght)
+                        + M.RIGHT * (-6.5 + stage * stage_lenght))
+                    text.rotate(SSf.SIPK_SSCTV_functions.get_angle_by_dx_dy(
+                        stage_lenght, points[1] - points[0]))
+                    vg.add(zline, text)
+        scene.add(vg)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
 
     @staticmethod
