@@ -69,8 +69,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
-    sipk7_errs = []
-    sipk7_soft = "-1, -1; 1, 3; 2, 1; 1, 2; 2, -3; -2, -4; 3, 4; -2, -4; 3, -3; -4, -2; 1, 2"
+    sipk7_errs = [-1, -1]
+    sipk7_soft = "-2, -4; -1, -3; 3, 4; -3, 1; -2, 2; 4, 3; 1, 1; 2, 4; 4, -1; -1, 1; 3, 4"
     sipk7_final_way = ""
 
 
@@ -3608,14 +3608,15 @@ class SIPK(object):
         second_without = SIPK.sipk7_code_svert(second)[0]
         second_with_mistake = SIPK.sipk4_inverse_bit(second, first_mistake)
         second_with_mistakes = SIPK.sipk4_inverse_bit(second_with_mistake, second_mistake)
-        err1 = 2
-        err2 = 6
+        err1 = SIPK.sipk7_errs[0]
+        err2 = SIPK.sipk7_errs[1]
         if err1 == -1:
-            err1 = randint(0, 7)
+            err1 = randint(0, 9)
         while err2 == -1 or err1 == err2:
-            err2 = randint(1, 8)
+            err2 = randint(0, 10)
         SIPK.sipk7_errs = [err1, err2]
         print(SIPK.sipk7_errs)
+        print(second_without)
         second_with_errors = SIPK.sipk4_inverse_bit(second_without, err1)
         second_with_errors = SIPK.sipk4_inverse_bit(second_with_errors, err2)
         SSf.SIPK_SSCTV_functions.make_background(scene)
@@ -3989,7 +3990,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size - 4.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        text = M.Text("Исходная последовательность:", font_size = 24.0, color = mc
+        text = M.Text("Исходная\nпоследовательность:", font_size = 24.0, color = mc
                       ).next_to(M.UP * 3.0 + M.RIGHT * -2.0, M.LEFT, 0.5)
         perf2 = perforate(bin_str, 2)
         perf3 = perforate(bin_str, 3)
@@ -4013,7 +4014,7 @@ class SIPK(object):
     @staticmethod
     def sipk7_soft_solution(scene: M.Scene, bin_str: str):
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        txs = 24.0
+        txs = 22.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         texts = ["Исходная\nпоследовательность",
                  "Последовательность\nс мягким решением",
@@ -4063,7 +4064,7 @@ class SIPK(object):
     @staticmethod
     def sipk7_soft_table(scene: M.Scene, soft_list: list):
         SSf.SIPK_SSCTV_functions.make_background(scene)
-        txs = 28.0
+        txs = 24.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         left_part = [[" ", "C1", "00", "01", "00", "01", "10", "11", "10", "11"],
                      [" ", r"б\ч", "00", "11", "11", "00", "01", "10", "10", "01"]]
