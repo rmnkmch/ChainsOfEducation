@@ -70,7 +70,7 @@ class SIPK(object):
     sipk6_sigmas = []
 
     sipk7_errs = [-1, -1]
-    sipk7_soft = "-2, -4; -1, -3; 3, 4; -3, 1; -2, 2; 4, 3; 1, 1; 2, 4; 4, -1; -1, 1; 3, 4"
+    sipk7_soft = ""
     sipk7_final_way = ""
 
 
@@ -192,9 +192,9 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        # SIPK.make_sipk5(scene)
+        SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
-        SIPK.make_sipk7(scene)
+        # SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2284,22 +2284,22 @@ class SIPK(object):
 
     @staticmethod
     def make_sipk5(scene: M.Scene):
-        # SIPK.sipk5_formula_1(scene)
-        # SIPK.sipk5_formula_2(scene)
-        # SIPK.sipk5_table_1(scene)
-        # SIPK.sipk5_formula_3(scene)
-        # SIPK.sipk5_table_2(scene)
-        # SIPK.sipk5_formula_4(scene)
-        # SIPK.sipk5_table_3(scene)
-        # SIPK.sipk5_formula_5(scene)
-        # SIPK.sipk5_formula_6(scene)
-        # SIPK.sipk5_formula_7(scene)
+        SIPK.sipk5_formula_1(scene)
+        SIPK.sipk5_formula_2(scene)
+        SIPK.sipk5_table_1(scene)
+        SIPK.sipk5_formula_3(scene)
+        SIPK.sipk5_table_2(scene)
+        SIPK.sipk5_formula_4(scene)
+        SIPK.sipk5_table_3(scene)
+        SIPK.sipk5_formula_5(scene)
+        SIPK.sipk5_formula_6(scene)
+        SIPK.sipk5_formula_7(scene)
         # SIPK.sipk_lr3_formula_1(scene)
         # SIPK.sipk_lr3_table_1(scene)
         # SIPK.sipk_lr3_graphs_1(scene)
         # SIPK.sipk_lr3_legend(scene)
-        SIPK.sipk_lr4_graphs_1(scene)
-        SIPK.sipk_lr4_legend(scene)
+        # SIPK.sipk_lr4_graphs_1(scene)
+        # SIPK.sipk_lr4_legend(scene)
 
     @staticmethod
     def sipk5_formula_1(scene: M.Scene):
@@ -3164,10 +3164,13 @@ class SIPK(object):
                 remainder_list.append(char)
         remainder_polinom = "".join(remainder_list)
         V_s_x_polinom = variant_polinom + " + " + remainder_polinom
+        scene.add(tex, tex2, table)
+        SSf.SIPK_SSCTV_functions.make_pause(scene)
+        SSf.SIPK_SSCTV_functions.make_background(scene)
         tx3 = r"v(x) = " + V_s_x_polinom
-        tex3 = M.MathTex(tx3, font_size = txs, color = mc
-                         ).next_to(table, M.DOWN, 0.4)
-        scene.add(tex, tex2, table, tex3)
+        tex3 = M.MathTex(tx3, font_size = txs, color = mc).next_to(
+            SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
+        scene.add(tex3)
         SSf.SIPK_SSCTV_functions.make_pause(scene)
         SSf.SIPK_SSCTV_functions.make_background(scene)
         V_s_x_bin = SIPK.sipk5_polinom_to_bin_str(V_s_x_polinom)

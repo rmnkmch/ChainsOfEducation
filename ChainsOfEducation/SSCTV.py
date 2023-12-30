@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 3
+    variant = 7
 
     tv1_in_0_1_str = ""
 
@@ -41,9 +41,9 @@ class SSCTV(object):
     tv6_floors_by_line = -1
     tv6_data_razv_db = {1: 0.0, 2: 4.8, 3: 7.5}
 
-    tv7_phi = 69 / 180.0 * 3.14159265
-    tv7_lambda = 2 / 180.0 * 3.14159265
-    tv7_f = 12566
+    tv7_phi = 43 / 180.0 * 3.14159265
+    tv7_lambda = 9 / 180.0 * 3.14159265
+    tv7_f = 11977
     tv7_P_EIRP = 52.0
 
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
