@@ -71,7 +71,7 @@ class SSCTV(object):
                         14: ["Жёлтый", "Красный", "Голубой", "Чёрный", "Белый"],
                         15: ["Синий", "Зелёный", "Белый", "Голубой", "Пурпурный"]}
 
-    old_tv_variant = 2
+    old_tv_variant = 7
     old_tv1_YRB = []
     old_tv1_YRBUVCMP = []
     old_tv1_YRBDFKRB = []
@@ -114,11 +114,11 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        SSCTV.make_tv7(scene)
+        # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
-        # SSCTV.make_old_tv5(scene)
+        SSCTV.make_old_tv5(scene)
         # SSCTV.make_old_tv6(scene)
 
     @staticmethod
@@ -3052,8 +3052,8 @@ class SSCTV(object):
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         mb = 16
         b = 4
-        res_x = 128
-        res_y = 96
+        res_x = 1920
+        res_y = 1080
         mb_num = int(res_x * res_y / mb / mb)
         b_in_mb = int(mb * mb / b / b)
         Y_num = b_in_mb * mb_num

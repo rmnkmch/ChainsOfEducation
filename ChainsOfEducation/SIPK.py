@@ -11,25 +11,25 @@ class SIPK(object):
     RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-    sipk1_ps_str = ""
-    sipk1_m1 = ""
-    sipk1_m2 = ""
-    sipk1_m3 = ""
+    sipk1_ps_str = "x0.25 l0.14 t0.07 k0.03 y0.13 m0.11 n0.19 h0.08"
+    sipk1_m1 = "tmmtnnmmxnthylylxlym"
+    sipk1_m2 = "xxxnyxnyxynlyxlxnnxx"
+    sipk1_m3 = "kkttmttttmkmkhtkkkmt"
     sipk1_entropy = 0.0
     sipk1_table_data = []
     sipk1_all_symbol_num = 8
     sipk1_symbol_num_arithm = 6
-    sipk1_mess_all_symbol_num = 22
-    sipk1_mean_bit_over_symb1 = round(1.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb2 = round(1.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb3 = round(1.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mess_all_symbol_num = 20
+    sipk1_mean_bit_over_symb1 = round(68.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb2 = round(56.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb3 = round(91.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
-    sipk2_Nhor = 28
-    sipk2_Nver = 23
+    sipk2_Nhor = 25
+    sipk2_Nver = 25
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[-2.804, 0.126, 0.072], [-0.511, -0.755, 0.912], [0.389, -0.185, 6.163], [-0.078, 1.824, 4.893]]
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -44,12 +44,12 @@ class SIPK(object):
     sipk2_a1 = 0.0
     sipk2_a21 = 0.0
     sipk2_a22 = 0.0
-    sipk2_decode_n = [3, 15, 28]
+    sipk2_decode_n = [3, 13, 24]
 
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_7_in_group_list = 7
+    sipk4_5_6_7_in_group_list = 3
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -62,6 +62,7 @@ class SIPK(object):
     sipk5_mistake_2 = 8
     sipk5_vde = ""
     sipk5_Hr = []
+    sipk5_phone = 2663
 
     sipk6_log_p_16 = []
     sipk6_V_s_x_bin = ""
@@ -69,8 +70,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
-    sipk7_errs = [-1, -1]
-    sipk7_soft = ""
+    sipk7_errs = [0, 10]
+    sipk7_soft = "4, 4; -4, -1; -2, -2; 2, -1; -3, 1; -4, -4; -3, -2; 4, -4; -2, -4; -1, 3; 1, 3"
     sipk7_final_way = ""
 
 
@@ -192,9 +193,9 @@ class SIPK(object):
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
-        SIPK.make_sipk5(scene)
+        # SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
-        # SIPK.make_sipk7(scene)
+        SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
@@ -2731,7 +2732,8 @@ class SIPK(object):
         g_x_bin = "10011"
         phone = random.randint(1, 9) * 1000 + random.randint(1, 9) * 100
         phone += random.randint(1, 9) * 10 + random.randint(1, 9)
-        phone = 5592
+        if SIPK.sipk5_phone != -1:
+            phone = SIPK.sipk5_phone
         print(phone)
         crc_16_bit = ""
         for _ in range(4):
