@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_7_in_group_list = 3
+    sipk4_5_6_7_in_group_list = 26
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -70,8 +70,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
-    sipk7_errs = [0, 10]
-    sipk7_soft = "4, 4; -4, -1; -2, -2; 2, -1; -3, 1; -4, -4; -3, -2; 4, -4; -2, -4; -1, 3; 1, 3"
+    sipk7_errs = [1, 9]
+    sipk7_soft = "3, 4; -1, -1; 4, 4; -3, 3; -1, -3; -4, -1; 2, 2; 1, 3; 4, -1; -3, -4; 3, 2"
     sipk7_final_way = ""
 
 
