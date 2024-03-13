@@ -11,14 +11,14 @@ class SIPK(object):
     RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-    sipk1_ps_str = "x0.25 l0.14 t0.07 k0.03 y0.13 m0.11 n0.19 h0.08"
-    sipk1_m1 = "tmmtnnmmxnthylylxlym"
-    sipk1_m2 = "xxxnyxnyxynlyxlxnnxx"
-    sipk1_m3 = "kkttmttttmkmkhtkkkmt"
+    sipk1_ps_str = "f0.12 g0.08 h0.24 i0.36 k0.2"
+    sipk1_m1 = "kighhifkihf"
+    sipk1_m2 = "kighhifkihf"
+    sipk1_m3 = "kighhifkihf"
     sipk1_entropy = 0.0
     sipk1_table_data = []
     sipk1_all_symbol_num = 8
-    sipk1_symbol_num_arithm = 6
+    sipk1_symbol_num_arithm = 5
     sipk1_mess_all_symbol_num = 20
     sipk1_mean_bit_over_symb1 = round(68.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_mean_bit_over_symb2 = round(56.0 / sipk1_mess_all_symbol_num, 3)
@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.85
     sipk3_t = 3
 
-    sipk4_5_6_7_in_group_list = 26
+    sipk4_5_6_7_in_group_list = 19
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -70,8 +70,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
-    sipk7_errs = [1, 9]
-    sipk7_soft = "3, 4; -1, -1; 4, 4; -3, 3; -1, -3; -4, -1; 2, 2; 1, 3; 4, -1; -3, -4; 3, 2"
+    sipk7_errs = [0, 9]
+    sipk7_soft = "-4, -1; -4, 1; 1, 4; 3, 1; -4, 3; 4, 4; 4, -1; 1, 2; 1, -4; -4, -4; 3, 1"
     sipk7_final_way = ""
 
 

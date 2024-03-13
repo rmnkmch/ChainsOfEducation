@@ -26,6 +26,8 @@ class ChainsOfEducation(M.MovingCameraScene):
         # SSCTV.make_tv(self)
         from SIPK import SIPK
         SIPK.make_sipk(self)
+        # from welldungeon import Welldungeon
+        # Welldungeon.do(self)
 
     def load_all(self):
         self.sql_db = SQLDatabase.SQLDatabase()
@@ -192,6 +194,7 @@ class ChainsOfEducation(M.MovingCameraScene):
 
     r"""
 cd ChainsOfEducation
+manim ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png -r 800,800
