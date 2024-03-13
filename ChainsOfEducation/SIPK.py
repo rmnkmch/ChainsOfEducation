@@ -46,8 +46,8 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [3, 13, 24]
 
-    sipk3_R = 0.85
-    sipk3_t = 3
+    sipk3_R = 0.6
+    sipk3_t = 4
 
     sipk4_5_6_7_in_group_list = 19
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
@@ -191,11 +191,11 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
+        SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
-        SIPK.make_sipk7(scene)
+        # SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1373,10 +1373,10 @@ class SIPK(object):
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
         # SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene, 120)
+        SIPK.sipk3_graph_scaled(scene, 70)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [30, 100, 150, 130, 129, 128, 127, 126]
+        check = [70]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
         SIPK.sipk3_count_2(scene, 127, 108)
