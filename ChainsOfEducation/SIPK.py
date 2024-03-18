@@ -20,9 +20,9 @@ class SIPK(object):
     sipk1_all_symbol_num = 6
     sipk1_symbol_num_arithm = 6
     sipk1_mess_all_symbol_num = 20
-    sipk1_mean_bit_over_symb1 = round(70.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb2 = round(70.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb3 = round(70.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb1 = round(61.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb2 = round(52.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb3 = round(75.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.87
     sipk3_t = 3
 
-    sipk4_5_6_7_in_group_list = 17
+    sipk4_5_6_7_in_group_list = 6
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -62,7 +62,7 @@ class SIPK(object):
     sipk5_mistake_2 = 8
     sipk5_vde = ""
     sipk5_Hr = []
-    sipk5_phone = 7731
+    sipk5_phone = 7842
 
     sipk6_log_p_16 = []
     sipk6_V_s_x_bin = ""
@@ -71,7 +71,7 @@ class SIPK(object):
     sipk6_sigmas = []
 
     sipk7_errs = [1, 7]
-    sipk7_soft = "-4, -1; -4, 1; 1, 4; 3, 1; -4, 3; 4, 4; 4, -1; 1, 2; 1, -4; -4, -4; 3, 1"
+    sipk7_soft = "-4, -2; 2, -1; -2, -3; -2, -3; -1, -2; -1, 4; -2, 3; 1, -2; -2, 1; -2, -3; 3, 3"
     sipk7_final_way = ""
 
 
@@ -194,8 +194,8 @@ class SIPK(object):
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
-        # SIPK.make_sipk6(scene)
-        SIPK.make_sipk7(scene)
+        SIPK.make_sipk6(scene)
+        # SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
@@ -3136,7 +3136,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * 0
+        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * 2
         if variant > 127: variant -= 127
         variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 7)
         tx = str(variant) + r"_{10} = " + variant_bin + r"_2,\ u(x) = "
