@@ -70,8 +70,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
-    sipk7_errs = [1, 7]
-    sipk7_soft = "-4, -2; 2, -1; -2, -3; -2, -3; -1, -2; -1, 4; -2, 3; 1, -2; -2, 1; -2, -3; 3, 3"
+    sipk7_errs = [1, 8]
+    sipk7_soft = "-2, -3; 1, -2; 3, 1; -2, 3; 3, -3; -2, 1; -2, -2; -2, 1; 1, -4; -4, -4; 4, 3"
     sipk7_final_way = ""
 
 
@@ -194,8 +194,8 @@ class SIPK(object):
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
-        SIPK.make_sipk6(scene)
-        # SIPK.make_sipk7(scene)
+        # SIPK.make_sipk6(scene)
+        SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
