@@ -96,7 +96,7 @@ class TitleBlock(manim.RoundedRectangle):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 301
+        num = 331
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -277,7 +277,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "度 庫 庭 式 役 待 急 息 悪 悲 想 意 感 所 打 投 拾 持 指 放 整 旅 族 昔 昭 暑 暗 曲 有 服"
+        kanji = "期 板 柱 根 植 業 様 横 橋 次 歯 死 氷 決 油 波 注 泳 洋 流 消 深 温 港 湖 湯 漢 炭 物 球"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -3216,6 +3216,8 @@ On: ハ
 Radical: water 水 (氵, 氺)
 Parts: 丶 汁 王
 лить, примечание, изливать, орошать, проливать (слезы), вливаться, концентрироваться, отмечать, комментировать, аннотировать
+Kun: そそ.ぐ、 さ.す、 つ.ぐ
+On: チュウ
 泳
 8 strokes
 Radical: water 水 (氵, 氺)
@@ -5641,8 +5643,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_301_330)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_301_330)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_331_360)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_331_360)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
