@@ -20,12 +20,13 @@ class ChainsOfEducation(M.MovingCameraScene):
         # self.chapter_1_1()
         # self.chapter_1_2()
         # self.chapter_1_3()
+        self.test_1()
         # from TitleBlock import TitleBlock
         # TitleBlock.Jpn_Geo(self)
         # from SSCTV import SSCTV
         # SSCTV.make_tv(self)
-        from SIPK import SIPK
-        SIPK.make_sipk(self)
+        # from SIPK import SIPK
+        # SIPK.make_sipk(self)
         # from welldungeon import Welldungeon
         # Welldungeon.do(self)
 
@@ -205,7 +206,7 @@ manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
     def chapter_1_000(self):
         self.wait(1.0)
         logo = M.SVGMobject(
-            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\logo_1",
+            r"media/SVGs/tree_1",
             stroke_color = "#FFFFFF").scale(2.5)
         self.play(M.Write(logo, run_time = 5.0))
         self.play(M.Unwrite(logo, run_time = 5.0, reverse = False))
@@ -492,41 +493,50 @@ manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
         self.wait(1.0)
 
     def test_1(self):
-        #self.add(M.NumberPlane())
-        sv = M.SVGMobject(
-            r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\SVGs\tree_1",
-            stroke_color = "#FFFFFF").scale(2.5)
-        self.play(M.Write(sv, run_time = 5.0))
+        # self.add(M.NumberPlane())
+        # sv = M.SVGMobject(
+        #     r"media/SVGs/tree_1",
+        #     stroke_color = "#FFFFFF").scale(2.5)
+        # self.play(M.Write(sv, run_time = 5.0))
         
-        '''tb = TextBlock.TextBlock(
-            """нашими друзьями\nи знакомыми,""").move_to(0.2 * M.UR).rotate(0.05)
-        tb2 = TextBlock.TextBlock("""нашими друзьями
-        и знакомыми,
-        ми друзьями
-        ми друзьями
-        ми друзьями""")
-        self.add(tb, tb2)
-        x_values_1 = [0.0, 2.7, 2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0]
-        y_values_1 = [2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0, 2.7, 2.7]
-        coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
-        def get_arr():
-            b = tb.get_arrow_to_tb(
-                tb2, TextBlock.Directions.LEFT, TextBlock.Directions.RIGHT,
-                1.0, 1.0, 1, 1, 1, 1)[0]
-            vg = b
-            vg = M.VGroup()
-            a = []
-            for dot in b.get_anchors():
-                a.append(M.Dot(dot, radius = 0.04,
-                               color = "#1312F5", fill_opacity = 0.5))
-            vg = M.VGroup(b, *a)
-            return vg
-        arrow = M.always_redraw(get_arr)
-        self.add(arrow)
-        self.play(M.MoveAlongPath(tb2, ComplexArrow.ComplexArrow(coords),
-                                  run_time = 1.0, rate_func = M.linear))
-        #self.add(M.ThreeDScene())'''
-        self.wait(1.0)
+        # tb = TextBlock.TextBlock(
+        #     """1111111\n2222222""").move_to(0.2 * M.UR).rotate(0.05)
+        # tb2 = TextBlock.TextBlock("""test
+        #                           test
+        #                           test""")
+        # self.add(tb, tb2)
+        # x_values_1 = [0.0, 2.7, 2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0]
+        # y_values_1 = [2.7, 2.7, 0.0, -2.7, -2.7, -2.7, 0.0, 2.7, 2.7]
+        # coords = [(x, y, 0.0) for x, y in zip(x_values_1, y_values_1)]
+        # def get_arr():
+        #     b = tb.get_arrow_to_tb(
+        #         tb2, TextBlock.Directions.LEFT, TextBlock.Directions.RIGHT,
+        #         1.0, 1.0, 1, 1, 1, 1)[0]
+        #     vg = b
+        #     vg = M.VGroup()
+        #     a = []
+        #     for dot in b.get_anchors():
+        #         a.append(M.Dot(dot, radius = 0.04,
+        #                        color = "#1312F5", fill_opacity = 0.5))
+        #     vg = M.VGroup(b, *a)
+        #     return vg
+        # arrow = M.always_redraw(get_arr)
+        # self.add(arrow)
+        # self.play(M.MoveAlongPath(tb2, ComplexArrow.ComplexArrow(coords),
+        #                           run_time = 1.0, rate_func = M.linear))
+        # self.wait(1.0)
+        func = lambda pos: pos - M.LEFT * 5
+        colors = [M.RED, M.YELLOW, M.BLUE, M.DARK_GRAY]
+        min_radius = M.Circle(radius=2, color=colors[0]).shift(M.LEFT * 5)
+        max_radius = M.Circle(radius=10, color=colors[-1]).shift(M.LEFT * 5)
+        vf = M.ArrowVectorField(
+            func, min_color_scheme_value=2, max_color_scheme_value=10, colors=colors
+        )
+        length_func = lambda x: x - M.LEFT * 6
+        vf2 = M.ArrowVectorField(func, x_range=[-7, 7, 1], length_func=length_func)
+        self.play(vf.animate.become(vf2))
+        self.wait()
+        self.add(vf, min_radius, max_radius)
 
     class MyMoveAlongPath(M.Animation):
         def __init__(
