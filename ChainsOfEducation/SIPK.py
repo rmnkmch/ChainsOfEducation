@@ -11,18 +11,18 @@ class SIPK(object):
     RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-    sipk1_ps_str = "j0.23 u0.15 x0.06 n0.11 e0.21 q0.24"
-    sipk1_m1 = "qxnjunuqujjeueujeqxn"
-    sipk1_m2 = "jeeeeeuqqjqqjjjeeqee"
-    sipk1_m3 = "jxnnnnuuxnuxxuxxnxnu"
+    sipk1_ps_str = "n0.3 a0.03 s0.05 m0.2 v0.14 j0.28"
+    sipk1_m1 = "jmnmmavmmmjvnvjnvmjn"
+    sipk1_m2 = "njjjjjmnjjmnmnjjmnjn"
+    sipk1_m3 = "vvasvvasassvssavaavv"
     sipk1_entropy = 0.0
     sipk1_table_data = []
     sipk1_all_symbol_num = 6
     sipk1_symbol_num_arithm = 6
     sipk1_mess_all_symbol_num = 20
-    sipk1_mean_bit_over_symb1 = round(61.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb2 = round(52.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb3 = round(75.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb1 = round(55.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb2 = round(46.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb3 = round(87.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
@@ -46,8 +46,8 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [4, 13, 24]
 
-    sipk3_R = 0.87
-    sipk3_t = 3
+    sipk3_R = 0.6
+    sipk3_t = 4
 
     sipk4_5_6_7_in_group_list = 6
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
@@ -191,11 +191,11 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
+        SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
-        SIPK.make_sipk7(scene)
+        # SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
@@ -1373,13 +1373,13 @@ class SIPK(object):
     def make_sipk3(scene: M.Scene):
         SIPK.sipk3_hemming_example(scene)
         # SIPK.sipk3_graph(scene)
-        SIPK.sipk3_graph_scaled(scene, 150)
+        SIPK.sipk3_graph_scaled(scene, 40)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [70, 100, 130, 160, 155, 154, 153]
+        check = [25, 50, 40, 45, 44]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 154, 134)
+        SIPK.sipk3_count_2(scene, 45, 27)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
@@ -3136,7 +3136,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * 2
+        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * 1
         if variant > 127: variant -= 127
         variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 7)
         tx = str(variant) + r"_{10} = " + variant_bin + r"_2,\ u(x) = "
