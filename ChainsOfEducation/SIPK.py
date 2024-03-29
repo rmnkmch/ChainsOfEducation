@@ -49,7 +49,7 @@ class SIPK(object):
     sipk3_R = 0.6
     sipk3_t = 4
 
-    sipk4_5_6_7_in_group_list = 6
+    sipk4_5_6_7_in_group_list = 21
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -70,8 +70,8 @@ class SIPK(object):
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
 
-    sipk7_errs = [1, 8]
-    sipk7_soft = "-2, -3; 1, -2; 3, 1; -2, 3; 3, -3; -2, 1; -2, -2; -2, 1; 1, -4; -4, -4; 4, 3"
+    sipk7_errs = [3, 7]
+    sipk7_soft = "4, 3; 1, 4; -4, 1; -2, 3; 3, 2; 1, -3; 3, 2; -1, 3; -4, 1; -4, -4; 1, 4"
     sipk7_final_way = ""
 
 
@@ -191,11 +191,11 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        SIPK.make_sipk3(scene)
+        # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
-        # SIPK.make_sipk7(scene)
+        SIPK.make_sipk7(scene)
 
     @staticmethod
     def random_sipk1():
