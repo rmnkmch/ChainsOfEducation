@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 7
+    variant = 25 - 15
 
     tv1_in_0_1_str = ""
 
@@ -36,15 +36,15 @@ class SSCTV(object):
     tv6_used_data = []
     tv6_floors = -1
     tv6_flats = -1
-    tv6_usilit_db = 108.0
+    tv6_usilit_db = 107.8
     tv6_lines = -1
     tv6_floors_by_line = -1
     tv6_data_razv_db = {1: 0.0, 2: 4.8, 3: 7.5}
 
-    tv7_phi = 43 / 180.0 * 3.14159265
-    tv7_lambda = 9 / 180.0 * 3.14159265
-    tv7_f = 11500
-    tv7_P_EIRP = 52.0
+    tv7_phi = 56 / 180.0 * 3.14159265
+    tv7_lambda = 3 / 180.0 * 3.14159265
+    tv7_f = 11241
+    tv7_P_EIRP = 53.0
 
     old_tv1_colors = {"Чёрный": [0, 0, 0, "#000000"],
                       "Синий": [0, 0, 1, "#0000FF"],
@@ -114,7 +114,7 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        # SSCTV.make_tv7(scene)
+        SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -123,7 +123,7 @@ class SSCTV(object):
         # SSCTV.tv_ekz_1(scene)
         # SSCTV.tv_ekz_2(scene)
         # SSCTV.tv_ekz_4(scene)
-        SSCTV.tv_ekz_5(scene)
+        # SSCTV.tv_ekz_5(scene)
 
     @staticmethod
     def tv_ekz_1(scene: M.Scene):
@@ -1680,18 +1680,18 @@ class SSCTV(object):
                     9: [20, 4, 2], 10: [18, 6, 2], 11: [22, 4, 2], 12: [20, 8, 2],
                     13: [16, 4, 2], 14: [20, 6, 2], 15: [17, 4, 2]}
         data_4 = {26: 1.2,
-                  #20: 1.5,
-                  #18: 1.8,
-                  #16: 2.5,
-                  #14: 3.0,
-                  #12: 4.0,
-                  #10: 4.5
+                #   20: 1.5,
+                #   18: 1.8,
+                #   16: 2.5,
+                #   14: 3.0,
+                #   12: 4.0,
+                #   10: 4.5
                   }
         data_6 = {20: 1.5,
-                  #16: 2.5,
+                #   16: 2.5,
                   12: 4.5}
         data_8 = {20: 2.2,
-                  #16: 4.2,
+                #   16: 4.2,
                   12: 4.5}
         data_full = data_var[SSCTV.variant]
         SSCTV.tv6_floors = data_full[0]
@@ -1987,7 +1987,7 @@ class SSCTV(object):
         d = round(sqrt(R_3 ** 2 + R_G ** 2 - 2 * R_3 * R_G * cos(psi)))
         d = 39400
         L_0 = round(20.0 * (log10(SSCTV.tv7_f) + log10(d)) + 32.45, 3)
-        P_r = round(SSCTV.tv7_P_EIRP + 41.0 - 4.0 - L_0, 3)
+        P_r = round(SSCTV.tv7_P_EIRP + 40.0 - 6.0 - L_0, 3)
         K_n = round(10 ** (1/10), 3)
         T_nr = round((K_n - 1.0) * 290.0, 3)
         N_n = round(1.38 * (10 ** -9) * (198.0) * 27000000.0, 3)
@@ -2025,7 +2025,7 @@ class SSCTV(object):
         tex8 = M.MathTex(tx8, font_size = txs, color = mc)
         txt8 = M.Text("дБ", font_size = tts, color = mc)
         gr8 = M.VGroup(tex8, txt8).arrange().next_to(tex7, M.DOWN)
-        tx9 = r"P_r = " + str(SSCTV.tv7_P_EIRP) + r" + 41 - 4 - " + str(L_0)
+        tx9 = r"P_r = " + str(SSCTV.tv7_P_EIRP) + r" + 40 - 6 - " + str(L_0)
         tx9 += r" = " + str(P_r)
         tex9 = M.MathTex(tx9, font_size = txs, color = mc)
         txt9 = M.Text("дБВт", font_size = tts, color = mc)

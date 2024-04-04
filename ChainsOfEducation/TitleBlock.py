@@ -92,11 +92,10 @@ class TitleBlock(manim.RoundedRectangle):
                     print(ln + line + ".")
 
     @staticmethod
-    def resplit_to_post_kanji(text: str):
+    def resplit_to_post_kanji(text: str, num: int):
         lines = text.split("\n")
         ln = ""
         trlt = ""
-        num = 331
         mod3 = 0
         for line in lines:
             if len(line) == 1:
@@ -277,15 +276,31 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "期 板 柱 根 植 業 様 横 橋 次 歯 死 氷 決 油 波 注 泳 洋 流 消 深 温 港 湖 湯 漢 炭 物 球"
+        kanji = "由 申 界 畑 病 発 登 皮 皿 相 県 真 着 短 研 礼 神 祭 福 秒 究 章 童 笛 第 筆 等 箱 級 終"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
             TitleBlock.print_symbol(scene, kj)
 
     @staticmethod
+    def rename_all(num: int):
+        import os
+        path = r"D:\My\LTTDIT\Python\ChainsOfEducation\ChainsOfEducation\media\images\ChainsOfEducation"
+        for i in range(30):
+            old_name = r"\ChainsOfEducation00"
+            if i < 10:
+                old_name += r"0"
+            old_name += str(i) + r".png"
+            old_name_2 = r"\ChainsOfEducation00" + str(30 + i) + r".png"
+            new_name = r"\#" + str(num + i) + r"_2.png"
+            new_name_2 = r"\#" + str(num + i) + r".png"
+            os.rename(path + old_name, path + new_name)
+            os.rename(path + old_name_2, path + new_name_2)
+
+    @staticmethod
     def Jpn_Geo(scene: manim.Scene):
         TitleBlock.make_symbols(scene)
+        start_num = 361
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -5643,8 +5658,9 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_331_360)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_331_360)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_361_390, start_num)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_361_390)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
+        TitleBlock.rename_all(start_num)
