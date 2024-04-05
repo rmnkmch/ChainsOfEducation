@@ -2926,6 +2926,7 @@ Radical: field 田
 Parts: 火 田
 ферма, поле, сад
 Kun: はた、 はたけ、 -ばたけ
+On: 1
 病
 10 strokes
 Radical: sickness 疒
@@ -5663,4 +5664,4 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
-        TitleBlock.rename_all(start_num)
+        # TitleBlock.rename_all(start_num)

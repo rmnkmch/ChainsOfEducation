@@ -21,12 +21,12 @@ class ChainsOfEducation(M.MovingCameraScene):
         # self.chapter_1_2()
         # self.chapter_1_3()
         # self.test_1()
-        # from TitleBlock import TitleBlock
-        # TitleBlock.Jpn_Geo(self)
+        from TitleBlock import TitleBlock
+        TitleBlock.Jpn_Geo(self)
         # from SSCTV import SSCTV
         # SSCTV.make_tv(self)
-        from SIPK import SIPK
-        SIPK.make_sipk(self)
+        # from SIPK import SIPK
+        # SIPK.make_sipk(self)
         # from welldungeon import Welldungeon
         # Welldungeon.do(self)
 
