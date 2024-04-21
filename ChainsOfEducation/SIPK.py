@@ -11,25 +11,25 @@ class SIPK(object):
     RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-    sipk1_ps_str = ""
-    sipk1_m1 = ""
-    sipk1_m2 = ""
-    sipk1_m3 = ""
+    sipk1_ps_str = "E0.04 N0.09 U0.21 X0.29 M0.03 A0.34"
+    sipk1_m1 = "AUAXAXNMMAEAUAAXXXAX"
+    sipk1_m2 = "UXAAAAXAXXXUAAAAXXUA"
+    sipk1_m3 = "MMEMEMENEEEEMEEMENEN"
     sipk1_entropy = 0.0
     sipk1_table_data = []
     sipk1_all_symbol_num = 6
     sipk1_symbol_num_arithm = 6
     sipk1_mess_all_symbol_num = 20
-    sipk1_mean_bit_over_symb1 = round(5.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb2 = round(4.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb3 = round(10.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb1 = round(54.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb2 = round(43.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb3 = round(101.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
     sipk2_Nhor = 25
     sipk2_Nver = 20
     sipk2_x_n = []
-    sipk2_cffs = []
+    sipk2_cffs = [[-4.292, 0.431, 1.189], [-0.271, -0.182, 0.738], [-1.778, 0.13, 1.116], [1.523, -0.682, 5.672]]
     sipk2_e1 = []
     sipk2_e2 = []
     sipk2_e2_opt = []
@@ -44,12 +44,12 @@ class SIPK(object):
     sipk2_a1 = 0.0
     sipk2_a21 = 0.0
     sipk2_a22 = 0.0
-    sipk2_decode_n = [5, 15, 25]
+    sipk2_decode_n = [3, 14, 25]
 
-    sipk3_R = 0.6
-    sipk3_t = 4
+    sipk3_R = 0.68
+    sipk3_t = 3
 
-    sipk4_5_6_7_in_group_list = 14
+    sipk4_5_6_7_in_group_list = 21
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -62,16 +62,17 @@ class SIPK(object):
     sipk5_mistake_2 = 8
     sipk5_vde = ""
     sipk5_Hr = []
-    sipk5_phone = 7705
+    sipk5_phone = 8208
 
     sipk6_log_p_16 = []
     sipk6_V_s_x_bin = ""
     sipk6_sindroms = []
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
+    sipk6_group = 3
 
-    sipk7_errs = [-1, -1]
-    sipk7_soft = "4, 2; -2, -2; 1, -1; 4, 3; -1, 2; 3, -4; 3, 3; 3, 4; 4, -2; -4, -4; 2, 4"
+    sipk7_errs = [0, 6]
+    sipk7_soft = "4, 4; -2, -4; -4, 1; -4, -1; 4, 3; 2, -3; 2, 4; -4, 4; -4, 2; -4, -3; 4, 1"
     sipk7_final_way = ""
 
 
@@ -1377,10 +1378,10 @@ class SIPK(object):
         SIPK.sipk3_graph_scaled(scene, 40)
         # SIPK.sipk3_formula_1(scene)
         # SIPK.sipk3_formula_2(scene)
-        check = [15, 25, 35, 45, 44]
+        check = [10, 30, 60, 50, 40, 45, 43, 44]
         for i in check:
             SIPK.sipk3_count_1(scene, i)
-        SIPK.sipk3_count_2(scene, 45, 27)
+        SIPK.sipk3_count_2(scene, 44, 30)
 
     @staticmethod
     def sipk3_hemming_example(scene: M.Scene):
@@ -3137,7 +3138,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * 0
+        variant = SIPK.sipk4_5_6_7_in_group_list + 30 * (SIPK.sipk6_group - 1)
         if variant > 127: variant -= 127
         variant_bin = SSf.SIPK_SSCTV_functions.fill_zeros(bin(variant)[2:], 7)
         tx = str(variant) + r"_{10} = " + variant_bin + r"_2,\ u(x) = "
