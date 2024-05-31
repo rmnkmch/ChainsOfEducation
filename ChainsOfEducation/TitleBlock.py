@@ -276,7 +276,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "緑 練 羊 美 習 者 育 苦 荷 落 葉 薬 血 表 詩 調 談 豆 負 起 路 身 転 軽 農 返 追 送 速 進"
+        kanji = "束 松 果 栄 案 梅 械 極 標 機 欠 歴 残 殺 毒 氏 民 求 治 法 泣 浅 浴 清 満 漁 灯 無 然 焼"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -300,7 +300,7 @@ class TitleBlock(manim.RoundedRectangle):
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
         TitleBlock.make_symbols(scene)
-        start_num = 391
+        start_num = 541
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -1752,7 +1752,6 @@ On: ジ、 チ
 8 strokes
 Radical: water 水 (氵, 氺)
 Parts: 厶 土 汁
-Variants: 佱 灋
 метод, закон, правило, принцип, модель, система
 Kun: のり
 On: ホウ、 ハッ、 ホッ、 フラン
@@ -2043,7 +2042,7 @@ On: ザイ"""
 12 strokes
 Radical: ten, complete 十
 Parts: 丶 十 寸 田
-Доктор, команда, уважение, завоевание признания, доктор философии, экспозиция, ярмарка
+доктор, команда, уважение, завоевание признания, доктор философии, экспозиция, ярмарка
 On: ハク、 バク
 印
 6 strokes
@@ -2225,6 +2224,7 @@ On: ガイ
 14 strokes
 Radical: roof 宀
 Parts: ノ 二 宀 小 癶 示
+Variants:
 угадывать, предполагать, догадываться, судить, понимать
 On: サツ
 巣
@@ -2440,6 +2440,7 @@ On: ユウ
 5 strokes
 Radical: wrap, embrace 勹
 Parts: 勹 已
+Variants:
 заворачивать, упаковывать, накрывать, скрывать
 Kun: つつ.む、 くる.む
 On: ホウ
@@ -5659,8 +5660,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_391_420, start_num)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_391_420)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_541_570, start_num)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_541_570)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
