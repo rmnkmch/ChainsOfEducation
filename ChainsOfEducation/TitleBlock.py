@@ -276,7 +276,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "束 松 果 栄 案 梅 械 極 標 機 欠 歴 残 殺 毒 氏 民 求 治 法 泣 浅 浴 清 満 漁 灯 無 然 焼"
+        kanji = "陸 隊 静 順 願 類 飛 飯 養 験 久 仏 仮 件 任 似 余 価 保 修 俵 個 備 像 再 刊 判 制 券 則"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -300,7 +300,7 @@ class TitleBlock(manim.RoundedRectangle):
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
         TitleBlock.make_symbols(scene)
-        start_num = 541
+        start_num = 661
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -1139,14 +1139,12 @@ Variants: 僃
 оснащение, обеспечение, подготовка
 Kun: そな.える、 そな.わる、 つぶさ.に
 On: ビ
-備
-12 strokes
+像
+14 strokes
 Radical: man, human 人 (亻)
-Parts: 化 厂 艾 用
-Variants: 僃
-оснащение, обеспечение, подготовка
-Kun: そな.える、 そな.わる、 つぶさ.に
-On: ビ
+Parts: 一 化 勹 口 豕
+статуя, картина, образ, фигура, портрет
+On: ゾウ
 再
 6 strokes
 Radical: open country 冂
@@ -1354,7 +1352,6 @@ On: レン
 12 strokes (also 11)
 Radical: walk 辵 (辶, ⻌, ⻍)
 Parts: 并 込 土 王 羊
-Variants: 逹
 свершенный, достигающий, прибывающий, постигающий
 Kun: -たち
 On: タツ、 ダ
@@ -1551,7 +1548,7 @@ On: ゾク、 ショク、 コウ、 キョウ
 置
 13 strokes
 Radical: net 网 (罒, ⺲, 罓, ⺳)
-Parts: 一 ｜ 十 目 買
+Parts: 一 十 目 買
 размещение, класть, комплектовать, депонировать, оставлять после себя, хранить, нанимать на работу, закладывать
 Kun: お.く、 -お.き
 On: チ
@@ -5660,8 +5657,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_541_570, start_num)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_541_570)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_661_690, start_num)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_661_690)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
