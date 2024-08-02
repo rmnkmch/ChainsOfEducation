@@ -276,7 +276,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "陸 隊 静 順 願 類 飛 飯 養 験 久 仏 仮 件 任 似 余 価 保 修 俵 個 備 像 再 刊 判 制 券 則"
+        kanji = "条 枝 査 格 桜 検 構 武 比 永 河 液 混 減 測 準 演 潔 災 燃 版 犯 状 独 率 現 留 略 益 眼"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -300,7 +300,7 @@ class TitleBlock(manim.RoundedRectangle):
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
         TitleBlock.make_symbols(scene)
-        start_num = 661
+        start_num = 721
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -518,18 +518,2579 @@ class TitleBlock(manim.RoundedRectangle):
         native_kun_on_1141_1170 = """"""
         native_kun_on_1111_1140 = """"""
         native_kun_on_1081_1110 = """"""
-        native_kun_on_1051_1080 = """"""
-        native_kun_on_1021_1050 = """"""
-        native_kun_on_991_1020 = """"""
-        native_kun_on_961_990 = """"""
-        native_kun_on_931_960 = """"""
-        native_kun_on_901_930 = """"""
-        native_kun_on_871_900 = """"""
-        native_kun_on_841_870 = """"""
-        native_kun_on_811_840 = """"""
-        native_kun_on_781_810 = """"""
-        native_kun_on_751_780 = """"""
-        native_kun_on_721_750 = """"""
+        native_kun_on_1051_1080 = """押
+8 strokes
+Radical: hand 手 (扌龵)
+Parts: ｜ 扎 日 田
+нажимать, надавливать
+Kun: お.す、 お.し-、 お.っ-、 お.さえる、 おさ.える
+On: オウ
+旺
+8 strokes
+Radical: sun, day 日
+Parts: 日 王
+Variants: 暀
+процветать, процветающий, успешный, красивый, энергичный
+Kun: かがや.き、 うつくし.い、 さかん
+On: オウ、 キョウ、 ゴウ
+欧
+8 strokes
+Radical: lack, yawn 欠
+Parts: 丶 ノ 匚 欠
+Variants: 歐
+Европа
+Kun: うた.う、 は.く
+On: オウ
+殴
+8 strokes
+Radical: weapon, lance 殳
+Parts: 丶 ノ 几 匚 又 殳
+Variants: 毆
+нападение, удар, избиение, бить, ударять, колотить
+Kun: なぐ.る
+On: オウ
+翁
+10 strokes
+Radical: feather 羽
+Parts: ハ 冫 厶 羽
+старец, почтенный старик
+Kun: おきな
+On: オウ
+奥
+12 strokes
+Radical: big, very 大
+Parts: 冂 大 米
+Variants: 奧 嶴
+глубь, внутренняя часть
+Kun: おく、 おく.まる、 くま
+On: オウ
+岡
+8 strokes
+Radical: mountain 山
+Parts: 一 并 冂 山 岡
+гора, холм, возвышенность
+Kun: おか
+On: コウ
+憶
+16 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 忙 心 日 立 音
+вспоминать, думать, память
+On: オク
+臆
+17 strokes
+Radical: meat 肉 (⺼)
+Parts: 心 日 月 立 音
+робкий, робеть, робость, сердце, ум, страх, трусость
+Kun: むね、 おくする
+On: オク、 ヨク
+虞
+13 strokes
+Radical: tiger stripes 虍
+Parts: ハ 匕 卜 厂 口 虍
+опасение, страх, тревога, тревога, беспокойство, ожидание, рассмотрение
+Kun: おそれ、 おもんぱか.る、 はか.る、 うれ.える、 あざむ.く、 あやま.る、 のぞ.む、 たの.しむ
+On: グ
+乙
+1 strokes
+Radical: second 乛 (乙, ⺄, 乚)
+Parts: 乙
+второй, дубликат
+Kun: おと-、 きのと
+On: オツ、 イツ
+俺
+10 strokes
+Radical: man, human 人 (亻)
+Parts: 乙 化 大 奄
+я, мы
+Kun: おれ、 われ
+On: エン
+卸
+9 strokes
+Radical: kneel 卩
+Parts: ノ 卩 止 乞
+оптовый, продавать оптом
+Kun: おろ.す、 おろし、 おろ.し
+On: シャ
+穩
+19 strokes
+Radical: grain 禾
+Parts: 工 ヨ 心 爪 禾
+Variants: 穏
+спокойный, умеренный
+Kun: おだ.やか
+On: オン
+佳
+8 strokes
+Radical: man, human 人 (亻)
+Parts: 化 土
+Variants:
+прекрасный, отличный, красивый, хороший, приятный, умелый
+On: カ
+苛
+8 strokes
+Radical: grass 艸 (艹)
+Parts: 一 亅 口 艾
+истязать, мучить, ругать, наказывать
+Kun: いじ.める、 さいな.む、 いらだ.つ、 からい、 こまかい
+On: カ
+架
+9 strokes
+Radical: tree 木
+Parts: 力 口 木
+возводить, каркас, крепление, опора, полка, конструкция, подставка, сооружать
+Kun: か.ける、 か.かる
+On: カ
+華
+10 strokes
+Radical: grass 艸 (艹)
+Parts: 一 ｜ 艾
+Variants: 蕐
+цветок, лепесток, блеск, эффектный, веселый, великолепный, пышный
+Kun: はな
+On: カ、 ケ
+菓
+11 strokes
+Radical: grass 艸 (艹)
+Parts: 艾 木 田
+сласти, конфеты, пирожные, фрукты
+On: カ
+渦
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: ｜ 冂 口 汁
+водоворот, вихрь
+Kun: うず
+On: カ
+嫁
+13 strokes
+Radical: woman, female 女
+Parts: 女 宀 豕
+невестка, выходить замуж, жениться, невеста
+Kun: よめ、 とつ.ぐ、 い.く、 ゆ.く
+On: カ
+暇
+13 strokes
+Radical: sun, day 日
+Parts: 又 日
+свободное время, отдых, досуг, время, отпуск
+Kun: ひま、 いとま
+On: カ
+禍
+13 strokes
+Radical: sign 示 (礻)
+Parts: 冂 口 礼
+Variants: 禍
+бедствие, несчастье, зло, проклятие
+Kun: わざわい
+On: カ
+靴
+13 strokes
+Radical: leather, rawhide 革
+Parts: 化 匕 革
+Variants: 鞾
+обувь, ботинки
+Kun: くつ
+On: カ
+寡
+14 strokes
+Radical: roof 宀
+Parts: 一 ハ 刀 宀 自
+вдова, меньшинство, немногие, мало, вдовый
+On: カ
+箇
+14 strokes
+Radical: bamboo 竹 (⺮)
+Parts: 十 口 囗 竹 乞
+штука, счетчик статей
+On: カ、 コ
+稼
+15 strokes
+Radical: grain 禾
+Parts: 宀 禾 豕
+заработок, работа, зарабатывать деньги
+Kun: かせ.ぐ
+On: カ
+蚊
+10 strokes
+Radical: insect 虫
+Parts: 文 虫
+Variants: 蟁
+комар, москит
+Kun: か
+On: ブン
+牙
+5 strokes (also 4)
+Radical: fang 牙
+Parts: 牙
+бивень, клык
+Kun: きば、 は
+On: ガ、 ゲ
+瓦
+5 strokes
+Radical: tile 瓦
+Parts: 一 瓦
+плитка, грамм, черепица
+Kun: かわら、 ぐらむ
+On: ガ
+雅
+13 strokes
+Radical: small bird 隹
+Parts: 牙 隹
+изящный, элегантный, вкус, стиль, изысканный
+Kun: みや.び
+On: ガ"""
+        native_kun_on_1021_1050 = """咽
+9 strokes
+Radical: mouth, opening 口
+Parts: 口 囗 大
+Variants: 胭
+горло, задыхающееся, задушенное, душное, захлёбываться
+Kun: むせ.ぶ、 むせ.る、 のど、 の.む
+On: イン、 エン、 エツ
+姻
+9 strokes
+Radical: woman, female 女
+Parts: 囗 大 女
+Variants: 婣
+брачное родство, брак, жениться
+On: イン
+淫
+11 strokes
+Radical: water 水 (氵, 氺)
+Parts: ノ 士 汁 爪 王
+Variants: 婬
+распущенность, разврат
+Kun: ひた.す、 ほしいまま、 みだ.ら、 みだ.れる、 みだり
+On: イン
+陰
+11 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 一 二 个 厶 阡
+Variants: 侌 阥 隂
+тень, инь, негатив, тайна, смеркаться
+Kun: かげ、 かげ.る
+On: イン
+隱
+17 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 工 ヨ 阡 心 爪
+Variants: 隠 乚
+спрятать, скрыть, прикрыть
+Kun: かく.す、 かく.れる、 よ.る
+On: イン、 オン
+韻
+19 strokes
+Radical: sound 音
+Parts: ハ 口 日 目 立 貝 音
+рифма, элегантность, тон
+On: イン
+唄
+10 strokes
+Radical: mouth, opening 口
+Parts: ハ 口 目 貝
+песня, баллада
+Kun: うた、 うた.う
+On: バイ
+鬱
+29 strokes
+Radical: herbs, sacrificial wine 鬯
+Parts: 冖 匕 彡 凵 木 缶 鬯
+Variants: 欝
+уныние, депрессия, меланхолия, пышность, хандрить
+Kun: うっ.する、 ふさ.ぐ、 しげ.る
+On: ウツ
+畝
+10 strokes
+Radical: field 田
+Parts: 亠 久 田
+Variants: 畆 畒 畞
+борозда, тридцать цубо, гребень, ребро, грядка
+Kun: せ、 うね
+On: ボウ、 ホ、 モ、 ム
+浦
+10 strokes
+Radical: water 水 (氵, 氺)
+Parts: 丶 十 汁 用
+бухта, морской берег, залив, ручей, пляж, морское побережье
+Kun: うら
+On: ホ
+詠
+12 strokes
+Radical: speech 言 (訁)
+Parts: 丶 水 言
+Variants: 咏
+декламация, стихотворение, песня, сочинение
+Kun: よ.む、 うた.う
+On: エイ
+影
+15 strokes
+Radical: bristle, beard 彡
+Parts: 亠 口 小 彡 日
+тень, силуэт, призрак
+Kun: かげ
+On: エイ
+鋭
+15 strokes
+Radical: metal, gold 金 (釒)
+Parts: 个 儿 并 口 金
+заостренный, острота, край, оружие, острый, жестокий
+Kun: するど.い
+On: エイ
+疫
+9 strokes
+Radical: sickness 疒
+Parts: 几 又 殳 疔
+эпидемия
+On: エキ、 ヤク
+悦
+10 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 儿 并 口 忙
+Variants: 恱
+экстаз, радость, восторг
+Kun: よろこ.ぶ、 よろこ.ばす
+On: エツ
+越
+12 strokes
+Radical: run 走 (赱)
+Parts: 土 戈 走
+превзойти, пересечь, переехать, превзойти
+Kun: こ.す、 -こ.す、 -ご.し、 こ.える、 -ご.え
+On: エツ、 オツ
+謁
+15 strokes
+Radical: speech 言 (訁)
+Parts: 勹 匕 日 言
+аудиенция
+On: エツ
+閲
+15 strokes
+Radical: gate 門
+Parts: 儿 并 口 門
+Variants:
+проверять, просматривать, обзор, проверка, пересмотр
+Kun: けみ.する
+On: エツ
+炎
+8 strokes
+Radical: fire 火 (灬)
+Parts: 火
+воспламенение, пламя
+Kun: ほのお
+On: エン
+怨
+9 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 卩 夕 心
+злоба, быть в обиде, обижаться, проявлять обиду, ревновать
+Kun: うら.む、 うらみ、 うら.めしい
+On: エン、 オン、 ウン
+宴
+10 strokes
+Radical: roof 宀
+Parts: 女 宀 日
+банкет, застолье, вечеринка, приём
+Kun: うたげ
+On: エン
+媛
+12 strokes
+Radical: woman, female 女
+Parts: ノ 又 女 爪
+барышня, красивая женщина, принцесса
+Kun: ひめ
+On: エン
+援
+12 strokes
+Radical: hand 手 (扌龵)
+Parts: 一 ノ 又 扎 爪
+помощь
+On: エン
+煙
+13 strokes
+Radical: fire 火 (灬)
+Parts: 土 火 西
+Variants: 烟
+дым, дымиться, курить
+Kun: けむ.る、 けむり、 けむ.い
+On: エン
+猿
+13 strokes
+Radical: dog 犬 (犭)
+Parts: 口 土 犯 衣
+Variants: 猨
+обезьяна
+Kun: さる
+On: エン
+鉛
+13 strokes
+Radical: metal, gold 金 (釒)
+Parts: ハ 并 口 金
+Variants: 鈆
+свинец
+Kun: なまり
+On: エン
+縁
+15 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 ヨ 糸 豕
+свзязь, узы, край, берег, близость, связь, соединение, край, граница, грань
+Kun: ふち、 ふち.どる、 ゆかり、 よすが、 へり、 えにし
+On: エン、 -ネン
+艷
+24 strokes
+Radical: colour, prettiness 色
+Parts: 并 口 山 凵 色 豆
+Variants: 艶 豓 豔
+блеск, глазурь, полировка, очарование, красочный, пленительный
+Kun: つや、 なま.めかしい、 あで.やか、 つや.めく、 なま.めく
+On: エン
+汚
+6 strokes
+Radical: water 水 (氵, 氺)
+Parts: 一 二 勹 汁
+Variants: 汙
+грязь, грязный, осквернить, позорить, изнасиловать, осквернить
+Kun: けが.す、 けが.れる、 けが.らわしい、 よご.す、 よご.れる、 きたな.い
+On: オ
+凹
+5 strokes
+Radical: container, open mouth 凵
+Parts: 凵
+вогнутый, полый, затонувший
+Kun: くぼ.む、 へこ.む、 ぼこ
+On: オウ"""
+        native_kun_on_991_1020 = """障
+14 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 十 阡 日 立 音
+мешать, ранить, вредить
+Kun: さわ.る
+On: ショウ
+難
+18 strokes
+Radical: small bird 隹
+Parts: 二 亠 口 大 艾 隹
+трудный, невозможный, беда, несчастный случай, дефект
+Kun: かた.い、 -がた.い、 むずか.しい、 むづか.しい、 むつか.しい、 -にく.い
+On: ナン
+革
+9 strokes
+Radical: leather, rawhide 革
+Parts: 十 口 廾 革
+Variants:
+кожа, реформа, стать серьезным
+Kun: かわ
+On: カク
+頂
+11 strokes
+Radical: leaf 頁
+Parts: 一 亅 ハ 目 貝 頁
+вершина, положить на голову, получить, макушка
+Kun: いただ.く、 いただき
+On: チョウ
+骨
+10 strokes
+Radical: bone 骨
+Parts: 冂 冖 月 骨
+скелет, кость, останки, рама
+Kun: ほね
+On: コツ
+亜
+7 strokes
+Radical: two 二
+Parts: 一 ｜ 口
+Variants: 亞
+Азия, следующая по рангу, иди после
+Kun: つ.ぐ
+On: ア
+哀
+9 strokes
+Radical: mouth, opening 口
+Parts: 亠 口 衣
+жалко, горе, скорбь, пафос, жалость, сочувствовать
+Kun: あわ.れ、 あわ.れむ、 かな.しい
+On: アイ
+挨
+10 strokes
+Radical: hand 手 (扌龵)
+Parts: 厶 扎 矢 乞
+приблизиться, открыться
+Kun: ひら.く
+On: アイ
+曖
+17 strokes
+Radical: sun, day 日
+Parts: 冖 夂 心 日 爪
+темно, не ясно
+Kun: くら.い
+On: アイ
+握
+12 strokes
+Radical: hand 手 (扌龵)
+Parts: 厶 土 尸 扎 至
+хватать, держать, лепить суши, подкупать
+Kun: にぎ.る
+On: アク
+扱
+6 strokes
+Radical: hand 手 (扌龵)
+Parts: 扎 及
+обрабатывать, развлекать, молотить, раздевать
+Kun: あつか.い、 あつか.う、 あつか.る、 こ.く
+On: ソウ、 キュウ
+宛
+8 strokes
+Radical: roof 宀
+Parts: 卩 夕 宀
+адрес, как, к счастью
+Kun: あ.てる、 -あて、 -づつ、 あたか.も
+On: エン
+嵐
+12 strokes
+Radical: mountain 山
+Parts: 山 風
+буря
+Kun: あらし
+On: ラン
+依
+8 strokes
+Radical: man, human 人 (亻)
+Parts: 亠 化 衣
+зависимый, зависеть от, следовательно, вследствие
+Kun: よ.る
+On: イ、 エ
+威
+9 strokes
+Radical: woman, female 女
+Parts: ノ 厂 女 戈
+запугивать, достоинство, величие, угрожать
+Kun: おど.す、 おど.し、 おど.かす
+On: イ
+為
+9 strokes
+Radical: fire 火 (灬)
+Parts: ユ 丶 ノ 并 勹 杰
+Variants: 爲
+делать, приносить пользу, благополучие, быть полезным, достигать, пробовать, практиковать, стоить, служить, благом, преимуществом, в результате
+Kun: ため、 な.る、 な.す、 す.る、 たり、 つく.る、 なり
+On: イ
+畏
+9 strokes
+Radical: field 田
+Parts: 一 田 衣
+бояться, величественно, милостиво, опасаться
+Kun: おそ.れる、 かしこま.る、 かしこ、 かしこ.し
+On: イ
+尉
+11 strokes
+Radical: thumb, inch 寸
+Parts: 二 寸 小 尸 示
+Variants: 叞
+военный офицер, тюремщик, старик, звание
+On: イ、 ジョウ
+萎
+11 strokes
+Radical: grass 艸 (艹)
+Parts: 女 艾 禾
+вянуть, свисать, хромать
+Kun: な、 しお.れる、 しな.びる、 しぼ.む、 な.える
+On: イ
+偉
+12 strokes
+Radical: man, human 人 (亻)
+Parts: 化 口 韋
+замечательный, величие, тщеславный, знаменитый, превосходный
+Kun: えら.い
+On: イ
+椅
+12 strokes
+Radical: tree 木
+Parts: 一 亅 口 大 木
+стул
+On: イ
+彙
+13 strokes
+Radical: pig snout 彐 (彑)
+Parts: 冖 ヨ 彑 木 田
+того же вида, собирать, классифицировать, категорию
+Kun: はりねずみ
+On: イ
+違
+13 strokes (also 12)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 込 口 韋
+разница, отличаться
+Kun: ちが.う、 ちが.い、 ちが.える、 -ちが.える、 たが.う、 たが.える
+On: イ
+維
+14 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 糸 隹
+волокно, галстук, веревка
+On: イ
+慰
+15 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 二 寸 小 尸 心 示
+утешение, развлечение, соблазнить, развеселить, развлечься, утешить
+Kun: なぐさ.める、 なぐさ.む
+On: イ
+緯
+16 strokes
+Radical: silk 糸 (糹)
+Parts: 口 小 幺 糸 韋
+горизонталь, гав, левая и правая, (параллели) широты, предсказание
+Kun: よこいと、 ぬき
+On: イ
+壱
+7 strokes
+Radical: scholar, bachelor 士
+Parts: 冖 匕 士
+Variants: 壹
+один (в документах)
+Kun: ひとつ
+On: イチ、 イツ
+逸
+11 strokes (also 10)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: ノ 儿 勹 込 免
+отклоняться, безделье, досуг, промахиваться, уклоняться, ускользать, парировать, расходиться
+Kun: そ.れる、 そ.らす、 はぐ.れる
+On: イツ
+茨
+9 strokes
+Radical: grass 艸 (艹)
+Parts: 冫 艾 欠
+шиповник, терновник
+Kun: いばら、 かや、 くさぶき
+On: シ、 ジ
+芋
+6 strokes
+Radical: grass 艸 (艹)
+Parts: 一 干 艾
+картофель, батат
+Kun: いも
+On: ウ"""
+        native_kun_on_961_990 = """裁
+12 strokes
+Radical: clothes 衣 (衤)
+Parts: 亠 厶 土 戈 衣
+портной, судья, решение, вырезание (выкройка)
+Kun: た.つ、 さば.く
+On: サイ
+装
+12 strokes
+Radical: clothes 衣 (衤)
+Parts: 亠 士 爿 衣
+Variants: 裝
+одеваться, притворяться, маскировать, исповедовать
+Kun: よそお.う、 よそお.い
+On: ソウ、 ショウ
+裏
+13 strokes
+Radical: clothes 衣 (衤)
+Parts: 亠 衣 里
+сзади, среди, в, обратном, внутри, ладонь, подошва, тыльная сторона, подкладка, изнаночная сторона
+Kun: うら
+On: リ
+補
+12 strokes
+Radical: clothes 衣 (衤)
+Parts: 丶 十 用 初
+дополнять, снабжать, приносить пользу, компенсировать
+Kun: おぎな.う
+On: ホ
+視
+11 strokes
+Radical: see 見
+Parts: 礼 見
+Variants: 眎
+осмотр, рассматривать, видеть, смотреть
+Kun: み.る
+On: シ
+覽
+22 strokes
+Radical: see 見
+Parts: 買 臣 見 乞
+Variants: 覧
+смотреть, осматривать, воспринимать
+Kun: み.る
+On: ラン
+討
+10 strokes
+Radical: speech 言 (訁)
+Parts: 寸 言
+наказывать, атаковать, побеждать, уничтожать, побеждать
+Kun: う.つ
+On: トウ
+訪
+11 strokes
+Radical: speech 言 (訁)
+Parts: 方 言
+позвонить, посетить, поискать, выразить сочувствие
+Kun: おとず.れる、 たず.ねる、 と.う
+On: ホウ
+訳
+11 strokes
+Radical: speech 言 (訁)
+Parts: 丶 尸 言
+Variants: 譯
+перевести, причина, обстоятельство, случай
+Kun: わけ
+On: ヤク
+詞
+12 strokes
+Radical: speech 言 (訁)
+Parts: 一 亅 口 言
+часть речи, слова, стихи
+Kun: ことば
+On: シ
+誌
+14 strokes
+Radical: speech 言 (訁)
+Parts: 士 心 言
+документ, записи
+On: シ
+認
+14 strokes
+Radical: speech 言 (訁)
+Parts: 丶 刀 心 言
+признавать, свидетельствовать, различать, узнавать, ценить, верить
+Kun: みと.める、 したた.める
+On: ニン
+誕
+15 strokes
+Radical: speech 言 (訁)
+Parts: ノ 廴 止 言
+рождение, родиться, склонение, ложь, быть произвольным
+On: タン
+誠
+13 strokes
+Radical: speech 言 (訁)
+Parts: ノ 戈 言
+искренность, увещевать, предупреждать, запрещать, правда, верность
+Kun: まこと
+On: セイ
+誤
+14 strokes
+Radical: speech 言 (訁)
+Parts: ハ 口 言
+ошибаться, поступать неправильно, вводить в заблуждение
+Kun: あやま.る、 -あやま.る
+On: ゴ
+論
+15 strokes
+Radical: speech 言 (訁)
+Parts: 一 ｜ 个 廾 冊 言
+спор, рассуждение
+Kun: あげつら.う
+On: ロン
+諸
+15 strokes
+Radical: speech 言 (訁)
+Parts: 老 日 言
+Variants: 諸
+различные, многие, несколько, вместе
+Kun: もろ
+On: ショ
+警
+19 strokes
+Radical: speech 言 (訁)
+Parts: 勹 口 夂 艾 言 乞 攵
+Variants:
+увещевать, заповедь
+Kun: いまし.める
+On: ケイ
+貴
+12 strokes
+Radical: shell 貝
+Parts: 一 ｜ ハ 口 目 貝
+драгоценный, ценность, приз, уважение, честь
+Kun: たっと.い、 とうと.い、 たっと.ぶ、 とうと.ぶ
+On: キ
+賃
+13 strokes
+Radical: shell 貝
+Parts: 化 ハ 王 目 貝
+плата, найм, рента
+On: チン
+遺
+15 strokes (also 14)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 一 ｜ ハ 込 口 目 貝
+завещать, оставить
+Kun: のこ.す
+On: イ、 ユイ
+郵
+11 strokes (also 10)
+Radical: town (阝 right) 邑 (阝)
+Parts: 一 ｜ ノ 邦
+почта
+On: ユウ
+郷
+11 strokes (also 10)
+Radical: town (阝 right) 邑 (阝)
+Parts: 幺 邦 艮
+родной город, село, родина, район
+Kun: さと
+On: キョウ、 ゴウ
+針
+10 strokes
+Radical: metal, gold 金 (釒)
+Parts: 十 金
+игла, булавка, скоба, жало
+Kun: はり
+On: シン
+鋼
+16 strokes
+Radical: metal, gold 金 (釒)
+Parts: 并 冂 山 金 岡
+сталь
+Kun: はがね
+On: コウ
+閉
+11 strokes
+Radical: gate 門
+Parts: 一 ノ 亅 門
+Variants: 閇
+закрыто
+Kun: と.じる、 と.ざす、 し.める、 し.まる、 た.てる
+On: ヘイ
+閣
+14 strokes
+Radical: gate 門
+Parts: 口 夂 門
+Variants:
+башня, высокое здание, дворец
+On: カク
+降
+10 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 十 夂 阡
+Variants: 夅
+спуститься, осаждаться, падать, сдаваться
+Kun: お.りる、 お.ろす、 ふ.る、 ふ.り、 くだ.る、 くだ.す
+On: コウ、 ゴ
+陛
+10 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 土 阡 比
+Высочество, ступеньки (трона)
+On: ヘイ
+除
+10 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 一 个 阡 示
+исключить, разделить, удалить, отменить, кроме
+Kun: のぞ.く、 -よ.け
+On: ジョ、 ジ"""
+        native_kun_on_931_960 = """穴
+5 strokes
+Radical: cave 穴
+Parts: 儿 ハ 宀 穴
+дыра, отверстие, щель, пещера, логово
+Kun: あな
+On: ケツ
+窓
+11 strokes
+Radical: cave 穴
+Parts: 儿 厶 宀 心 穴
+Variants: 窗 囱 牎 牕 窻
+окно, панель
+Kun: まど、 てんまど、 けむだし
+On: ソウ、 ス
+筋
+12 strokes
+Radical: bamboo 竹 (⺮)
+Parts: 力 月 竹 乞
+Variants: 觔
+мышца, сухожилие, волокно, сюжет, план, спуск
+Kun: すじ
+On: キン
+策
+12 strokes
+Radical: bamboo 竹 (⺮)
+Parts: ｜ 亅 ハ 冂 巾 木 竹 乞
+Variants: 笧
+схема, план, политика, шаг, средство
+On: サク
+簡
+18 strokes
+Radical: bamboo 竹 (⺮)
+Parts: 日 竹 門 乞
+Variants:
+простота, краткость
+Kun: えら.ぶ、 ふだ
+On: カン、 ケン
+糖
+16 strokes
+Radical: rice 米
+Parts: 口 广 米
+сахар
+On: トウ
+系
+7 strokes
+Radical: silk 糸 (糹)
+Parts: ノ 小 幺 糸
+родословная, система
+On: ケイ
+紅
+9 strokes
+Radical: silk 糸 (糹)
+Parts: 小 工 幺 糸
+алый, малиновый, темно-красный
+Kun: べに、 くれない、 あか.い
+On: コウ、 ク
+納
+10 strokes
+Radical: silk 糸 (糹)
+Parts: 人 冂 小 幺 糸
+поселить, получить, пожинать, платить, поставлять, хранить
+Kun: おさ.める、 -おさ.める、 おさ.まる
+On: ノウ、 ナッ、 ナ、 ナン、 トウ
+純
+10 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 屯 糸
+подлинный, чистота, невинность, чистая (прибыль)
+On: ジュン
+絹
+13 strokes
+Radical: silk 糸 (糹)
+Parts: 口 小 幺 月 糸
+шёлк
+Kun: きぬ
+On: ケン
+縦
+16 strokes
+Radical: silk 糸 (糹)
+Parts: 并 小 幺 彳 疋 糸
+Variants: 縱
+вертикальный, длина, высота, потакающий своим желаниям, своенравный
+Kun: たて
+On: ジュウ
+縮
+17 strokes
+Radical: silk 糸 (糹)
+Parts: 化 宀 小 幺 白 糸
+сжиматься, сморщиваться, сокращаться
+Kun: ちぢ.む、 ちぢ.まる、 ちぢ.める、 ちぢ.れる、 ちぢ.らす
+On: シュク
+署
+13 strokes
+Radical: net 网 (罒, ⺲, 罓, ⺳)
+Parts: 老 日 買
+Variants: 署
+подпись, правительственное учреждение, полицейский участок
+On: ショ
+翌
+11 strokes
+Radical: feather 羽
+Parts: 冫 立 羽
+следующий
+On: ヨク
+聖
+13 strokes
+Radical: ear 耳
+Parts: 口 王 耳
+Variants: 垩
+святой, мудрец, мастер, священник
+Kun: ひじり
+On: セイ、 ショウ
+肺
+9 strokes
+Radical: meat 肉 (⺼)
+Parts: 亠 巾 月
+легкие
+On: ハイ
+背
+9 strokes
+Radical: meat 肉 (⺼)
+Parts: 匕 月 爿
+рост, высота, спина, позади, не подчиняться, бросать вызов, возвращаться, бунтовать
+Kun: せ、 せい、 そむ.く、 そむ.ける
+On: ハイ
+胸
+10 strokes
+Radical: meat 肉 (⺼)
+Parts: 丶 ノ 勹 凵 月
+грудь, сердце, чувства
+Kun: むね、 むな-
+On: キョウ
+脳
+11 strokes
+Radical: meat 肉 (⺼)
+Parts: 尚 凵 月
+Variants: 腦 匘
+мозг, память
+Kun: のうずる
+On: ノウ、 ドウ
+腹
+13 strokes
+Radical: meat 肉 (⺼)
+Parts: 一 ノ 人 夂 日 月 乞
+живот, желудок
+Kun: はら
+On: フク
+臓
+19 strokes
+Radical: meat 肉 (⺼)
+Parts: ノ 厂 艾 戈 月 臣
+Variants: 臟
+внутренности, внутренние органы, кишечник
+Kun: はらわた
+On: ゾウ
+臨
+18 strokes
+Radical: minster, official 臣
+Parts: 一 ノ 人 口 臣 品 乞
+посмотреть, встретиться, противостоять, присутствовать, позвонить
+Kun: のぞ.む
+On: リン
+至
+6 strokes
+Radical: arrive 至
+Parts: 一 厶 土 至
+кульминация, прибыть, продолжить, достичь, привести к
+Kun: いた.る
+On: シ
+若
+8 strokes
+Radical: grass 艸 (艹)
+Parts: 一 ノ 口 艾
+молодой, если возможно, небольшая численность, незрелый
+Kun: わか.い、 わか-、 も.しくわ、 も.し、 も.しくは、 ごと.し
+On: ジャク、 ニャク、 ニャ
+著
+11 strokes
+Radical: grass 艸 (艹)
+Parts: 艾 老 日
+известный, публиковать, писать, замечательный, литературное произведение
+Kun: あらわ.す、 いちじる.しい
+On: チョ、 チャク
+蒸
+13 strokes
+Radical: grass 艸 (艹)
+Parts: 一 ノ 亅 艾 杰
+пар, жара, душно, разжигание, затхлый
+Kun: む.す、 む.れる、 む.らす
+On: ジョウ、 セイ
+蔵
+15 strokes
+Radical: grass 艸 (艹)
+Parts: ノ 厂 艾 戈 臣
+Variants: 藏 匨
+склад, прятать, владеть, иметь
+Kun: くら、 おさ.める、 かく.れる
+On: ゾウ、 ソウ
+蔵
+15 strokes
+Radical: grass 艸 (艹)
+Parts: ノ 厂 艾 戈 臣
+Variants: 藏 匨
+склад, прятать, владеть, иметь
+Kun: くら、 おさ.める、 かく.れる
+On: ゾウ、 ソウ
+衆
+12 strokes
+Radical: blood 血
+Parts: 皿 糸 血
+Variants: 眾
+массы, множество,  население
+Kun: おお.い
+On: シュウ、 シュ"""
+        native_kun_on_901_930 = """模
+14 strokes
+Radical: tree 木
+Parts: 大 艾 日 木
+подражание, копия, пародия
+On: モ、 ボ
+権
+15 strokes
+Radical: tree 木
+Parts: 木 矢 隹 乞
+Variants: 權
+власть, права
+Kun: おもり、 かり、 はか.る
+On: ケン、 ゴン
+樹
+16 strokes
+Radical: tree 木
+Parts: 并 口 土 寸 木 豆
+деревья, древесина, установить, установить
+Kun: き
+On: ジュ
+欲
+11 strokes
+Radical: lack, yawn 欠
+Parts: 个 ハ 口 欠 谷
+тоска, алчность, жадность, страсть, желание, жажда
+Kun: ほっ.する、 ほ.しい
+On: ヨク
+段
+9 strokes
+Radical: weapon, lance 殳
+Parts: 一 ｜ ノ 几 又 殳
+сорт, ступеньки, лестница
+On: ダン、 タン
+沿
+8 strokes
+Radical: water 水 (氵, 氺)
+Parts: ハ 口 汁
+бежать рядом, следовать, бежать, лежать
+Kun: そ.う、 -ぞ.い
+On: エン
+泉
+9 strokes
+Radical: water 水 (氵, 氺)
+Parts: 水 白
+весна, фонтан
+Kun: いずみ
+On: セン
+洗
+9 strokes
+Radical: water 水 (氵, 氺)
+Parts: ノ 儿 土 汁
+мыть, исследовать
+Kun: あら.う
+On: セン
+裁
+12 strokes
+Radical: clothes 衣 (衤)
+Parts: 亠 厶 土 戈 衣
+портной, судить, судья, решение, вырезание (выкройка)
+Kun: た.つ、 さば.く
+On: サイ
+派
+9 strokes
+Radical: water 水 (氵, 氺)
+Parts: 厂 汁 斤
+фракция, группа, партия, клика, секта, школа
+On: ハ
+済
+11 strokes
+Radical: water 水 (氵, 氺)
+Parts: ｜ ノ 廾 汁 文 斉
+Variants: 濟
+погасить (долг и т. д.), облегчить (бремя), закончить, закончиться, простительно, не нужно
+Kun: す.む、 -ず.み、 -ずみ、 す.まない、 す.ます、 -す.ます、 すく.う、 な.す、 わたし、 わた.る
+On: サイ、 セイ
+源
+13 strokes
+Radical: water 水 (氵, 氺)
+Parts: 厂 小 汁 白
+Variants: 厵
+источник, происхождение
+Kun: みなもと
+On: ゲン
+潮
+15 strokes
+Radical: water 水 (氵, 氺)
+Parts: 十 汁 日 月
+прилив, соленая вода, возможность
+Kun: しお、 うしお
+On: チョウ
+激
+16 strokes
+Radical: water 水 (氵, 氺)
+Parts: 汁 方 白 乞 攵
+Variants:
+буйный, возбудиться, разозлиться, раздражать, подстрекать
+Kun: はげ.しい
+On: ゲキ
+灰
+6 strokes
+Radical: fire 火 (灬)
+Parts: 厂 火
+пепел, смородиновый сок, кремация
+Kun: はい
+On: カイ
+熟
+15 strokes
+Radical: fire 火 (灬)
+Parts: 丶 亠 九 口 子 杰
+созревать, приобретать навыки
+Kun: う.れる
+On: ジュク
+片
+4 strokes
+Radical: slice 片
+Parts: 片
+односторонний, лист, лист, правосторонний радикал ката (№ 91)
+Kun: かた-、 かた
+On: ヘン
+班
+10 strokes
+Radical: jade (king) 玉 (王)
+Parts: 刈 王
+отряд, корпус, часть, группа
+On: ハン
+異
+11 strokes
+Radical: field 田
+Parts: 一 ハ 井 田
+странный, необычный, чудесный, любопытный
+Kun: こと、 こと.なる、 け
+On: イ
+疑
+14 strokes
+Radical: bolt of cloth 疋 (⺪)
+Parts: 匕 マ 疋 矢 乞
+сомнение, недоверие, подозрение, вопрос
+Kun: うたが.う
+On: ギ
+痛
+12 strokes
+Radical: sickness 疒
+Parts: マ 用 疔
+боль, рана, повреждение, синяк
+Kun: いた.い、 いた.む、 いた.ましい、 いた.める
+On: ツウ
+皇
+9 strokes
+Radical: white 白
+Parts: 王 白
+император
+On: コウ、 オウ
+盛
+11 strokes
+Radical: dish 皿
+Parts: ノ 戈 皿
+бум, процветать, совокупляться
+Kun: も.る、 さか.る、 さか.ん
+On: セイ、 ジョウ
+盟
+13 strokes
+Radical: dish 皿
+Parts: 日 月 皿
+союз, клятва
+On: メイ
+看
+9 strokes
+Radical: eye 目
+Parts: 一 ノ 二 手 目
+Variants:
+следить, видеть
+Kun: み.る
+On: カン
+砂
+9 strokes
+Radical: stone 石
+Parts: ノ 口 小 石
+песок
+Kun: すな
+On: サ、 シャ
+磁
+14 strokes
+Radical: stone 石
+Parts: 一 并 口 幺 石
+Variants: 礠
+магнит, фарфор
+On: ジ
+私
+7 strokes
+Radical: grain 禾
+Parts: 厶 禾
+личное, я
+Kun: わたくし、 わたし
+On: シ
+秘
+10 strokes
+Radical: grain 禾
+Parts: 丶 ノ 心 禾
+Variants: 祕
+секрет, скрыть
+Kun: ひ.める、 ひそ.か、 かく.す
+On: ヒ
+穀
+14 strokes
+Radical: grain 禾
+Parts: 冖 几 又 士 殳 禾
+Variants: 糓 穀
+крупы, зерно
+On: コク"""
+        native_kun_on_871_900 = """幼
+5 strokes
+Radical: short, tiny 幺
+Parts: 力 幺
+младенчество, детство
+Kun: おさな.い
+On: ヨウ
+庁 
+5 strokes
+Radical: house on cliff 广
+Parts: 一 亅 广
+Variants: 廳 廰
+администрация, правительственное учреждение
+Kun: やくしょ
+On: チョウ、 テイ
+座
+10 strokes
+Radical: house on cliff 广
+Parts: ｜ 人 土 广
+приседание, сиденье, подушка, сбор, сидеть
+Kun: すわ.る
+On: ザ
+延
+8 strokes (also 7)
+Radical: long stride 廴
+Parts: 一 廴 止
+продлить, растянуть
+Kun: の.びる、 の.べる、 の.べ、 の.ばす
+On: エン
+律
+9 strokes
+Radical: step 彳
+Parts: 彳 聿
+правило, ритм, закон, регулирование, мера, контроль
+On: リツ、 リチ、 レツ
+從
+11 strokes
+Radical: step 彳
+Parts: 人 彳 疋
+Variants: 従
+от, через, с тех пор, откуда, через, следовать, сопровождать
+Kun: したが.う、 したが.える、 より
+On: ジュウ、 ショウ、 ジュ
+忘
+7 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 亠 亡 心
+забывать
+Kun: わす.れる
+On: ボウ
+忠
+8 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: ｜ 口 心
+преданность, верность
+On: チュウ
+憲 
+16 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 二 亠 土 宀 心 買
+конституция, закон
+On: ケン
+我
+7 strokes
+Radical: spear, halberd 戈
+Parts: 亅 戈 手
+я, мой, свой
+Kun: われ、 わ、 わ.が-、 わが-
+On: ガ
+批
+7 strokes
+Radical: hand 手 (扌龵)
+Parts: 扎 比
+критика, забастовка
+On: ヒ
+担
+8 strokes
+Radical: hand 手 (扌龵)
+Parts: 一 扎 日
+Variants: 擔
+взваливать на плечи, нести, поднимать
+Kun: かつ.ぐ、 にな.う
+On: タン
+拝 
+8 strokes
+Radical: hand 手 (扌龵)
+Parts: 一 ｜ 干 扎
+Variants: 拜
+почитать, поклоняться, обожать, молиться
+Kun: おが.む、 おろが.む
+On: ハイ
+拡 
+8 strokes
+Radical: hand 手 (扌龵)
+Parts: 厶 广 扎
+Variants: 擴 挄
+расширяться, распространять
+Kun: ひろ.がる、 ひろ.げる、 ひろ.める
+On: カク、 コウ
+捨
+11 strokes
+Radical: hand 手 (扌龵)
+Parts: 个 口 土 扎
+бросать, отбросить, выбросить, отказаться, уйти в отставку, отвергнуть, пожертвовать
+Kun: す.てる
+On: シャ
+探
+11 strokes
+Radical: hand 手 (扌龵)
+Parts: 儿 冖 扎 木
+нащупывать, искать, разыскивать
+Kun: さぐ.る、 さが.す
+On: タン
+推
+11 strokes
+Radical: hand 手 (扌龵)
+Parts: 扎 隹
+догадка, вывод, заключать, предполагать, 
+Kun: お.す
+On: スイ
+揮
+12 strokes
+Radical: hand 手 (扌龵)
+Parts: 冖 扎 車
+Variants:
+размахивать, махать, вилять, качаться, трясти
+Kun: ふる.う
+On: キ
+操
+16 strokes
+Radical: hand 手 (扌龵)
+Parts: 口 扎 木 品
+Variants: 撡
+маневрировать, манипулировать, управлять, управлять, целомудрие, девственность, верность, невинность
+Kun: みさお、 あやつ.る
+On: ソウ、 サン
+敬
+12 strokes
+Radical: rap 攴 (攵)
+Parts: 勹 口 艾 乞 攵
+трепет, уважение, честь, почтение
+Kun: うやま.う
+On: ケイ、 キョウ
+映
+9 strokes
+Radical: sun, day 日
+Parts: ノ 冖 大 日
+отражать, отражение, проекция
+Kun: うつ.る、 うつ.す、 は.える、 -ば.え
+On: エイ
+晚
+11 strokes
+Radical: sun, day 日
+Parts:
+Variants: 晩 晩
+ночь, вечер, поздно
+Kun: くれ、 おそい
+On: バン
+暖
+13 strokes
+Radical: sun, day 日
+Parts: 一 ノ 又 日 爪
+теплота
+Kun: あたた.か、 あたた.かい、 あたた.まる、 あたた.める
+On: ダン、 ノン
+暮
+14 strokes
+Radical: sun, day 日
+Parts: 大 艾 日
+вечер, сумерки, конец сезона, средства к существованию, зарабатывать на жизнь, проводить время
+Kun: く.れる、 く.らす
+On: ボ
+朗
+10 strokes
+Radical: moon, month 月
+Parts: 月 艮
+Variants: 朖 朗
+мелодичный, ясный, яркий, безмятежный, веселый
+Kun: ほが.らか、 あき.らか
+On: ロウ
+机
+6 strokes
+Radical: tree 木
+Parts: 几 木
+письменный стол, стол
+Kun: つくえ
+On: キ
+枚
+8 strokes
+Radical: tree 木
+Parts: 木 乞 攵
+лист..., счётный суффикс для плоских предметов
+On: マイ、 バイ
+染
+9 strokes
+Radical: tree 木
+Parts: 九 汁 木
+краситель, цвет, краска, пятно, печать
+Kun: そ.める、 そ.まる、 し.みる、 し.み
+On: セン
+株
+10 strokes
+Radical: tree 木
+Parts: 木 牛
+акции, пень, инвентарь
+Kun: かぶ
+On: シュ
+棒
+12 strokes
+Radical: tree 木
+Parts: 一 ｜ 二 人 大 木
+стержень, палка, трость, шест, дубинка, леска
+On: ボウ"""
+        native_kun_on_841_870 = """困
+7 strokes
+Radical: enclosure 囗
+Parts: 囗 木
+Variants:
+запутаться, огорчиться, раздосадоваться, трудности, быть в затруднении
+Kun: こま.る
+On: コン
+垂 
+8 strokes
+Radical: earth 土
+Parts: 一 ｜ ノ
+Variants: 埀
+свисать, приостанавливаться, висеть, сутулиться, висеть, капать
+Kun: た.れる、 た.らす、 た.れ、 -た.れ、 なんなんと.す
+On: スイ
+城
+9 strokes
+Radical: earth 土
+Parts: ノ 土 戈
+замок, крепость
+Kun: しろ
+On: ジョウ、 セイ
+域
+11 strokes
+Radical: earth 土
+Parts: 口 土 戈
+диапазон, регион, пределы, стадия, уровень, район, пределы, границы
+On: イキ
+奏
+9 strokes
+Radical: big, very 大
+Parts: 一 二 人 大 禾
+играть, музицировать, включить музыку, поговорить с правителем, завершить
+Kun: かな.でる
+On: ソウ
+奮
+16 strokes
+Radical: big, very 大
+Parts: 大 田 隹
+воодушевляться, воодушевляться, процветать
+Kun: ふる.う
+On: フン
+姿
+9 strokes
+Radical: woman, female 女
+Parts: 冫 女 欠
+фигура, форма, состояние
+Kun: すがた
+On: シ
+存  
+6 strokes
+Radical: child, seed 子
+Parts: 一 ｜ ノ 子
+существовать, предполагать, осознавать, верить
+Kun: ながら.える、 あ.る、 たも.つ、 と.う
+On: ソン、 ゾン
+孝
+7 strokes
+Radical: child, seed 子
+Parts: 子 老
+сыновняя почтительность, уважение ребенка, сыновий долг
+On: コウ、 キョウ
+宅
+6 strokes
+Radical: roof 宀
+Parts: 乙 一 ノ 宀
+дом, место жительства, наш дом, жилище
+On: タク
+宇
+6 strokes
+Radical: roof 宀
+Parts: 亅 宀 干
+карниз, крыша, дом, небо, вселенная, космос
+On: ウ
+宗
+8 strokes
+Radical: roof 宀
+Parts: 二 宀 小 示
+предок, религия, секта, конфессия, суть, происхождение, суть
+Kun: むね
+On: シュウ、 ソウ
+宙
+8 strokes
+Radical: roof 宀
+Parts: ｜ 宀 日 田
+воздух, космос, небо, запоминание, интервал времени
+On: チュウ
+宝
+8 strokes
+Radical: roof 宀
+Parts: 丶 宀 王
+Variants: 寶 寳 寚
+сокровище, богатство, ценности
+Kun: たから
+On: ホウ
+宣 
+9 strokes
+Radical: roof 宀
+Parts: 一 宀 日
+оглашать, изрекать, объявить, сказать
+Kun: のたま.う
+On: セン
+密
+11 strokes
+Radical: roof 宀
+Parts: 丶 ノ 宀 山 心
+тайный, плотный, густой, скрытность, подробность, осторожность
+Kun: ひそ.か
+On: ミツ
+寸
+3 strokes
+Radical: thumb, inch 寸
+Parts: 寸
+дюйм, размер, измерение, десятая часть сяку, немного, маленький
+On: スン
+專 858
+11 strokes
+Radical: thumb, inch 寸
+Parts: 一 十 厶 寸 田 虫
+Variants: 専
+специальный, исключительный, главным образом, исключительно
+Kun: もっぱ.ら
+On: セン
+射
+10 strokes
+Radical: thumb, inch 寸
+Parts: 寸 身
+попадать, стрелять, светить, стрелять из лука
+Kun: い.る、 さ.す、 う.つ
+On: シャ
+将
+10 strokes
+Radical: thumb, inch 寸
+Parts: 寸 爪 爿
+Variants: 將
+вождь, командующий, генерал, адмирал, командир
+Kun: まさ.に、 はた、 まさ、 ひきい.る、 もって
+On: ショウ、 ソウ
+尊
+12 strokes
+Radical: thumb, inch 寸
+Parts: 并 寸 酉
+почитать, уважать, знатный, почитаемый, ценный, драгоценный, благородный, возвышенный
+Kun: たっと.い、 とうと.い、 たっと.ぶ、 とうと.ぶ
+On: ソン
+就
+12 strokes
+Radical: lame 尢 (尣)
+Parts: 丶 亠 口 小 尢 尤
+приступать, относительно, урегулировать, занять позицию
+Kun: つ.く、 つ.ける
+On: シュウ、 ジュ
+尺
+4 strokes
+Radical: corpse 尸
+Parts: 丶 尸
+сяку, японская стопа, мера длины, масштаб, правило
+Kun: さし
+On: シャク、 セキ
+届
+8 strokes
+Radical: corpse 尸
+Parts: ｜ 尸 日 田
+Variants: 屆
+извещение, достигать, доставать, прибыть, сообщить, уведомить, переслать
+Kun: とど.ける、 -とど.け、 とど.く
+On: カイ
+展
+10 strokes
+Radical: corpse 尸
+Parts: 一 ｜ 二 尸 衣
+выставка, разворачиваться, расширяться
+On: テン
+層
+14 strokes
+Radical: corpse 尸
+Parts: 并 尸 日 田
+Variants: 層
+слой, социальный класс, пласт, история, этаж
+On: ソウ
+己
+3 strokes
+Radical: oneself 己 (巳, 已, 㔾)
+Parts: 已
+сам, свой, собственный
+Kun: おのれ、 つちのと、 な
+On: コ、 キ
+卷 
+8 strokes
+Radical: kneel 卩
+Parts: 二 人 ハ 并 卩 大
+Variants: 巻
+свиток, том, книга, часть
+Kun: ま.く、 まき
+On: カン、 ケン
+幕
+13 strokes
+Radical: turban, scarf 巾
+Parts: 大 巾 艾 日
+занавес, овсянка, игра
+Kun: とばり
+On: マク、 バク
+干
+3 strokes
+Radical: pestle 干
+Parts: 一 十 干
+сухой, сушить, отлив, отступать, мешать, заступаться
+Kun: ほ.す、 ほ.し-、 -ぼ.し、 ひ.る
+On: カン"""
+        native_kun_on_811_840 = """預
+13 strokes
+Radical: leaf 頁
+Parts: 一 亅 ハ マ 欠 目 貝 頁
+положить на хранение, оставить под стражей, оставить, поручить
+Kun: あず.ける、 あず.かる
+On: ヨ
+領
+14 strokes
+Radical: leaf 頁
+Parts: 一 个 ハ 卩 目 貝 頁
+юрисдикция, доминион, территория, феод, господство
+Kun: えり
+On: リョウ
+額
+18 strokes
+Radical: leaf 頁
+Parts: ハ 口 夂 宀 目 貝 頁
+лоб, табличка, мемориальная доска, фотография в рамке, сумма, количество, объём
+Kun: ひたい
+On: ガク
+飼
+13 strokes
+Radical: eat, food 食 (飠)
+Parts: 亅 个 口 艮 食
+приручить, вырастить, содержать, кормить
+Kun: か.う
+On: シ
+善
+12 strokes
+Radical: mouth, opening 口
+Parts: 并 口 王 羊
+Variants: 譱
+добродетельный, хороший
+Kun: よ.い、 い.い、 よ.く、 よし.とする
+On: ゼン
+並
+8 strokes
+Radical: one 一
+Parts: 一 ｜ 二 并
+Variants: 竝 傡
+ряд, и, кроме того, а также, выстраиваться в ряд, равным
+Kun: な.み、 なみ、 なら.べる、 なら.ぶ、 なら.びに
+On: ヘイ、 ホウ
+乱
+7 strokes
+Radical: second 乛 (乙, ⺄, 乚)
+Parts: 乙 口 舌
+Variants: 亂
+бунт, война, беспорядок
+Kun: みだ.れる、 みだ.る、 みだ.す、 みだ、 おさ.める、 わた.る
+On: ラン、 ロン
+乳
+8 strokes
+Radical: second 乛 (乙, ⺄, 乚)
+Parts: 乙 子 爪
+молоко, грудь
+Kun: ちち、 ち
+On: ニュウ
+亡
+3 strokes
+Radical: lid 亠
+Parts: 亠 亡
+Variants: 兦
+умерший, покойный, умирающий, погибнуть
+Kun: な.い、 な.き-、 ほろ.びる、 ほろ.ぶ、 ほろ.ぼす
+On: ボウ、 モウ
+仁
+4 strokes
+Radical: man, human 人 (亻)
+Parts: 二 化
+человечность, добродетель, доброжелательность, благотворительность, человек, ядро
+On: ジン、 ニ、 ニン
+供
+8 strokes
+Radical: man, human 人 (亻)
+Parts: 一 ｜ 二 化 ハ
+подать, предложить, подарить, подавать (еду), сопровождать
+Kun: そな.える、 とも、 -ども
+On: キョウ、 ク、 クウ、 グ
+俳
+10 strokes
+Radical: man, human 人 (亻)
+Parts: 化 非
+актер
+On: ハイ
+傷
+13 strokes
+Radical: man, human 人 (亻)
+Parts: 一 ノ 人 化 勹 日 勿 乞
+рана, травмировать, ранить, порезать, шрам, слабое место
+Kun: きず、 いた.む、 いた.める
+On: ショウ
+優
+17 strokes
+Radical: man, human 人 (亻)
+Parts: 一 化 冖 夂 心 白 自
+нежность, превосходить, превосходство, мягкость
+Kun: やさ.しい、 すぐ.れる、 まさ.る
+On: ユウ、 ウ
+党
+10 strokes
+Radical: legs 儿
+Parts: 儿 冖 口 尚
+Variants: 黨
+партия, фракция, клика
+Kun: なかま、 むら
+On: トウ
+冊
+5 strokes
+Radical: open country 冂
+Parts: 一 ｜ 亅 冂 廾 冊
+Variants: 册
+том, счетчик для книг
+Kun: ふみ
+On: サツ、 サク
+刻
+8 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 丶 ノ 亠 人 刈
+гравировать, мелко нарезать, рубить, перемешивать, фарш, время, резьба
+Kun: きざ.む、 きざ.み
+On: コク
+割
+12 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 二 亠 刈 口 土 宀
+пропорция, сравнительно, разделить, разрезать, отделить, расколоть
+Kun: わ.る、 わり、 わ.り、 わ.れる、 さ.く
+On: カツ
+創
+12 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 一 个 刈 口
+Variants: 刅 戧
+генезис, рана, травма, начало, возникновение
+Kun: つく.る、 はじ.める、 きず、 けず.しける
+On: ソウ、 ショウ
+劇
+15 strokes
+Radical: knife, sword 刀 (刂)
+Parts: 刈 匕 卜 厂 虍 豕
+драма, пьеса
+On: ゲキ
+勤
+12 strokes
+Radical: power, force 力
+Parts: 一 二 力 口 土 艾
+Variants: 勤
+трудолюбие, трудоустроиться, служить
+Kun: つと.める、 -づと.め、 つと.まる、 いそ.しむ
+On: キン、 ゴン
+危
+6 strokes
+Radical: kneel 卩
+Parts: 勹 卩 厂
+опасный, страх, тревожный
+Kun: あぶ.ない、 あや.うい、 あや.ぶむ
+On: キ
+卵
+7 strokes
+Radical: kneel 卩
+Parts: 丶 ノ 卜 卩
+яйцо, яйцеклетка, икра
+Kun: たまご
+On: ラン
+厳
+17 strokes
+Radical: cliff 厂
+Parts: 厂 尚 耳 乞 攵
+Variants: 嚴
+суровость, строгость, жесткость
+Kun: おごそ.か、 きび.しい、 いか.めしい、 いつくし
+On: ゲン、 ゴン
+収
+4 strokes (also 5)
+Radical: right hand 又
+Parts: ｜ 又
+Variants: 收
+доход, получать, пожинать, платить, поставлять, хранить
+Kun: おさ.める、 おさ.まる
+On: シュウ
+后
+6 strokes
+Radical: mouth, opening 口
+Parts: 一 ノ 亅 厂 口 斤
+императрица, королева, после, позади, назад, позже
+Kun: きさき
+On: コウ、 ゴ
+否
+7 strokes
+Radical: mouth, opening 口
+Parts: 一 ｜ 丶 ノ 口
+отрицать, нет, отказываться, отклонять, отрицать
+Kun: いな、 いや
+On: ヒ
+吸
+6 strokes
+Radical: mouth, opening 口
+Parts: ノ 口 及
+сосать, впитывать, вдыхать, глотать
+Kun: す.う
+On: キュウ
+呼
+8 strokes
+Radical: mouth, opening 口
+Parts: ノ 亅 并 口
+позвонить, позвонить, пригласить
+Kun: よ.ぶ
+On: コ"""
+        native_kun_on_781_810 = """謝
+17 strokes
+Radical: speech 言 (訁)
+Parts: 寸 言 身
+извинись, поблагодари, откажись
+Kun: あやま.る
+On: シャ
+識
+19 strokes
+Radical: speech 言 (訁)
+Parts: 戈 日 立 言 音
+различать, знать, писать
+Kun: し.る、 しる.す
+On: シキ
+護
+20 strokes
+Radical: speech 言 (訁)
+Parts: 又 艾 言 隹
+Variants:
+охранять, защищать
+Kun: まも.る
+On: ゴ
+豐
+18 strokes
+Radical: bean 豆
+Parts: 并 口 山 凵 豆
+Variants: 豊
+обильный, превосходный, богатый
+Kun: ゆた.か、 とよ
+On: ホウ、 ブ
+財
+10 strokes
+Radical: shell 貝
+Parts: 一 ノ 亅 ハ 目 貝
+Variants: 戝
+имущество, деньги, богатство, активы
+Kun: たから
+On: ザイ、 サイ、 ゾク
+貧
+11 strokes
+Radical: shell 貝
+Parts: ハ 刀 目 貝
+бедность, бедный
+Kun: まず.しい
+On: ヒン、 ビン
+責
+11 strokes
+Radical: shell 貝
+Parts: 二 亠 ハ 土 目 貝
+винить, осуждать, порицать
+Kun: せ.める
+On: セキ
+貸
+12 strokes
+Radical: shell 貝
+Parts: 化 ハ 弋 目 貝
+одалживать
+Kun: か.す、 か.し-、 かし-
+On: タイ
+貿
+12 strokes
+Radical: shell 貝
+Parts: ハ 刀 厶 目 貝
+торговля, обмен
+On: ボウ
+賀
+12 strokes
+Radical: shell 貝
+Parts: ハ 力 口 目 貝
+поздравления, радость
+On: ガ
+資
+13 strokes
+Radical: shell 貝
+Parts: ハ 冫 欠 目 貝
+активы, ресурсы, капитал, средства, данные, способствовать
+On: シ
+慧 -нет гифки
+15 strokes
+Radical: heart 心 (忄, ⺗)
+Parts: 一 ｜ ヨ 心
+мудрый
+Kun: さとい
+On: ケイ、 エ
+質
+15 strokes
+Radical: shell 貝
+Parts: ハ 斤 目 貝
+Variants: 貭 劕
+субстанция, качество, материя, темперамент
+Kun: たち、 ただ.す、 もと、 わりふ
+On: シツ、 シチ、 チ
+輸
+16 strokes
+Radical: cart, car 車
+Parts: 一 个 刈 月 車
+транспортировать, отправлять, быть хуже
+On: ユ、 シュ
+述
+8 strokes (also 7)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 丶 十 込 木
+упоминать, заявлять, говорить, соотносить
+Kun: の.べる
+On: ジュツ
+迷
+9 strokes (also 8)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 込 米
+сбиться с пути, растеряться, сомневаться, потеряться, заблуждаться, иллюзия
+Kun: まよ.う
+On: メイ
+退
+9 strokes (also 8)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 込 艮
+отступить, уйти в отставку, отталкивать, изгнать, отвергнуть
+Kun: しりぞ.く、 しりぞ.ける、 ひ.く、 の.く、 の.ける、 ど.く
+On: タイ
+逆
+9 strokes (also 8)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 并 込 屮
+перевернутый, обратный, противоположный, злой
+Kun: さか、 さか.さ、 さか.らう
+On: ギャク、 ゲキ
+造
+10 strokes (also 9)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: ノ 込 口 土
+создавать, строить, телосложение
+Kun: つく.る、 つく.り、 -づく.り
+On: ゾウ
+過
+12 strokes (also 11)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 冂 込 口
+переусердствовать, превышать, выходить за рамки, ошибка
+Kun: す.ぎる、 す.ごす、 あやま.ち、 あやま.つ、 よぎ.る、 よ.ぎる
+On: カ
+適
+14 strokes (also 13)
+Radical: walk 辵 (辶, ⻌, ⻍)
+Parts: 亠 并 冂 十 込 口 立 滴
+подходящий, случайный, редкий, квалифицированный, способный
+Kun: かな.う
+On: テキ
+酸
+14 strokes
+Radical: wine, alcohol 酉
+Parts: 儿 厶 夂 酉
+кислота, горечь, кислинка, терпкий
+Kun: す.い
+On: サン
+鉱
+13 strokes
+Radical: metal, gold 金 (釒)
+Parts: 厶 广 金
+Variants: 砿 礦 鑛 磺
+минерал, руда
+Kun: あらがね
+On: コウ
+銅
+14 strokes
+Radical: metal, gold 金 (釒)
+Parts: 一 冂 口 金
+медь
+Kun: あかがね
+On: ドウ
+銭
+14 strokes
+Radical: metal, gold 金 (釒)
+Parts: 二 戈 金
+Variants: 錢
+монета, 0,01 иена, деньги
+Kun: ぜに、 すき
+On: セン、 ゼン
+防
+7 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 阡 方
+отгонять, защищать, сопротивляться
+Kun: ふせ.ぐ
+On: ボウ
+限
+9 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 阡 艮
+ограничивать, в меру своих возможностей
+Kun: かぎ.る、 かぎ.り、 -かぎ.り
+On: ゲン
+険
+11 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: 人 个 口 阡
+Variants: 險 礆
+обрывистое, недоступное место, неприступное место, крутое место, острый глаз
+Kun: けわ.しい
+On: ケン
+際
+14 strokes
+Radical: mound, dam (阝 left) 阜 (阝)
+Parts: ノ 二 小 阡 癶 示
+повод, сторона, край, грань, опасный, авантюрный, неприличный, время, когда
+Kun: きわ、 -ぎわ
+On: サイ
+雜 - нет гифки
+18 strokes
+Radical: small bird 隹
+Parts: 亠 人 木 隹
+Variants: 雑
+смешанный, перемешать
+Kun: まじ.える、 まじ.る
+On: ザツ、 ゾウ
+非
+8 strokes
+Radical: wrong 非
+Parts: 非
+не-, ошибка, негатив, несправедливость
+Kun: あら.ず
+On: ヒ"""
+        native_kun_on_751_780 = """破
+10 strokes
+Radical: stone 石
+Parts: 又 口 皮 石
+разорвать, сломать, уничтожить, победить, расстроить
+Kun: やぶ.る、 やぶ.れる、 わ.れる
+On: ハ
+確
+15 strokes
+Radical: stone 石
+Parts: 口 宀 石 隹
+Variants: 碻
+уверенность, твердый, плотный, подтверждающий, ясный, очевидный
+Kun: たし.か、 たし.かめる
+On: カク、 コウ
+示
+5 strokes
+Radical: sign 示 (礻)
+Parts: 二 小 示
+показывать, указывать, выражать
+Kun: しめ.す
+On: ジ、 シ
+祖
+9 strokes
+Radical: sign 示 (礻)
+Parts: 一 礼 目
+Variants: 祖
+предок, пионер, основатель
+On: ソ
+禁
+13 strokes
+Radical: sign 示 (礻)
+Parts: 二 小 木 示
+запрет, запретить
+On: キン
+移
+11 strokes
+Radical: grain 禾
+Parts: 夕 禾
+сдвигать, перемещать, менять, дрейфовать, переходить в
+Kun: うつ.る、 うつ.す
+On: イ
+程
+12 strokes
+Radical: grain 禾
+Parts: 口 王 禾
+степень, закон, формула, расстояние, пределы, количество
+Kun: ほど、 -ほど
+On: テイ
+税
+12 strokes
+Radical: grain 禾
+Parts: 儿 并 口 禾
+налог, пошлина
+On: ゼイ
+築
+16 strokes
+Radical: bamboo 竹 (⺮)
+Parts: 丶 几 工 木 竹
+изготовить, построить, соорудить
+Kun: きず.く
+On: チク
+精
+14 strokes
+Radical: rice 米
+Parts: 二 亠 土 月 米 青
+изысканный, призрак, фея, энергия, жизненная сила, семя, совершенство, чистота, мастерство
+Kun: しら.げる、 くわ.しい
+On: セイ、 ショウ
+素
+10 strokes
+Radical: silk 糸 (糹)
+Parts: 二 亠 土 小 幺 糸
+элементарный, принцип, голый, непокрытый
+Kun: もと
+On: ソ、 ス
+経
+11 strokes
+Radical: silk 糸 (糹)
+Parts: 又 土 小 幺 糸
+Variants: 經
+сутра, долгота, проходить, истекать, деформироваться
+Kun: へ.る、 た.つ、 たていと、 はか.る、 のり
+On: ケイ、 キョウ、 キン
+統
+12 strokes
+Radical: silk 糸 (糹)
+Parts: 亠 儿 厶 小 幺 糸
+Variants: 綂
+в целом, отношения, управление
+Kun: す.べる、 ほび.る
+On: トウ
+絶
+12 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 糸 色
+прекратить, разорвать, отрезать, воздержаться, прервать, подавить, выйти за рамки, не иметь себе равных, бесподобный, беспрецедентный
+Kun: た.える、 た.やす、 た.つ
+On: ゼツ
+綿
+14 strokes
+Radical: silk 糸 (糹)
+Parts: 小 巾 幺 白 糸
+хлопок
+Kun: わた
+On: メン
+総
+14 strokes
+Radical: silk 糸 (糹)
+Parts: ハ 厶 小 幺 心 糸
+Variants: 總 摠 緫
+общий, весь, полный, тотальный
+Kun: す.べて、 すべ.て、 ふさ
+On: ソウ
+編
+15 strokes
+Radical: silk 糸 (糹)
+Parts: 一 ｜ 冂 小 尸 幺 廾 戸 冊 糸
+компиляция, вязание, коса, скручивание, редактирование, законченное стихотворение, часть книги
+Kun: あ.む、 -あ.み
+On: ヘン
+績
+17 strokes
+Radical: silk 糸 (糹)
+Parts: 二 亠 ハ 土 小 幺 目 糸 貝
+подвиги, достижения, разматывание коконов
+On: セキ
+織
+18 strokes
+Radical: silk 糸 (糹)
+Parts: 小 幺 戈 日 立 糸 音
+переплетение, ткань
+Kun: お.る、 お.り、 おり、 -おり、 -お.り
+On: ショク、 シキ
+罪
+13 strokes
+Radical: net 网 (罒, ⺲, 罓, ⺳)
+Parts: 買 非
+вина, грех, преступление, проступок
+Kun: つみ
+On: ザイ
+衛
+16 strokes
+Radical: go, do 行
+Parts: 口 彳 行 韋
+Variants: 衞
+защита
+On: エイ、 エ
+製
+14 strokes
+Radical: clothes 衣 (衤)
+Parts: 亠 刈 巾 牛 衣
+сделано в..., производство
+On: セイ
+複
+14 strokes
+Radical: clothes 衣 (衤)
+Parts: 夂 日 初 乞
+дубликат, двойной, составной, множественный
+On: フク
+規
+11 strokes
+Radical: see 見
+Parts: 二 人 土 大 見
+стандарт, мера
+On: キ
+解
+13 strokes
+Radical: horn 角
+Parts: 刀 牛 角
+Variants: 觧
+разгадать, заметки, ключ, объяснение, понимание, развязать, отменить, решить, ответить, отменить, освободить, объяснить, минута
+Kun: と.く、 と.かす、 と.ける、 ほど.く、 ほど.ける、 わか.る、 さと.る
+On: カイ、 ゲ
+設
+11 strokes
+Radical: speech 言 (訁)
+Parts: 几 又 殳 言
+создание, обеспечение, подготовка
+Kun: もう.ける
+On: セツ
+許
+11 strokes
+Radical: speech 言 (訁)
+Parts: ノ 十 干 言 乞
+разрешить, одобрить
+Kun: ゆる.す、 もと
+On: キョ
+証
+12 strokes
+Radical: speech 言 (訁)
+Parts: 一 止 言
+Variants: 證
+свидетельство, доказательство
+Kun: あかし
+On: ショウ
+評
+12 strokes
+Radical: speech 言 (訁)
+Parts: 一 ｜ 二 并 言
+оценивать, критиковать, комментировать
+On: ヒョウ
+講
+17 strokes
+Radical: speech 言 (訁)
+Parts: 一 冂 十 言
+лекция, клуб, ассоциация
+On: コウ"""
+        native_kun_on_721_750 = """条
+7 strokes
+Radical: tree 木
+Parts: 夂 木 攵
+Variants: 條
+статья, оговорка, счетчик статей, пунктов, параграфов, полоска, штрих
+Kun: えだ、 すじ
+On: ジョウ、 チョウ、 デキ
+枝
+8 strokes
+Radical: tree 木
+Parts: 十 又 支 木
+сук, ветка, прут, стойка для веток
+Kun: えだ
+On: シ
+査
+9 strokes
+Radical: tree 木
+Parts: 一 木 目
+расследовать
+On: サ
+格
+10 strokes
+Radical: tree 木
+Parts: 口 夂 木
+статус, чин, должность, характер, случай
+On: カク、 コウ、 キャク、 ゴウ
+桜
+10 strokes
+Radical: tree 木
+Parts: 女 尚 木
+Variants: 櫻
+сакура, японская декоративная вишня
+Kun: さくら
+On: オウ、 ヨウ
+検
+12 strokes
+Radical: tree 木
+Parts: 人 个 口 木
+Variants: 檢
+изучение, исследование, взвешивание (фактов, данных и т. п.), изучать, исследовать, рассматривать; взвешивать
+Kun: しら.べる
+On: ケン
+構
+14 strokes
+Radical: tree 木
+Parts: 一 冂 十 木
+Variants: 构
+поза, позиция, внешний вид, телосложение, установка
+Kun: かま.える、 かま.う
+On: コウ
+武
+8 strokes
+Radical: stop 止
+Parts: 弋 止
+воин, военные, рыцарство, оружие
+Kun: たけ、 たけ.し
+On: ブ、 ム
+比
+4 strokes
+Radical: compare, compete 比
+Parts: 比
+Variants: 夶
+сравнить, раса, соотношение, Филиппины
+Kun: くら.べる
+On: ヒ
+永
+5 strokes
+Radical: water 水 (氵, 氺)
+Parts: 丶 水
+вечность, долгий
+Kun: なが.い
+On: エイ
+河
+8 strokes
+Radical: water 水 (氵, 氺)
+Parts: 一 亅 口 汁
+река, 111
+Kun: かわ
+On: カ
+液
+11 strokes
+Radical: water 水 (氵, 氺)
+Parts: 亠 化 夕 汁 乞 攵
+жидкость, сок, секрет
+On: エキ
+混
+11 strokes
+Radical: water 水 (氵, 氺)
+Parts: 汁 日 比
+смешивать, путать
+Kun: ま.じる、 -ま.じり、 ま.ざる、 ま.ぜる、 こ.む
+On: コン
+減
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: 亅 口 汁 戈
+Variants: 减
+сокращаться, уменьшаться, голодать
+Kun: へ.る、 へ.らす
+On: ゲン
+測
+12 strokes
+Radical: water 水 (氵, 氺)
+Parts: ハ 刈 汁 目 貝
+Variants:
+сажень, план, схема, мера
+Kun: はか.る
+On: ソク
+準
+13 strokes
+Radical: water 水 (氵, 氺)
+Parts: 十 汁 隹
+Variants: 凖
+полу-, соответствовать, соразмерно, подражать
+Kun: じゅん.じる、 じゅん.ずる、 なぞら.える、 のり、 ひと.しい、 みずもり
+On: ジュン
+演
+14 strokes
+Radical: water 水 (氵, 氺)
+Parts: 一 ハ 宀 汁 田
+спектакль, действие, пьеса, рендеринг, сцена
+On: エン
+潔
+15 strokes
+Radical: water 水 (氵, 氺)
+Parts: 二 亠 刀 土 小 幺 汁 糸
+Variants: 洯
+непорочный, чистый, праведный, доблестный
+Kun: いさぎよ.い
+On: ケツ
+災
+7 strokes
+Radical: fire 火 (灬)
+Parts: 巛 火
+Variants: 灾 烖
+катастрофа, бедствие, горе, проклятие, зло
+Kun: わざわ.い
+On: サイ
+燃
+16 strokes
+Radical: fire 火 (灬)
+Parts: 夕 火 杰 犬
+гореть, пылать, светиться
+Kun: も.える、 も.やす、 も.す
+On: ネン
+版
+8 strokes
+Radical: slice 片
+Parts: 片 厂 又
+печатная клише, печатная форма, тираж, оттиск, этикетка
+On: ハン
+犯
+5 strokes
+Radical: dog 犬 (犭)
+Parts: 乙 卩 犯
+преступление, грех
+Kun: おか.す
+On: ハン、 ボン
+状
+7 strokes
+Radical: dog 犬 (犭)
+Parts: 爿 犬
+статус-кво, условия, обстоятельства, форма, внешний вид
+On: ジョウ
+独
+9 strokes
+Radical: dog 犬 (犭)
+Parts: 犯 虫
+Variants: 獨
+одинокий, спонтанно, Германия
+Kun: ひと.り
+On: ドク、 トク
+率
+11 strokes
+Radical: dark, profound 玄
+Parts: 亠 冫 十 幺 玄
+Variants: 卛
+соотношение, скорость, пропорция, %, фактор, преимущество
+Kun: ひき.いる
+On: ソツ、 リツ、 シュツ
+現
+11 strokes
+Radical: jade (king) 玉 (王)
+Parts: 王 見
+настоящий, существующий, актуальный
+Kun: あらわ.れる、 あらわ.す、 うつつ、 うつ.つ
+On: ゲン
+留
+10 strokes
+Radical: field 田
+Parts: 刀 厶 田
+Variants: 畄 畱
+задержать, застегнуть, остановить
+Kun: と.める、 と.まる、 とど.める、 とど.まる、 るうぶる
+On: リュウ、 ル
+略
+11 strokes
+Radical: field 田
+Parts: 口 夂 田
+Variants: 畧
+сокращение, упущение, набросок, захват, разграбление
+Kun: ほぼ、 はぶ.く、 おか.す、 おさ.める、 はかりごと、 はか.る
+On: リャク
+益
+10 strokes
+Radical: dish 皿
+Parts: 一 ハ 并 皿
+польза, выгода, преимущество
+Kun: ま.す
+On: エキ、 ヤク
+眼
+11 strokes
+Radical: eye 目
+Parts: 目 艮
+Variants:
+глазное яблоко
+Kun: まなこ、 め
+On: ガン、 ゲン"""
         native_kun_on_691_720 = """序
 7 strokes
 Radical: house on cliff 广
@@ -740,7 +3301,7 @@ On: キュウ
 8 strokes
 Radical: sun, day 日
 Parts: ノ 勹 日 勿
-Легко, готово, просто, гадания
+легко, готово, просто, гадания
 Kun: やさ.しい、 やす.い
 On: エキ、 イ
 暴
@@ -5657,8 +8218,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_661_690, start_num)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_661_690)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_721_750, start_num)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_721_750)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
