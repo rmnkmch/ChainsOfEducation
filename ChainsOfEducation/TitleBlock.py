@@ -276,7 +276,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "条 枝 査 格 桜 検 構 武 比 永 河 液 混 減 測 準 演 潔 災 燃 版 犯 状 独 率 現 留 略 益 眼"
+        kanji = "破 確 示 祖 禁 移 程 税 築 精 素 経 統 絶 綿 総 編 績 織 罪 衛 製 複 規 解 設 許 証 評 講"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -300,7 +300,7 @@ class TitleBlock(manim.RoundedRectangle):
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
         TitleBlock.make_symbols(scene)
-        start_num = 721
+        start_num = 751
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -2760,7 +2760,7 @@ On: トウ
 12 strokes
 Radical: silk 糸 (糹)
 Parts: 小 幺 糸 色
-прекратить, разорвать, отрезать, воздержаться, прервать, подавить, выйти за рамки, не иметь себе равных, бесподобный, беспрецедентный
+прекратить, разорвать, отрезать, воздержаться, прервать, подавить, выйти за рамки, бесподобный
 Kun: た.える、 た.やす、 た.つ
 On: ゼツ
 綿
@@ -2811,24 +2811,28 @@ Radical: go, do 行
 Parts: 口 彳 行 韋
 Variants: 衞
 защита
+Kun: 1
 On: エイ、 エ
 製
 14 strokes
 Radical: clothes 衣 (衤)
 Parts: 亠 刈 巾 牛 衣
 сделано в..., производство
+Kun: 1
 On: セイ
 複
 14 strokes
 Radical: clothes 衣 (衤)
 Parts: 夂 日 初 乞
 дубликат, двойной, составной, множественный
+Kun: 1
 On: フク
 規
 11 strokes
 Radical: see 見
 Parts: 二 人 土 大 見
 стандарт, мера
+Kun: 1
 On: キ
 解
 13 strokes
@@ -2865,12 +2869,14 @@ On: ショウ
 Radical: speech 言 (訁)
 Parts: 一 ｜ 二 并 言
 оценивать, критиковать, комментировать
+Kun: 1
 On: ヒョウ
 講
 17 strokes
 Radical: speech 言 (訁)
 Parts: 一 冂 十 言
 лекция, клуб, ассоциация
+Kun: 1
 On: コウ"""
         native_kun_on_721_750 = """条
 7 strokes
@@ -8218,8 +8224,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_721_750, start_num)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_721_750)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_751_780, start_num)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_751_780)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
