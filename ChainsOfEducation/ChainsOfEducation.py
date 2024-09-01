@@ -16,13 +16,13 @@ class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
         # self.chapter_1_0()
         # self.chapter_1_00()
-        # self.chapter_1_000()
+        self.chapter_1_000()
         # self.chapter_1_1()
         # self.chapter_1_2()
         # self.chapter_1_3()
         # self.test_1()
-        from TitleBlock import TitleBlock
-        TitleBlock.Jpn_Geo(self)
+        # from TitleBlock import TitleBlock
+        # TitleBlock.Jpn_Geo(self)
         # from SSCTV import SSCTV
         # SSCTV.make_tv(self)
         # from SIPK import SIPK
@@ -206,10 +206,10 @@ manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation
     def chapter_1_000(self):
         self.wait(1.0)
         logo = M.SVGMobject(
-            r"media/SVGs/tree_1",
+            r"media/SVGs/heart_1",
             stroke_color = "#FFFFFF").scale(2.5)
-        self.play(M.Write(logo, run_time = 5.0))
-        self.play(M.Unwrite(logo, run_time = 5.0, reverse = False))
+        self.play(M.Write(logo, run_time = 3.0))
+        self.play(M.Unwrite(logo, run_time = 3.0, reverse = False))
         self.wait(1.0)
 
     def chapter_1_00(self):

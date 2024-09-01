@@ -276,7 +276,7 @@ class TitleBlock(manim.RoundedRectangle):
 
     @staticmethod
     def make_symbols(scene: manim.Scene):
-        kanji = "破 確 示 祖 禁 移 程 税 築 精 素 経 統 絶 綿 総 編 績 織 罪 衛 製 複 規 解 設 許 証 評 講"
+        kanji = "謝 識 護 豐 財 貧 責 貸 貿 賀 資 賛 質 輸 述 迷 退 逆 造 過 適 酸 鉱 銅 銭 防 限 険 際 雑"
         for kj in kanji.split():
             TitleBlock.print_symbols(scene, kj)
         for kj in kanji.split():
@@ -300,7 +300,7 @@ class TitleBlock(manim.RoundedRectangle):
     @staticmethod
     def Jpn_Geo(scene: manim.Scene):
         TitleBlock.make_symbols(scene)
-        start_num = 751
+        start_num = 781
         native_examples = """ 校長 	 こうちょう 
 директор школы
 33
@@ -2233,7 +2233,13 @@ Parts: 一 十 干
 сухой, сушить, отлив, отступать, мешать, заступаться
 Kun: ほ.す、 ほ.し-、 -ぼ.し、 ひ.る
 On: カン"""
-        native_kun_on_811_840 = """預
+        native_kun_on_811_840 = """非
+8 strokes
+Radical: wrong 非
+Parts: 非
+не-, ошибка, негатив, несправедливость
+Kun: あら.ず
+On: ヒ預
 13 strokes
 Radical: leaf 頁
 Parts: 一 亅 ハ マ 欠 目 貝 頁
@@ -2520,13 +2526,14 @@ Radical: shell 貝
 Parts: ハ 冫 欠 目 貝
 активы, ресурсы, капитал, средства, данные, способствовать
 On: シ
-慧 -нет гифки
+賛
 15 strokes
-Radical: heart 心 (忄, ⺗)
-Parts: 一 ｜ ヨ 心
-мудрый
-Kun: さとい
-On: ケイ、 エ
+Radical: shell 貝
+Parts: 二 亠 人 ハ 大 目 貝
+Variants: 贊
+одобрять, хвала
+Kun: たす.ける、 たた.える
+On: サン
 質
 15 strokes
 Radical: shell 貝
@@ -2649,21 +2656,14 @@ Parts: ノ 二 小 阡 癶 示
 повод, сторона, край, грань, опасный, авантюрный, неприличный, время, когда
 Kun: きわ、 -ぎわ
 On: サイ
-雜 - нет гифки
-18 strokes
+雑
+14 strokes
 Radical: small bird 隹
-Parts: 亠 人 木 隹
-Variants: 雑
-смешанный, перемешать
+Parts: 九 木 隹
+Variants: 雜
+различный, смешанный
 Kun: まじ.える、 まじ.る
-On: ザツ、 ゾウ
-非
-8 strokes
-Radical: wrong 非
-Parts: 非
-не-, ошибка, негатив, несправедливость
-Kun: あら.ず
-On: ヒ"""
+On: ザツ、 ゾウ"""
         native_kun_on_751_780 = """破
 10 strokes
 Radical: stone 石
@@ -8224,8 +8224,8 @@ USD, Доллар США, Восточно-тиморское сентаво; Un
 
         # TitleBlock.resplit_to_JP_read_kanji(native_kun_on)
         # TitleBlock.resplit_to_RU_read_kanji(native_kun_on)
-        TitleBlock.resplit_to_post_kanji(native_kun_on_751_780, start_num)
-        TitleBlock.resplit_to_menu_kanji(native_kun_on_751_780)
+        TitleBlock.resplit_to_post_kanji(native_kun_on_781_810, start_num)
+        TitleBlock.resplit_to_menu_kanji(native_kun_on_781_810)
         # TitleBlock.resplit_to_post_examples(native_examples)
         # TitleBlock.resplit_to_post_geo(geo2)
         # TitleBlock.resplit_to_z_name_geo(geo2)
