@@ -16,15 +16,15 @@ class ChainsOfEducation(M.MovingCameraScene):
     def construct(self):
         # self.chapter_1_0()
         # self.chapter_1_00()
-        self.chapter_1_000()
+        # self.chapter_1_000()
         # self.chapter_1_1()
         # self.chapter_1_2()
         # self.chapter_1_3()
         # self.test_1()
         # from TitleBlock import TitleBlock
         # TitleBlock.Jpn_Geo(self)
-        # from SSCTV import SSCTV
-        # SSCTV.make_tv(self)
+        from SSCTV import SSCTV
+        SSCTV.make_tv(self)
         # from SIPK import SIPK
         # SIPK.make_sipk(self)
         # from welldungeon import Welldungeon
@@ -197,7 +197,7 @@ class ChainsOfEducation(M.MovingCameraScene):
 cd ChainsOfEducation
 manim ChainsOfEducation.py ChainsOfEducation
 manim -pqh ChainsOfEducation.py ChainsOfEducation
-manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png
+manim -qh ChainsOfEducation.py ChainsOfEducation --format=png
 manim -pqh ChainsOfEducation.py ChainsOfEducation --format=png -r 800,800
 manim -pqh --disable_caching -s ChainsOfEducation.py ChainsOfEducation
 manim -pqh --format=gif --disable_caching ChainsOfEducation.py ChainsOfEducation

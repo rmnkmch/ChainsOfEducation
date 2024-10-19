@@ -1,0 +1,6 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="500px" height="500px" viewBox="0 0 500 500">
+<g><path style="stroke: rgb(0,0,0); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(184,176,156); fill-opacity: 0.2; fill-rule: nonzero; opacity: 1;" d="M 108 320 L 71 243 L 241 141 L 409 190 L 449 260 L 420 308 L 246 345 Z" /></g>
+<g><path style="stroke: rgb(0,0,0); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(184,176,156); fill-opacity: 0.2; fill-rule: nonzero; opacity: 1;" d="M 71 243 L 241 272 L 296 197 L 241 141" /></g>
+<g><line style="stroke: rgb(0,0,0); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(184,176,156); fill-rule: nonzero; opacity: 1;" x1="296" y1="197" x2="409" y2="190" /></g>
+<g><line style="stroke: rgb(0,0,0); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-miterlimit: 4; fill: rgb(184,176,156); fill-rule: nonzero; opacity: 1;" x1="241" y1="272" x2="246" y2="345" /></g></svg>

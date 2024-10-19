@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 7
+    variant = 9
 
     tv1_in_0_1_str = ""
 
@@ -108,11 +108,11 @@ class SSCTV(object):
 
     @staticmethod
     def make_tv(scene: M.Scene):
-        # SSCTV.make_tv1(scene)
+        SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
         # SSCTV.make_tv4(scene)
-        SSCTV.make_tv5(scene)
+        # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)

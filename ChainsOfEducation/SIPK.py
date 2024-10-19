@@ -11,18 +11,18 @@ class SIPK(object):
     RU = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
     ru = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
 
-    sipk1_ps_str = "р0.26 с0.16 т0.17 у0.29 ф0.12"
-    sipk1_m1 = "фурстуртус"
-    sipk1_m2 = "фурстуртус"
-    sipk1_m3 = "фурстуртус"
+    sipk1_ps_str = "B0.09 V0.16 C0.26 J0.22 E0.19 M0.08"
+    sipk1_m1 = "VVCMCMMCMJCCCMCVCJVE"
+    sipk1_m2 = "EEECCCEJJCJCCJCCCCJE"
+    sipk1_m3 = "MVMBMVVVVBMVBVVMMBVM"
     sipk1_entropy = 0.0
     sipk1_table_data = []
-    sipk1_all_symbol_num = 5
-    sipk1_symbol_num_arithm = 5
+    sipk1_all_symbol_num = 6
+    sipk1_symbol_num_arithm = 6
     sipk1_mess_all_symbol_num = 20
     sipk1_mean_bit_over_symb1 = round(59.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb2 = round(46.0 / sipk1_mess_all_symbol_num, 3)
-    sipk1_mean_bit_over_symb3 = round(80.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb2 = round(51.0 / sipk1_mess_all_symbol_num, 3)
+    sipk1_mean_bit_over_symb3 = round(72.0 / sipk1_mess_all_symbol_num, 3)
     sipk1_PRB_NUM: int = 2
     sipk1_UL = M.LEFT * 5.5 + M.UP * 3.5
 
@@ -46,11 +46,11 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [4, 14, 25]
 
-    sipk3_R = 0.7
-    sipk3_t = 4
-    sipk3_check = [10, 20, 30, 50, 70, 68, 67, 66]
-    sipk3_n = 67
-    sipk3_k = 47
+    sipk3_R = 0.77
+    sipk3_t = 3
+    sipk3_check = [11, 22, 33, 44, 55, 66, 70, 69, 68]
+    sipk3_n = 70
+    sipk3_k = 54
     sipk3_n_graph = 60
 
     sipk4_5_6_7_in_group_list = 10
@@ -194,9 +194,9 @@ class SIPK(object):
     @staticmethod
     def make_sipk(scene: M.Scene):
         # SIPK.random_sipk1()
-        SIPK.make_sipk1(scene)
+        # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        # SIPK.make_sipk3(scene)
+        SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
         # SIPK.make_sipk6(scene)
