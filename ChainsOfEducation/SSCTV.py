@@ -157,7 +157,8 @@ class SSCTV(object):
         # SSCTV.make_tv3(scene)
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
-        SSCTV.make_tv6(scene)
+        # SSCTV.make_tv6(scene)
+        SSCTV.make_new_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
@@ -2006,6 +2007,315 @@ class SSCTV(object):
                                     str(useful[2 * (floors_done % SSCTV.tv6_floors_by_line)]),
                                     font_size = dbs, color = mc).next_to(
                                         number_plane.c2p(17, 0.3 + 2 * (4 - j), 0), buff = 0.1)
+                                scene.add(from_otv, from_otv_db_text)
+                            scene.add(otv, otv_text, to_otv)
+                    scene.add(floor_text, otv_db_text)
+                floors_done += 1
+                scene.add(line_graph_j)
+            SSf.SIPK_SSCTV_functions.make_pause(scene)
+
+    @staticmethod
+    def make_new_tv6(scene: M.Scene):
+        tv6_usilit_db = 112.8
+        tv6_data_razv_db = {1: 0.0, 2: 4.0, 3: 7.5}
+        usilit_name = "Terra HS 004"
+        data = SSCTV.new_tv6_count_1(SSCTV.variant, SSCTV.tv6_usilit_db, SSCTV.tv6_data_razv_db)
+        SSCTV.new_tv6_table_1(scene, data[0], data[1], data[2], data[3], data[4],
+                              tv6_usilit_db, tv6_data_razv_db, usilit_name)
+
+    @staticmethod
+    def reccurent_count(data: dict, floor: int, db_in: float):
+        ret_list = []
+        inner_list = []
+        for i in data:
+            db_next = round(db_in - data[i], 2)
+            db_flat = round(db_in - i, 2)
+            if floor >= 2:
+                inner_list = SSCTV.reccurent_count(data, floor - 1, db_next)
+                for j in range(len(inner_list)):
+                    ret_list.append([db_in, db_flat, *inner_list[j]])
+            else:
+                ret_list.append([db_in, db_flat])
+        return ret_list
+
+    @staticmethod
+    def new_tv6_count_1(variant, tv6_usilit_db, tv6_data_razv_db):
+        from random import randint
+        data_var = {1: [14, 7, 2], 2: [16, 8, 2], 3: [12, 4, 2], 4: [12, 8, 2],
+                    5: [8, 6, 2], 6: [9, 8, 2], 7: [9, 7, 2], 8: [10, 6, 2],
+                    9: [20, 4, 2], 10: [18, 6, 2], 11: [22, 4, 2], 12: [20, 8, 2],
+                    13: [16, 4, 2], 14: [20, 6, 2], 15: [17, 4, 2]}
+        data_4 = {27: 1.2,
+                #   24: 1.2,
+                #   20: 1.5,
+                #   16: 2.5,
+                #   12: 4.5,
+                  10: 4.5
+                  }
+        data_6 = {20: 1.5,
+                  16: 2.5,
+                  12: 4.5}
+        data_8 = {20: 2.2,
+                  16: 4.2,
+                  12: 4.5,
+                  }
+        data_full = data_var[variant]
+        tv6_floors = data_full[0]
+        tv6_flats = data_full[1]
+        tv6_lines = data_full[2]
+        tv6_floors_by_line = round(tv6_floors / tv6_lines + 0.000001)
+        tv6_floors += 1
+        data = data_4
+        if tv6_flats >= 5:
+            data = data_6
+        if tv6_flats >= 7:
+            data = data_8
+        db_in = tv6_usilit_db - tv6_data_razv_db[tv6_lines]
+        lis = SSCTV.reccurent_count(data, tv6_floors_by_line, db_in)
+        useful = []
+        for i in range(len(lis)):
+            show = True
+            for j in range(len(lis[i]) // 2):
+                if lis[i][1 + j * 2] < 70.0 or lis[i][1 + j * 2] > 83.0:
+                    show = False
+            if show:
+                useful.append(lis[i])
+                print(lis[i])
+        ind = randint(0, len(useful) - 1)
+        # ind = 2
+        return (useful[ind], tv6_floors, tv6_flats, tv6_lines, tv6_floors_by_line)
+
+    @staticmethod
+    def new_tv6_table_1(scene: M.Scene, useful, tv6_floors, tv6_flats, tv6_lines, tv6_floors_by_line,
+                        tv6_usilit_db, tv6_data_razv_db, usilit_name):
+        print(useful)
+        data_razv_text = {2: "TLC\nSAH\n204F", 3: "SAH\n306F"}
+        data_otv_4_text = {10: "TAH-410F", 12: "TAH-412F",
+                           16: "TAH-416F", 20: "TAH-420F",
+                           24: "TAH-424F", 27: "TAH-427F"}
+        data_otv_6_text = {20.0: "TAH\n620F", 16.0: "TAH\n616F", 12.0: "TAH\n612F"}
+        data_otv_8_text = {20.0: "TAH\n820F", 16.0: "TAH\n816F", 12.0: "TAH\n812F"}
+        data_otv_text = data_otv_4_text
+        data_otv_wires = 4
+        if tv6_flats >= 5:
+            data_otv_text = data_otv_6_text
+            data_otv_wires = 6
+        if tv6_flats >= 7:
+            data_otv_text = data_otv_8_text
+            data_otv_wires = 8
+        number_plane = M.NumberPlane(
+            x_range = (0, 20, 1),
+            y_range = (0, 10, 1),
+            x_length = 13.0,
+            y_length = 7.0)
+        floors_done = 0
+        mc = SSf.SIPK_SSCTV_functions.get_main_color()
+        tts = 18.0
+        dbs = 18.0
+        while floors_done < tv6_floors:
+            SSf.SIPK_SSCTV_functions.make_background(scene)
+            line_graph1 = number_plane.plot_line_graph(
+                x_values = [1, 19],
+                y_values = [10, 10],
+                line_color = mc,
+                vertex_dot_radius = 0.0,
+                stroke_width = 5)
+            scene.add(line_graph1)
+            floors_now = 5
+            if floors_done + floors_now > tv6_floors:
+                floors_now = tv6_floors - floors_done
+            for j in range(floors_now):
+                line_graph_j = number_plane.plot_line_graph(
+                    x_values = [1, 1, 19, 19],
+                    y_values = [2 * (5 - j), 2 * (4 - j), 2 * (4 - j), 2 * (5 - j)],
+                    line_color = mc,
+                    vertex_dot_radius = 0.0,
+                    stroke_width = 5)
+                if floors_done == 0:
+                    to_usilit = number_plane.plot_line_graph(
+                        x_values = [2, 4],
+                        y_values = [9, 9],
+                        line_color = mc,
+                        vertex_dot_radius = 0.0,
+                        stroke_width = 3)
+                    to_usilit_text = M.Text("К антенне", font_size = tts, color = mc
+                                            ).move_to(number_plane.c2p(2.53, 9.35, 0))
+                    usilit = number_plane.plot_line_graph(
+                        x_values = [4, 4, 7, 7, 4],
+                        y_values = [8.2, 9.8, 9.8, 8.2, 8.2],
+                        line_color = mc,
+                        vertex_dot_radius = 0.0,
+                        stroke_width = 4)
+                    usilit_text = M.Text("".join(["Усилитель\n", usilit_name]), font_size = tts, color = mc
+                                         ).move_to(number_plane.c2p(5.5, 9, 0))
+                    from_usilit = number_plane.plot_line_graph(
+                        x_values = [7, 9],
+                        y_values = [9, 9],
+                        line_color = mc,
+                        vertex_dot_radius = 0.0,
+                        stroke_width = 3)
+                    from_usilit_text = M.Text("".join([str(tv6_usilit_db), " дБ"]), font_size = dbs, color = mc
+                                              ).next_to(number_plane.c2p(8, 9, 0), M.UP, 0.05)
+                    scene.add(to_usilit, to_usilit_text, usilit, usilit_text,
+                              from_usilit, from_usilit_text)
+                    x_pos_1 = 17.0
+                    x_pos_2 = 15.0
+                    x_pos_3 = 13.0
+                    splitter_half_width = 1.1
+                    splitter_half_height = 0.4
+                    splitter_pos_y = 1.0
+                    if tv6_lines == 2:
+                        x_pos_1 = 17.0
+                        x_pos_2 = 13.0
+                    if tv6_lines >= 2:
+                        razv = number_plane.plot_line_graph(
+                            x_values = [9, 9, 11, 11, 9],
+                            y_values = [8.2, 9.8, 9.8, 8.2, 8.2],
+                            line_color = mc,
+                            vertex_dot_radius = 0.0,
+                            stroke_width = 4)
+                        razv_text = M.Text(data_razv_text[tv6_lines], font_size = tts, color = mc
+                                           ).move_to(number_plane.c2p(10, 9, 0))
+                        scene.add(razv, razv_text)
+                        if tv6_lines == 2:
+                            from_razv1 = number_plane.plot_line_graph(
+                                x_values = [11, x_pos_1, x_pos_1],
+                                y_values = [9.33, 9.33, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv2 = number_plane.plot_line_graph(
+                                x_values = [11, x_pos_2, x_pos_2],
+                                y_values = [8.67, 8.67, 8],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            from_razv_text1 = M.Text(
+                                "".join([str(tv6_usilit_db - tv6_data_razv_db[tv6_lines]), " дБ"]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(x_pos_1, 8.3, 0), buff = 0.1)
+                            from_razv_text2 = M.Text(
+                                "".join([str(tv6_usilit_db - tv6_data_razv_db[tv6_lines]), " дБ"]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(x_pos_2, 8.3, 0), buff = 0.1)
+                            scene.add(from_razv1, from_razv2, from_razv_text1, from_razv_text2)
+                else:
+                    floor_text = M.Text("Этаж " + str(tv6_floors - floors_done),
+                                        font_size = 24.0, color = mc).move_to(
+                                            number_plane.c2p(3, 1 + 2 * (4 - j), 0))
+                    otv_db_text = M.Text(
+                        "".join([str(useful[2 * (floors_done % tv6_floors_by_line) - 1]), " дБ"]),
+                        font_size = tts, color = mc).move_to(number_plane.c2p(7, 1 + 2 * (4 - j), 0))
+                    if tv6_lines == 2:
+                        if (floors_done - 1) // tv6_floors_by_line == 0:
+                            otv = number_plane.plot_line_graph(
+                                x_values = [x_pos_1 - splitter_half_width,
+                                            x_pos_1 - splitter_half_width,
+                                            x_pos_1 + splitter_half_width,
+                                            x_pos_1 + splitter_half_width,
+                                            x_pos_1 - splitter_half_width],
+                                y_values = [splitter_pos_y - splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y + splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y + splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y - splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y - splitter_half_height + 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 4)
+                            diff = useful[2 * (floors_done % tv6_floors_by_line) - 2]
+                            diff -= useful[2 * (floors_done % tv6_floors_by_line) - 1]
+                            otv_text = M.Text(
+                                data_otv_text[round(diff)], font_size = tts, color = mc).move_to(
+                                    number_plane.c2p(x_pos_1, splitter_pos_y + 2 * (4 - j), 0))
+                            dk = splitter_half_height * 2.0 / (data_otv_wires + 1)
+                            for k in range(data_otv_wires):
+                                wire = number_plane.plot_line_graph(
+                                    x_values = [x_pos_1 - splitter_half_width - 0.5,
+                                                x_pos_1 - splitter_half_width],
+                                    y_values = [splitter_pos_y + splitter_half_height + 2 * (4 - j) - dk * (1 + k),
+                                                splitter_pos_y + splitter_half_height + 2 * (4 - j) - dk * (1 + k)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 2)
+                                scene.add(wire)
+                            to_otv = number_plane.plot_line_graph(
+                                x_values = [x_pos_1, x_pos_1],
+                                y_values = [2 * (5 - j),
+                                            splitter_pos_y + splitter_half_height + 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            if floors_done % tv6_floors_by_line != 0:
+                                from_otv = number_plane.plot_line_graph(
+                                    x_values = [x_pos_1, x_pos_1],
+                                    y_values = [splitter_pos_y - splitter_half_height + 2 * (4 - j),
+                                                2 * (4 - j)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 3)
+                                from_otv_db_text = M.Text(
+                                    "".join([str(useful[2 * (floors_done % tv6_floors_by_line)]), " дБ"]),
+                                    font_size = dbs, color = mc).next_to(
+                                        number_plane.c2p(x_pos_1, 0.3 + 2 * (4 - j), 0), buff = 0.1)
+                                scene.add(from_otv, from_otv_db_text)
+                            line_2 = number_plane.plot_line_graph(
+                                x_values = [x_pos_2, x_pos_2],
+                                y_values = [2 * (5 - j), 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            scene.add(otv, otv_text, to_otv, line_2)
+                        elif (floors_done - 1) // tv6_floors_by_line == 1:
+                            otv = number_plane.plot_line_graph(
+                                x_values = [x_pos_2 - splitter_half_width,
+                                            x_pos_2 - splitter_half_width,
+                                            x_pos_2 + splitter_half_width,
+                                            x_pos_2 + splitter_half_width,
+                                            x_pos_2 - splitter_half_width],
+                                y_values = [splitter_pos_y - splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y + splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y + splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y - splitter_half_height + 2 * (4 - j),
+                                            splitter_pos_y - splitter_half_height + 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 4)
+                            diff = useful[2 * (floors_done % tv6_floors_by_line) - 2]
+                            diff -= useful[2 * (floors_done % tv6_floors_by_line) - 1]
+                            otv_text = M.Text(data_otv_text[round(diff)],
+                                              font_size = tts, color = mc).move_to(
+                                                number_plane.c2p(x_pos_2, splitter_pos_y + 2 * (4 - j), 0))
+                            dk = splitter_half_height * 2.0 / (data_otv_wires + 1)
+                            for k in range(data_otv_wires):
+                                wire = number_plane.plot_line_graph(
+                                    x_values = [x_pos_2 - splitter_half_width - 0.5,
+                                                x_pos_2 - splitter_half_width],
+                                    y_values = [splitter_pos_y + splitter_half_height + 2 * (4 - j) - dk * (1 + k),
+                                                splitter_pos_y + splitter_half_height + 2 * (4 - j) - dk * (1 + k)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 2)
+                                scene.add(wire)
+                            to_otv = number_plane.plot_line_graph(
+                                x_values = [x_pos_2, x_pos_2],
+                                y_values = [2 * (5 - j),
+                                            splitter_pos_y + splitter_half_height + 2 * (4 - j)],
+                                line_color = mc,
+                                vertex_dot_radius = 0.0,
+                                stroke_width = 3)
+                            if (floors_done % tv6_floors_by_line != 0 and
+                                floors_done + 1 != tv6_floors):
+                                from_otv = number_plane.plot_line_graph(
+                                    x_values = [x_pos_2, x_pos_2],
+                                    y_values = [splitter_pos_y - splitter_half_height + 2 * (4 - j),
+                                                2 * (4 - j)],
+                                    line_color = mc,
+                                    vertex_dot_radius = 0.0,
+                                    stroke_width = 3)
+                                from_otv_db_text = M.Text(
+                                    "".join([str(useful[2 * (floors_done % tv6_floors_by_line)]), " дБ"]),
+                                    font_size = dbs, color = mc).next_to(
+                                        number_plane.c2p(x_pos_2, 0.3 + 2 * (4 - j), 0), buff = 0.1)
                                 scene.add(from_otv, from_otv_db_text)
                             scene.add(otv, otv_text, to_otv)
                     scene.add(floor_text, otv_db_text)
