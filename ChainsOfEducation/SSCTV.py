@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 1
+    variant = 13
 
     tv1_in_0_1_str = ""
 
@@ -115,7 +115,7 @@ class SSCTV(object):
                         14: ["Жёлтый", "Красный", "Голубой", "Чёрный", "Белый"],
                         15: ["Синий", "Зелёный", "Белый", "Голубой", "Пурпурный"]}
 
-    old_tv_variant = 7
+    old_tv_variant = 13
     old_tv1_YRB = []
     old_tv1_YRBUVCMP = []
     old_tv1_YRBDFKRB = []
@@ -154,10 +154,10 @@ class SSCTV(object):
     def make_tv(scene: M.Scene):
         # SSCTV.make_tv1(scene)
         # SSCTV.make_tv2(scene)
-        SSCTV.make_tv3(scene)
+        # SSCTV.make_tv3(scene)
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
-        # SSCTV.make_tv6(scene)
+        SSCTV.make_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)

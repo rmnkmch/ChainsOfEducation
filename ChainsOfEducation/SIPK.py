@@ -53,7 +53,7 @@ class SIPK(object):
     sipk3_k = 54
     sipk3_n_graph = 60
 
-    sipk4_5_6_7_in_group_list = 10
+    sipk4_5_6_7_in_group_list = 1
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -66,14 +66,14 @@ class SIPK(object):
     sipk5_mistake_2 = 8
     sipk5_vde = ""
     sipk5_Hr = []
-    sipk5_phone = 8482
+    sipk5_phone = 2158
 
     sipk6_log_p_16 = []
     sipk6_V_s_x_bin = ""
     sipk6_sindroms = []
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
-    sipk6_group = 2
+    sipk6_group = 1
 
     sipk7_errs = [0, 4]
     sipk7_soft = "2, 3; -4, -1; -4, -3; -1, 3; -4, 4; -3, 4; 4, 4; -2, 1; -4, 2; -3, -1; 3, 2"
@@ -196,10 +196,10 @@ class SIPK(object):
         # SIPK.random_sipk1()
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
-        SIPK.make_sipk3(scene)
+        # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
-        # SIPK.make_sipk6(scene)
+        SIPK.make_sipk6(scene)
         # SIPK.make_sipk7(scene)
 
     @staticmethod
