@@ -2016,22 +2016,23 @@ class SSCTV(object):
 
     @staticmethod
     def make_new_tv6(scene: M.Scene):
-        tv6_usilit_db = 112.8
+        tv6_usilit_db = 100.0
         tv6_data_razv_db = {1: 0.0, 2: 4.0, 3: 7.5}
+        db_minus_between_floors = 0.6
         usilit_name = "Terra HS 004"
-        data = SSCTV.new_tv6_count_1(SSCTV.variant, SSCTV.tv6_usilit_db, SSCTV.tv6_data_razv_db)
+        data = SSCTV.new_tv6_count_1(SSCTV.variant, tv6_usilit_db, tv6_data_razv_db, db_minus_between_floors)
         SSCTV.new_tv6_table_1(scene, data[0], data[1], data[2], data[3], data[4],
-                              tv6_usilit_db, tv6_data_razv_db, usilit_name)
+                              tv6_usilit_db, tv6_data_razv_db, usilit_name, db_minus_between_floors)
 
     @staticmethod
-    def reccurent_count(data: dict, floor: int, db_in: float):
+    def reccurent_count(data: dict, floor: int, db_in: float, db_minus_between_floors):
         ret_list = []
         inner_list = []
         for i in data:
-            db_next = round(db_in - data[i], 2)
-            db_flat = round(db_in - i, 2)
+            db_next = round(db_in - data[i] - db_minus_between_floors, 1)
+            db_flat = round(db_in - i, 1)
             if floor >= 2:
-                inner_list = SSCTV.reccurent_count(data, floor - 1, db_next)
+                inner_list = SSCTV.reccurent_count(data, floor - 1, db_next, db_minus_between_floors)
                 for j in range(len(inner_list)):
                     ret_list.append([db_in, db_flat, *inner_list[j]])
             else:
@@ -2039,7 +2040,7 @@ class SSCTV(object):
         return ret_list
 
     @staticmethod
-    def new_tv6_count_1(variant, tv6_usilit_db, tv6_data_razv_db):
+    def new_tv6_count_1(variant, tv6_usilit_db, tv6_data_razv_db, db_minus_between_floors):
         from random import randint
         data_var = {1: [14, 7, 2], 2: [16, 8, 2], 3: [12, 4, 2], 4: [12, 8, 2],
                     5: [8, 6, 2], 6: [9, 8, 2], 7: [9, 7, 2], 8: [10, 6, 2],
@@ -2050,15 +2051,13 @@ class SSCTV(object):
                 #   20: 1.5,
                 #   16: 2.5,
                 #   12: 4.5,
-                  10: 4.5
-                  }
+                  10: 4.5}
         data_6 = {20: 1.5,
                   16: 2.5,
                   12: 4.5}
         data_8 = {20: 2.2,
                   16: 4.2,
-                  12: 4.5,
-                  }
+                  12: 4.5}
         data_full = data_var[variant]
         tv6_floors = data_full[0]
         tv6_flats = data_full[1]
@@ -2071,12 +2070,14 @@ class SSCTV(object):
         if tv6_flats >= 7:
             data = data_8
         db_in = tv6_usilit_db - tv6_data_razv_db[tv6_lines]
-        lis = SSCTV.reccurent_count(data, tv6_floors_by_line, db_in)
+        lis = SSCTV.reccurent_count(data, tv6_floors_by_line, db_in, db_minus_between_floors)
         useful = []
+        min_floor_db = 50.5
+        max_floor_db = 71.5
         for i in range(len(lis)):
             show = True
             for j in range(len(lis[i]) // 2):
-                if lis[i][1 + j * 2] < 70.0 or lis[i][1 + j * 2] > 83.0:
+                if lis[i][1 + j * 2] < min_floor_db or lis[i][1 + j * 2] > max_floor_db:
                     show = False
             if show:
                 useful.append(lis[i])
@@ -2087,7 +2088,7 @@ class SSCTV(object):
 
     @staticmethod
     def new_tv6_table_1(scene: M.Scene, useful, tv6_floors, tv6_flats, tv6_lines, tv6_floors_by_line,
-                        tv6_usilit_db, tv6_data_razv_db, usilit_name):
+                        tv6_usilit_db, tv6_data_razv_db, usilit_name, db_minus_between_floors):
         print(useful)
         data_razv_text = {2: "TLC\nSAH\n204F", 3: "SAH\n306F"}
         data_otv_4_text = {10: "TAH-410F", 12: "TAH-412F",
@@ -2203,9 +2204,12 @@ class SSCTV(object):
                     floor_text = M.Text("Этаж " + str(tv6_floors - floors_done),
                                         font_size = 24.0, color = mc).move_to(
                                             number_plane.c2p(3, 1 + 2 * (4 - j), 0))
-                    otv_db_text = M.Text(
-                        "".join([str(useful[2 * (floors_done % tv6_floors_by_line) - 1]), " дБ"]),
-                        font_size = tts, color = mc).move_to(number_plane.c2p(7, 1 + 2 * (4 - j), 0))
+                    otv_db = useful[2 * (floors_done % tv6_floors_by_line) - 1] - db_minus_between_floors
+                    if (floors_done - 1) // tv6_floors_by_line == 1:
+                        otv_db -= db_minus_between_floors * (floors_done - 1)
+                    otv_db_txt = "".join([str(round(otv_db, 1)), " дБ"])
+                    otv_db_text = M.Text(otv_db_txt, font_size = tts, color = mc).move_to(
+                        number_plane.c2p(7, 1 + 2 * (4 - j), 0))
                     if tv6_lines == 2:
                         if (floors_done - 1) // tv6_floors_by_line == 0:
                             otv = number_plane.plot_line_graph(
@@ -2245,6 +2249,16 @@ class SSCTV(object):
                                 line_color = mc,
                                 vertex_dot_radius = 0.0,
                                 stroke_width = 3)
+                            to_otv_db_text = M.Text(
+                                "".join([str(round(useful[2 * (floors_done % tv6_floors_by_line) - 2]
+                                             - db_minus_between_floors, 1)), " дБ"]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(x_pos_1, 1.7 + 2 * (4 - j), 0), buff = 0.1)
+                            to_otv_db_text_2 = M.Text(
+                                "".join([str(round(useful[0] - db_minus_between_floors * floors_done, 1)), " дБ"]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(x_pos_2, 1.7 + 2 * (4 - j), 0), buff = 0.1)
+                            scene.add(to_otv_db_text, to_otv_db_text_2)
                             if floors_done % tv6_floors_by_line != 0:
                                 from_otv = number_plane.plot_line_graph(
                                     x_values = [x_pos_1, x_pos_1],
@@ -2303,6 +2317,12 @@ class SSCTV(object):
                                 line_color = mc,
                                 vertex_dot_radius = 0.0,
                                 stroke_width = 3)
+                            to_otv_db_text_2 = M.Text(
+                                "".join([str(round(useful[2 * (floors_done % tv6_floors_by_line) - 2]
+                                                   - db_minus_between_floors * floors_done, 1)), " дБ"]),
+                                font_size = dbs, color = mc).next_to(
+                                    number_plane.c2p(x_pos_2, 1.7 + 2 * (4 - j), 0), buff = 0.1)
+                            scene.add(to_otv_db_text_2)
                             if (floors_done % tv6_floors_by_line != 0 and
                                 floors_done + 1 != tv6_floors):
                                 from_otv = number_plane.plot_line_graph(
@@ -2313,7 +2333,8 @@ class SSCTV(object):
                                     vertex_dot_radius = 0.0,
                                     stroke_width = 3)
                                 from_otv_db_text = M.Text(
-                                    "".join([str(useful[2 * (floors_done % tv6_floors_by_line)]), " дБ"]),
+                                    "".join([str(useful[2 * (floors_done % tv6_floors_by_line)]
+                                                 - db_minus_between_floors * (floors_done - 1)), " дБ"]),
                                     font_size = dbs, color = mc).next_to(
                                         number_plane.c2p(x_pos_2, 0.3 + 2 * (4 - j), 0), buff = 0.1)
                                 scene.add(from_otv, from_otv_db_text)
