@@ -158,13 +158,13 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        SSCTV.make_new_tv6(scene)
+        # SSCTV.make_new_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
         # SSCTV.make_old_tv5(scene)
-        # SSCTV.make_old_tv6(scene)
+        SSCTV.make_old_tv6(scene)
         # SSCTV.tv_ekz_1(scene)
         # SSCTV.tv_ekz_2(scene)
         # SSCTV.tv_ekz_4(scene)
@@ -2016,10 +2016,10 @@ class SSCTV(object):
 
     @staticmethod
     def make_new_tv6(scene: M.Scene):
-        tv6_usilit_db = 100.0
+        tv6_usilit_db = 102.0
         tv6_data_razv_db = {1: 0.0, 2: 4.0, 3: 7.5}
         db_minus_between_floors = 0.6
-        usilit_name = "Terra HS 004"
+        usilit_name = "Foro\nSHA 848-121"
         data = SSCTV.new_tv6_count_1(SSCTV.variant, tv6_usilit_db, tv6_data_razv_db, db_minus_between_floors)
         SSCTV.new_tv6_table_1(scene, data[0], data[1], data[2], data[3], data[4],
                               tv6_usilit_db, tv6_data_razv_db, usilit_name, db_minus_between_floors)
@@ -2077,13 +2077,14 @@ class SSCTV(object):
         for i in range(len(lis)):
             show = True
             for j in range(len(lis[i]) // 2):
-                if lis[i][1 + j * 2] < min_floor_db or lis[i][1 + j * 2] > max_floor_db:
+                if (lis[i][1 + j * 2] - tv6_floors_by_line * (tv6_lines - 1) * db_minus_between_floors < min_floor_db or
+                    lis[i][1 + j * 2] > max_floor_db):
                     show = False
             if show:
                 useful.append(lis[i])
                 print(lis[i])
         ind = randint(0, len(useful) - 1)
-        # ind = 2
+        ind = 0
         return (useful[ind], tv6_floors, tv6_flats, tv6_lines, tv6_floors_by_line)
 
     @staticmethod
