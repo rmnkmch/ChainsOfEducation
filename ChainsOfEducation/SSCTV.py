@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 13
+    variant = 21 - 15
 
     tv1_in_0_1_str = ""
 
@@ -158,13 +158,13 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        # SSCTV.make_new_tv6(scene)
+        SSCTV.make_new_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
         # SSCTV.make_old_tv5(scene)
-        SSCTV.make_old_tv6(scene)
+        # SSCTV.make_old_tv6(scene)
         # SSCTV.tv_ekz_1(scene)
         # SSCTV.tv_ekz_2(scene)
         # SSCTV.tv_ekz_4(scene)
@@ -2016,8 +2016,8 @@ class SSCTV(object):
 
     @staticmethod
     def make_new_tv6(scene: M.Scene):
-        tv6_usilit_db = 102.0
-        tv6_data_razv_db = {1: 0.0, 2: 4.0, 3: 7.5}
+        tv6_usilit_db = 95.0
+        tv6_data_razv_db = {1: 0.0, 2: 4.0}
         db_minus_between_floors = 0.6
         usilit_name = "Foro\nSHA 848-121"
         data = SSCTV.new_tv6_count_1(SSCTV.variant, tv6_usilit_db, tv6_data_razv_db, db_minus_between_floors)
@@ -2055,10 +2055,12 @@ class SSCTV(object):
                   }
         data_6 = {20: 1.5,
                   16: 2.5,
-                  12: 4.5}
+                  12: 4.5
+                  }
         data_8 = {20: 2.2,
-                  16: 4.2,
-                  12: 4.5}
+                #   16: 4.2,
+                #   12: 4.5
+                  }
         data_full = data_var[variant]
         tv6_floors = data_full[0]
         tv6_flats = data_full[1]
@@ -2096,7 +2098,7 @@ class SSCTV(object):
                            16: "TAH-416F", 20: "TAH-420F",
                            24: "TAH-424F", 27: "TAH-427F"}
         data_otv_6_text = {20.0: "TAH\n620F", 16.0: "TAH\n616F", 12.0: "TAH\n612F"}
-        data_otv_8_text = {20.0: "TAH\n820F", 16.0: "TAH\n816F", 12.0: "TAH\n812F"}
+        data_otv_8_text = {12: "TAH-812F", 16: "TAH-816F", 20: "TAH-820F"}
         data_otv_text = data_otv_4_text
         data_otv_wires = 4
         if tv6_flats >= 5:

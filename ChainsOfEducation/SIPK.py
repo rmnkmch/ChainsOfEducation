@@ -53,7 +53,7 @@ class SIPK(object):
     sipk3_k = 54
     sipk3_n_graph = 60
 
-    sipk4_5_6_7_in_group_list = 1
+    sipk4_5_6_7_in_group_list = 26
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -197,9 +197,9 @@ class SIPK(object):
         # SIPK.make_sipk1(scene)
         # SIPK.make_sipk2(scene)
         # SIPK.make_sipk3(scene)
-        # SIPK.make_sipk4(scene)
+        SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
-        SIPK.make_sipk6(scene)
+        # SIPK.make_sipk6(scene)
         # SIPK.make_sipk7(scene)
 
     @staticmethod
