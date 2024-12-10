@@ -4265,7 +4265,7 @@ class SIPK(object):
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
-        variant_bin = "0111"
+        variant_bin = "1001"
         variant_bin = SSf.SIPK_SSCTV_functions.add_zeros(variant_bin, 3)
         variant_polinom = SIPK.sipk5_bin_str_to_polinom(variant_bin)
         g_x = 11
@@ -4303,7 +4303,7 @@ class SIPK(object):
         fs = 20.0
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         table_data = []
-        V_s_x_bin = "1111010"
+        V_s_x_bin = "1000110"
         e = V_s_x_bin[0]
         d = V_s_x_bin[1]
         v = V_s_x_bin[2]
@@ -4589,68 +4589,68 @@ class SIPK(object):
             tips = True)
         number_plane2.get_axes().set_color(mc)
         data = """0.05
-27
-7
-2
+36
+15
+5
 0.1
-64
-32
-10
+67
+51
+16
 0.15
-116
-113
-35
+87
+72
+23
 0.2
-115
-117
-37
+146
+144
+43
 0.25
-164
-178
-55
+186
+185
+56
 0.3
-213
-235
-70
+205
+207
+61
 0.35
-229
-242
-71
+254
+279
+77
 0.4
-290
-313
-87"""
+257
+279
+82"""
         data2 = """0.05
-86
-68
-21
+81
+55
+17
 0.1
-141
-140
-41
+134
+126
+36
 0.15
-244
-275
-71
+236
+250
+70
 0.2
-312
-364
-89
+343
+389
+91
 0.25
-365
-418
-92
+398
+448
+95
 0.3
-479
-518
-99
+461
+483
+98
 0.35
-511
-528
-99
+523
+545
+97
 0.4
-643
-649
+597
+611
 100"""
         x_range1 = []
         chanel_err1 = []
