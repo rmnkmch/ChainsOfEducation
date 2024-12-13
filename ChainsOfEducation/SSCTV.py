@@ -5,15 +5,15 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 21 - 15
+    variant = 10
 
     tv1_in_0_1_str = ""
 
-    tv2_F_s = 22.5
-    tv2_R2 = 1.0 / 2.0
-    tv2_R2_str = r"\frac {1}{2}"
-    tv2_V_p = 12.82
-    tv2_b_s = 8
+    tv2_F_s = 30.0
+    tv2_R2 = 7.0 / 8.0
+    tv2_R2_str = r"\frac {7}{8}"
+    tv2_V_p = 56.1
+    tv2_b_s = 7
     tv2_data1 = [9.0, 7.0, 5.0, 3.0, 1.0]
     tv2_data2 = [10.0, 8.0, 6.0, 4.0, 2.0]
     tv2_data3 = [16.2, 13.2, 10.2, 7.2, 4.2]
@@ -153,12 +153,12 @@ class SSCTV(object):
     @staticmethod
     def make_tv(scene: M.Scene):
         # SSCTV.make_tv1(scene)
-        # SSCTV.make_tv2(scene)
+        SSCTV.make_tv2(scene)
         # SSCTV.make_tv3(scene)
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        SSCTV.make_new_tv6(scene)
+        # SSCTV.make_new_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
@@ -1442,8 +1442,8 @@ class SSCTV(object):
         C_N_Gauss = data_C_N_Gauss_by_mod_R_num[mod][R_num]
         DELTA_Rice = data_DELTA_Rice_by_mod_R_num[mod][R_num]
         ABC = data_ABC_by_PP[PP]
-        round_digits = 6
-        C_N_Rice_no_D = round(C_N_Gauss + DELTA_Rice + ABC[0] + ABC[1] + ABC[2], round_digits)
+        round_n = 4
+        C_N_Rice_no_D = round(C_N_Gauss + DELTA_Rice + ABC[0] + ABC[1] + ABC[2], round_n)
         D = 0.0
         if C_N_Rice_no_D >= 15.0:
             if C_N_Rice_no_D >= 32.0:
@@ -1454,8 +1454,8 @@ class SSCTV(object):
                 D_prop = data_D_by_C_N_Rice_no_D[floor(C_N_Rice_no_D) + 1]
                 D_prop -= data_D_by_C_N_Rice_no_D[floor(C_N_Rice_no_D)]
                 D += D_prop * C_N_more
-                D = round(D, round_digits)
-        C_N_Rice = round(C_N_Rice_no_D + D, round_digits)
+                D = round(D, round_n)
+        C_N_Rice = round(C_N_Rice_no_D + D, round_n)
         SSCTV.tv5_C_N_Rice = C_N_Rice
         SSf.SIPK_SSCTV_functions.make_background(scene)
         txt0 = M.Text("дБ", font_size = tts, color = mc)
@@ -1506,6 +1506,7 @@ class SSCTV(object):
     @staticmethod
     def tv5_formula_2(scene: M.Scene):
         from math import log10, pi
+        round_n = 4
         data_N_kff_by_var = {
             1: 3, 2: 4, 3: 3, 4: 2, 5: 4, 6: 3, 7: 2, 8: 4,
             9: 3, 10: 2, 11: 4, 12: 3, 13: 2, 14: 4, 15: 3}
@@ -1534,23 +1535,23 @@ class SSCTV(object):
         k = 1.38 * 10.0 ** (-23)
         T_0 = 290.0
         B = 7.61 * 10.0 ** 6
-        P_n = round(F + 10.0 * log10(k * T_0 * B), 4)
+        P_n = round(F + 10.0 * log10(k * T_0 * B), round_n)
         SSCTV.tv5_P_n = P_n
-        P_smin = round(SSCTV.tv5_C_N_Rice + P_n, 4)
+        P_smin = round(SSCTV.tv5_C_N_Rice + P_n, round_n)
         SSCTV.tv5_P_smin = P_smin
         f_obr = data_f_obr_by_chanel(SSCTV.tv5_chanel)
         G_D0 = data_G_D0_by_chanel(SSCTV.tv5_chanel)
-        Corr = round(10.0 * log10(SSCTV.tv5_f_c / f_obr), 4)
-        G_D = G_D0 + Corr
+        Corr = round(10.0 * log10(SSCTV.tv5_f_c / f_obr), round_n)
+        G_D = round(G_D0 + Corr, round_n)
         c = 300.0
-        lambd = round(c / SSCTV.tv5_f_c, 4)
-        A_a = round(G_D + 10.0 * log10(1.64 * lambd ** 2 / 4.0 / pi), 4)
+        lambd = round(c / SSCTV.tv5_f_c, round_n)
+        A_a = round(G_D + 10.0 * log10(1.64 * lambd ** 2 / 4.0 / pi), round_n)
         L_f = data_L_f_by_chanel(SSCTV.tv5_chanel)
-        phi_min = round(P_smin - A_a + L_f, 4)
-        E_min = round(phi_min + 120.0 + 10.0 * log10(120.0 * pi), 4)
+        phi_min = round(P_smin - A_a + L_f, round_n)
+        E_min = round(phi_min + 120.0 + 10.0 * log10(120.0 * pi), round_n)
         SSCTV.tv5_E_min = E_min
         R = 75.0
-        U_smin = round(P_smin + 120.0 + 10.0 * log10(R), 4)
+        U_smin = round(P_smin + 120.0 + 10.0 * log10(R), round_n)
         SSCTV.tv5_U_smin = U_smin
         SSf.SIPK_SSCTV_functions.make_background(scene)
         tx = r"P_n = F + 10 \lg (k T_0 B)"
@@ -1559,7 +1560,7 @@ class SSCTV(object):
         gr = M.VGroup(tex, txt).arrange().next_to(
             SSf.SIPK_SSCTV_functions.upper_side, M.DOWN)
         tx2 = r"P_n = " + str(F) + r" + 10 \cdot "
-        tx2 += str(round(log10(k * T_0 * B), 4)) + r" = " + str(P_n)
+        tx2 += str(round(log10(k * T_0 * B), round_n)) + r" = " + str(P_n)
         tex2 = M.MathTex(tx2, font_size = txs, color = mc)
         txt2 = M.Text("дБВт", font_size = tts, color = mc)
         gr2 = M.VGroup(tex2, txt2).arrange().next_to(gr, M.DOWN)
@@ -1630,14 +1631,14 @@ class SSCTV(object):
         tx5 = r"E_{min} = {\varphi}_{min} + 120 + 10 \lg (120 \pi) = "
         tex5 = M.MathTex(tx5, font_size = txs, color = mc).next_to(gr4, M.DOWN)
         tx6 = r" = " + str(phi_min) + r" + 120 + "
-        tx6 += str(round(10.0 * log10(120 * pi), 4)) + r" = " + str(E_min)
+        tx6 += str(round(10.0 * log10(120 * pi), round_n)) + r" = " + str(E_min)
         tex6 = M.MathTex(tx6, font_size = txs, color = mc)
         txt6 = M.Text("дБ(мкВ/м)", font_size = tts, color = mc)
         gr5 = M.VGroup(tex6, txt6).arrange().next_to(tex5, M.DOWN)
         tx7 = r"U_{s\ min} = P_{s\ min} + 120 + 10 \lg (R) = "
         tex7 = M.MathTex(tx7, font_size = txs, color = mc).next_to(gr5, M.DOWN)
         tx8 = r" = " + str(P_smin) + r" + 120 + "
-        tx8 += str(round(10.0 * log10(R), 4)) + r" = " + str(U_smin)
+        tx8 += str(round(10.0 * log10(R), round_n)) + r" = " + str(U_smin)
         tex8 = M.MathTex(tx8, font_size = txs, color = mc)
         txt8 = M.Text("дБмкВ", font_size = tts, color = mc)
         gr6 = M.VGroup(tex8, txt8).arrange().next_to(tex7, M.DOWN)
@@ -1646,6 +1647,7 @@ class SSCTV(object):
 
     @staticmethod
     def tv5_formula_3(scene: M.Scene):
+        round_n = 4
         tts = SSf.SIPK_SSCTV_functions.formula_text_size - 2.0
         txs = SSf.SIPK_SSCTV_functions.formula_tex_size
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
@@ -1687,12 +1689,12 @@ class SSCTV(object):
         txt8 = M.Text("Вт", font_size = tts, color = mc)
         gr8 = M.VGroup(tex8, txt8).arrange().next_to(gr7, M.DOWN)
         tx9 = r"E_{min} = 10^{\frac {" + str(SSCTV.tv5_E_min) + r"}{20}} = "
-        tx9 += str(round(10.0 ** (SSCTV.tv5_E_min / 20.0), 4))
+        tx9 += str(round(10.0 ** (SSCTV.tv5_E_min / 20.0), round_n))
         tex9 = M.MathTex(tx9, font_size = txs, color = mc)
         txt9 = M.Text("мкВ/м", font_size = tts, color = mc)
         gr9 = M.VGroup(tex9, txt9).arrange().next_to(gr8, M.DOWN)
         tx10 = r"U_{s\ min} = 10^{\frac {" + str(SSCTV.tv5_U_smin) + r"}{20}} = "
-        tx10 += str(round(10.0 ** (SSCTV.tv5_U_smin / 20.0), 4))
+        tx10 += str(round(10.0 ** (SSCTV.tv5_U_smin / 20.0), round_n))
         tex10 = M.MathTex(tx10, font_size = txs, color = mc)
         txt10 = M.Text("мкВ", font_size = tts, color = mc)
         gr10 = M.VGroup(tex10, txt10).arrange().next_to(gr9, M.DOWN)
@@ -2049,17 +2051,18 @@ class SSCTV(object):
         data_4 = {27: 1.2,
                 #   24: 1.2,
                 #   20: 1.5,
-                #   16: 2.5,
-                #   12: 4.5,
-                #   10: 4.5
-                  }
-        data_6 = {20: 1.5,
                   16: 2.5,
+                #   12: 4.5,
+                  10: 4.5
+                  }
+        data_6 = {24: 1.2,
+                #   20: 1.5,
+                #   16: 2.5,
                   12: 4.5
                   }
         data_8 = {20: 2.2,
                 #   16: 4.2,
-                #   12: 4.5
+                  12: 4.5
                   }
         data_full = data_var[variant]
         tv6_floors = data_full[0]
@@ -2086,7 +2089,7 @@ class SSCTV(object):
                 useful.append(lis[i])
                 print(lis[i])
         ind = randint(0, len(useful) - 1)
-        ind = 0
+        ind = 1
         return (useful[ind], tv6_floors, tv6_flats, tv6_lines, tv6_floors_by_line)
 
     @staticmethod
@@ -2094,10 +2097,9 @@ class SSCTV(object):
                         tv6_usilit_db, tv6_data_razv_db, usilit_name, db_minus_between_floors):
         print(useful)
         data_razv_text = {2: "TLC\nSAH\n204F", 3: "SAH\n306F"}
-        data_otv_4_text = {10: "TAH-410F", 12: "TAH-412F",
-                           16: "TAH-416F", 20: "TAH-420F",
-                           24: "TAH-424F", 27: "TAH-427F"}
-        data_otv_6_text = {20.0: "TAH\n620F", 16.0: "TAH\n616F", 12.0: "TAH\n612F"}
+        data_otv_4_text = {10: "TAH-410F", 12: "TAH-412F", 16: "TAH-416F",
+                           20: "TAH-420F", 24: "TAH-424F", 27: "TAH-427F"}
+        data_otv_6_text = {12: "TAH-612F", 16: "TAH-616F", 20: "TAH-620F", 24: "TAH-624F"}
         data_otv_8_text = {12: "TAH-812F", 16: "TAH-816F", 20: "TAH-820F"}
         data_otv_text = data_otv_4_text
         data_otv_wires = 4

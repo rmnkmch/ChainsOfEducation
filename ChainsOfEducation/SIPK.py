@@ -46,14 +46,14 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [4, 14, 25]
 
-    sipk3_R = 0.77
-    sipk3_t = 3
-    sipk3_check = [11, 22, 33, 44, 55, 66, 70, 69, 68]
-    sipk3_n = 70
-    sipk3_k = 54
-    sipk3_n_graph = 60
+    sipk3_R = 0.62
+    sipk3_t = 4
+    sipk3_check = [45, 44]
+    sipk3_n = 48
+    sipk3_k = 30
+    sipk3_n_graph = 40
 
-    sipk4_5_6_7_in_group_list = 26
+    sipk4_5_6_7_in_group_list = 10
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -66,7 +66,7 @@ class SIPK(object):
     sipk5_mistake_2 = 8
     sipk5_vde = ""
     sipk5_Hr = []
-    sipk5_phone = 2158
+    sipk5_phone = 9113
 
     sipk6_log_p_16 = []
     sipk6_V_s_x_bin = ""
@@ -199,12 +199,12 @@ class SIPK(object):
         # SIPK.make_sipk3(scene)
         # SIPK.make_sipk4(scene)
         # SIPK.make_sipk5(scene)
-        # SIPK.make_sipk6(scene)
+        SIPK.make_sipk6(scene)
         # SIPK.make_sipk7(scene)
-        SIPK.sipk_lr3_formula_1(scene)
-        SIPK.sipk_lr3_table_1(scene)
-        SIPK.new_sipk_lr3_graphs_1(scene)
-        SIPK.new_sipk_lr3_legend(scene)
+        # SIPK.sipk_lr3_formula_1(scene)
+        # SIPK.sipk_lr3_table_1(scene)
+        # SIPK.new_sipk_lr3_graphs_1(scene)
+        # SIPK.new_sipk_lr3_legend(scene)
         # SIPK.sipk_lr4_graphs_1(scene)
         # SIPK.sipk_lr4_legend(scene)
 
