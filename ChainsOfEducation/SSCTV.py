@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 13
+    variant = 11
 
     tv1_in_0_1_str = ""
 
@@ -80,7 +80,7 @@ class SSCTV(object):
     tv6_used_data = []
     tv6_floors = -1
     tv6_flats = -1
-    tv6_usilit_db = 112.8
+    tv6_usilit_db = 94.0
     tv6_lines = -1
     tv6_floors_by_line = -1
     tv6_data_razv_db = {1: 0.0, 2: 4.8, 3: 7.5}
@@ -158,8 +158,8 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        # SSCTV.make_new_tv6(scene)
-        SSCTV.make_tv7(scene)
+        SSCTV.make_new_tv6(scene)
+        # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
@@ -2018,7 +2018,7 @@ class SSCTV(object):
 
     @staticmethod
     def make_new_tv6(scene: M.Scene):
-        tv6_usilit_db = 95.0
+        tv6_usilit_db = 102.0
         tv6_data_razv_db = {1: 0.0, 2: 4.0}
         db_minus_between_floors = 0.6
         usilit_name = "Foro\nSHA 848-121"
@@ -2050,8 +2050,8 @@ class SSCTV(object):
                     13: [16, 4, 2], 14: [20, 6, 2], 15: [17, 4, 2]}
         data_4 = {27: 1.2,
                 #   24: 1.2,
-                #   20: 1.5,
-                  16: 2.5,
+                  20: 1.5,
+                #   16: 2.5,
                 #   12: 4.5,
                   10: 4.5
                   }
@@ -2079,6 +2079,7 @@ class SSCTV(object):
         useful = []
         min_floor_db = 50.5
         max_floor_db = 71.5
+        line = 0
         for i in range(len(lis)):
             show = True
             for j in range(len(lis[i]) // 2):
@@ -2087,9 +2088,11 @@ class SSCTV(object):
                     show = False
             if show:
                 useful.append(lis[i])
-                print(lis[i])
+                print(line, lis[i])
+                line += 1
         ind = randint(0, len(useful) - 1)
-        ind = 1
+        # ind = 22
+        print(ind)
         return (useful[ind], tv6_floors, tv6_flats, tv6_lines, tv6_floors_by_line)
 
     @staticmethod
