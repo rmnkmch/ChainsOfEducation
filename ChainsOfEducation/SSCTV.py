@@ -5,7 +5,7 @@ import SIPK_SSCTV_functions as SSf
 class SSCTV(object):
     """SSCTV"""
 
-    variant = 11
+    variant = 13
 
     tv1_in_0_1_str = ""
 
@@ -158,12 +158,12 @@ class SSCTV(object):
         # SSCTV.make_tv4(scene)
         # SSCTV.make_tv5(scene)
         # SSCTV.make_tv6(scene)
-        SSCTV.make_new_tv6(scene)
+        # SSCTV.make_new_tv6(scene)
         # SSCTV.make_tv7(scene)
         # SSCTV.make_old_tv1(scene)
         # SSCTV.make_old_tv2(scene)
         # SSCTV.make_old_tv3(scene)
-        # SSCTV.make_old_tv5(scene)
+        SSCTV.make_old_tv5(scene)
         # SSCTV.make_old_tv6(scene)
         # SSCTV.tv_ekz_1(scene)
         # SSCTV.tv_ekz_2(scene)
@@ -3717,8 +3717,8 @@ class SSCTV(object):
         mc = SSf.SIPK_SSCTV_functions.get_main_color()
         mb = 16
         b = 4
-        res_x = 1920
-        res_y = 1080
+        res_x = 4096
+        res_y = 2048
         mb_num = int(res_x * res_y / mb / mb)
         b_in_mb = int(mb * mb / b / b)
         Y_num = b_in_mb * mb_num
