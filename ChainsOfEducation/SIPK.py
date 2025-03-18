@@ -46,14 +46,14 @@ class SIPK(object):
     sipk2_a22 = 0.0
     sipk2_decode_n = [4, 14, 25]
 
-    sipk3_R = 0.62
+    sipk3_R = 0.65
     sipk3_t = 4
-    sipk3_check = [45, 44]
-    sipk3_n = 48
-    sipk3_k = 30
-    sipk3_n_graph = 40
+    sipk3_check = [15, 25, 35, 45, 55, 54]
+    sipk3_n = 55
+    sipk3_k = 36
+    sipk3_n_graph = 50
 
-    sipk4_5_6_7_in_group_list = 26
+    sipk4_5_6_7_in_group_list = 8
     sipk4_fvh = ["0000000", "0011101", "0101011", "0110110",
                  "1000111", "1011010", "1101100", "1110001"]
     sipk4_matrix_fs = 30.0
@@ -66,17 +66,17 @@ class SIPK(object):
     sipk5_mistake_2 = 8
     sipk5_vde = ""
     sipk5_Hr = []
-    sipk5_phone = 9113
+    sipk5_phone = -1
 
     sipk6_log_p_16 = []
     sipk6_V_s_x_bin = ""
     sipk6_sindroms = []
     sipk6_sindroms_int_p1 = []
     sipk6_sigmas = []
-    sipk6_group = 1
+    sipk6_group = 2
 
     sipk7_errs = [-1, -1]
-    sipk7_soft = "2, 3; 1, -4; 2, 2; -3, 4; -4, -3; -4, -1; 2, -3; 4, 2; 2, -1; -2, -4; 4, 4"
+    sipk7_soft = "1, 2; 1, -2; -2, 2; 3, -1; -4, -2; 4, 2; 4, -1; 4, 4; 3, -4; -4, -4; 4, 1"
     sipk7_final_way = ""
 
 
